@@ -1,0 +1,2350 @@
+=== dispatch opencode xiaomi-token-plan-sgp/mimo-v2.5-pro -> work/wave-4/05-orchestrator.md @ Fri Jun 19 21:21:25 IST 2026 ===
+=== opencode exited rc=0 @ Fri Jun 19 21:33:58 IST 2026 ===
+KER_PROMPT.md
+[0m→ [0mRead work/wave-4/05-orchestrator.md
+[0m✱ [0mGlob ".specify/specs/wave-4/contracts/*.md"[90m 0 matches[0m
+[0m→ [0mRead src/finroot/schemas/state.py
+[0m✱ [0mGlob ".specify/specs/wave-4/**/*.md"[90m 0 matches[0m
+[0m→ [0mRead src/finroot/schemas
+[0m→ [0mRead src/finroot/agents
+[0m→ [0mRead src/finroot/schemas/enums.py
+[0m→ [0mRead src/finroot/schemas/recommendation.py
+[0m→ [0mRead src/finroot/schemas/audit.py
+[0m→ [0mRead src/finroot/agents/base.py
+[0m→ [0mRead src/finroot/agents/intent.py
+[0m→ [0mRead src/finroot/agents/market_agent.py
+[0m→ [0mRead src/finroot/agents/portfolio_agent.py
+[0m→ [0mRead src/finroot/agents/risk_agent.py
+[0m→ [0mRead src/finroot/agents/tax_agent.py
+[0m→ [0mRead src/finroot/agents/news_agent.py
+[0m→ [0mRead src/finroot/workflows
+[0m→ [0mRead src/finroot/audit/trail.py
+[0m→ [0mRead src/finroot/llm/base.py
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead src/finroot/workflows/context.py
+[0m✱ [0mGlob "src/finroot/workflows/synthesize.py"[90m 0 matches[0m
+[0m→ [0mRead src/finroot/tools
+[0m→ [0mRead src/finroot/memory/manager.py
+[0m✱ [0mGlob "tests/**/*.py"[90m 20 matches[0m
+[0m→ [0mRead tests/integration/test_memory_integration.py
+[0m✱ [0mGlob "tests/**/conftest.py"[90m 0 matches[0m
+[0m→ [0mRead src/finroot/agents/__init__.py
+[0m→ [0mRead src/finroot/tools/base.py
+[0m
+[0m$ [0mpip list 2>/dev/null | grep -i langgraph
+(no output)
+[0m
+[0m$ [0mpip list 2>/dev/null | grep -iE "langgraph|langchain"
+(no output)
+[0m
+[0m→ [0mRead pyproject.toml
+[0m
+[0m$ [0mpython3 -c "import langgraph; print(langgraph.__version__)" 2>&1
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import langgraph; print(langgraph.__version__)
+                            ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'langgraph' has no attribute '__version__'
+[0m
+[0m$ [0mpip show langgraph 2>&1
+zsh:1: command not found: pip
+[0m
+[0m$ [0mpython3 -c "from langgraph.graph import StateGraph; print('StateGraph available')" 2>&1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+StateGraph available
+[0m
+[0m$ [0mpython3 -c "
+from langgraph.graph import StateGraph, END
+from typing import TypedDict, Annotated
+print('All imports OK')
+" 2>&1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+All imports OK
+[0m
+[0m$ [0mpython3 -c "
+import operator
+from langgraph.graph import StateGraph, END
+from typing import TypedDict, Annotated
+
+class TestState(TypedDict):
+    val: int
+
+def node_a(state):
+    return {'val': state['val'] + 1}
+
+g = StateGraph(TestState)
+g.add_node('a', node_a)
+g.set_entry_point('a')
+g.add_edge('a', END)
+app = g.compile()
+result = app.invoke({'val': 0})
+print('Result:', result)
+" 2>&1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+Result: {'val': 1}
+[0m
+[0m$ [0mpython3 -c "
+from langgraph.graph import StateGraph, END
+from pydantic import BaseModel
+
+class MyState(BaseModel):
+    val: int = 0
+
+def node_a(state: MyState):
+    return MyState(val=state.val + 1)
+
+g = StateGraph(MyState)
+g.add_node('a', node_a)
+g.set_entry_point('a')
+g.add_edge('a', END)
+app = g.compile()
+result = app.invoke(MyState(val=0))
+print('Result:', result, type(result))
+" 2>&1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+Result: {'val': 1} <class 'langgraph.pregel.io.AddableValuesDict'>
+[0m
+[0m$ [0mpython3 -c "
+from langgraph.graph import StateGraph, END
+from pydantic import BaseModel
+from typing import Optional
+
+class MyState(BaseModel):
+    val: int = 0
+    items: list[str] = []
+    data: dict = {}
+
+def node_a(state: MyState):
+    return MyState(val=state.val + 1, items=['a'], data={'x': 1})
+
+g = StateGraph(MyState)
+g.add_node('a', node_a)
+g.set_entry_point('a')
+g.add_edge('a', END)
+app = g.compile()
+result = app.invoke(MyState(val=0))
+print('Result:', result, type(result))
+print('val:', result['val'])
+print('items:', result['items'])
+" 2>&1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+Result: {'val': 1, 'items': ['a'], 'data': {'x': 1}} <class 'langgraph.pregel.io.AddableValuesDict'>
+val: 1
+items: ['a']
+[0m
+[0m$ [0mpython3 -c "
+from langgraph.graph import StateGraph, END
+from pydantic import BaseModel
+from typing import Annotated
+import operator
+
+class MyState(BaseModel):
+    val: int = 0
+    items: list[str] = []
+
+def node_a(state):
+    # state is a dict-like object, not a Pydantic model
+    return {'val': state['val'] + 1, 'items': state['items'] + ['a']}
+
+def node_b(state):
+    return {'val': state['val'] * 2}
+
+g = StateGraph(MyState)
+g.add_node('a', node_a)
+g.add_node('b', node_b)
+g.set_entry_point('a')
+g.add_edge('a', 'b')
+g.add_edge('b', END)
+app = g.compile()
+result = app.invoke(MyState(val=5))
+print('Result:', result)
+print('Type:', type(result))
+" 2>&1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+Traceback (most recent call last):
+  File "<string>", line 25, in <module>
+    result = app.invoke(MyState(val=5))
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/pregel/__init__.py", line 2336, in invoke
+    for chunk in self.stream(
+                 ~~~~~~~~~~~^
+        input,
+        ^^^^^^
+    ...<6 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    ):
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/pregel/__init__.py", line 1993, in stream
+    for _ in runner.tick(
+             ~~~~~~~~~~~^
+        loop.tasks.values(),
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        get_waiter=get_waiter,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/pregel/runner.py", line 230, in tick
+    run_with_retry(
+    ~~~~~~~~~~~~~~^
+        t,
+        ^^
+    ...<4 lines>...
+        },
+        ^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/pregel/retry.py", line 40, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py", line 546, in invoke
+    input = step.invoke(input, config, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py", line 310, in invoke
+    ret = context.run(self.func, *args, **kwargs)
+  File "<string>", line 13, in node_a
+    return {'val': state['val'] + 1, 'items': state['items'] + ['a']}
+                   ~~~~~^^^^^^^
+TypeError: 'MyState' object is not subscriptable
+During task with name 'a' and id '73ffa3af-2d12-07e5-509b-bc9c80b60202'
+[0m
+[0m$ [0mpython3 -c "
+from langgraph.graph import StateGraph, END
+from pydantic import BaseModel
+
+class MyState(BaseModel):
+    val: int = 0
+    items: list[str] = []
+
+def node_a(state: MyState) -> dict:
+    return {'val': state.val + 1, 'items': state.items + ['a']}
+
+def node_b(state: MyState) -> dict:
+    return {'val': state.val * 2}
+
+g = StateGraph(MyState)
+g.add_node('a', node_a)
+g.add_node('b', node_b)
+g.set_entry_point('a')
+g.add_edge('a', 'b')
+g.add_edge('b', END)
+app = g.compile()
+result = app.invoke(MyState(val=5))
+print('Result:', result)
+print('Type:', type(result))
+print('val:', result['val'])
+" 2>&1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+Result: {'val': 12, 'items': ['a']}
+Type: <class 'langgraph.pregel.io.AddableValuesDict'>
+val: 12
+[0m
+[0m# [0mTodos
+[•] Create src/finroot/workflows/graph.py with build_graph()
+[ ] Create src/finroot/agents/orchestrator.py with FinRootOrchestrator
+[ ] Create tests/integration/test_orchestrator.py (8+ tests)
+[ ] Run acceptance: pytest + ruff
+[ ] Write report to work/reports/wave-4/05-orchestrator.report.md
+[0m
+Now I have a thorough understanding. Let me create the implementation files.
+[0m→ [0mRead src/finroot/tools/market.py
+[0m→ [0mRead src/finroot/tools/news.py
+[0m→ [0mRead src/finroot/tools/risk.py
+[0m→ [0mRead src/finroot/tools/tax.py
+[0m→ [0mRead src/finroot/tools/portfolio_sim.py
+[0m→ [0mRead src/finroot/tools/__init__.py
+[0m→ [0mRead src/finroot/tools/sentiment.py
+[0m→ [0mRead src/finroot/tools/profile.py
+[0m
+[0m← [0mWrite src/finroot/workflows/graph.py
+Wrote file successfully.
+[0m
+[0m✱ [0mGlob "src/finroot/**/synthe*.py"[90m 0 matches[0m
+[0m✱ [0mGlob "src/finroot/workflows/__init__.py"[90m 0 matches[0m
+Now let me create the orchestrator.py with a minimal ResultSynthesizer embedded:
+[0m
+[0m← [0mWrite src/finroot/agents/orchestrator.py
+Wrote file successfully.
+[0m
+[0m$ [0mPYTHONPATH=src python3 -c "from finroot.agents.orchestrator import FinRootOrchestrator; print('Import OK')" 2>&1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+Import OK
+[0m
+[0m→ [0mRead src/finroot/tools/fundamentals.py
+[0m
+[0m$ [0mruff check src/finroot/agents/orchestrator.py src/finroot/workflows/graph.py 2>&1
+F821 Undefined name `NewsInterpreterAgent`
+   --> src/finroot/agents/orchestrator.py:266:51
+    |
+264 |                 SentimentAnalysisTool(mock=True, audit=self._audit),
+265 |             ]
+266 |             self._agent_map["news_interpreter"] = NewsInterpreterAgent(
+    |                                                   ^^^^^^^^^^^^^^^^^^^^
+267 |                 llm=self._llm, tools=news_tools, audit=self._audit,
+268 |             )
+    |
+
+Found 1 error.
+[0m
+[0m← [0mEdit src/finroot/agents/orchestrator.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/agents/orchestrator.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/agents/orchestrator.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/agents/orchestrator.py
+@@ -262,8 +262,9 @@
+     news_tools = [
+         NewsSearchTool(mock=True, audit=self._audit),
+         SentimentAnalysisTool(mock=True, audit=self._audit),
+     ]
++    from finroot.agents.news_agent import NewsInterpreterAgent
+     self._agent_map["news_interpreter"] = NewsInterpreterAgent(
+         llm=self._llm, tools=news_tools, audit=self._audit,
+     )
+ except ImportError as exc:
+
+[0m
+[0m← [0mEdit src/finroot/agents/orchestrator.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/agents/orchestrator.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/agents/orchestrator.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/agents/orchestrator.py
+@@ -302,18 +302,8 @@
+         )
+     except ImportError as exc:
+         logger.warning("Could not load tax agent: %s", exc)
+ 
+-    # Avoid import error from news_agent not being importable at top
+-    try:
+-        from finroot.agents.news_agent import NewsInterpreterAgent as _NI
+-        if "news_interpreter" not in self._agent_map:
+-            self._agent_map["news_interpreter"] = _NI(
+-                llm=self._llm, tools=[], audit=self._audit,
+-            )
+-    except ImportError:
+-        pass
+-
+ @property
+ def agent_map(self) -> dict[str, BaseAgent]:
+     """Registered agent instances (read-only)."""
+     return dict(self._agent_map)
+
+[0m
+[0m$ [0mruff check src/finroot/agents/orchestrator.py src/finroot/workflows/graph.py 2>&1
+All checks passed!
+[0m
+[0m# [0mTodos
+[✓] Create src/finroot/workflows/graph.py with build_graph()
+[✓] Create src/finroot/agents/orchestrator.py with FinRootOrchestrator
+[•] Create tests/integration/test_orchestrator.py (8+ tests)
+[ ] Run acceptance: pytest + ruff
+[ ] Write report to work/reports/wave-4/05-orchestrator.report.md
+[0m
+[0m$ [0mPYTHONPATH=src python3 -c "
+import sys, os
+os.environ['FINROOT_LLM_PROVIDER'] = 'mock'
+from finroot.agents.intent import IntentClassifier
+ic = IntentClassifier()
+print('portfolio:', ic.classify('Review my portfolio'))
+print('tax:', ic.classify('What is the tax on 2L LTCG?'))
+print('market:', ic.classify('What is RELIANCE price?'))
+print('greeting:', ic.classify('Hello'))
+" 2>&1
+portfolio: intent=<Intent.PORTFOLIO: 'portfolio'> confidence=1.0 entities={'symbols': [], 'timeframe': None} reasoning="Keyword 'portfolio' matched for intent portfolio"
+tax: intent=<Intent.TAX: 'tax'> confidence=1.0 entities={'symbols': ['LTCG'], 'timeframe': None} reasoning="Keyword 'tax' matched for intent tax"
+market: intent=<Intent.NEWS_IMPACT: 'news_impact'> confidence=1.0 entities={'symbols': ['RELIANCE'], 'timeframe': None} reasoning="Keyword 'price' matched for intent news_impact"
+greeting: intent=<Intent.GENERAL: 'general'> confidence=1.0 entities={'symbols': [], 'timeframe': None} reasoning="Keyword 'hello' matched for intent general"
+[0m
+[0m✱ [0mGlob "src/finroot/llm/*.py"[90m 7 matches[0m
+[0m→ [0mRead src/finroot/llm/mock.py
+[0m
+[0m← [0mWrite tests/integration/test_orchestrator.py
+Wrote file successfully.
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/integration/test_orchestrator.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 10 items
+
+tests/integration/test_orchestrator.py FFFFFFFFFF                        [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_full_pipeline_portfolio _________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10da96f90>
+audit = <finroot.audit.trail.AuditTrail object at 0x10da970e0>
+llm = <finroot.llm.mock.MockProvider object at 0x10da97380>
+
+    def test_full_pipeline_portfolio(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """'Review my portfolio' → PORTFOLIO → PortfolioOptimizer + RiskAssessor → synthesis."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:136: in build_graph
+    graph = StateGraph(AgentState)
+            ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:181: in __init__
+    self._add_schema(state_schema)
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:196: in _add_schema
+    channels, managed = _get_channels(schema)
+                        ^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:946: in _get_channels
+    for name, typ in get_type_hints(schema, include_extras=True).items()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:2391: in get_type_hints
+    value = _eval_type(value, base_globals, base_locals, (),
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:461: in _eval_type
+    return evaluate_forward_ref(t, globals=globalns, locals=localns,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:1000: in evaluate_forward_ref
+    value = forward_ref.evaluate(globals=globals, locals=locals,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/annotationlib.py:205: in evaluate
+    return eval(code, globals=globals, locals=locals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   NameError: name 'AuditEvent' is not defined
+
+<string>:1: NameError
+____________________________ test_full_pipeline_tax ____________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10e3e4a50>
+audit = <finroot.audit.trail.AuditTrail object at 0x10e3e4b90>
+llm = <finroot.llm.mock.MockProvider object at 0x10e3e4e10>
+
+    def test_full_pipeline_tax(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """'What's the tax on 2L LTCG?' → TAX → TaxPlanner → synthesis."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:136: in build_graph
+    graph = StateGraph(AgentState)
+            ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:181: in __init__
+    self._add_schema(state_schema)
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:196: in _add_schema
+    channels, managed = _get_channels(schema)
+                        ^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:946: in _get_channels
+    for name, typ in get_type_hints(schema, include_extras=True).items()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:2391: in get_type_hints
+    value = _eval_type(value, base_globals, base_locals, (),
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:461: in _eval_type
+    return evaluate_forward_ref(t, globals=globalns, locals=localns,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:1000: in evaluate_forward_ref
+    value = forward_ref.evaluate(globals=globals, locals=locals,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/annotationlib.py:205: in evaluate
+    return eval(code, globals=globals, locals=locals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   NameError: name 'AuditEvent' is not defined
+
+<string>:1: NameError
+__________________________ test_full_pipeline_market ___________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10e3e7390>
+audit = <finroot.audit.trail.AuditTrail object at 0x10e3e74d0>
+llm = <finroot.llm.mock.MockProvider object at 0x10e3e7750>
+
+    def test_full_pipeline_market(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """'What's RELIANCE price?' → NEWS_IMPACT → MarketAnalyst + NewsInterpreter → synthesis."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:136: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:136: in build_graph
+    graph = StateGraph(AgentState)
+            ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:181: in __init__
+    self._add_schema(state_schema)
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:196: in _add_schema
+    channels, managed = _get_channels(schema)
+                        ^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:946: in _get_channels
+    for name, typ in get_type_hints(schema, include_extras=True).items()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:2391: in get_type_hints
+    value = _eval_type(value, base_globals, base_locals, (),
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:461: in _eval_type
+    return evaluate_forward_ref(t, globals=globalns, locals=localns,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:1000: in evaluate_forward_ref
+    value = forward_ref.evaluate(globals=globals, locals=locals,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/annotationlib.py:205: in evaluate
+    return eval(code, globals=globals, locals=locals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   NameError: name 'AuditEvent' is not defined
+
+<string>:1: NameError
+___________________________ test_greeting_no_agents ____________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10e2e6b10>
+audit = <finroot.audit.trail.AuditTrail object at 0x10e2e6c40>
+llm = <finroot.llm.mock.MockProvider object at 0x10e2e6ea0>
+
+    def test_greeting_no_agents(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """GENERAL intent → no agents executed, direct greeting response."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:136: in build_graph
+    graph = StateGraph(AgentState)
+            ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:181: in __init__
+    self._add_schema(state_schema)
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:196: in _add_schema
+    channels, managed = _get_channels(schema)
+                        ^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:946: in _get_channels
+    for name, typ in get_type_hints(schema, include_extras=True).items()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:2391: in get_type_hints
+    value = _eval_type(value, base_globals, base_locals, (),
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:461: in _eval_type
+    return evaluate_forward_ref(t, globals=globalns, locals=localns,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:1000: in evaluate_forward_ref
+    value = forward_ref.evaluate(globals=globals, locals=locals,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/annotationlib.py:205: in evaluate
+    return eval(code, globals=globals, locals=locals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   NameError: name 'AuditEvent' is not defined
+
+<string>:1: NameError
+_________________________ test_audit_trail_has_entries _________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10e404d60>
+audit = <finroot.audit.trail.AuditTrail object at 0x10e404e90>
+llm = <finroot.llm.mock.MockProvider object at 0x10e4050f0>
+
+    def test_audit_trail_has_entries(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """The audit trail records orchestrator.run and orchestrator.done events."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:170: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:136: in build_graph
+    graph = StateGraph(AgentState)
+            ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:181: in __init__
+    self._add_schema(state_schema)
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:196: in _add_schema
+    channels, managed = _get_channels(schema)
+                        ^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:946: in _get_channels
+    for name, typ in get_type_hints(schema, include_extras=True).items()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:2391: in get_type_hints
+    value = _eval_type(value, base_globals, base_locals, (),
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:461: in _eval_type
+    return evaluate_forward_ref(t, globals=globalns, locals=localns,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:1000: in evaluate_forward_ref
+    value = forward_ref.evaluate(globals=globals, locals=locals,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/annotationlib.py:205: in evaluate
+    return eval(code, globals=globals, locals=locals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   NameError: name 'AuditEvent' is not defined
+
+<string>:1: NameError
+__________________________ test_state_roundtrip_valid __________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10e4455b0>
+audit = <finroot.audit.trail.AuditTrail object at 0x10e4456d0>
+llm = <finroot.llm.mock.MockProvider object at 0x10e445910>
+
+    def test_state_roundtrip_valid(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """AgentState survives the graph pipeline and validates correctly."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:136: in build_graph
+    graph = StateGraph(AgentState)
+            ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:181: in __init__
+    self._add_schema(state_schema)
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:196: in _add_schema
+    channels, managed = _get_channels(schema)
+                        ^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:946: in _get_channels
+    for name, typ in get_type_hints(schema, include_extras=True).items()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:2391: in get_type_hints
+    value = _eval_type(value, base_globals, base_locals, (),
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:461: in _eval_type
+    return evaluate_forward_ref(t, globals=globalns, locals=localns,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:1000: in evaluate_forward_ref
+    value = forward_ref.evaluate(globals=globals, locals=locals,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/annotationlib.py:205: in evaluate
+    return eval(code, globals=globals, locals=locals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   NameError: name 'AuditEvent' is not defined
+
+<string>:1: NameError
+_____________________ test_intent_routes_to_correct_agents _____________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10e3f0160>
+audit = <finroot.audit.trail.AuditTrail object at 0x10e3f0270>
+llm = <finroot.llm.mock.MockProvider object at 0x10e3f09e0>
+
+    def test_intent_routes_to_correct_agents(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """Verify the routing map: PORTFOLIO→portfolio_optimizer+risk_assessor,
+        TAX→tax_planner, NEWS_IMPACT→market_analyst+news_interpreter.
+        """
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:136: in build_graph
+    graph = StateGraph(AgentState)
+            ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:181: in __init__
+    self._add_schema(state_schema)
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:196: in _add_schema
+    channels, managed = _get_channels(schema)
+                        ^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:946: in _get_channels
+    for name, typ in get_type_hints(schema, include_extras=True).items()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:2391: in get_type_hints
+    value = _eval_type(value, base_globals, base_locals, (),
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:461: in _eval_type
+    return evaluate_forward_ref(t, globals=globalns, locals=localns,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:1000: in evaluate_forward_ref
+    value = forward_ref.evaluate(globals=globals, locals=locals,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/annotationlib.py:205: in evaluate
+    return eval(code, globals=globals, locals=locals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   NameError: name 'AuditEvent' is not defined
+
+<string>:1: NameError
+_____________________ test_context_assembly_populates_twin _____________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10e37fac0>
+audit = <finroot.audit.trail.AuditTrail object at 0x10e37f790>
+llm = <finroot.llm.mock.MockProvider object at 0x10e37ead0>
+
+    def test_context_assembly_populates_twin(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """The context assembler should populate twin_snapshot from memory."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:230: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:136: in build_graph
+    graph = StateGraph(AgentState)
+            ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:181: in __init__
+    self._add_schema(state_schema)
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:196: in _add_schema
+    channels, managed = _get_channels(schema)
+                        ^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:946: in _get_channels
+    for name, typ in get_type_hints(schema, include_extras=True).items()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:2391: in get_type_hints
+    value = _eval_type(value, base_globals, base_locals, (),
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:461: in _eval_type
+    return evaluate_forward_ref(t, globals=globalns, locals=localns,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:1000: in evaluate_forward_ref
+    value = forward_ref.evaluate(globals=globals, locals=locals,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/annotationlib.py:205: in evaluate
+    return eval(code, globals=globals, locals=locals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   NameError: name 'AuditEvent' is not defined
+
+<string>:1: NameError
+_________________________ test_build_graph_compilable __________________________
+
+audit = <finroot.audit.trail.AuditTrail object at 0x10e3ca150>
+
+    def test_build_graph_compilable(audit: AuditTrail) -> None:
+        """build_graph() should return a StateGraph that compiles without error."""
+        from finroot.agents.orchestrator import ResultSynthesizer
+        from finroot.workflows.graph import build_graph
+    
+        classifier = IntentClassifier()
+        assembler = ContextAssembler()
+        synthesizer = ResultSynthesizer()
+        memory = MemoryManager.create(user_id="graph_test")
+    
+>       graph = build_graph(
+            intent_classifier=classifier,
+            context_assembler=assembler,
+            agent_map={},
+            memory=memory,
+            synthesizer=synthesizer,
+        )
+
+tests/integration/test_orchestrator.py:253: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/finroot/workflows/graph.py:136: in build_graph
+    graph = StateGraph(AgentState)
+            ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:181: in __init__
+    self._add_schema(state_schema)
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:196: in _add_schema
+    channels, managed = _get_channels(schema)
+                        ^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:946: in _get_channels
+    for name, typ in get_type_hints(schema, include_extras=True).items()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:2391: in get_type_hints
+    value = _eval_type(value, base_globals, base_locals, (),
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:461: in _eval_type
+    return evaluate_forward_ref(t, globals=globalns, locals=localns,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:1000: in evaluate_forward_ref
+    value = forward_ref.evaluate(globals=globals, locals=locals,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/annotationlib.py:205: in evaluate
+    return eval(code, globals=globals, locals=locals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   NameError: name 'AuditEvent' is not defined
+
+<string>:1: NameError
+_________________________ test_candidate_has_citations _________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x111783950>
+audit = <finroot.audit.trail.AuditTrail object at 0x111783a50>
+llm = <finroot.llm.mock.MockProvider object at 0x111783c50>
+
+    def test_candidate_has_citations(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """When sub-agents produce tool outputs, the candidate should have citations."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:271: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:136: in build_graph
+    graph = StateGraph(AgentState)
+            ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:181: in __init__
+    self._add_schema(state_schema)
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:196: in _add_schema
+    channels, managed = _get_channels(schema)
+                        ^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:946: in _get_channels
+    for name, typ in get_type_hints(schema, include_extras=True).items()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:2391: in get_type_hints
+    value = _eval_type(value, base_globals, base_locals, (),
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:461: in _eval_type
+    return evaluate_forward_ref(t, globals=globalns, locals=localns,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/typing.py:1000: in evaluate_forward_ref
+    value = forward_ref.evaluate(globals=globals, locals=locals,
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/annotationlib.py:205: in evaluate
+    return eval(code, globals=globals, locals=locals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   NameError: name 'AuditEvent' is not defined
+
+<string>:1: NameError
+=============================== warnings summary ===============================
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    from pydantic.v1.fields import FieldInfo as FieldInfoV1
+
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77: DeprecationWarning: ForwardRef._evaluate is a private API and is retained for compatibility, but will be removed in Python 3.16. Use ForwardRef.evaluate() or typing.evaluate_forward_ref() instead.
+    return cast(Any, type_)._evaluate(globalns, localns, type_params=(), recursive_guard=set())
+
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+
+tests/integration/test_orchestrator.py::test_build_graph_compilable
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    if asyncio.iscoroutinefunction(f):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+FAILED tests/integration/test_orchestrator.py::test_full_pipeline_tax - NameE...
+FAILED tests/integration/test_orchestrator.py::test_full_pipeline_market - Na...
+FAILED tests/integration/test_orchestrator.py::test_greeting_no_agents - Name...
+FAILED tests/integration/test_orchestrator.py::test_audit_trail_has_entries
+FAILED tests/integration/test_orchestrator.py::test_state_roundtrip_valid - N...
+FAILED tests/integration/test_orchestrator.py::test_intent_routes_to_correct_agents
+FAILED tests/integration/test_orchestrator.py::test_context_assembly_populates_twin
+FAILED tests/integration/test_orchestrator.py::test_build_graph_compilable - ...
+FAILED tests/integration/test_orchestrator.py::test_candidate_has_citations
+======================= 10 failed, 10 warnings in 7.49s ========================
+[0m
+The issue is LangGraph's `get_type_hints` can't resolve the `AuditEvent` forward reference in `AgentState`. I need to use a TypedDict for the graph state instead. Let me fix this:
+[0m→ [0mRead src/finroot/workflows/graph.py
+[0m
+[0m← [0mWrite src/finroot/workflows/graph.py
+Wrote file successfully.
+[0m
+[0m→ [0mRead src/finroot/agents/orchestrator.py
+[0m
+[0m← [0mEdit src/finroot/agents/orchestrator.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/agents/orchestrator.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/agents/orchestrator.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/agents/orchestrator.py
+@@ -20,9 +20,9 @@
+ from finroot.schemas.enums import ConfidenceLevel, Intent
+ from finroot.schemas.recommendation import Citation, Recommendation
+ from finroot.schemas.state import AgentState
+ from finroot.workflows.context import ContextAssembler
+-from finroot.workflows.graph import build_graph
++from finroot.workflows.graph import agent_state_to_graph, build_graph, graph_state_to_agent
+ 
+ logger = logging.getLogger(__name__)
+ 
+ 
+
+[0m
+[0m← [0mEdit src/finroot/agents/orchestrator.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/agents/orchestrator.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/agents/orchestrator.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/agents/orchestrator.py
+@@ -337,12 +337,12 @@
+ initial_state = AgentState(query=query)
+ 
+ self._audit.append("orchestrator.run", {"query": query})
+ 
+-result = self._graph.invoke(initial_state)
++graph_input = agent_state_to_graph(initial_state)
++result = self._graph.invoke(graph_input)
+ 
+-# Reconstruct AgentState from the graph result dict
+-final_state = AgentState.model_validate(result)
++final_state = graph_state_to_agent(result)
+ 
+ self._audit.append("orchestrator.done", {
+     "query": query,
+     "intent": final_state.intent.value if final_state.intent else None,
+
+[0m
+[0m$ [0mruff check src/finroot/agents/orchestrator.py src/finroot/workflows/graph.py 2>&1
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/integration/test_orchestrator.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 10 items
+
+tests/integration/test_orchestrator.py FFFFFFFFFF                        [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_full_pipeline_portfolio _________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10ba6b770>
+audit = <finroot.audit.trail.AuditTrail object at 0x10ba6b8c0>
+llm = <finroot.llm.mock.MockProvider object at 0x10ba6bb60>
+
+    def test_full_pipeline_portfolio(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """'Review my portfolio' → PORTFOLIO → PortfolioOptimizer + RiskAssessor → synthesis."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:210: in build_graph
+    graph.add_node("plan", plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <langgraph.graph.state.StateGraph object at 0x10c394ec0>, node = 'plan'
+action = <function build_graph.<locals>.plan at 0x10c3d4720>
+
+    def add_node(
+        self,
+        node: Union[str, RunnableLike],
+        action: Optional[RunnableLike] = None,
+        *,
+        metadata: Optional[dict[str, Any]] = None,
+        input: Optional[Type[Any]] = None,
+        retry: Optional[RetryPolicy] = None,
+        destinations: Optional[Union[dict[str, str], tuple[str]]] = None,
+    ) -> Self:
+        """Adds a new node to the state graph.
+    
+        Will take the name of the function/runnable as the node name.
+    
+        Args:
+            node (Union[str, RunnableLike]): The function or runnable this node will run.
+            action (Optional[RunnableLike]): The action associated with the node. (default: None)
+            metadata (Optional[dict[str, Any]]): The metadata associated with the node. (default: None)
+            input (Optional[Type[Any]]): The input schema for the node. (default: the graph's input schema)
+            retry (Optional[RetryPolicy]): The policy for retrying the node. (default: None)
+            destinations (Optional[Union[dict[str, str], tuple[str]]]): Destinations that indicate where a node can route to.
+                This is useful for edgeless graphs with nodes that return `Command` objects.
+                If a dict is provided, the keys will be used as the target node names and the values will be used as the labels for the edges.
+                If a tuple is provided, the values will be used as the target node names.
+                NOTE: this is only used for graph rendering and doesn't have any effect on the graph execution.
+        Raises:
+            ValueError: If the key is already being used as a state key.
+    
+        Examples:
+            ```pycon
+            >>> from langgraph.graph import START, StateGraph
+            ...
+            >>> def my_node(state, config):
+            ...    return {"x": state["x"] + 1}
+            ...
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node(my_node)  # node name will be 'my_node'
+            >>> builder.add_edge(START, "my_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+            Customize the name:
+    
+            ```pycon
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node("my_fair_node", my_node)
+            >>> builder.add_edge(START, "my_fair_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+    
+        Returns:
+            Self: The instance of the state graph, allowing for method chaining.
+        """
+        if not isinstance(node, str):
+            action = node
+            if isinstance(action, Runnable):
+                node = action.get_name()
+            else:
+                node = getattr(action, "__name__", action.__class__.__name__)
+            if node is None:
+                raise ValueError(
+                    "Node name must be provided if action is not a function"
+                )
+        if node in self.channels:
+>           raise ValueError(f"'{node}' is already being used as a state key")
+E           ValueError: 'plan' is already being used as a state key
+
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:341: ValueError
+____________________________ test_full_pipeline_tax ____________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10c4d0cd0>
+audit = <finroot.audit.trail.AuditTrail object at 0x10c4d0e10>
+llm = <finroot.llm.mock.MockProvider object at 0x10c4d1090>
+
+    def test_full_pipeline_tax(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """'What's the tax on 2L LTCG?' → TAX → TaxPlanner → synthesis."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:210: in build_graph
+    graph.add_node("plan", plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <langgraph.graph.state.StateGraph object at 0x10c4d2710>, node = 'plan'
+action = <function build_graph.<locals>.plan at 0x10c1638a0>
+
+    def add_node(
+        self,
+        node: Union[str, RunnableLike],
+        action: Optional[RunnableLike] = None,
+        *,
+        metadata: Optional[dict[str, Any]] = None,
+        input: Optional[Type[Any]] = None,
+        retry: Optional[RetryPolicy] = None,
+        destinations: Optional[Union[dict[str, str], tuple[str]]] = None,
+    ) -> Self:
+        """Adds a new node to the state graph.
+    
+        Will take the name of the function/runnable as the node name.
+    
+        Args:
+            node (Union[str, RunnableLike]): The function or runnable this node will run.
+            action (Optional[RunnableLike]): The action associated with the node. (default: None)
+            metadata (Optional[dict[str, Any]]): The metadata associated with the node. (default: None)
+            input (Optional[Type[Any]]): The input schema for the node. (default: the graph's input schema)
+            retry (Optional[RetryPolicy]): The policy for retrying the node. (default: None)
+            destinations (Optional[Union[dict[str, str], tuple[str]]]): Destinations that indicate where a node can route to.
+                This is useful for edgeless graphs with nodes that return `Command` objects.
+                If a dict is provided, the keys will be used as the target node names and the values will be used as the labels for the edges.
+                If a tuple is provided, the values will be used as the target node names.
+                NOTE: this is only used for graph rendering and doesn't have any effect on the graph execution.
+        Raises:
+            ValueError: If the key is already being used as a state key.
+    
+        Examples:
+            ```pycon
+            >>> from langgraph.graph import START, StateGraph
+            ...
+            >>> def my_node(state, config):
+            ...    return {"x": state["x"] + 1}
+            ...
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node(my_node)  # node name will be 'my_node'
+            >>> builder.add_edge(START, "my_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+            Customize the name:
+    
+            ```pycon
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node("my_fair_node", my_node)
+            >>> builder.add_edge(START, "my_fair_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+    
+        Returns:
+            Self: The instance of the state graph, allowing for method chaining.
+        """
+        if not isinstance(node, str):
+            action = node
+            if isinstance(action, Runnable):
+                node = action.get_name()
+            else:
+                node = getattr(action, "__name__", action.__class__.__name__)
+            if node is None:
+                raise ValueError(
+                    "Node name must be provided if action is not a function"
+                )
+        if node in self.channels:
+>           raise ValueError(f"'{node}' is already being used as a state key")
+E           ValueError: 'plan' is already being used as a state key
+
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:341: ValueError
+__________________________ test_full_pipeline_market ___________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10c4d3610>
+audit = <finroot.audit.trail.AuditTrail object at 0x10c4d3750>
+llm = <finroot.llm.mock.MockProvider object at 0x10c4d39d0>
+
+    def test_full_pipeline_market(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """'What's RELIANCE price?' → NEWS_IMPACT → MarketAnalyst + NewsInterpreter → synthesis."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:136: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:210: in build_graph
+    graph.add_node("plan", plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <langgraph.graph.state.StateGraph object at 0x10c494cd0>, node = 'plan'
+action = <function build_graph.<locals>.plan at 0x10c500510>
+
+    def add_node(
+        self,
+        node: Union[str, RunnableLike],
+        action: Optional[RunnableLike] = None,
+        *,
+        metadata: Optional[dict[str, Any]] = None,
+        input: Optional[Type[Any]] = None,
+        retry: Optional[RetryPolicy] = None,
+        destinations: Optional[Union[dict[str, str], tuple[str]]] = None,
+    ) -> Self:
+        """Adds a new node to the state graph.
+    
+        Will take the name of the function/runnable as the node name.
+    
+        Args:
+            node (Union[str, RunnableLike]): The function or runnable this node will run.
+            action (Optional[RunnableLike]): The action associated with the node. (default: None)
+            metadata (Optional[dict[str, Any]]): The metadata associated with the node. (default: None)
+            input (Optional[Type[Any]]): The input schema for the node. (default: the graph's input schema)
+            retry (Optional[RetryPolicy]): The policy for retrying the node. (default: None)
+            destinations (Optional[Union[dict[str, str], tuple[str]]]): Destinations that indicate where a node can route to.
+                This is useful for edgeless graphs with nodes that return `Command` objects.
+                If a dict is provided, the keys will be used as the target node names and the values will be used as the labels for the edges.
+                If a tuple is provided, the values will be used as the target node names.
+                NOTE: this is only used for graph rendering and doesn't have any effect on the graph execution.
+        Raises:
+            ValueError: If the key is already being used as a state key.
+    
+        Examples:
+            ```pycon
+            >>> from langgraph.graph import START, StateGraph
+            ...
+            >>> def my_node(state, config):
+            ...    return {"x": state["x"] + 1}
+            ...
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node(my_node)  # node name will be 'my_node'
+            >>> builder.add_edge(START, "my_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+            Customize the name:
+    
+            ```pycon
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node("my_fair_node", my_node)
+            >>> builder.add_edge(START, "my_fair_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+    
+        Returns:
+            Self: The instance of the state graph, allowing for method chaining.
+        """
+        if not isinstance(node, str):
+            action = node
+            if isinstance(action, Runnable):
+                node = action.get_name()
+            else:
+                node = getattr(action, "__name__", action.__class__.__name__)
+            if node is None:
+                raise ValueError(
+                    "Node name must be provided if action is not a function"
+                )
+        if node in self.channels:
+>           raise ValueError(f"'{node}' is already being used as a state key")
+E           ValueError: 'plan' is already being used as a state key
+
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:341: ValueError
+___________________________ test_greeting_no_agents ____________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10c319810>
+audit = <finroot.audit.trail.AuditTrail object at 0x10c31a3f0>
+llm = <finroot.llm.mock.MockProvider object at 0x10c31a650>
+
+    def test_greeting_no_agents(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """GENERAL intent → no agents executed, direct greeting response."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:210: in build_graph
+    graph.add_node("plan", plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <langgraph.graph.state.StateGraph object at 0x10c31b6f0>, node = 'plan'
+action = <function build_graph.<locals>.plan at 0x10c174720>
+
+    def add_node(
+        self,
+        node: Union[str, RunnableLike],
+        action: Optional[RunnableLike] = None,
+        *,
+        metadata: Optional[dict[str, Any]] = None,
+        input: Optional[Type[Any]] = None,
+        retry: Optional[RetryPolicy] = None,
+        destinations: Optional[Union[dict[str, str], tuple[str]]] = None,
+    ) -> Self:
+        """Adds a new node to the state graph.
+    
+        Will take the name of the function/runnable as the node name.
+    
+        Args:
+            node (Union[str, RunnableLike]): The function or runnable this node will run.
+            action (Optional[RunnableLike]): The action associated with the node. (default: None)
+            metadata (Optional[dict[str, Any]]): The metadata associated with the node. (default: None)
+            input (Optional[Type[Any]]): The input schema for the node. (default: the graph's input schema)
+            retry (Optional[RetryPolicy]): The policy for retrying the node. (default: None)
+            destinations (Optional[Union[dict[str, str], tuple[str]]]): Destinations that indicate where a node can route to.
+                This is useful for edgeless graphs with nodes that return `Command` objects.
+                If a dict is provided, the keys will be used as the target node names and the values will be used as the labels for the edges.
+                If a tuple is provided, the values will be used as the target node names.
+                NOTE: this is only used for graph rendering and doesn't have any effect on the graph execution.
+        Raises:
+            ValueError: If the key is already being used as a state key.
+    
+        Examples:
+            ```pycon
+            >>> from langgraph.graph import START, StateGraph
+            ...
+            >>> def my_node(state, config):
+            ...    return {"x": state["x"] + 1}
+            ...
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node(my_node)  # node name will be 'my_node'
+            >>> builder.add_edge(START, "my_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+            Customize the name:
+    
+            ```pycon
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node("my_fair_node", my_node)
+            >>> builder.add_edge(START, "my_fair_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+    
+        Returns:
+            Self: The instance of the state graph, allowing for method chaining.
+        """
+        if not isinstance(node, str):
+            action = node
+            if isinstance(action, Runnable):
+                node = action.get_name()
+            else:
+                node = getattr(action, "__name__", action.__class__.__name__)
+            if node is None:
+                raise ValueError(
+                    "Node name must be provided if action is not a function"
+                )
+        if node in self.channels:
+>           raise ValueError(f"'{node}' is already being used as a state key")
+E           ValueError: 'plan' is already being used as a state key
+
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:341: ValueError
+_________________________ test_audit_trail_has_entries _________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10c4583e0>
+audit = <finroot.audit.trail.AuditTrail object at 0x10c458510>
+llm = <finroot.llm.mock.MockProvider object at 0x10c458770>
+
+    def test_audit_trail_has_entries(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """The audit trail records orchestrator.run and orchestrator.done events."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:170: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:210: in build_graph
+    graph.add_node("plan", plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <langgraph.graph.state.StateGraph object at 0x10c459810>, node = 'plan'
+action = <function build_graph.<locals>.plan at 0x10c5017a0>
+
+    def add_node(
+        self,
+        node: Union[str, RunnableLike],
+        action: Optional[RunnableLike] = None,
+        *,
+        metadata: Optional[dict[str, Any]] = None,
+        input: Optional[Type[Any]] = None,
+        retry: Optional[RetryPolicy] = None,
+        destinations: Optional[Union[dict[str, str], tuple[str]]] = None,
+    ) -> Self:
+        """Adds a new node to the state graph.
+    
+        Will take the name of the function/runnable as the node name.
+    
+        Args:
+            node (Union[str, RunnableLike]): The function or runnable this node will run.
+            action (Optional[RunnableLike]): The action associated with the node. (default: None)
+            metadata (Optional[dict[str, Any]]): The metadata associated with the node. (default: None)
+            input (Optional[Type[Any]]): The input schema for the node. (default: the graph's input schema)
+            retry (Optional[RetryPolicy]): The policy for retrying the node. (default: None)
+            destinations (Optional[Union[dict[str, str], tuple[str]]]): Destinations that indicate where a node can route to.
+                This is useful for edgeless graphs with nodes that return `Command` objects.
+                If a dict is provided, the keys will be used as the target node names and the values will be used as the labels for the edges.
+                If a tuple is provided, the values will be used as the target node names.
+                NOTE: this is only used for graph rendering and doesn't have any effect on the graph execution.
+        Raises:
+            ValueError: If the key is already being used as a state key.
+    
+        Examples:
+            ```pycon
+            >>> from langgraph.graph import START, StateGraph
+            ...
+            >>> def my_node(state, config):
+            ...    return {"x": state["x"] + 1}
+            ...
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node(my_node)  # node name will be 'my_node'
+            >>> builder.add_edge(START, "my_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+            Customize the name:
+    
+            ```pycon
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node("my_fair_node", my_node)
+            >>> builder.add_edge(START, "my_fair_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+    
+        Returns:
+            Self: The instance of the state graph, allowing for method chaining.
+        """
+        if not isinstance(node, str):
+            action = node
+            if isinstance(action, Runnable):
+                node = action.get_name()
+            else:
+                node = getattr(action, "__name__", action.__class__.__name__)
+            if node is None:
+                raise ValueError(
+                    "Node name must be provided if action is not a function"
+                )
+        if node in self.channels:
+>           raise ValueError(f"'{node}' is already being used as a state key")
+E           ValueError: 'plan' is already being used as a state key
+
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:341: ValueError
+__________________________ test_state_roundtrip_valid __________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10c4b83b0>
+audit = <finroot.audit.trail.AuditTrail object at 0x10c4b84d0>
+llm = <finroot.llm.mock.MockProvider object at 0x10c4b8710>
+
+    def test_state_roundtrip_valid(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """AgentState survives the graph pipeline and validates correctly."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:210: in build_graph
+    graph.add_node("plan", plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <langgraph.graph.state.StateGraph object at 0x10c4b9c70>, node = 'plan'
+action = <function build_graph.<locals>.plan at 0x10c502a30>
+
+    def add_node(
+        self,
+        node: Union[str, RunnableLike],
+        action: Optional[RunnableLike] = None,
+        *,
+        metadata: Optional[dict[str, Any]] = None,
+        input: Optional[Type[Any]] = None,
+        retry: Optional[RetryPolicy] = None,
+        destinations: Optional[Union[dict[str, str], tuple[str]]] = None,
+    ) -> Self:
+        """Adds a new node to the state graph.
+    
+        Will take the name of the function/runnable as the node name.
+    
+        Args:
+            node (Union[str, RunnableLike]): The function or runnable this node will run.
+            action (Optional[RunnableLike]): The action associated with the node. (default: None)
+            metadata (Optional[dict[str, Any]]): The metadata associated with the node. (default: None)
+            input (Optional[Type[Any]]): The input schema for the node. (default: the graph's input schema)
+            retry (Optional[RetryPolicy]): The policy for retrying the node. (default: None)
+            destinations (Optional[Union[dict[str, str], tuple[str]]]): Destinations that indicate where a node can route to.
+                This is useful for edgeless graphs with nodes that return `Command` objects.
+                If a dict is provided, the keys will be used as the target node names and the values will be used as the labels for the edges.
+                If a tuple is provided, the values will be used as the target node names.
+                NOTE: this is only used for graph rendering and doesn't have any effect on the graph execution.
+        Raises:
+            ValueError: If the key is already being used as a state key.
+    
+        Examples:
+            ```pycon
+            >>> from langgraph.graph import START, StateGraph
+            ...
+            >>> def my_node(state, config):
+            ...    return {"x": state["x"] + 1}
+            ...
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node(my_node)  # node name will be 'my_node'
+            >>> builder.add_edge(START, "my_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+            Customize the name:
+    
+            ```pycon
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node("my_fair_node", my_node)
+            >>> builder.add_edge(START, "my_fair_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+    
+        Returns:
+            Self: The instance of the state graph, allowing for method chaining.
+        """
+        if not isinstance(node, str):
+            action = node
+            if isinstance(action, Runnable):
+                node = action.get_name()
+            else:
+                node = getattr(action, "__name__", action.__class__.__name__)
+            if node is None:
+                raise ValueError(
+                    "Node name must be provided if action is not a function"
+                )
+        if node in self.channels:
+>           raise ValueError(f"'{node}' is already being used as a state key")
+E           ValueError: 'plan' is already being used as a state key
+
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:341: ValueError
+_____________________ test_intent_routes_to_correct_agents _____________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10c3c7bd0>
+audit = <finroot.audit.trail.AuditTrail object at 0x10c3c7ce0>
+llm = <finroot.llm.mock.MockProvider object at 0x10c3c7f00>
+
+    def test_intent_routes_to_correct_agents(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """Verify the routing map: PORTFOLIO→portfolio_optimizer+risk_assessor,
+        TAX→tax_planner, NEWS_IMPACT→market_analyst+news_interpreter.
+        """
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:210: in build_graph
+    graph.add_node("plan", plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <langgraph.graph.state.StateGraph object at 0x10c4c5150>, node = 'plan'
+action = <function build_graph.<locals>.plan at 0x10c503c10>
+
+    def add_node(
+        self,
+        node: Union[str, RunnableLike],
+        action: Optional[RunnableLike] = None,
+        *,
+        metadata: Optional[dict[str, Any]] = None,
+        input: Optional[Type[Any]] = None,
+        retry: Optional[RetryPolicy] = None,
+        destinations: Optional[Union[dict[str, str], tuple[str]]] = None,
+    ) -> Self:
+        """Adds a new node to the state graph.
+    
+        Will take the name of the function/runnable as the node name.
+    
+        Args:
+            node (Union[str, RunnableLike]): The function or runnable this node will run.
+            action (Optional[RunnableLike]): The action associated with the node. (default: None)
+            metadata (Optional[dict[str, Any]]): The metadata associated with the node. (default: None)
+            input (Optional[Type[Any]]): The input schema for the node. (default: the graph's input schema)
+            retry (Optional[RetryPolicy]): The policy for retrying the node. (default: None)
+            destinations (Optional[Union[dict[str, str], tuple[str]]]): Destinations that indicate where a node can route to.
+                This is useful for edgeless graphs with nodes that return `Command` objects.
+                If a dict is provided, the keys will be used as the target node names and the values will be used as the labels for the edges.
+                If a tuple is provided, the values will be used as the target node names.
+                NOTE: this is only used for graph rendering and doesn't have any effect on the graph execution.
+        Raises:
+            ValueError: If the key is already being used as a state key.
+    
+        Examples:
+            ```pycon
+            >>> from langgraph.graph import START, StateGraph
+            ...
+            >>> def my_node(state, config):
+            ...    return {"x": state["x"] + 1}
+            ...
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node(my_node)  # node name will be 'my_node'
+            >>> builder.add_edge(START, "my_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+            Customize the name:
+    
+            ```pycon
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node("my_fair_node", my_node)
+            >>> builder.add_edge(START, "my_fair_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+    
+        Returns:
+            Self: The instance of the state graph, allowing for method chaining.
+        """
+        if not isinstance(node, str):
+            action = node
+            if isinstance(action, Runnable):
+                node = action.get_name()
+            else:
+                node = getattr(action, "__name__", action.__class__.__name__)
+            if node is None:
+                raise ValueError(
+                    "Node name must be provided if action is not a function"
+                )
+        if node in self.channels:
+>           raise ValueError(f"'{node}' is already being used as a state key")
+E           ValueError: 'plan' is already being used as a state key
+
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:341: ValueError
+_____________________ test_context_assembly_populates_twin _____________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10c4c5bf0>
+audit = <finroot.audit.trail.AuditTrail object at 0x10c4c5d00>
+llm = <finroot.llm.mock.MockProvider object at 0x10c4c5f20>
+
+    def test_context_assembly_populates_twin(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """The context assembler should populate twin_snapshot from memory."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:230: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:210: in build_graph
+    graph.add_node("plan", plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <langgraph.graph.state.StateGraph object at 0x10c4c7130>, node = 'plan'
+action = <function build_graph.<locals>.plan at 0x10c40cf60>
+
+    def add_node(
+        self,
+        node: Union[str, RunnableLike],
+        action: Optional[RunnableLike] = None,
+        *,
+        metadata: Optional[dict[str, Any]] = None,
+        input: Optional[Type[Any]] = None,
+        retry: Optional[RetryPolicy] = None,
+        destinations: Optional[Union[dict[str, str], tuple[str]]] = None,
+    ) -> Self:
+        """Adds a new node to the state graph.
+    
+        Will take the name of the function/runnable as the node name.
+    
+        Args:
+            node (Union[str, RunnableLike]): The function or runnable this node will run.
+            action (Optional[RunnableLike]): The action associated with the node. (default: None)
+            metadata (Optional[dict[str, Any]]): The metadata associated with the node. (default: None)
+            input (Optional[Type[Any]]): The input schema for the node. (default: the graph's input schema)
+            retry (Optional[RetryPolicy]): The policy for retrying the node. (default: None)
+            destinations (Optional[Union[dict[str, str], tuple[str]]]): Destinations that indicate where a node can route to.
+                This is useful for edgeless graphs with nodes that return `Command` objects.
+                If a dict is provided, the keys will be used as the target node names and the values will be used as the labels for the edges.
+                If a tuple is provided, the values will be used as the target node names.
+                NOTE: this is only used for graph rendering and doesn't have any effect on the graph execution.
+        Raises:
+            ValueError: If the key is already being used as a state key.
+    
+        Examples:
+            ```pycon
+            >>> from langgraph.graph import START, StateGraph
+            ...
+            >>> def my_node(state, config):
+            ...    return {"x": state["x"] + 1}
+            ...
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node(my_node)  # node name will be 'my_node'
+            >>> builder.add_edge(START, "my_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+            Customize the name:
+    
+            ```pycon
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node("my_fair_node", my_node)
+            >>> builder.add_edge(START, "my_fair_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+    
+        Returns:
+            Self: The instance of the state graph, allowing for method chaining.
+        """
+        if not isinstance(node, str):
+            action = node
+            if isinstance(action, Runnable):
+                node = action.get_name()
+            else:
+                node = getattr(action, "__name__", action.__class__.__name__)
+            if node is None:
+                raise ValueError(
+                    "Node name must be provided if action is not a function"
+                )
+        if node in self.channels:
+>           raise ValueError(f"'{node}' is already being used as a state key")
+E           ValueError: 'plan' is already being used as a state key
+
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:341: ValueError
+_________________________ test_build_graph_compilable __________________________
+
+audit = <finroot.audit.trail.AuditTrail object at 0x10c4ac550>
+
+    def test_build_graph_compilable(audit: AuditTrail) -> None:
+        """build_graph() should return a StateGraph that compiles without error."""
+        from finroot.agents.orchestrator import ResultSynthesizer
+        from finroot.workflows.graph import build_graph
+    
+        classifier = IntentClassifier()
+        assembler = ContextAssembler()
+        synthesizer = ResultSynthesizer()
+        memory = MemoryManager.create(user_id="graph_test")
+    
+>       graph = build_graph(
+            intent_classifier=classifier,
+            context_assembler=assembler,
+            agent_map={},
+            memory=memory,
+            synthesizer=synthesizer,
+        )
+
+tests/integration/test_orchestrator.py:253: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/finroot/workflows/graph.py:210: in build_graph
+    graph.add_node("plan", plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <langgraph.graph.state.StateGraph object at 0x10f7bc650>, node = 'plan'
+action = <function build_graph.<locals>.plan at 0x10f7dcca0>
+
+    def add_node(
+        self,
+        node: Union[str, RunnableLike],
+        action: Optional[RunnableLike] = None,
+        *,
+        metadata: Optional[dict[str, Any]] = None,
+        input: Optional[Type[Any]] = None,
+        retry: Optional[RetryPolicy] = None,
+        destinations: Optional[Union[dict[str, str], tuple[str]]] = None,
+    ) -> Self:
+        """Adds a new node to the state graph.
+    
+        Will take the name of the function/runnable as the node name.
+    
+        Args:
+            node (Union[str, RunnableLike]): The function or runnable this node will run.
+            action (Optional[RunnableLike]): The action associated with the node. (default: None)
+            metadata (Optional[dict[str, Any]]): The metadata associated with the node. (default: None)
+            input (Optional[Type[Any]]): The input schema for the node. (default: the graph's input schema)
+            retry (Optional[RetryPolicy]): The policy for retrying the node. (default: None)
+            destinations (Optional[Union[dict[str, str], tuple[str]]]): Destinations that indicate where a node can route to.
+                This is useful for edgeless graphs with nodes that return `Command` objects.
+                If a dict is provided, the keys will be used as the target node names and the values will be used as the labels for the edges.
+                If a tuple is provided, the values will be used as the target node names.
+                NOTE: this is only used for graph rendering and doesn't have any effect on the graph execution.
+        Raises:
+            ValueError: If the key is already being used as a state key.
+    
+        Examples:
+            ```pycon
+            >>> from langgraph.graph import START, StateGraph
+            ...
+            >>> def my_node(state, config):
+            ...    return {"x": state["x"] + 1}
+            ...
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node(my_node)  # node name will be 'my_node'
+            >>> builder.add_edge(START, "my_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+            Customize the name:
+    
+            ```pycon
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node("my_fair_node", my_node)
+            >>> builder.add_edge(START, "my_fair_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+    
+        Returns:
+            Self: The instance of the state graph, allowing for method chaining.
+        """
+        if not isinstance(node, str):
+            action = node
+            if isinstance(action, Runnable):
+                node = action.get_name()
+            else:
+                node = getattr(action, "__name__", action.__class__.__name__)
+            if node is None:
+                raise ValueError(
+                    "Node name must be provided if action is not a function"
+                )
+        if node in self.channels:
+>           raise ValueError(f"'{node}' is already being used as a state key")
+E           ValueError: 'plan' is already being used as a state key
+
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:341: ValueError
+_________________________ test_candidate_has_citations _________________________
+
+memory = <finroot.memory.manager.MemoryManager object at 0x10f7bd650>
+audit = <finroot.audit.trail.AuditTrail object at 0x10f7bd750>
+llm = <finroot.llm.mock.MockProvider object at 0x10f7bd950>
+
+    def test_candidate_has_citations(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+        """When sub-agents produce tool outputs, the candidate should have citations."""
+>       orch = _make_orchestrator(memory, audit, llm)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_orchestrator.py:271: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_orchestrator.py:89: in _make_orchestrator
+    return FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/finroot/agents/orchestrator.py:233: in __init__
+    self._graph = build_graph(
+src/finroot/workflows/graph.py:210: in build_graph
+    graph.add_node("plan", plan)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <langgraph.graph.state.StateGraph object at 0x10f7be650>, node = 'plan'
+action = <function build_graph.<locals>.plan at 0x10f7de350>
+
+    def add_node(
+        self,
+        node: Union[str, RunnableLike],
+        action: Optional[RunnableLike] = None,
+        *,
+        metadata: Optional[dict[str, Any]] = None,
+        input: Optional[Type[Any]] = None,
+        retry: Optional[RetryPolicy] = None,
+        destinations: Optional[Union[dict[str, str], tuple[str]]] = None,
+    ) -> Self:
+        """Adds a new node to the state graph.
+    
+        Will take the name of the function/runnable as the node name.
+    
+        Args:
+            node (Union[str, RunnableLike]): The function or runnable this node will run.
+            action (Optional[RunnableLike]): The action associated with the node. (default: None)
+            metadata (Optional[dict[str, Any]]): The metadata associated with the node. (default: None)
+            input (Optional[Type[Any]]): The input schema for the node. (default: the graph's input schema)
+            retry (Optional[RetryPolicy]): The policy for retrying the node. (default: None)
+            destinations (Optional[Union[dict[str, str], tuple[str]]]): Destinations that indicate where a node can route to.
+                This is useful for edgeless graphs with nodes that return `Command` objects.
+                If a dict is provided, the keys will be used as the target node names and the values will be used as the labels for the edges.
+                If a tuple is provided, the values will be used as the target node names.
+                NOTE: this is only used for graph rendering and doesn't have any effect on the graph execution.
+        Raises:
+            ValueError: If the key is already being used as a state key.
+    
+        Examples:
+            ```pycon
+            >>> from langgraph.graph import START, StateGraph
+            ...
+            >>> def my_node(state, config):
+            ...    return {"x": state["x"] + 1}
+            ...
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node(my_node)  # node name will be 'my_node'
+            >>> builder.add_edge(START, "my_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+            Customize the name:
+    
+            ```pycon
+            >>> builder = StateGraph(dict)
+            >>> builder.add_node("my_fair_node", my_node)
+            >>> builder.add_edge(START, "my_fair_node")
+            >>> graph = builder.compile()
+            >>> graph.invoke({"x": 1})
+            {'x': 2}
+            ```
+    
+        Returns:
+            Self: The instance of the state graph, allowing for method chaining.
+        """
+        if not isinstance(node, str):
+            action = node
+            if isinstance(action, Runnable):
+                node = action.get_name()
+            else:
+                node = getattr(action, "__name__", action.__class__.__name__)
+            if node is None:
+                raise ValueError(
+                    "Node name must be provided if action is not a function"
+                )
+        if node in self.channels:
+>           raise ValueError(f"'{node}' is already being used as a state key")
+E           ValueError: 'plan' is already being used as a state key
+
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/graph/state.py:341: ValueError
+=============================== warnings summary ===============================
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    from pydantic.v1.fields import FieldInfo as FieldInfoV1
+
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77: DeprecationWarning: ForwardRef._evaluate is a private API and is retained for compatibility, but will be removed in Python 3.16. Use ForwardRef.evaluate() or typing.evaluate_forward_ref() instead.
+    return cast(Any, type_)._evaluate(globalns, localns, type_params=(), recursive_guard=set())
+
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+
+tests/integration/test_orchestrator.py: 20 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:384: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    asyncio.iscoroutinefunction(func)
+
+tests/integration/test_orchestrator.py: 20 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:386: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    and asyncio.iscoroutinefunction(func.__call__)
+
+tests/integration/test_orchestrator.py::test_build_graph_compilable
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    if asyncio.iscoroutinefunction(f):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+FAILED tests/integration/test_orchestrator.py::test_full_pipeline_tax - Value...
+FAILED tests/integration/test_orchestrator.py::test_full_pipeline_market - Va...
+FAILED tests/integration/test_orchestrator.py::test_greeting_no_agents - Valu...
+FAILED tests/integration/test_orchestrator.py::test_audit_trail_has_entries
+FAILED tests/integration/test_orchestrator.py::test_state_roundtrip_valid - V...
+FAILED tests/integration/test_orchestrator.py::test_intent_routes_to_correct_agents
+FAILED tests/integration/test_orchestrator.py::test_context_assembly_populates_twin
+FAILED tests/integration/test_orchestrator.py::test_build_graph_compilable - ...
+FAILED tests/integration/test_orchestrator.py::test_candidate_has_citations
+======================= 10 failed, 50 warnings in 6.67s ========================
+[0m
+The issue is that `plan` is both a state key and a node name. LangGraph doesn't allow that. I need to rename the node:
+[0m← [0mEdit src/finroot/workflows/graph.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/workflows/graph.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/workflows/graph.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/workflows/graph.py
+@@ -155,9 +155,9 @@
+         "twin_snapshot": context.get("twin", {}),
+         "tool_outputs": list(agent_st.tool_outputs),
+     }
+ 
+-def plan(state: GraphState) -> dict[str, Any]:
++def select_agents(state: GraphState) -> dict[str, Any]:
+     """Select sub-agents based on the classified intent."""
+     intent = state.get("intent") or Intent.GENERAL
+     selected = _INTENT_AGENT_MAP.get(intent, [])
+     logger.info("Plan: selected agents %s for intent=%s", selected, intent.value)
+
+[0m
+[0m← [0mEdit src/finroot/workflows/graph.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/workflows/graph.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/workflows/graph.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/workflows/graph.py
+@@ -206,16 +206,16 @@
+ graph = StateGraph(GraphState)
+ 
+ graph.add_node("classify_intent", classify_intent)
+ graph.add_node("assemble_context", assemble_context)
+-graph.add_node("plan", plan)
++graph.add_node("select_agents", select_agents)
+ graph.add_node("execute_agents", execute_agents)
+ graph.add_node("synthesize", synthesize)
+ 
+ graph.set_entry_point("classify_intent")
+ graph.add_edge("classify_intent", "assemble_context")
+-graph.add_edge("assemble_context", "plan")
+-graph.add_edge("plan", "execute_agents")
++graph.add_edge("assemble_context", "select_agents")
++graph.add_edge("select_agents", "execute_agents")
+ graph.add_edge("execute_agents", "synthesize")
+ graph.add_edge("synthesize", END)
+ 
+ return graph
+
+[0m
+[0m$ [0mruff check src/finroot/agents/orchestrator.py src/finroot/workflows/graph.py 2>&1
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/integration/test_orchestrator.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 10 items
+
+tests/integration/test_orchestrator.py ..........                        [100%]
+
+=============================== warnings summary ===============================
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    from pydantic.v1.fields import FieldInfo as FieldInfoV1
+
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77: DeprecationWarning: ForwardRef._evaluate is a private API and is retained for compatibility, but will be removed in Python 3.16. Use ForwardRef.evaluate() or typing.evaluate_forward_ref() instead.
+    return cast(Any, type_)._evaluate(globalns, localns, type_params=(), recursive_guard=set())
+
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+
+tests/integration/test_orchestrator.py: 50 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:384: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    asyncio.iscoroutinefunction(func)
+
+tests/integration/test_orchestrator.py: 50 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:386: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    and asyncio.iscoroutinefunction(func.__call__)
+
+tests/integration/test_orchestrator.py::test_build_graph_compilable
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    if asyncio.iscoroutinefunction(f):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+====================== 10 passed, 110 warnings in 11.61s =======================
+[0m
+[0m# [0mTodos
+[✓] Create src/finroot/workflows/graph.py with build_graph()
+[✓] Create src/finroot/agents/orchestrator.py with FinRootOrchestrator
+[✓] Create tests/integration/test_orchestrator.py (8+ tests)
+[•] Run acceptance: pytest + ruff
+[ ] Write report to work/reports/wave-4/05-orchestrator.report.md
+[0m
+All 10 tests pass. Now let me run the full acceptance:
+[0m$ [0mruff check src/finroot/agents/orchestrator.py src/finroot/workflows/graph.py 2>&1
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/integration/test_orchestrator.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 10 items
+
+tests/integration/test_orchestrator.py ..........                        [100%]
+
+=============================== warnings summary ===============================
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    from pydantic.v1.fields import FieldInfo as FieldInfoV1
+
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77: DeprecationWarning: ForwardRef._evaluate is a private API and is retained for compatibility, but will be removed in Python 3.16. Use ForwardRef.evaluate() or typing.evaluate_forward_ref() instead.
+    return cast(Any, type_)._evaluate(globalns, localns, type_params=(), recursive_guard=set())
+
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+
+tests/integration/test_orchestrator.py: 50 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:384: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    asyncio.iscoroutinefunction(func)
+
+tests/integration/test_orchestrator.py: 50 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:386: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    and asyncio.iscoroutinefunction(func.__call__)
+
+tests/integration/test_orchestrator.py::test_build_graph_compilable
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    if asyncio.iscoroutinefunction(f):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+====================== 10 passed, 110 warnings in 29.28s =======================
+[0m
+[0m# [0mTodos
+[✓] Create src/finroot/workflows/graph.py with build_graph()
+[✓] Create src/finroot/agents/orchestrator.py with FinRootOrchestrator
+[✓] Create tests/integration/test_orchestrator.py (8+ tests)
+[✓] Run acceptance: pytest + ruff
+[•] Write report to work/reports/wave-4/05-orchestrator.report.md
+[0m
+Both acceptance commands pass. Now let me write the report:
+[0m$ [0mls -la work/reports/wave-4/ 2>&1 || mkdir -p work/reports/wave-4/
+total 488
+drwxr-xr-x@ 13 srujansai  staff     416 Jun 19 21:21 .
+drwxr-xr-x@ 10 srujansai  staff     320 Jun 19 08:35 ..
+-rw-r--r--@  1 srujansai  staff       0 Jun 19 08:35 .gitkeep
+-rw-r--r--@  1 srujansai  staff   15227 Jun 19 21:20 01-intent-classifier-context.run.log
+-rw-r--r--@  1 srujansai  staff    3483 Jun 19 21:20 01-intent-classifier.report.md
+-rw-r--r--@  1 srujansai  staff     200 Jun 19 21:20 01-intent-classifier.run.log
+-rw-r--r--@  1 srujansai  staff    2683 Jun 19 20:57 02-market-news-agents.report.md
+-rw-r--r--@  1 srujansai  staff   20139 Jun 19 20:58 02-market-news-agents.run.log
+-rw-r--r--@  1 srujansai  staff    2925 Jun 19 20:55 03-risk-portfolio-agents.report.md
+-rw-r--r--@  1 srujansai  staff   10374 Jun 19 20:56 03-risk-portfolio-agents.run.log
+-rw-r--r--@  1 srujansai  staff    2466 Jun 19 21:19 04-tax-planner-agent.report.md
+-rw-r--r--@  1 srujansai  staff   10411 Jun 19 21:20 04-tax-planner-agent.run.log
+-rw-r--r--@  1 srujansai  staff  111832 Jun 19 21:31 05-orchestrator.run.log
+[0m
+[0m$ [0mls -la docs/waves/wave-4-gotchas.md 2>&1 || echo "File does not exist"
+ls: docs/waves/wave-4-gotchas.md: No such file or directory
+File does not exist
+[0m
+[0m← [0mWrite work/reports/wave-4/05-orchestrator.report.md
+Wrote file successfully.
+[0m
+[0m← [0mWrite docs/waves/wave-4-gotchas.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create src/finroot/workflows/graph.py with build_graph()
+[✓] Create src/finroot/agents/orchestrator.py with FinRootOrchestrator
+[✓] Create tests/integration/test_orchestrator.py (8+ tests)
+[✓] Run acceptance: pytest + ruff
+[✓] Write report to work/reports/wave-4/05-orchestrator.report.md
+[0m
+[0m$ [0mgit status 2>&1
+On branch main
+Your branch is based on 'origin/main', but the upstream is gone.
+  (use "git branch --unset-upstream" to fixup)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   work/reports/wave-1/02-pydantic-schemas-state.run.log
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.claude/
+	.dockerignore
+	.env.example
+	.gitignore
+	.pre-commit-config.yaml
+	.specify/
+	AGENTS.md
+	BACKLOG.md
+	CHANGELOG.md
+	CLAUDE.md
+	CONTRIBUTING.md
+	Dockerfile
+	HALL_OF_SHAME.md
+	HANDOFF.md
+	HIERARCHY.md
+	HOW_TO_RUN.md
+	KIMI.md
+	LICENSE
+	Makefile
+	OS_SETUP.md
+	README.md
+	attic/
+	corpus/
+	deployment/
+	docker-compose.dev.yml
+	docker-compose.yml
+	docs/REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+	docs/SCOPE_GUARD.md
+	docs/agents/
+	docs/architecture/
+	docs/audits/
+	docs/benchmarks/
+	docs/conventions.md
+	docs/decisions/
+	docs/flows/
+	docs/historical/
+	docs/interview_runbook.md
+	docs/operational/
+	docs/runbook.md
+	docs/runtime/
+	docs/schemas/
+	docs/waves/wave-4-gotchas.md
+	evals/
+	evidence/
+	logs/
+	mcp.json
+	models/
+	orchestrator/
+	plan/
+	prometheus.yml
+	prompts/
+	pyproject.toml
+	pytest.ini
+	requirements.txt
+	resources/
+	results/
+	skills-lock.json
+	skills.manifest.json
+	src/finroot/agents/intent.py
+	src/finroot/agents/market_agent.py
+	src/finroot/agents/news_agent.py
+	src/finroot/agents/orchestrator.py
+	src/finroot/agents/portfolio_agent.py
+	src/finroot/agents/risk_agent.py
+	src/finroot/agents/tax_agent.py
+	src/finroot/workflows/context.py
+	src/finroot/workflows/graph.py
+	tests/integration/test_orchestrator.py
+	tests/unit/test_agent_tax.py
+	tests/unit/test_agents_market_news.py
+	tests/unit/test_agents_risk_portfolio.py
+	tests/unit/test_intent.py
+	work/REPORT_TEMPLATE.md
+	work/TASK_TEMPLATE.md
+	work/WORKER_PROMPT.md
+	work/reports/wave-4/
+	work/reports/wave-5/
+	work/reports/wave-6/
+	work/reports/wave-7/
+	work/reports/wave-8/
+	work/wave-1/
+	work/wave-2/
+	work/wave-3/
+	work/wave-4/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[0m
+[0m$ [0mruff check tests/integration/test_orchestrator.py 2>&1
+F401 [*] `typing.Any` imported but unused
+  --> tests/integration/test_orchestrator.py:12:20
+   |
+10 | from datetime import UTC, datetime
+11 | from pathlib import Path
+12 | from typing import Any
+   |                    ^^^
+13 |
+14 | import pytest
+   |
+help: Remove unused import: `typing.Any`
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.
+[0m
+[0m← [0mEdit tests/integration/test_orchestrator.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/integration/test_orchestrator.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/integration/test_orchestrator.py
++++ /Users/srujansai/Desktop/FinRoot/tests/integration/test_orchestrator.py
+@@ -8,9 +8,8 @@
+ 
+ import sys
+ from datetime import UTC, datetime
+ from pathlib import Path
+-from typing import Any
+ 
+ import pytest
+ 
+ from finroot.agents.intent import IntentClassifier
+
+[0m
+[0m$ [0mruff check tests/integration/test_orchestrator.py 2>&1
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/integration/test_orchestrator.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 10 items
+
+tests/integration/test_orchestrator.py ..........                        [100%]
+
+=============================== warnings summary ===============================
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    from pydantic.v1.fields import FieldInfo as FieldInfoV1
+
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77: DeprecationWarning: ForwardRef._evaluate is a private API and is retained for compatibility, but will be removed in Python 3.16. Use ForwardRef.evaluate() or typing.evaluate_forward_ref() instead.
+    return cast(Any, type_)._evaluate(globalns, localns, type_params=(), recursive_guard=set())
+
+tests/integration/test_orchestrator.py::test_full_pipeline_portfolio
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+
+tests/integration/test_orchestrator.py: 50 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:384: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    asyncio.iscoroutinefunction(func)
+
+tests/integration/test_orchestrator.py: 50 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:386: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    and asyncio.iscoroutinefunction(func.__call__)
+
+tests/integration/test_orchestrator.py::test_build_graph_compilable
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    if asyncio.iscoroutinefunction(f):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+====================== 10 passed, 110 warnings in 14.12s =======================
+[0m
+Task complete. Here's what was delivered:
+
+**Files written** (Writes set only):
+- `src/finroot/workflows/graph.py` — `build_graph()` with 5-node LangGraph state graph using `GraphState` TypedDict
+- `src/finroot/agents/orchestrator.py` — `FinRootOrchestrator` + `ResultSynthesizer`
+- `tests/integration/test_orchestrator.py` — 10 integration tests
+
+**Acceptance** (both pass):
+```
+PYTHONPATH=src python3 -m pytest tests/integration/test_orchestrator.py -v  → 10 passed
+ruff check src/finroot/agents/orchestrator.py src/finroot/workflows/graph.py → All checks passed
+```
+
+**Key decisions**:
+- Used `GraphState` TypedDict instead of `AgentState` directly because LangGraph's `get_type_hints()` can't resolve the `AuditEvent` forward reference guarded by `TYPE_CHECKING` (documented in `docs/waves/wave-4-gotchas.md`)
+- Renamed node `plan` → `select_agents` to avoid collision with the `plan` state key
+- Minimal `ResultSynthesizer` embedded in orchestrator (full version belongs to `workflows/synthesize.py` which is Forbid for this task)
+
+Report at `work/reports/wave-4/05-orchestrator.report.md`.
+=== opencode exited rc=0 @ Fri Jun 19 21:33:58 IST 2026 ===
