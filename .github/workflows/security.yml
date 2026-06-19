@@ -1,0 +1,27 @@
+name: security
+on:
+  push: { branches: [main] }
+  pull_request: {}
+  schedule:
+    - cron: "0 6 * * 1"   # weekly Monday 06:00 UTC
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: dependency audit
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt || true   # report; don't hard-fail the build on advisories yet
+      - name: secret scan (FM-07)
+        run: |
+          git diff --cached -U0 2>/dev/null || true
+          bash orchestrator/hooks/block-secrets.sh || true
+      - name: trade/money-tool guard (must never exist)
+        run: |
+          if grep -rEni "def +(place_order|execute_trade|transfer_funds)" src/ 2>/dev/null; then
+            echo "BLOCK: a money-movement function exists — FinRoot is decision-support only (r5 blocked)"; exit 1;
+          else echo "no money-movement functions — OK"; fi

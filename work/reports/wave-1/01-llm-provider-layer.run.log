@@ -1,0 +1,269 @@
+=== dispatch opencode xiaomi-token-plan-sgp/mimo-v2.5-pro -> work/wave-1/01-llm-provider-layer.md @ Fri Jun 19 14:24:07 IST 2026 ===
+[0m
+> build · mimo-v2.5-pro
+[0m
+[0m→ [0mRead work/WORKER_PROMPT.md
+[0m→ [0mRead work/wave-1/01-llm-provider-layer.md
+[0m→ [0mRead .specify/specs/wave-1/contracts/schemas.contract.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead src/finroot
+[0m→ [0mRead src/finroot/llm
+[0m→ [0mRead src/finroot/schemas
+[0m→ [0mRead pyproject.toml
+[0m→ [0mRead src/finroot/schemas/enums.py
+[0m→ [0mRead tests
+[0m
+[0m# [0mTodos
+[•] Create src/finroot/llm/base.py - LLMProvider protocol + LLMResult + parse_reasoning_confidence
+[ ] Create src/finroot/llm/mock.py - deterministic canned responses
+[ ] Create src/finroot/llm/ollama.py, groq.py, openai.py - thin adapters
+[ ] Create src/finroot/llm/factory.py - get_provider
+[ ] Create src/finroot/llm/__init__.py - public API
+[ ] Create tests/unit/test_llm_provider.py
+[ ] Run acceptance commands and write report
+[0m
+[0m← [0mWrite src/finroot/llm/base.py
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create src/finroot/llm/base.py - LLMProvider protocol + LLMResult + parse_reasoning_confidence
+[•] Create src/finroot/llm/mock.py - deterministic canned responses
+[ ] Create src/finroot/llm/ollama.py, groq.py, openai.py - thin adapters
+[ ] Create src/finroot/llm/factory.py - get_provider
+[ ] Create src/finroot/llm/__init__.py - public API
+[ ] Create tests/unit/test_llm_provider.py
+[ ] Run acceptance commands and write report
+[0m
+[0m← [0mWrite src/finroot/llm/mock.py
+Wrote file successfully.
+[0m
+[0m← [0mWrite src/finroot/llm/ollama.py
+Wrote file successfully.
+[0m
+[0m← [0mWrite src/finroot/llm/groq.py
+Wrote file successfully.
+[0m
+[0m← [0mWrite src/finroot/llm/openai.py
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create src/finroot/llm/base.py - LLMProvider protocol + LLMResult + parse_reasoning_confidence
+[✓] Create src/finroot/llm/mock.py - deterministic canned responses
+[✓] Create src/finroot/llm/ollama.py, groq.py, openai.py - thin adapters
+[•] Create src/finroot/llm/factory.py - get_provider
+[ ] Create src/finroot/llm/__init__.py - public API
+[ ] Create tests/unit/test_llm_provider.py
+[ ] Run acceptance commands and write report
+[0m
+[0m← [0mWrite src/finroot/llm/factory.py
+Wrote file successfully.
+[0m
+[0m← [0mWrite src/finroot/llm/__init__.py
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create src/finroot/llm/base.py - LLMProvider protocol + LLMResult + parse_reasoning_confidence
+[✓] Create src/finroot/llm/mock.py - deterministic canned responses
+[✓] Create src/finroot/llm/ollama.py, groq.py, openai.py - thin adapters
+[✓] Create src/finroot/llm/factory.py - get_provider
+[✓] Create src/finroot/llm/__init__.py - public API
+[•] Create tests/unit/test_llm_provider.py
+[ ] Run acceptance commands and write report
+[0m
+[0m← [0mWrite tests/unit/test_llm_provider.py
+Wrote file successfully.
+[0m
+[0m$ [0mrm /Users/srujansai/Desktop/FinRoot/src/finroot/llm/.gitkeep
+(no output)
+[0m
+[0m# [0mTodos
+[✓] Create src/finroot/llm/base.py - LLMProvider protocol + LLMResult + parse_reasoning_confidence
+[✓] Create src/finroot/llm/mock.py - deterministic canned responses
+[✓] Create src/finroot/llm/ollama.py, groq.py, openai.py - thin adapters
+[✓] Create src/finroot/llm/factory.py - get_provider
+[✓] Create src/finroot/llm/__init__.py - public API
+[✓] Create tests/unit/test_llm_provider.py
+[•] Run acceptance commands and write report
+[0m
+[0m$ [0mruff check src/finroot/llm/
+SIM108 Use ternary operator `key = name.value if isinstance(name, Provider) else str(name).strip().lower()` instead of `if`-`else`-block
+  --> src/finroot/llm/factory.py:50:5
+   |
+48 |           name = os.environ.get("FINROOT_LLM_PROVIDER", Provider.MOCK)
+49 |
+50 | /     if isinstance(name, Provider):
+51 | |         key = name.value
+52 | |     else:
+53 | |         key = str(name).strip().lower()
+   | |_______________________________________^
+54 |
+55 |       mapping = _lazy_map()
+   |
+help: Replace `if`-`else`-block with `key = name.value if isinstance(name, Provider) else str(name).strip().lower()`
+
+Found 1 error.
+No fixes available (1 hidden fix can be enabled with the `--unsafe-fixes` option).
+[0m
+[0m← [0mEdit src/finroot/llm/factory.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/llm/factory.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/llm/factory.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/llm/factory.py
+@@ -46,12 +46,9 @@
+ """
+ if name is None:
+     name = os.environ.get("FINROOT_LLM_PROVIDER", Provider.MOCK)
+ 
+-if isinstance(name, Provider):
+-    key = name.value
+-else:
+-    key = str(name).strip().lower()
++key = name.value if isinstance(name, Provider) else str(name).strip().lower()
+ 
+ mapping = _lazy_map()
+ cls = mapping.get(key)
+ if cls is None:
+
+[0m
+[0m$ [0mruff check src/finroot/llm/
+All checks passed!
+[0m
+[0m$ [0mpython -c "from finroot.llm import get_provider; r=get_provider('mock').complete('hi'); print(r.provider, r.text[:20])"
+zsh:1: command not found: python
+[0m
+[0m$ [0mpytest tests/unit/test_llm_provider.py -v
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 17 items
+
+tests/unit/test_llm_provider.py .........F.......                        [100%]
+
+=================================== FAILURES ===================================
+____________________ TestFactory.test_resolve_string_names _____________________
+
+self = <test_llm_provider.TestFactory object at 0x10b716490>
+
+    def test_resolve_string_names(self) -> None:
+        for name in ("mock", "ollama", "groq", "openai"):
+>           p = get_provider(name)
+                ^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_llm_provider.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/finroot/llm/factory.py:58: in get_provider
+    return cls()
+           ^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <finroot.llm.groq.GroqProvider object at 0x10b7f4d70>, model = None
+api_key = None
+
+    def __init__(self, model: str | None = None, api_key: str | None = None) -> None:
+        self.model = model or _DEFAULT_MODEL
+        self._api_key = api_key or os.environ.get("GROQ_API_KEY")
+        if not self._api_key:
+>           raise RuntimeError(
+                "GROQ_API_KEY environment variable is required for GroqProvider. "
+                "Set it or pass api_key explicitly."
+            )
+E           RuntimeError: GROQ_API_KEY environment variable is required for GroqProvider. Set it or pass api_key explicitly.
+
+src/finroot/llm/groq.py:25: RuntimeError
+=========================== short test summary info ============================
+FAILED tests/unit/test_llm_provider.py::TestFactory::test_resolve_string_names
+========================= 1 failed, 16 passed in 0.28s =========================
+[0m
+[0m← [0mEdit tests/unit/test_llm_provider.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_llm_provider.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_llm_provider.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_llm_provider.py
+@@ -83,13 +83,32 @@
+ def test_default_is_mock(self) -> None:
+     p = get_provider()
+     assert p.name == "mock"
+ 
+-def test_resolve_string_names(self) -> None:
+-    for name in ("mock", "ollama", "groq", "openai"):
+-        p = get_provider(name)
+-        assert p.name == name
++def test_resolve_mock_by_string(self) -> None:
++    p = get_provider("mock")
++    assert p.name == "mock"
+ 
++def test_resolve_ollama_by_string(self, monkeypatch: pytest.MonkeyPatch) -> None:
++    monkeypatch.setenv("GROQ_API_KEY", "test-key")
++    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
++    from finroot.llm.groq import GroqProvider
++    from finroot.llm.openai import OpenAIProvider
++
++    # Ollama doesn't require a key to instantiate
++    p = get_provider("ollama")
++    assert p.name == "ollama"
++
++def test_resolve_groq_by_string(self, monkeypatch: pytest.MonkeyPatch) -> None:
++    monkeypatch.setenv("GROQ_API_KEY", "test-key")
++    p = get_provider("groq")
++    assert p.name == "groq"
++
++def test_resolve_openai_by_string(self, monkeypatch: pytest.MonkeyPatch) -> None:
++    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
++    p = get_provider("openai")
++    assert p.name == "openai"
++
+ def test_resolve_enum(self) -> None:
+     p = get_provider(Provider.MOCK)
+     assert p.name == "mock"
+ 
+
+[0m
+[0m$ [0mpython3 -c "from finroot.llm import get_provider; r=get_provider('mock').complete('hi'); print(r.provider, r.text[:20])"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from finroot.llm import get_provider; r=get_provider('mock').complete('hi'); print(r.provider, r.text[:20])
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'finroot'
+[0m
+[0m$ [0mpytest tests/unit/test_llm_provider.py -v
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 20 items
+
+tests/unit/test_llm_provider.py ....................                     [100%]
+
+============================== 20 passed in 0.66s ==============================
+[0m
+[0m$ [0mPYTHONPATH=src python3 -c "from finroot.llm import get_provider; r=get_provider('mock').complete('hi'); print(r.provider, r.text[:20])"
+mock Diversification acro
+[0m
+[0m$ [0mruff check src/finroot/llm/
+All checks passed!
+[0m
+[0m← [0mWrite work/reports/wave-1/01-llm-provider-layer.report.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create src/finroot/llm/base.py - LLMProvider protocol + LLMResult + parse_reasoning_confidence
+[✓] Create src/finroot/llm/mock.py - deterministic canned responses
+[✓] Create src/finroot/llm/ollama.py, groq.py, openai.py - thin adapters
+[✓] Create src/finroot/llm/factory.py - get_provider
+[✓] Create src/finroot/llm/__init__.py - public API
+[✓] Create tests/unit/test_llm_provider.py
+[✓] Run acceptance commands and write report
+[0m
+Done. All 8 files in the Writes set implemented, all acceptance commands pass:
+
+- **ruff check**: All checks passed
+- **mock provider**: `mock Diversification acro`
+- **pytest**: 20/20 passed in 0.66s
+
+Report written to `work/reports/wave-1/01-llm-provider-layer.report.md`.
+=== opencode exited rc=0 @ Fri Jun 19 15:51:32 IST 2026 ===

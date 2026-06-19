@@ -1,0 +1,39 @@
+name: evals
+on:
+  pull_request:
+    paths:
+      - "src/finroot/agents/**"
+      - "src/finroot/reasoning/**"
+      - "src/finroot/evaluation/**"
+      - "evals/**"
+  workflow_dispatch: {}
+
+jobs:
+  frb:
+    runs-on: ubuntu-latest
+    env:
+      FINROOT_LLM_PROVIDER: mock      # deterministic, offline reasoning benchmark
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip }
+      - name: install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+          pip install -e . || true
+      - name: run FRB (pass@k / pass^k vs baseline)
+        run: |
+          if [ -f scripts/run_evals.py ]; then python scripts/run_evals.py --mock --all; else echo "FRB harness pending wave-6"; fi
+      - name: publish metrics
+        if: always()
+        run: |
+          if [ -f results/metrics.json ]; then echo "=== FRB metrics ==="; cat results/metrics.json; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frb-reports
+          path: |
+            results/metrics.json
+            evals/reports/
+          if-no-files-found: ignore

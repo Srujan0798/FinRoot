@@ -1,0 +1,21 @@
+name: docs_sync
+on:
+  push: { branches: [main] }
+  pull_request: {}
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: EXECUTION.md no-drift (FM-01)
+        run: bash orchestrator/scripts/validate_execution.sh
+      - name: referenced files exist (FM-03)
+        run: |
+          MISSING=0
+          for f in $(grep -oE '\(([a-zA-Z0-9_./-]+\.md)\)' README.md | tr -d '()'); do
+            if [ ! -e "$f" ]; then echo "broken reference in README: $f"; MISSING=1; fi
+          done
+          [ "$MISSING" -eq 0 ] && echo "README references resolve" || exit 1
+      - name: structural validate
+        run: bash orchestrator/scripts/validate.sh

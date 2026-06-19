@@ -1,0 +1,28 @@
+name: test
+on:
+  push: { branches: [main] }
+  pull_request: {}
+
+jobs:
+  matrix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python: ["3.11", "3.12"]
+    env:
+      FINROOT_LLM_PROVIDER: mock
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.python }}", cache: pip }
+      - name: install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+          pip install pytest pytest-cov
+          pip install -e . || true
+      - name: tests
+        run: |
+          if ls tests/**/*.py >/dev/null 2>&1; then pytest --cov=src/finroot --cov-report=term-missing; else echo "tests pending wave-1"; fi

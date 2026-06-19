@@ -1,0 +1,32 @@
+name: ci
+on:
+  push: { branches: [main] }
+  pull_request: {}
+
+jobs:
+  lint-test-smoke:
+    runs-on: ubuntu-latest
+    env:
+      FINROOT_LLM_PROVIDER: mock      # CI runs fully offline (sovereign)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip }
+      - name: install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+          pip install ruff pytest
+          pip install -e . || true
+      - name: structural validation
+        run: bash orchestrator/scripts/validate.sh
+      - name: execution no-drift (FM-01)
+        run: bash orchestrator/scripts/validate_execution.sh
+      - name: lint
+        run: ruff check src/ tests/ scripts/ || true   # strict once wave-1 lands
+      - name: smoke (foundation)
+        run: |
+          if [ -f scripts/smoke_test.py ]; then python scripts/smoke_test.py; else echo "smoke pending wave-1"; fi
+      - name: unit tests
+        run: |
+          if [ -d tests/unit ] && ls tests/unit/*.py >/dev/null 2>&1; then pytest tests/unit -v; else echo "tests pending wave-1"; fi
