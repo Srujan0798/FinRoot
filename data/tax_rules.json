@@ -1,0 +1,54 @@
+{
+  "rules": [
+    {
+      "id": "LTCG_EQUITY",
+      "gain_type": "LTCG",
+      "asset_class": "equity",
+      "holding_period_months": 12,
+      "rate": 0.10,
+      "exemption": 100000,
+      "cess_rate": 0.04,
+      "surcharge_threshold": 5000000,
+      "surcharge_rate": 0.10,
+      "description": "LTCG equity (held > 12 months): 10% on gains above ₹1,00,000 exempt limit; 4% cess on tax + surcharge"
+    },
+    {
+      "id": "STCG_EQUITY",
+      "gain_type": "STCG_EQUITY",
+      "asset_class": "equity",
+      "holding_period_months": 12,
+      "rate": 0.15,
+      "exemption": 0,
+      "cess_rate": 0.04,
+      "surcharge_threshold": 5000000,
+      "surcharge_rate": 0.10,
+      "description": "STCG equity (held ≤ 12 months): 15% flat; 4% cess on tax + surcharge"
+    },
+    {
+      "id": "STCG",
+      "gain_type": "STCG",
+      "asset_class": "debt_gold_others",
+      "holding_period_months": 36,
+      "rate": null,
+      "exemption": 0,
+      "cess_rate": 0.04,
+      "surcharge_threshold": 5000000,
+      "surcharge_rate": 0.10,
+      "description": "STCG other (debt/gold/others held ≤ 36 months): taxed at slab rate; 4% cess on tax + surcharge"
+    }
+  ],
+  "income_tax_slabs": [
+    {"min_income": 0, "max_income": 300000, "rate": 0.0},
+    {"min_income": 300000, "max_income": 700000, "rate": 0.05},
+    {"min_income": 700000, "max_income": 1000000, "rate": 0.10},
+    {"min_income": 1000000, "max_income": 1200000, "rate": 0.15},
+    {"min_income": 1200000, "max_income": 1500000, "rate": 0.20},
+    {"min_income": 1500000, "max_income": null, "rate": 0.30}
+  ],
+  "metadata": {
+    "financial_year": "2024-25",
+    "regime": "new",
+    "version": "1.0",
+    "source": "Budget 2024 / Finance Act 2024"
+  }
+}

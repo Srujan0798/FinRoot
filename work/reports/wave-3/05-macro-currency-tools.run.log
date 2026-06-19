@@ -1,0 +1,618 @@
+=== dispatch opencode minimax-coding-plan/MiniMax-M3 -> work/wave-3/05-macro-currency-tools.md @ Fri Jun 19 19:03:17 IST 2026 ===
+[0m
+> build · MiniMax-M3
+[0m
+[0m→ [0mRead work/WORKER_PROMPT.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead work/wave-3/05-macro-currency-tools.md
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/finroot/tools/
+__init__.py
+__pycache__
+base.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/tests/unit/
+__pycache__
+test_audit_chain.py
+test_base_interfaces.py
+test_config.py
+test_llm_provider.py
+test_schemas.py
+[0m
+[0m→ [0mRead .specify/specs/wave-3/contracts/tools.contract.md
+[0m→ [0mRead src/finroot/tools/base.py
+[0m→ [0mRead tests/unit/test_base_interfaces.py
+[0m→ [0mRead src/finroot/tools/__init__.py
+[0m→ [0mRead src/finroot
+[0m→ [0mRead src/finroot/schemas
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/
+AGENTS.md
+BACKLOG.md
+CHANGELOG.md
+CLAUDE.md
+CONTRIBUTING.md
+Dockerfile
+HALL_OF_SHAME.md
+HANDOFF.md
+HIERARCHY.md
+HOW_TO_RUN.md
+KIMI.md
+LICENSE
+Makefile
+OS_SETUP.md
+README.md
+attic
+config
+corpus
+data
+deployment
+docker-compose.dev.yml
+docker-compose.yml
+docs
+evals
+evidence
+logs
+mcp.json
+models
+orchestrator
+plan
+prometheus.yml
+prompts
+pyproject.toml
+pytest.ini
+requirements.txt
+resources
+results
+schema
+scripts
+skills-lock.json
+skills.manifest.json
+src
+tests
+work
+workflows
+[0m
+[0m→ [0mRead src/finroot/llm
+[0m→ [0mRead pyproject.toml
+[0m→ [0mRead pytest.ini
+[0m→ [0mRead src/finroot/llm/factory.py
+[0m→ [0mRead tests/unit/test_schemas.py
+[0m→ [0mRead src/finroot/audit/trail.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-3/
+contracts
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/.specify/specs/
+wave-1
+wave-2
+wave-3
+[0m
+[0m→ [0mRead src/finroot/schemas/finance.py
+[0m→ [0mRead src/finroot/schemas/enums.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-3/contracts/
+tools.contract.md
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-2/contracts/ 2>/dev/null || ls /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-2/
+memory.contract.md
+[0m
+[0m$ [0mpython3 -c "import requests; print(requests.__version__)"
+2.33.1
+[0m
+[0m→ [0mRead .specify/specs/wave-2/contracts/memory.contract.md[90m [limit=50][0m
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && python3 -c "
+import requests
+# Test World Bank API and open.er-api
+print('Testing World Bank API for gdp_growth IN:')
+r = requests.get('https://api.worldbank.org/v2/country/IN/indicator/NY.GDP.MKTP.KD.ZG?format=json&mrv=1', timeout=10)
+print('status:', r.status_code)
+print('body (first 500 chars):', r.text[:500])
+
+print()
+print('Testing open.er-api.com for USD:')
+r = requests.get('https://open.er-api.com/v6/latest/USD', timeout=10)
+print('status:', r.status_code)
+print('body (first 500 chars):', r.text[:500])
+"
+
+Testing World Bank API for gdp_growth IN:
+status: 200
+body (first 500 chars): [{"page":1,"pages":1,"per_page":50,"total":1,"sourceid":"2","lastupdated":"2026-04-08"},[{"indicator":{"id":"NY.GDP.MKTP.KD.ZG","value":"GDP growth (annual %)"},"country":{"id":"IN","value":"India"},"countryiso3code":"IND","date":"2024","value":6.49476552383821,"unit":"","obs_status":"","decimal":1}]]
+
+Testing open.er-api.com for USD:
+status: 200
+body (first 500 chars): {"result":"success","provider":"https://www.exchangerate-api.com","documentation":"https://www.exchangerate-api.com/docs/free","terms_of_use":"https://www.exchangerate-api.com/terms","time_last_update_unix":1781827352,"time_last_update_utc":"Fri, 19 Jun 2026 00:02:32 +0000","time_next_update_unix":1781914942,"time_next_update_utc":"Sat, 20 Jun 2026 00:22:22 +0000","time_eol_unix":0,"base_code":"USD","rates":{"USD":1,"AED":3.6725,"AFN":63.988486,"ALL":82.377288,"AMD":368.328717,"ANG":1.79,"AOA":9
+[0m
+[0m# [0mTodos
+[•] Implement src/finroot/tools/macro.py (MacroDataTool)
+[ ] Implement src/finroot/tools/currency.py (CurrencyConverterTool)
+[ ] Write tests/unit/test_tools_macro.py with 12+ tests
+[ ] Run pytest + ruff, capture real output
+[ ] Write report to work/reports/wave-3/05-macro-currency-tools.report.md
+[0m
+[0m✱ [0mGrep "ToolError|ToolCallError"[90m in src/finroot/tools · 10 matches[0m
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && python3 -c "
+import requests
+# Quick check on World Bank indicators
+r = requests.get('https://api.worldbank.org/v2/country/IN/indicator/FP.CPI.TOTL.ZG?format=json&mrv=1', timeout=10)
+print('inflation IN:', r.json()[1][0]['value'], 'date:', r.json()[1][0]['date'])
+r = requests.get('https://api.worldbank.org/v2/country/IN/indicator/SL.UEM.TOTL.ZS?format=json&mrv=1', timeout=10)
+print('unemployment IN:', r.json()[1][0]['value'], 'date:', r.json()[1][0]['date'])
+r = requests.get('https://api.worldbank.org/v2/country/IN/indicator/FM.RBL.BMNY.ZG?format=json&mrv=1', timeout=10)
+print('repo_rate (broad money) IN:', r.json()[1][0]['value'] if r.json()[1] else 'no data')
+"
+Traceback (most recent call last):
+  File "<string>", line 9, in <module>
+    print('repo_rate (broad money) IN:', r.json()[1][0]['value'] if r.json()[1] else 'no data')
+                                                                    ~~~~~~~~^^^
+IndexError: list index out of range
+inflation IN: 4.95303550973656 date: 2024
+unemployment IN: 4.219 date: 2025
+[0m
+[0m→ [0mRead src/finroot/tools/risk.py
+[0m→ [0mRead src/finroot/tools/news.py
+Now I have full context. Let me implement the tools.
+[0m
+[0m← [0mWrite src/finroot/tools/macro.py
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Implement src/finroot/tools/macro.py (MacroDataTool)
+[•] Implement src/finroot/tools/currency.py (CurrencyConverterTool)
+[ ] Write tests/unit/test_tools_macro.py with 12+ tests
+[ ] Run pytest + ruff, capture real output
+[ ] Write report to work/reports/wave-3/05-macro-currency-tools.report.md
+[0m
+[0m← [0mWrite src/finroot/tools/currency.py
+Wrote file successfully.
+[0m
+[0m← [0mWrite tests/unit/test_tools_macro.py
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Implement src/finroot/tools/macro.py (MacroDataTool)
+[✓] Implement src/finroot/tools/currency.py (CurrencyConverterTool)
+[✓] Write tests/unit/test_tools_macro.py with 12+ tests
+[•] Run pytest + ruff, capture real output
+[ ] Write report to work/reports/wave-3/05-macro-currency-tools.report.md
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && PYTHONPATH=src python3 -m pytest tests/unit/test_tools_macro.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 35 items
+
+tests/unit/test_tools_macro.py ......F................F...........       [100%]
+
+=================================== FAILURES ===================================
+________________ TestMacroMock.test_country_normalised_to_upper ________________
+
+self = <test_tools_macro.TestMacroMock object at 0x10993d590>
+
+    def test_country_normalised_to_upper(self) -> None:
+        tool = MacroDataTool(mock=True)
+        out = tool(MacroInput(indicator="gdp_growth", country="in"))
+>       assert out.country == "IN"
+E       AssertionError: assert 'in' == 'IN'
+E         
+E         - IN
+E         + in
+
+tests/unit/test_tools_macro.py:91: AssertionError
+___________ TestCurrencyMock.test_unknown_mock_currency_raises_loud ____________
+
+self = <test_tools_macro.TestCurrencyMock object at 0x1099a3550>
+
+    def test_unknown_mock_currency_raises_loud(self) -> None:
+        tool = CurrencyConverterTool(mock=True)
+        with pytest.raises(ToolCallError) as exc:
+            tool(CurrencyInput(amount=1.0, from_currency="XYZ", to_currency="INR"))
+        assert "XYZ" in str(exc.value)
+>       assert "Mock rate table" in str(exc.value)
+E       assert 'Mock rate table' in "Tool 'currency_converter' failed after 4 attempt(s): CurrencyConverterTool: mock rate table has no entry for 'XYZ' or 'INR'. Supported: ['AED', 'EUR', 'GBP', 'INR', 'JPY', 'USD']"
+E        +  where "Tool 'currency_converter' failed after 4 attempt(s): CurrencyConverterTool: mock rate table has no entry for 'XYZ' or 'INR'. Supported: ['AED', 'EUR', 'GBP', 'INR', 'JPY', 'USD']" = str(ToolCallError("Tool 'currency_converter' failed after 4 attempt(s): CurrencyConverterTool: mock rate table has no entry for 'XYZ' or 'INR'. Supported: ['AED', 'EUR', 'GBP', 'INR', 'JPY', 'USD']"))
+E        +    where ToolCallError("Tool 'currency_converter' failed after 4 attempt(s): CurrencyConverterTool: mock rate table has no entry for 'XYZ' or 'INR'. Supported: ['AED', 'EUR', 'GBP', 'INR', 'JPY', 'USD']") = <ExceptionInfo ToolCallError("Tool 'currency_converter' failed after 4 attempt(s): CurrencyConverterTool: mock rate table has no entry for 'XYZ' or 'INR'. Supported: ['AED', 'EUR', 'GBP', 'INR', 'JPY', 'USD']") tblen=2>.value
+
+tests/unit/test_tools_macro.py:260: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  finroot.tools.base:base.py:108 Tool 'currency_converter' attempt 1/4 failed: CurrencyConverterTool: mock rate table has no entry for 'XYZ' or 'INR'. Supported: ['AED', 'EUR', 'GBP', 'INR', 'JPY', 'USD']
+WARNING  finroot.tools.base:base.py:108 Tool 'currency_converter' attempt 2/4 failed: CurrencyConverterTool: mock rate table has no entry for 'XYZ' or 'INR'. Supported: ['AED', 'EUR', 'GBP', 'INR', 'JPY', 'USD']
+WARNING  finroot.tools.base:base.py:108 Tool 'currency_converter' attempt 3/4 failed: CurrencyConverterTool: mock rate table has no entry for 'XYZ' or 'INR'. Supported: ['AED', 'EUR', 'GBP', 'INR', 'JPY', 'USD']
+WARNING  finroot.tools.base:base.py:108 Tool 'currency_converter' attempt 4/4 failed: CurrencyConverterTool: mock rate table has no entry for 'XYZ' or 'INR'. Supported: ['AED', 'EUR', 'GBP', 'INR', 'JPY', 'USD']
+=========================== short test summary info ============================
+FAILED tests/unit/test_tools_macro.py::TestMacroMock::test_country_normalised_to_upper
+FAILED tests/unit/test_tools_macro.py::TestCurrencyMock::test_unknown_mock_currency_raises_loud
+======================== 2 failed, 33 passed in 48.44s =========================
+[0m
+Two test failures and slow tests due to retry backoff. Let me fix the country validator, the test assertion, and speed up the failure-path tests.
+[0m← [0mEdit src/finroot/tools/macro.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/tools/macro.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/tools/macro.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/tools/macro.py
+@@ -17,9 +17,9 @@
+ import urllib.error
+ import urllib.request
+ from typing import Literal
+ 
+-from pydantic import BaseModel, Field
++from pydantic import BaseModel, Field, field_validator
+ 
+ from finroot.tools.base import BaseTool, ToolCallError
+ 
+ logger = logging.getLogger(__name__)
+
+[0m
+[0m← [0mEdit src/finroot/tools/macro.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/tools/macro.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/tools/macro.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/tools/macro.py
+@@ -38,9 +38,14 @@
+     country: str = Field(default="IN", min_length=2, max_length=3)
+ 
+     model_config = {"extra": "forbid"}
+ 
++    @field_validator("country")
++    @classmethod
++    def _upper(cls, v: str) -> str:
++        return v.upper()
+ 
++
+ class MacroOutput(BaseModel):
+     """Output from MacroDataTool."""
+ 
+     indicator: str
+
+[0m
+[0m← [0mEdit tests/unit/test_tools_macro.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
+@@ -253,12 +253,14 @@
+     assert out.to_currency == "INR"
+ 
+ def test_unknown_mock_currency_raises_loud(self) -> None:
+     tool = CurrencyConverterTool(mock=True)
++    tool.base_delay = 0.001  # fast tests; retry tested separately
++    tool.max_retries = 0
+     with pytest.raises(ToolCallError) as exc:
+         tool(CurrencyInput(amount=1.0, from_currency="XYZ", to_currency="INR"))
+     assert "XYZ" in str(exc.value)
+-    assert "Mock rate table" in str(exc.value)
++    assert "mock rate table" in str(exc.value).lower()
+ 
+ def test_extra_forbidden(self) -> None:
+     with pytest.raises(ValidationError):
+         CurrencyInput(
+
+[0m
+[0m← [0mEdit tests/unit/test_tools_macro.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
+@@ -147,8 +147,10 @@
+     assert "World Bank" in out.citation
+ 
+ def test_live_network_failure_raises_loud(self) -> None:
+     tool = MacroDataTool(mock=False)
++    tool.base_delay = 0.001  # fast tests; retry tested separately
++    tool.max_retries = 0
+     with mock.patch("urllib.request.urlopen") as u:
+         u.side_effect = urllib.error.URLError("dns down")
+         with pytest.raises(ToolCallError) as exc:
+             tool(MacroInput(indicator="gdp_growth"))
+@@ -171,16 +173,20 @@
+             ],
+         ]
+     ).encode("utf-8")
+     tool = MacroDataTool(mock=False)
++    tool.base_delay = 0.001
++    tool.max_retries = 0
+     with mock.patch("urllib.request.urlopen") as u:
+         u.return_value.__enter__.return_value.read.return_value = payload
+         with pytest.raises(ToolCallError) as exc:
+             tool(MacroInput(indicator="gdp_growth"))
+     assert "null value" in str(exc.value)
+ 
+ def test_live_unexpected_shape_raises_loud(self) -> None:
+     tool = MacroDataTool(mock=False)
++    tool.base_delay = 0.001
++    tool.max_retries = 0
+     with mock.patch("urllib.request.urlopen") as u:
+         u.return_value.__enter__.return_value.read.return_value = b"not a json array"
+         with pytest.raises(ToolCallError):
+             tool(MacroInput(indicator="gdp_growth"))
+
+[0m
+[0m← [0mEdit tests/unit/test_tools_macro.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
+@@ -323,8 +323,10 @@
+     assert "open.er-api.com" in out.citation
+ 
+ def test_live_network_failure_raises_loud(self) -> None:
+     tool = CurrencyConverterTool(mock=False)
++    tool.base_delay = 0.001
++    tool.max_retries = 0
+     with mock.patch("urllib.request.urlopen") as u:
+         u.side_effect = urllib.error.URLError("offline")
+         with pytest.raises(ToolCallError) as exc:
+             tool(CurrencyInput(amount=1.0, from_currency="USD", to_currency="INR"))
+@@ -332,8 +334,10 @@
+     assert "offline" in str(exc.value)
+ 
+ def test_live_non_success_result_raises_loud(self) -> None:
+     tool = CurrencyConverterTool(mock=False)
++    tool.base_delay = 0.001
++    tool.max_retries = 0
+     bad = json.dumps({"result": "error", "base_code": "USD", "rates": {}}).encode("utf-8")
+     with mock.patch("urllib.request.urlopen") as u:
+         u.return_value.__enter__.return_value.read.return_value = bad
+         with pytest.raises(ToolCallError) as exc:
+
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && PYTHONPATH=src python3 -m pytest tests/unit/test_tools_macro.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 35 items
+
+tests/unit/test_tools_macro.py ...................................       [100%]
+
+============================== 35 passed in 2.76s ==============================
+[0m
+All 35 tests pass in 2.76s. Now let me run ruff and verify the rest of the test suite still works (no collateral damage to wave-1/2).
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && ruff check src/finroot/tools/macro.py src/finroot/tools/currency.py tests/unit/test_tools_macro.py 2>&1
+F401 [*] `io.BytesIO` imported but unused
+  --> tests/unit/test_tools_macro.py:21:16
+   |
+19 | import json
+20 | import urllib.error
+21 | from io import BytesIO
+   |                ^^^^^^^
+22 | from unittest import mock
+   |
+help: Remove unused import: `io.BytesIO`
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && PYTHONPATH=src python3 -m pytest tests/unit/ 2>&1 | tail -20
+........................................................................ [ 19%]
+........................................................................ [ 39%]
+........................................................................ [ 59%]
+........................................................................ [ 78%]
+........................................................................ [ 98%]
+......                                                                   [100%]
+366 passed in 77.26s (0:01:17)
+[0m
+[0m← [0mEdit tests/unit/test_tools_macro.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
+@@ -17,9 +17,8 @@
+ from __future__ import annotations
+ 
+ import json
+ import urllib.error
+-from io import BytesIO
+ from unittest import mock
+ 
+ import pytest
+ from pydantic import ValidationError
+
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && ruff check src/finroot/tools/macro.py src/finroot/tools/currency.py tests/unit/test_tools_macro.py 2>&1
+All checks passed!
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && ruff check src/finroot/tools/macro.py src/finroot/tools/currency.py 2>&1
+All checks passed!
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && PYTHONPATH=src python3 -m pytest tests/unit/test_tools_macro.py -v 2>&1 | tail -50
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 35 items
+
+tests/unit/test_tools_macro.py ...................................       [100%]
+
+============================== 35 passed in 0.69s ==============================
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/docs/waves/ 2>&1 || ls /Users/srujansai/Desktop/FinRoot/docs/ 2>&1
+wave-1-brief.md
+wave-1-gotchas.md
+wave-2-brief.md
+wave-3-brief.md
+wave-4-brief.md
+wave-5-brief.md
+wave-6-brief.md
+wave-7-brief.md
+wave-8-brief.md
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/work/reports/ 2>&1
+wave-1
+wave-2
+wave-3
+wave-4
+wave-5
+wave-6
+wave-7
+wave-8
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/work/reports/wave-3/ 2>&1
+01-market-fundamentals-tools.run.log
+02-news-sentiment-tools.report.md
+02-news-sentiment-tools.run.log
+03-risk-portfolio-tools.report.md
+03-risk-portfolio-tools.run.log
+04-tax-engine.run.log
+05-macro-currency-tools.run.log
+06-profile-document-watchlist-tools.run.log
+[0m
+[0m→ [0mRead docs/waves/wave-1-gotchas.md[90m [limit=40][0m
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/docs/waves/wave-3-gotchas.md 2>&1 || echo "no wave-3-gotchas.md yet"
+ls: /Users/srujansai/Desktop/FinRoot/docs/waves/wave-3-gotchas.md: No such file or directory
+no wave-3-gotchas.md yet
+[0m
+[0m→ [0mRead work/reports/wave-3/05-macro-currency-tools.run.log
+[0m
+[0m← [0mWrite docs/waves/wave-3-gotchas.md
+Wrote file successfully.
+[0m
+[0m← [0mWrite work/reports/wave-3/05-macro-currency-tools.report.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Implement src/finroot/tools/macro.py (MacroDataTool)
+[✓] Implement src/finroot/tools/currency.py (CurrencyConverterTool)
+[✓] Write tests/unit/test_tools_macro.py with 12+ tests
+[✓] Run pytest + ruff, capture real output
+[✓] Write report to work/reports/wave-3/05-macro-currency-tools.report.md
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && git status 2>&1
+On branch main
+Your branch is based on 'origin/main', but the upstream is gone.
+  (use "git branch --unset-upstream" to fixup)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.claude/
+	.dockerignore
+	.env.example
+	.gitignore
+	.pre-commit-config.yaml
+	.specify/
+	AGENTS.md
+	BACKLOG.md
+	CHANGELOG.md
+	CLAUDE.md
+	CONTRIBUTING.md
+	Dockerfile
+	HALL_OF_SHAME.md
+	HANDOFF.md
+	HIERARCHY.md
+	HOW_TO_RUN.md
+	KIMI.md
+	LICENSE
+	Makefile
+	OS_SETUP.md
+	README.md
+	attic/
+	corpus/
+	data/
+	deployment/
+	docker-compose.dev.yml
+	docker-compose.yml
+	docs/REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+	docs/SCOPE_GUARD.md
+	docs/agents/
+	docs/architecture/
+	docs/audits/
+	docs/benchmarks/
+	docs/conventions.md
+	docs/decisions/
+	docs/flows/
+	docs/historical/
+	docs/interview_runbook.md
+	docs/operational/
+	docs/runbook.md
+	docs/runtime/
+	docs/schemas/
+	docs/waves/wave-3-gotchas.md
+	evals/
+	evidence/
+	logs/
+	mcp.json
+	models/
+	orchestrator/
+	plan/
+	prometheus.yml
+	prompts/
+	pyproject.toml
+	pytest.ini
+	requirements.txt
+	resources/
+	results/
+	schema/
+	skills-lock.json
+	skills.manifest.json
+	src/finroot/memory/__init__.py
+	src/finroot/memory/digital_twin.py
+	src/finroot/memory/semantic.py
+	src/finroot/memory/working.py
+	src/finroot/tools/currency.py
+	src/finroot/tools/documents.py
+	src/finroot/tools/fundamentals.py
+	src/finroot/tools/macro.py
+	src/finroot/tools/market.py
+	src/finroot/tools/news.py
+	src/finroot/tools/portfolio_sim.py
+	src/finroot/tools/profile.py
+	src/finroot/tools/risk.py
+	src/finroot/tools/sentiment.py
+	src/finroot/tools/watchlist.py
+	tests/unit/test_digital_twin.py
+	tests/unit/test_semantic_memory.py
+	tests/unit/test_tools_macro.py
+	tests/unit/test_tools_market.py
+	tests/unit/test_tools_news.py
+	tests/unit/test_tools_profile.py
+	tests/unit/test_tools_risk.py
+	tests/unit/test_working_memory.py
+	work/REPORT_TEMPLATE.md
+	work/TASK_TEMPLATE.md
+	work/WORKER_PROMPT.md
+	work/reports/wave-2/
+	work/reports/wave-3/
+	work/reports/wave-4/
+	work/reports/wave-5/
+	work/reports/wave-6/
+	work/reports/wave-7/
+	work/reports/wave-8/
+	work/wave-1/
+	work/wave-2/
+	work/wave-3/
+
+nothing added to commit but untracked files present (use "git add" to track)
+[0m
+All done. Final summary of the work:
+
+**Writes set (only these changed):**
+- `src/finroot/tools/macro.py` — `MacroDataTool` (mock + World Bank live, TTL 3600s)
+- `src/finroot/tools/currency.py` — `CurrencyConverterTool` (mock fixed table + open.er-api.com live, TTL 300s, cross-rate via INR)
+- `tests/unit/test_tools_macro.py` — 35 tests across 5 test classes
+- `work/reports/wave-3/05-macro-currency-tools.report.md` — full report
+- `docs/waves/wave-3-gotchas.md` — G-3.5 (BaseTool retry backoff slowing expected-failure tests)
+
+**Acceptance commands (real output, this session):**
+```
+$ PYTHONPATH=src python3 -m pytest tests/unit/test_tools_macro.py -v
+============================== 35 passed in 0.69s ==============================
+exit status: 0
+
+$ ruff check src/finroot/tools/macro.py src/finroot/tools/currency.py
+All checks passed!
+exit status: 0
+```
+
+Full unit suite: `366 passed in 77.26s` (was 331 before; +35 = my new tests, no regressions).
+=== opencode exited rc=0 @ Fri Jun 19 19:13:38 IST 2026 ===

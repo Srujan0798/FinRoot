@@ -1,0 +1,309 @@
+[
+  {
+    "user_id": "twin_priya_sharma_001",
+    "name": "Priya Sharma",
+    "age": 32,
+    "risk_tolerance": "conservative",
+    "investment_horizon": "medium",
+    "monthly_income": 150000.0,
+    "monthly_expenses": 85000.0,
+    "tax_bracket_pct": 20.0,
+    "goals": [
+      "Build emergency fund of 12 months expenses",
+      "Save for child's education in 10 years",
+      "Retire comfortably at age 60",
+      "Purchase a home in 5-7 years"
+    ],
+    "constraints": [
+      "Capital preservation is priority over growth",
+      "No direct equity exposure beyond 15% of portfolio",
+      "Monthly SIP commitment capped at INR 40,000"
+    ],
+    "holdings": [
+      {
+        "asset_id": "FD_HDFC_001",
+        "asset_type": "fixed_deposit",
+        "name": "HDFC Bank Fixed Deposit",
+        "quantity": 1,
+        "unit_price": 500000.0,
+        "currency": "INR",
+        "metadata": {
+          "issuer": "HDFC Bank",
+          "tenure_months": 36,
+          "interest_rate_pct": 7.1,
+          "maturity_date": "2027-03-15"
+        }
+      },
+      {
+        "asset_id": "MF_ICICI_BALANCED_001",
+        "asset_type": "mutual_fund",
+        "name": "ICICI Prudential Balanced Advantage Fund",
+        "quantity": 12500.45,
+        "unit_price": 48.72,
+        "currency": "INR",
+        "metadata": {
+          "fund_house": "ICICI Prudential",
+          "category": "Balanced Advantage",
+          "nav_date": "2024-12-19"
+        }
+      },
+      {
+        "asset_id": "MF_SBI_DEBT_001",
+        "asset_type": "mutual_fund",
+        "name": "SBI Magnum Medium Duration Fund",
+        "quantity": 18200.33,
+        "unit_price": 42.15,
+        "currency": "INR",
+        "metadata": {
+          "fund_house": "SBI Mutual Fund",
+          "category": "Medium Duration Debt",
+          "nav_date": "2024-12-19"
+        }
+      },
+      {
+        "asset_id": "PPF_ACCOUNT_001",
+        "asset_type": "provident_fund",
+        "name": "Public Provident Fund Account",
+        "quantity": 1,
+        "unit_price": 350000.0,
+        "currency": "INR",
+        "metadata": {
+          "account_since": "2019-04-01",
+          "current_rate_pct": 7.1
+        }
+      }
+    ],
+    "created_at": "2024-01-15T10:30:00+00:00",
+    "updated_at": "2024-12-10T14:22:00+00:00"
+  },
+  {
+    "user_id": "twin_rahul_mehta_002",
+    "name": "Rahul Mehta",
+    "age": 45,
+    "risk_tolerance": "moderate",
+    "investment_horizon": "medium",
+    "monthly_income": 450000.0,
+    "monthly_expenses": 280000.0,
+    "tax_bracket_pct": 30.0,
+    "goals": [
+      "Fund daughter's overseas education in 4 years (est. INR 80L)",
+      "Build retirement corpus for early retirement at 55",
+      "Diversify business wealth into financial assets",
+      "Maintain liquidity for business opportunities",
+      "Create passive income stream of INR 1L/month by 55"
+    ],
+    "constraints": [
+      "Business cash flow is volatile — maintain 6-month expense buffer",
+      "ESOP lockup restricts sale until 2026",
+      "Avoid concentrated single-stock risk beyond 10% of portfolio"
+    ],
+    "holdings": [
+      {
+        "asset_id": "EQUITY_RELIANCE_001",
+        "asset_type": "equity",
+        "name": "Reliance Industries Ltd",
+        "quantity": 850,
+        "unit_price": 2950.0,
+        "currency": "INR",
+        "metadata": {
+          "exchange": "NSE",
+          "ticker": "RELIANCE",
+          "sector": "Conglomerate",
+          "purchase_date": "2023-06-15"
+        }
+      },
+      {
+        "asset_id": "EQUITY_TCS_001",
+        "asset_type": "equity",
+        "name": "Tata Consultancy Services Ltd",
+        "quantity": 420,
+        "unit_price": 4150.0,
+        "currency": "INR",
+        "metadata": {
+          "exchange": "NSE",
+          "ticker": "TCS",
+          "sector": "IT Services",
+          "purchase_date": "2022-11-20"
+        }
+      },
+      {
+        "asset_id": "EQUITY_HDFCBANK_001",
+        "asset_type": "equity",
+        "name": "HDFC Bank Ltd",
+        "quantity": 600,
+        "unit_price": 1680.0,
+        "currency": "INR",
+        "metadata": {
+          "exchange": "NSE",
+          "ticker": "HDFCBANK",
+          "sector": "Banking",
+          "purchase_date": "2023-03-10"
+        }
+      },
+      {
+        "asset_id": "MF_HDFC_FLEXICAP_001",
+        "asset_type": "mutual_fund",
+        "name": "HDFC Flexi Cap Fund",
+        "quantity": 22500.75,
+        "unit_price": 1185.30,
+        "currency": "INR",
+        "metadata": {
+          "fund_house": "HDFC Mutual Fund",
+          "category": "Flexi Cap",
+          "nav_date": "2024-12-19"
+        }
+      },
+      {
+        "asset_id": "MF_NIPPON_SMALLCAP_001",
+        "asset_type": "mutual_fund",
+        "name": "Nippon India Small Cap Fund",
+        "quantity": 15800.20,
+        "unit_price": 95.45,
+        "currency": "INR",
+        "metadata": {
+          "fund_house": "Nippon India Mutual Fund",
+          "category": "Small Cap",
+          "nav_date": "2024-12-19"
+        }
+      },
+      {
+        "asset_id": "FD_ICICI_001",
+        "asset_type": "fixed_deposit",
+        "name": "ICICI Bank Fixed Deposit",
+        "quantity": 1,
+        "unit_price": 2000000.0,
+        "currency": "INR",
+        "metadata": {
+          "issuer": "ICICI Bank",
+          "tenure_months": 24,
+          "interest_rate_pct": 7.25,
+          "maturity_date": "2026-02-28"
+        }
+      },
+      {
+        "asset_id": "ESOP_COMPANY_001",
+        "asset_type": "esop",
+        "name": "Mehta Enterprises Pvt Ltd (Unlisted)",
+        "quantity": 50000,
+        "unit_price": 200.0,
+        "currency": "INR",
+        "metadata": {
+          "company": "Mehta Enterprises Pvt Ltd",
+          "vesting_schedule": "25% yearly from 2023",
+          "lockup_until": "2026-03-31",
+          "estimated_fmv_per_share": 200.0
+        }
+      }
+    ],
+    "created_at": "2023-11-20T09:15:00+00:00",
+    "updated_at": "2024-12-18T11:45:00+00:00"
+  },
+  {
+    "user_id": "twin_ananya_iyer_003",
+    "name": "Ananya Iyer",
+    "age": 27,
+    "risk_tolerance": "aggressive",
+    "investment_horizon": "long",
+    "monthly_income": 280000.0,
+    "monthly_expenses": 95000.0,
+    "tax_bracket_pct": 30.0,
+    "goals": [
+      "Maximize wealth creation over 20+ year horizon",
+      "Achieve financial independence by age 45",
+      "Build diversified global equity exposure",
+      "Accumulate INR 5Cr+ in equity portfolio by 45"
+    ],
+    "constraints": [
+      "High savings rate (>65%) allows aggressive allocation",
+      "No near-term liquidity needs beyond emergency fund",
+      "Comfortable with 30-40% drawdowns for long-term alpha"
+    ],
+    "holdings": [
+      {
+        "asset_id": "ESOP_TECHSTARTUP_001",
+        "asset_type": "esop",
+        "name": "TechNova Solutions Pvt Ltd (Unlisted)",
+        "quantity": 12000,
+        "unit_price": 850.0,
+        "currency": "INR",
+        "metadata": {
+          "company": "TechNova Solutions Pvt Ltd",
+          "vesting_schedule": "Monthly over 4 years from 2022",
+          "lockup_until": "2026-06-30",
+          "last_valuation_date": "2024-09-30",
+          "estimated_fmv_per_share": 850.0
+        }
+      },
+      {
+        "asset_id": "EQUITY_INFY_001",
+        "asset_type": "equity",
+        "name": "Infosys Ltd",
+        "quantity": 300,
+        "unit_price": 1820.0,
+        "currency": "INR",
+        "metadata": {
+          "exchange": "NSE",
+          "ticker": "INFY",
+          "sector": "IT Services",
+          "purchase_date": "2024-02-15"
+        }
+      },
+      {
+        "asset_id": "EQUITY_BAJFINANCE_001",
+        "asset_type": "equity",
+        "name": "Bajaj Finance Ltd",
+        "quantity": 180,
+        "unit_price": 7200.0,
+        "currency": "INR",
+        "metadata": {
+          "exchange": "NSE",
+          "ticker": "BAJFINANCE",
+          "sector": "NBFC",
+          "purchase_date": "2024-05-10"
+        }
+      },
+      {
+        "asset_id": "MF_QUANT_SMALLCAP_001",
+        "asset_type": "mutual_fund",
+        "name": "Quant Small Cap Fund",
+        "quantity": 8500.50,
+        "unit_price": 185.30,
+        "currency": "INR",
+        "metadata": {
+          "fund_house": "Quant Mutual Fund",
+          "category": "Small Cap",
+          "nav_date": "2024-12-19"
+        }
+      },
+      {
+        "asset_id": "MF_PARAG_PARIKH_FLEXI_001",
+        "asset_type": "mutual_fund",
+        "name": "Parag Parikh Flexi Cap Fund",
+        "quantity": 12200.80,
+        "unit_price": 62.45,
+        "currency": "INR",
+        "metadata": {
+          "fund_house": "PPFAS Mutual Fund",
+          "category": "Flexi Cap",
+          "nav_date": "2024-12-19"
+        }
+      },
+      {
+        "asset_id": "EQUITY_NASDAQ_ETF_001",
+        "asset_type": "equity",
+        "name": "Motilal Oswal NASDAQ 100 ETF",
+        "quantity": 2500,
+        "unit_price": 145.0,
+        "currency": "INR",
+        "metadata": {
+          "exchange": "NSE",
+          "ticker": "MON100",
+          "sector": "International Equity ETF",
+          "purchase_date": "2024-08-20"
+        }
+      }
+    ],
+    "created_at": "2024-03-10T14:00:00+00:00",
+    "updated_at": "2024-12-19T16:30:00+00:00"
+  }
+]

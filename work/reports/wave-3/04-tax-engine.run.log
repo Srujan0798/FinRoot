@@ -1,0 +1,379 @@
+=== dispatch opencode opencode/deepseek-v4-flash-free -> work/wave-3/04-tax-engine.md @ Fri Jun 19 20:32:38 IST 2026 ===
+=== opencode exited rc=0 @ Fri Jun 19 20:36:08 IST 2026 ===
+ work/WORKER_PROMPT.md
+[0m→ [0mRead .
+[0m→ [0mRead work/wave-3/04-tax-engine.md
+[0m→ [0mRead .specify/specs/wave-3/contracts/tools.contract.md
+[0m→ [0mRead src/finroot/tools
+[0m→ [0mRead tests/unit
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead src/finroot/tools/base.py
+[0m→ [0mRead src/finroot/tools/market.py
+[0m→ [0mRead data
+[0m→ [0mRead data/tax_rules.json
+[0m→ [0mRead tests/unit/test_tools_market.py
+[0m→ [0mRead pyproject.toml
+[0m→ [0mRead src/finroot
+[0m→ [0mRead src/finroot/tools/__init__.py
+[0m
+[0m# [0mTodos
+[•] Implement src/finroot/tools/tax.py (TaxRuleTool with BaseTool contract)
+[ ] Update data/tax_rules.json if needed
+[ ] Write tests/unit/test_tools_tax.py (16+ tests)
+[ ] Run ruff check and pytest acceptance commands, capture output
+[ ] Write report to work/reports/wave-3/04-tax-engine.report.md
+[0m
+[0m← [0mWrite src/finroot/tools/tax.py
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Implement src/finroot/tools/tax.py (TaxRuleTool with BaseTool contract)
+[✓] Update data/tax_rules.json if needed
+[•] Write tests/unit/test_tools_tax.py (16+ tests)
+[ ] Run ruff check and pytest acceptance commands, capture output
+[ ] Write report to work/reports/wave-3/04-tax-engine.report.md
+[0m
+[0m← [0mWrite tests/unit/test_tools_tax.py
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Implement src/finroot/tools/tax.py (TaxRuleTool with BaseTool contract)
+[✓] Update data/tax_rules.json if needed
+[✓] Write tests/unit/test_tools_tax.py (16+ tests)
+[•] Run ruff check and pytest acceptance commands, capture output
+[ ] Write report to work/reports/wave-3/04-tax-engine.report.md
+[0m
+[0m$ [0mruff check src/finroot/tools/tax.py 2>&1
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_tools_tax.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 26 items
+
+tests/unit/test_tools_tax.py ...........F..............                  [100%]
+
+=================================== FAILURES ===================================
+_____ TestTaxRuleToolInputValidation.test_negative_gain_raises_tool_error ______
+
+self = <finroot.tools.tax.TaxRuleTool object at 0x10da58b90>
+inp = TaxInput(gain=-100.0, gain_type='LTCG', annual_income=100000.0, cess=True)
+
+    def __call__(self, inp: In) -> Out:
+        """Execute the tool: cache -> rate-limit -> retry loop -> audit.
+    
+        Args:
+            inp: typed input for the tool.
+    
+        Returns:
+            Typed output from the tool (possibly from cache).
+    
+        Raises:
+            ToolCallError: if all retries are exhausted.
+        """
+        key = self._cache_key(inp)
+    
+        # 1. Cache hit within TTL -> return immediately
+        cached = self._cache_get(key)
+        if cached is not None:
+            return cached
+    
+        # 2. Rate-limit: wait for a token
+        self._consume_token()
+    
+        # 3. Execute with retry + exponential backoff
+        last_exc: Exception | None = None
+        for attempt in range(self.max_retries + 1):
+            try:
+>               result = self._run(inp)
+                         ^^^^^^^^^^^^^^
+
+src/finroot/tools/base.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <finroot.tools.tax.TaxRuleTool object at 0x10da58b90>
+inp = TaxInput(gain=-100.0, gain_type='LTCG', annual_income=100000.0, cess=True)
+
+    def _run(self, inp: TaxInput) -> TaxOutput:
+        # Fail loud on negative gain (FM-11)
+        if inp.gain < 0:
+>           raise ToolError(
+                f"Negative gain ({inp.gain}) is not allowed. "
+                "Capital gains must be non-negative."
+            )
+E           finroot.tools.tax.ToolError: Negative gain (-100.0) is not allowed. Capital gains must be non-negative.
+
+src/finroot/tools/tax.py:162: ToolError
+
+The above exception was the direct cause of the following exception:
+
+self = <test_tools_tax.TestTaxRuleToolInputValidation object at 0x10d8e4690>
+
+    def test_negative_gain_raises_tool_error(self) -> None:
+        """Negative gain fails loud (FM-11)."""
+        tool = TaxRuleTool()
+        with pytest.raises(ToolError, match="Negative gain"):
+>           tool(TaxInput(gain=-100, gain_type="LTCG", annual_income=100_000))
+
+tests/unit/test_tools_tax.py:183: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <finroot.tools.tax.TaxRuleTool object at 0x10da58b90>
+inp = TaxInput(gain=-100.0, gain_type='LTCG', annual_income=100000.0, cess=True)
+
+    def __call__(self, inp: In) -> Out:
+        """Execute the tool: cache -> rate-limit -> retry loop -> audit.
+    
+        Args:
+            inp: typed input for the tool.
+    
+        Returns:
+            Typed output from the tool (possibly from cache).
+    
+        Raises:
+            ToolCallError: if all retries are exhausted.
+        """
+        key = self._cache_key(inp)
+    
+        # 1. Cache hit within TTL -> return immediately
+        cached = self._cache_get(key)
+        if cached is not None:
+            return cached
+    
+        # 2. Rate-limit: wait for a token
+        self._consume_token()
+    
+        # 3. Execute with retry + exponential backoff
+        last_exc: Exception | None = None
+        for attempt in range(self.max_retries + 1):
+            try:
+                result = self._run(inp)
+            except Exception as exc:
+                last_exc = exc
+                logger.warning(
+                    "Tool %r attempt %d/%d failed: %s",
+                    self.name, attempt + 1, self.max_retries + 1, exc,
+                )
+                if attempt < self.max_retries:
+                    time.sleep(self.base_delay * (2**attempt))
+                continue
+    
+            # 4. Cache & audit on success
+            self._cache_set(key, result)
+            self._emit_audit("tool.called", inp, result)
+            return result
+    
+        # All retries exhausted — fail loud (FM-11, FM-09)
+        self._emit_audit("tool.failed", inp, last_exc)
+>       raise ToolCallError(
+            f"Tool {self.name!r} failed after {self.max_retries + 1} "
+            f"attempt(s): {last_exc}"
+        ) from last_exc
+E       finroot.tools.base.ToolCallError: Tool 'tax_rule' failed after 4 attempt(s): Negative gain (-100.0) is not allowed. Capital gains must be non-negative.
+
+src/finroot/tools/base.py:123: ToolCallError
+------------------------------ Captured log call -------------------------------
+WARNING  finroot.tools.base:base.py:108 Tool 'tax_rule' attempt 1/4 failed: Negative gain (-100.0) is not allowed. Capital gains must be non-negative.
+WARNING  finroot.tools.base:base.py:108 Tool 'tax_rule' attempt 2/4 failed: Negative gain (-100.0) is not allowed. Capital gains must be non-negative.
+WARNING  finroot.tools.base:base.py:108 Tool 'tax_rule' attempt 3/4 failed: Negative gain (-100.0) is not allowed. Capital gains must be non-negative.
+WARNING  finroot.tools.base:base.py:108 Tool 'tax_rule' attempt 4/4 failed: Negative gain (-100.0) is not allowed. Capital gains must be non-negative.
+=========================== short test summary info ============================
+FAILED tests/unit/test_tools_tax.py::TestTaxRuleToolInputValidation::test_negative_gain_raises_tool_error
+========================= 1 failed, 25 passed in 7.42s =========================
+[0m
+[0m← [0mEdit tests/unit/test_tools_tax.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_tax.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_tax.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_tax.py
+@@ -17,8 +17,9 @@
+ import pytest
+ from pydantic import ValidationError
+ 
+ from finroot.audit import AuditTrail
++from finroot.tools.base import ToolCallError
+ from finroot.tools.tax import (
+     TaxInput,
+     TaxOutput,
+     TaxRuleTool,
+
+[0m
+The base class wraps `_run` errors in `ToolCallError`. Let me fix the test to catch both.
+[0m← [0mEdit tests/unit/test_tools_tax.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_tax.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_tax.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_tax.py
+@@ -179,9 +179,9 @@
+ class TestTaxRuleToolInputValidation:
+     def test_negative_gain_raises_tool_error(self) -> None:
+         """Negative gain fails loud (FM-11)."""
+         tool = TaxRuleTool()
+-        with pytest.raises(ToolError, match="Negative gain"):
++        with pytest.raises((ToolError, ToolCallError), match="Negative gain"):
+             tool(TaxInput(gain=-100, gain_type="LTCG", annual_income=100_000))
+ 
+     def test_invalid_gain_type_raises_validation_error(self) -> None:
+         """Pydantic catches invalid Literal value."""
+
+[0m
+[0m$ [0mruff check src/finroot/tools/tax.py 2>&1
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_tools_tax.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 26 items
+
+tests/unit/test_tools_tax.py ..........................                  [100%]
+
+============================== 26 passed in 7.53s ==============================
+[0m
+[0m# [0mTodos
+[✓] Implement src/finroot/tools/tax.py (TaxRuleTool with BaseTool contract)
+[✓] Update data/tax_rules.json if needed
+[✓] Write tests/unit/test_tools_tax.py (16+ tests)
+[✓] Run ruff check and pytest acceptance commands, capture output
+[•] Write report to work/reports/wave-3/04-tax-engine.report.md
+[0m
+[0m$ [0mmkdir -p work/reports/wave-3
+(no output)
+[0m
+[0m← [0mWrite work/reports/wave-3/04-tax-engine.report.md
+Wrote file successfully.
+[0m
+[0m$ [0mgit diff --stat 2>&1
+work/reports/wave-1/02-pydantic-schemas-state.run.log | 1 +
+ 1 file changed, 1 insertion(+)
+[0m
+[0m$ [0mgit status 2>&1
+On branch main
+Your branch is based on 'origin/main', but the upstream is gone.
+  (use "git branch --unset-upstream" to fixup)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   work/reports/wave-1/02-pydantic-schemas-state.run.log
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.claude/
+	.dockerignore
+	.env.example
+	.gitignore
+	.pre-commit-config.yaml
+	.specify/
+	AGENTS.md
+	BACKLOG.md
+	CHANGELOG.md
+	CLAUDE.md
+	CONTRIBUTING.md
+	Dockerfile
+	HALL_OF_SHAME.md
+	HANDOFF.md
+	HIERARCHY.md
+	HOW_TO_RUN.md
+	KIMI.md
+	LICENSE
+	Makefile
+	OS_SETUP.md
+	README.md
+	attic/
+	corpus/
+	data/
+	deployment/
+	docker-compose.dev.yml
+	docker-compose.yml
+	docs/REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+	docs/SCOPE_GUARD.md
+	docs/agents/
+	docs/architecture/
+	docs/audits/
+	docs/benchmarks/
+	docs/conventions.md
+	docs/decisions/
+	docs/flows/
+	docs/historical/
+	docs/interview_runbook.md
+	docs/operational/
+	docs/runbook.md
+	docs/runtime/
+	docs/schemas/
+	docs/waves/wave-3-gotchas.md
+	evals/
+	evidence/
+	logs/
+	mcp.json
+	models/
+	orchestrator/
+	plan/
+	prometheus.yml
+	prompts/
+	pyproject.toml
+	pytest.ini
+	requirements.txt
+	resources/
+	results/
+	schema/
+	skills-lock.json
+	skills.manifest.json
+	src/finroot/memory/__init__.py
+	src/finroot/memory/digital_twin.py
+	src/finroot/memory/manager.py
+	src/finroot/memory/semantic.py
+	src/finroot/memory/working.py
+	src/finroot/tools/currency.py
+	src/finroot/tools/documents.py
+	src/finroot/tools/fundamentals.py
+	src/finroot/tools/macro.py
+	src/finroot/tools/market.py
+	src/finroot/tools/news.py
+	src/finroot/tools/portfolio_sim.py
+	src/finroot/tools/profile.py
+	src/finroot/tools/risk.py
+	src/finroot/tools/sentiment.py
+	src/finroot/tools/tax.py
+	src/finroot/tools/watchlist.py
+	tests/unit/test_digital_twin.py
+	tests/unit/test_semantic_memory.py
+	tests/unit/test_tools_macro.py
+	tests/unit/test_tools_market.py
+	tests/unit/test_tools_news.py
+	tests/unit/test_tools_profile.py
+	tests/unit/test_tools_risk.py
+	tests/unit/test_tools_tax.py
+	tests/unit/test_working_memory.py
+	work/REPORT_TEMPLATE.md
+	work/TASK_TEMPLATE.md
+	work/WORKER_PROMPT.md
+	work/reports/wave-2/
+	work/reports/wave-3/
+	work/reports/wave-4/
+	work/reports/wave-5/
+	work/reports/wave-6/
+	work/reports/wave-7/
+	work/reports/wave-8/
+	work/wave-1/
+	work/wave-2/
+	work/wave-3/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[0m
+[0m# [0mTodos
+[✓] Implement src/finroot/tools/tax.py (TaxRuleTool with BaseTool contract)
+[✓] Update data/tax_rules.json if needed
+[✓] Write tests/unit/test_tools_tax.py (16+ tests)
+[✓] Run ruff check and pytest acceptance commands, capture output
+[✓] Write report to work/reports/wave-3/04-tax-engine.report.md
+[0m
+Done. Built `src/finroot/tools/tax.py` (`TaxRuleTool` extending `BaseTool`), 26 tests pass, `ruff check` clean, report at `work/reports/wave-3/04-tax-engine.report.md`. Only touched the Writes set. Acceptance output captured verbatim.
+=== opencode exited rc=0 @ Fri Jun 19 20:36:08 IST 2026 ===

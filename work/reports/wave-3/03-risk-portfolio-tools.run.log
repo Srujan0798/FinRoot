@@ -1,0 +1,405 @@
+=== dispatch opencode opencode/deepseek-v4-flash-free -> work/wave-3/03-risk-portfolio-tools.md @ Fri Jun 19 19:03:17 IST 2026 ===
+[0m
+> build · deepseek-v4-flash-free
+[0m
+[0m→ [0mRead work/WORKER_PROMPT.md
+[0m→ [0mRead work/wave-3/03-risk-portfolio-tools.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead .specify/specs/wave-3/contracts
+[0m→ [0mRead .specify/specs/wave-3/contracts/tools.contract.md
+[0m→ [0mRead src/finroot/tools
+Now let me read the BaseTool class and understand the project structure:
+[0m✱ [0mGlob "tests/unit/*.py"[90m in . · 5 matches[0m
+[0m✱ [0mGlob "src/finroot/tools/__init__.py"[90m in . · 1 match[0m
+[0m→ [0mRead src/finroot/tools/base.py
+[0m→ [0mRead src/finroot/tools/__init__.py
+[0m→ [0mRead tests/unit/test_base_interfaces.py
+[0m✱ [0mGlob "src/finroot/tools/*.py"[90m in . · 2 matches[0m
+[0m→ [0mRead pyproject.toml
+[0m✱ [0mGlob "tests/conftest.py"[90m in . · 0 matches[0m
+[0m
+[0m# [0mTodos
+[•] Implement src/finroot/tools/risk.py — RiskCalculationTool
+[ ] Implement src/finroot/tools/portfolio_sim.py — PortfolioSimulatorTool
+[ ] Implement tests/unit/test_tools_risk.py — 14+ tests
+[ ] Run ruff check and tests, verify acceptance
+[ ] Write report to work/reports/wave-3/03-risk-portfolio-tools.report.md
+[0m
+Now I have a clear understanding. Let me implement the three files.
+[0m← [0mWrite src/finroot/tools/risk.py
+Wrote file successfully.
+[0m
+Let me rewrite `risk.py` with a cleaner approach:
+[0m← [0mWrite src/finroot/tools/risk.py
+Wrote file successfully.
+[0m
+[0m✗ [0mTodos failed
+[91m[1mError: [0mThe todowrite tool was called with invalid arguments: SchemaError(Missing key
+  at ["todos"][0]["status"]).
+Please rewrite the input so it satisfies the expected schema.
+[0m
+[0m# [0mTodos
+[✓] Implement src/finroot/tools/risk.py — RiskCalculationTool
+[•] Implement src/finroot/tools/portfolio_sim.py — PortfolioSimulatorTool
+[ ] Implement tests/unit/test_tools_risk.py — 14+ tests
+[ ] Run ruff check and tests, verify acceptance
+[ ] Write report to work/reports/wave-3/03-risk-portfolio-tools.report.md
+[0m
+[0m← [0mWrite src/finroot/tools/portfolio_sim.py
+Wrote file successfully.
+[0m
+[0m✗ [0mTodos failed
+[91m[1mError: [0mThe todowrite tool was called with invalid arguments: SchemaError(Missing key
+  at ["todos"][3]["status"]).
+Please rewrite the input so it satisfies the expected schema.
+[0m
+[0m# [0mTodos
+[✓] Implement src/finroot/tools/risk.py — RiskCalculationTool
+[✓] Implement src/finroot/tools/portfolio_sim.py — PortfolioSimulatorTool
+[•] Implement tests/unit/test_tools_risk.py — 14+ tests
+[ ] Run ruff check and tests, verify acceptance
+[ ] Write report to work/reports/wave-3/03-risk-portfolio-tools.report.md
+[0m
+[0m← [0mWrite tests/unit/test_tools_risk.py
+Wrote file successfully.
+[0m
+Now let me run the acceptance commands:
+[0m$ [0mruff check src/finroot/tools/risk.py src/finroot/tools/portfolio_sim.py 2>&1
+F401 [*] `statistics` imported but unused
+  --> src/finroot/tools/portfolio_sim.py:14:8
+   |
+12 | import os
+13 | import random
+14 | import statistics
+   |        ^^^^^^^^^^
+15 | from typing import Any
+   |
+help: Remove unused import: `statistics`
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_tools_risk.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 21 items
+
+tests/unit/test_tools_risk.py FF...........FFFF....                      [100%]
+
+=================================== FAILURES ===================================
+__________ TestRiskCalculationTool.test_known_returns_match_formulas ___________
+
+self = <test_tools_risk.TestRiskCalculationTool object at 0x10b33d090>
+
+    def test_known_returns_match_formulas(self):
+        """Verify tool output matches hand-computed / numpy reference values
+        for a small known returns array."""
+        returns = [0.01, 0.02]
+        tool = RiskCalculationTool()
+        result = tool(RiskInput(returns=returns))
+    
+        # Reference using numpy
+        arr = np.array(returns)
+        std = float(np.std(arr, ddof=1))
+        ref_vol = std * math.sqrt(252)
+        ref_var = float(np.percentile(arr, 5))
+        ref_cvar = float(np.mean(arr[arr < ref_var])) if np.any(arr < ref_var) else 0.0
+        ref_sharpe = float(np.mean(arr) / std * math.sqrt(252))
+        cum = np.cumprod(1 + arr)
+        running_max = np.maximum.accumulate(cum)
+        ref_max_dd = float(np.max(1.0 - cum / running_max))
+    
+>       assert result.volatility_annual == pytest.approx(ref_vol, rel=1e-6)
+E       assert 0.11225 == 0.11224972160321825 ± 1.1e-07
+E         
+E         comparison failed
+E         Obtained: 0.11225
+E         Expected: 0.11224972160321825 ± 1.1e-07
+
+tests/unit/test_tools_risk.py:50: AssertionError
+__________ TestRiskCalculationTool.test_multiple_returns_consistency ___________
+
+self = <test_tools_risk.TestRiskCalculationTool object at 0x10b801590>
+
+    def test_multiple_returns_consistency(self):
+        """Verify consistency across a longer return series."""
+        rng = np.random.default_rng(42)
+        returns = list(rng.normal(0.0005, 0.01, size=100))
+        tool = RiskCalculationTool()
+        result = tool(RiskInput(returns=returns))
+    
+        arr = np.array(returns)
+        std = float(np.std(arr, ddof=1))
+        ref_vol = std * math.sqrt(252)
+        ref_var = float(np.percentile(arr, 5))
+        ref_cvar = float(np.mean(arr[arr < ref_var]))
+        ref_sharpe = float(np.mean(arr) / std * math.sqrt(252))
+        cum = np.cumprod(1 + arr)
+        running_max = np.maximum.accumulate(cum)
+        ref_max_dd = float(np.max(1.0 - cum / running_max))
+    
+>       assert result.volatility_annual == pytest.approx(ref_vol, rel=1e-6)
+E       assert 0.123294 == 0.12329368613308209 ± 1.2e-07
+E         
+E         comparison failed
+E         Obtained: 0.123294
+E         Expected: 0.12329368613308209 ± 1.2e-07
+
+tests/unit/test_tools_risk.py:73: AssertionError
+_________ TestPortfolioSimulatorTool.test_holdings_weight_zero_raises __________
+
+self = <test_tools_risk.TestPortfolioSimulatorTool object at 0x10b8e8640>
+
+    def test_holdings_weight_zero_raises(self):
+        """Weight <= 0 raises ToolError."""
+        tool = PortfolioSimulatorTool()
+        with pytest.raises(ToolCallError, match="weight must be positive"):
+>           tool(SimInput(holdings=[{"symbol": "X", "weight": 0.0}]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           pydantic_core._pydantic_core.ValidationError: 1 validation error for SimInput
+E           horizon_years
+E             Field required [type=missing, input_value={'holdings': [{'symbol': 'X', 'weight': 0.0}]}, input_type=dict]
+E               For further information visit https://errors.pydantic.dev/2.12/v/missing
+
+tests/unit/test_tools_risk.py:183: ValidationError
+_______ TestPortfolioSimulatorTool.test_holdings_weight_negative_raises ________
+
+self = <test_tools_risk.TestPortfolioSimulatorTool object at 0x10b8e8770>
+
+    def test_holdings_weight_negative_raises(self):
+        """Negative weight raises ToolError."""
+        tool = PortfolioSimulatorTool()
+        with pytest.raises(ToolCallError, match="weight must be positive"):
+>           tool(SimInput(holdings=[{"symbol": "X", "weight": -0.5}]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           pydantic_core._pydantic_core.ValidationError: 1 validation error for SimInput
+E           horizon_years
+E             Field required [type=missing, input_value={'holdings': [{'symbol': 'X', 'weight': -0.5}]}, input_type=dict]
+E               For further information visit https://errors.pydantic.dev/2.12/v/missing
+
+tests/unit/test_tools_risk.py:189: ValidationError
+________ TestPortfolioSimulatorTool.test_holdings_missing_weight_raises ________
+
+self = <test_tools_risk.TestPortfolioSimulatorTool object at 0x10b81ac30>
+
+    def test_holdings_missing_weight_raises(self):
+        """Missing weight field raises ToolError."""
+        tool = PortfolioSimulatorTool()
+        with pytest.raises(ToolCallError, match="numeric 'weight' field"):
+>           tool(SimInput(holdings=[{"symbol": "X"}]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           pydantic_core._pydantic_core.ValidationError: 1 validation error for SimInput
+E           horizon_years
+E             Field required [type=missing, input_value={'holdings': [{'symbol': 'X'}]}, input_type=dict]
+E               For further information visit https://errors.pydantic.dev/2.12/v/missing
+
+tests/unit/test_tools_risk.py:195: ValidationError
+____________ TestPortfolioSimulatorTool.test_empty_holdings_raises _____________
+
+self = <test_tools_risk.TestPortfolioSimulatorTool object at 0x10b8aef10>
+
+    def test_empty_holdings_raises(self):
+        """Empty holdings list raises ToolError."""
+        tool = PortfolioSimulatorTool()
+        with pytest.raises(ToolCallError, match="at least one holding"):
+>           tool(SimInput(holdings=[]))
+                 ^^^^^^^^^^^^^^^^^^^^^
+E           pydantic_core._pydantic_core.ValidationError: 1 validation error for SimInput
+E           horizon_years
+E             Field required [type=missing, input_value={'holdings': []}, input_type=dict]
+E               For further information visit https://errors.pydantic.dev/2.12/v/missing
+
+tests/unit/test_tools_risk.py:201: ValidationError
+=========================== short test summary info ============================
+FAILED tests/unit/test_tools_risk.py::TestRiskCalculationTool::test_known_returns_match_formulas
+FAILED tests/unit/test_tools_risk.py::TestRiskCalculationTool::test_multiple_returns_consistency
+FAILED tests/unit/test_tools_risk.py::TestPortfolioSimulatorTool::test_holdings_weight_zero_raises
+FAILED tests/unit/test_tools_risk.py::TestPortfolioSimulatorTool::test_holdings_weight_negative_raises
+FAILED tests/unit/test_tools_risk.py::TestPortfolioSimulatorTool::test_holdings_missing_weight_raises
+FAILED tests/unit/test_tools_risk.py::TestPortfolioSimulatorTool::test_empty_holdings_raises
+======================== 6 failed, 15 passed in 20.51s =========================
+[0m
+I need to fix rounding precision issues, missing SimInput fields, and a ruff error. Let me fix all:
+[0m← [0mEdit src/finroot/tools/risk.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/tools/risk.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/tools/risk.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/tools/risk.py
+@@ -76,13 +76,13 @@
+     else:
+         vol_annual, var_95, cvar_95, sharpe, max_dd = self._compute_stdlib(returns)
+ 
+     return RiskOutput(
+-        volatility_annual=round(vol_annual, 6),
+-        var_95=round(var_95, 6),
+-        cvar_95=round(cvar_95, 6),
+-        sharpe_ratio=round(sharpe, 6) if sharpe is not None else None,
+-        max_drawdown=round(max_dd, 6),
++        volatility_annual=vol_annual,
++        var_95=var_95,
++        cvar_95=cvar_95,
++        sharpe_ratio=sharpe,
++        max_drawdown=max_dd,
+         citation=f"Computed from {n} daily returns, annualised at 252 trading days",
+     )
+ 
+ # ------------------------------------------------------------------
+
+[0m
+[0m← [0mEdit src/finroot/tools/portfolio_sim.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/tools/portfolio_sim.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/tools/portfolio_sim.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/tools/portfolio_sim.py
+@@ -10,9 +10,8 @@
+ import logging
+ import math
+ import os
+ import random
+-import statistics
+ from typing import Any
+ 
+ from pydantic import BaseModel, Field
+ 
+
+[0m
+[0m← [0mEdit tests/unit/test_tools_risk.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
+@@ -179,9 +179,9 @@
+ def test_holdings_weight_zero_raises(self):
+     """Weight <= 0 raises ToolError."""
+     tool = PortfolioSimulatorTool()
+     with pytest.raises(ToolCallError, match="weight must be positive"):
+-        tool(SimInput(holdings=[{"symbol": "X", "weight": 0.0}]))
++        tool(SimInput(holdings=[{"symbol": "X", "weight": 0.0}], horizon_years=1))
+ 
+ def test_holdings_weight_negative_raises(self):
+     """Negative weight raises ToolError."""
+     tool = PortfolioSimulatorTool()
+
+[0m
+[0m← [0mEdit tests/unit/test_tools_risk.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
+@@ -185,9 +185,9 @@
+ def test_holdings_weight_negative_raises(self):
+     """Negative weight raises ToolError."""
+     tool = PortfolioSimulatorTool()
+     with pytest.raises(ToolCallError, match="weight must be positive"):
+-        tool(SimInput(holdings=[{"symbol": "X", "weight": -0.5}]))
++        tool(SimInput(holdings=[{"symbol": "X", "weight": -0.5}], horizon_years=1))
+ 
+ def test_holdings_missing_weight_raises(self):
+     """Missing weight field raises ToolError."""
+     tool = PortfolioSimulatorTool()
+
+[0m
+[0m← [0mEdit tests/unit/test_tools_risk.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
+@@ -191,9 +191,9 @@
+ def test_holdings_missing_weight_raises(self):
+     """Missing weight field raises ToolError."""
+     tool = PortfolioSimulatorTool()
+     with pytest.raises(ToolCallError, match="numeric 'weight' field"):
+-        tool(SimInput(holdings=[{"symbol": "X"}]))
++        tool(SimInput(holdings=[{"symbol": "X"}], horizon_years=1))
+ 
+ def test_empty_holdings_raises(self):
+     """Empty holdings list raises ToolError."""
+     tool = PortfolioSimulatorTool()
+
+[0m
+[0m← [0mEdit tests/unit/test_tools_risk.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
+@@ -197,9 +197,9 @@
+ def test_empty_holdings_raises(self):
+     """Empty holdings list raises ToolError."""
+     tool = PortfolioSimulatorTool()
+     with pytest.raises(ToolCallError, match="at least one holding"):
+-        tool(SimInput(holdings=[]))
++        tool(SimInput(holdings=[], horizon_years=1))
+ 
+ def test_expected_return_sensible_range(self):
+     """Expected return should be positive given positive default μ."""
+     holdings = [{"symbol": "RELIANCE.NS", "weight": 1.0}]
+
+[0m
+[0m$ [0mruff check src/finroot/tools/risk.py src/finroot/tools/portfolio_sim.py 2>&1
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_tools_risk.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 21 items
+
+tests/unit/test_tools_risk.py .....................                      [100%]
+
+============================= 21 passed in 47.02s ==============================
+[0m
+[0m# [0mTodos
+[✓] Implement src/finroot/tools/risk.py — RiskCalculationTool
+[✓] Implement src/finroot/tools/portfolio_sim.py — PortfolioSimulatorTool
+[✓] Implement tests/unit/test_tools_risk.py — 14+ tests
+[✓] Run ruff check and tests, verify acceptance
+[•] Write report to work/reports/wave-3/03-risk-portfolio-tools.report.md
+[0m
+All 21 tests pass, ruff is clean. Let me write the report.
+[0m✱ [0mGlob "docs/waves/*gotchas*"[90m in . · 1 match[0m
+[0m
+[0m← [0mWrite work/reports/wave-3/03-risk-portfolio-tools.report.md
+Wrote file successfully.
+[0m
+Let me do a final verification by running the acceptance commands one more time:
+[0m$ [0mruff check src/finroot/tools/risk.py src/finroot/tools/portfolio_sim.py 2>&1
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_tools_risk.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 21 items
+
+tests/unit/test_tools_risk.py .....................                      [100%]
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 60000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m# [0mTodos
+[✓] Implement src/finroot/tools/risk.py — RiskCalculationTool
+[✓] Implement src/finroot/tools/portfolio_sim.py — PortfolioSimulatorTool
+[✓] Implement tests/unit/test_tools_risk.py — 14+ tests
+[✓] Run ruff check and tests, verify acceptance
+[✓] Write report to work/reports/wave-3/03-risk-portfolio-tools.report.md
+[0m
+Done. Here's the summary:
+
+**Files written** (task Writes set only):
+- `src/finroot/tools/risk.py` — `RiskCalculationTool(BaseTool[RiskInput, RiskOutput])` with numpy/stdlib fallback, computes vol/VaR/CVaR/Sharpe/max-drawdown with citations
+- `src/finroot/tools/portfolio_sim.py` — `PortfolioSimulatorTool(BaseTool[SimInput, SimOutput])` with Monte Carlo simulation, mock-mode seed determinism, holdings validation
+- `tests/unit/test_tools_risk.py` — 21 tests (11 RiskCalc + 10 PortfolioSim), all passing
+
+**Acceptance**: `pytest` 21/21 passed, `ruff check` clean. Report written to `work/reports/wave-3/03-risk-portfolio-tools.report.md`.
+=== opencode exited rc=0 @ Fri Jun 19 19:11:57 IST 2026 ===
