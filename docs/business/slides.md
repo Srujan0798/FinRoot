@@ -2,7 +2,7 @@
 
 > **Judging weights:** Reasoning Quality 35% · Agent Architecture 30% · Code Implementation 20% · Solution Idea 15%.
 > Every slide maps to at least one axis. Numbers below are sourced from `results/metrics.json`
-> (as_of_sha `ee438ae`, n_tasks 83, 11 financial domains). Regenerate anytime with `make evals`.
+> (as_of_sha `8d4d03f`, n_tasks 83, 11 financial domains). Regenerate anytime with `make evals`.
 > Judge reads each slide in **<20 seconds** — keep it crisp.
 
 ---
@@ -78,18 +78,18 @@ memory + critic + audit + LLM provider layer).
 - **5-axis Self-Critic:** Accuracy · Completeness · Risk Awareness · Evidence Quality · Actionability.
 - **Principles verifier (Rooted Prudence):** no unsupported claims, no unhedged recommendations, confidence labels required.
 - **Financial Reasoning Benchmark (FRB):** 83 tasks across 11 financial domains, deterministic graders.
-- **Composite lift vs RAG: +128% (2.3×)** — FinRoot mean **0.778** vs RAG **0.341** (results/metrics.json).
+- **Composite lift vs RAG: +138% (2.4×)** — FinRoot mean **0.795** vs RAG **0.334** (results/metrics.json).
 - **Per-domain mean scores (FinRoot vs RAG):**
-  - portfolio **0.83 vs 0.19** (+346%)
-  - tax **0.85 vs 0.28** (+203%)
-  - news_impact **0.73 vs 0.29** (+154%)
-  - risk **0.77 vs 0.25** (+215%)
+  - portfolio **0.85 vs 0.17** (+389%)
+  - tax **0.87 vs 0.27** (+228%)
+  - news_impact **0.77 vs 0.30** (+159%)
+  - risk **0.76 vs 0.26** (+192%)
 
 **Say**
 35% of the score is reasoning quality. We built the measurement tool (FRB), the quality gate
 (Self-Critic + Rooted Prudence), and the proof (benchmark lift vs a naive RAG baseline) — not
 just the agent. On 83 graded queries across 11 domains, FinRoot's mean reasoning-quality score
-is 0.78 versus 0.34 for a retrieve-and-summarize baseline — a composite +128% lift. The gain
+is 0.795 versus 0.334 for a retrieve-and-summarize baseline — a composite +138% lift. The gain
 is largest on the domains that demand synthesis (portfolio, tax, risk) where RAG cannot connect
 the dots.
 
@@ -126,7 +126,7 @@ alpha — and offers a structured alternative plan. That refusal is the system w
 **On-screen**
 | Axis | Weight | Where FinRoot Delivers |
 |---|---:|---|
-| Reasoning Quality | **35%** | 5-axis Self-Critic · Rooted Prudence verifier · FRB benchmark (+128% vs RAG) |
+| Reasoning Quality | **35%** | 5-axis Self-Critic · Rooted Prudence verifier · FRB benchmark (+138% vs RAG) |
 | Agent Architecture | **30%** | LangGraph plan-execute · 6 agents · 12 tools · 4-tier memory · typed I/O |
 | Code Implementation | **20%** | Pydantic v2 · pytest taxonomy · ruff-clean · Docker · Streamlit + Typer CLI |
 | Solution Idea | **15%** | Sovereign-first · Digital Twin moat · tamper-evident audit · explainability-by-design |
@@ -138,7 +138,7 @@ alpha — and offers a structured alternative plan. That refusal is the system w
 **Say**
 We didn't build for one axis — we built a system where every architectural decision maps
 directly to the scoring rubric. The 35% weapon is proof, not assertion: the FRB harness with
-+128% lift over RAG on 83 graded queries is in the repo. Sovereignty, audit, and reproducibility
++138% lift over RAG on 83 graded queries is in the repo. Sovereignty, audit, and reproducibility
 are not buzzwords — they're shipping features judges can run locally. FinRoot is what
 institutional-grade financial reasoning looks like on an individual's own terms.
 
@@ -159,6 +159,6 @@ The 4-axis table above, on screen. Close on `results/metrics.json` regenerate li
 | 5 | `docs/demo/screenshots/03_trap_refusal.png` (primary) + `02_reasoning_trace.png`, `04_digital_twin.png` (backup) |
 | 6 | on-screen table only |
 
-Numbers source: `results/metrics.json` (as_of_sha `ee438ae`, n_tasks 83, 11 domains).
+Numbers source: `results/metrics.json` (as_of_sha `8d4d03f`, n_tasks 83, 11 domains).
 Regenerate: `make evals` → updates `results/metrics.json` → re-quote any slide that
 cites a metric. Do **not** hand-edit numbers in this file (FM-05/FM-12).

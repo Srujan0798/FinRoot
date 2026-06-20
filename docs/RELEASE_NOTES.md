@@ -20,27 +20,18 @@ against OpenAI/Groq, and ships with a dark-mode Streamlit UI, a Typer CLI, and D
 
 ## FRB (FinRoot Reasoning Benchmark) headline
 
-> **FinRoot achieves 7.63x lift over a RAG baseline on 32 financial reasoning tasks.**
+> **FinRoot achieves 2.38x lift over a RAG baseline on 83 financial reasoning tasks.**
 >
-> - FinRoot mean score: **0.686** (68.6 %)
-> - RAG baseline mean score: **0.09** (9 %)
-> - Lift: **663.3 %** (7.63x)
+> - FinRoot mean score: **0.795** (79.5 %)
+> - RAG baseline mean score: **0.334** (33.4 %)
+> - Lift: **137.8 %** (2.38x)
 >
-> _Metrics stamped as of sha `ee438ae`._
+> _Metrics stamped as of sha `8d4d03f`._
 
 To refresh the numbers after re-running evals:
 
 ```bash
-python3 -c "
-import json, pathlib
-m = json.loads(pathlib.Path('results/metrics.json').read_text())
-f = m['systems']['finroot']['mean_score']
-r = m['systems']['rag']['mean_score']
-lift = m['composite_lift_vs_rag_pct']
-x = m['composite_lift_vs_rag_x']
-sha = m['as_of_sha']
-print(f'FinRoot mean: {f:.3f} | RAG mean: {r:.3f} | Lift: {lift:.1f}% ({x:.2f}x) | sha: {sha}')
-"
+make evals
 ```
 
 ## Quickstart
@@ -66,7 +57,7 @@ finroot audit --last 5
 
 ```bash
 pip install -e ".[dev]"
-streamlit run src/interface/streamlit_app.py
+streamlit run src/interface/ui/app.py
 ```
 
 ## Demo assets
@@ -79,7 +70,7 @@ streamlit run src/interface/streamlit_app.py
 
 ## Links
 
-- [Architecture](docs/ARCHITECTURE.md)
-- [Evaluation report](evals/REPORT.md)
+- [Architecture](docs/architecture/architecture.png)
+- [Evaluation results](results/metrics.json)
 - [Contributing](CONTRIBUTING.md)
 - [License: MIT](LICENSE)

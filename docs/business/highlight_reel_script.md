@@ -51,10 +51,10 @@
 **Screen:** Switch to the Harness tab. FRB comparison table loads: FinRoot vs RAG baseline vs single-agent. Bar chart with per-domain scores.
 
 **Narrate:**
-"Measured proof. We benchmark against a standard RAG baseline on our 50-question FinRoot Reasoning Bank. FinRoot lifts reasoning quality by over 23% — every domain gets a multi-agent orchestrated, self-critiqued answer. Not a chatbot. An institutional-grade reasoning pipeline."
+"Measured proof. We benchmark against a standard RAG baseline on our 83-question FinRoot Reasoning Bank across 11 domains. FinRoot lifts reasoning quality by 138% — every domain gets a multi-agent orchestrated, self-critiqued answer. Not a chatbot. An institutional-grade reasoning pipeline."
 
 **Visual cues:**
-- Highlight the composite lift number (e.g., "+23.4% vs RAG")
+- Highlight the composite lift number ("+138% vs RAG")
 - Quick wipe across the bar chart columns
 - Flash the scoring axes icons (accuracy, completeness, risk, citations, actionability)
 

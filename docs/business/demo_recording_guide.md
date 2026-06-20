@@ -201,30 +201,7 @@
 
 ---
 
-### [6:15] Beat 7 — Audit Trail (6:15–6:45)
-
-**Screen:** Any view.
-
-**Click:**
-1. Click the **Audit Trail** tab.
-2. Scroll through the event list.
-
-**Narrate:**
-"Sovereignty and trust. Every action FinRoot takes is logged in a tamper-evident hash chain — each entry includes the SHA-256 hash of the previous entry. If anyone tries to alter a past event, the chain breaks and we detect it. And because everything runs locally — Mock mode by default — your financial data never leaves your machine. No API keys required. No cloud dependency. Full sovereignty."
-
-**Show on screen:**
-- Audit events list with columns: `seq`, `type`, `tool`, `hash`, `prev_hash`
-- Event types: `answer_requested`, `tool_called`, `critic_evaluated`, `answer_returned`
-- Hash chain verification indicator: `trail.verify_chain() === True` (green checkmark)
-- Offline/Mock mode indicator badge
-
-**Reliability:**
-- If audit tab is empty → in-memory trail may not have persisted. Check `app.state.audit_events` is populated. Re-run a question first. Show fallback: the trace events displayed in Beat 3.
-- If hash values are all zeros → the hashing module might be in debug mode. Check `finroot.audit.hash_chain` module.
-
----
-
-### [6:45] Beat 8 — Wrap — Why We Win (6:45–7:00)
+### [6:15] Beat 7 — Wrap — Why We Win (6:15–6:45)
 
 **Screen:** Return to main Chat view or a clean summary screen.
 

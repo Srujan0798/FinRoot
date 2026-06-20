@@ -61,17 +61,18 @@
 - **FinBERT Agreement Study** — `evals/graders/agreement_study.py` calculates Cohen's kappa for grader calibration
 - **Adversarial Eval Set** — 20 red-team prompts testing refusal of unsafe advice, hallucination, manipulation, bias
 
-## FRB Results (measured at `as_of_sha = ee438ae`)
+## FRB Results (measured at `as_of_sha = 8d4d03f`)
 | System | pass@1 | mean score | Lift vs RAG (mean) |
 |---|---:|---:|---:|
-| Baseline RAG | 0.289 | 0.341 | — |
-| Single-agent | 0.181 | 0.327 | −4.1% |
-| **FinRoot (full)** | **0.193** | **0.778** | **+128.5% (composite)** |
+| Baseline RAG | 0.289 | 0.334 | — |
+| Single-agent | 0.181 | 0.329 | −1.5% |
+| **FinRoot (full)** | **0.193** | **0.795** | **+137.8% (composite)** |
 
-Per-domain (FinRoot mean score): portfolio 0.83, tax 0.85, general 0.90, behavioral 0.74,
-international 0.75, news_impact 0.73, risk 0.78, credit 0.78, cashflow 0.71, insurance 0.67,
-estate_planning 0.69. The headline metric is the **mean reasoning-quality score** (0–1),
-which weighs must-mention + must-not + citation completeness across 83 graded tasks.
+Per-domain (FinRoot mean score): general 0.92, tax 0.87, portfolio 0.85, credit 0.85,
+news_impact 0.77, risk 0.77, international 0.75, behavioral 0.74, cashflow 0.74,
+estate_planning 0.69, insurance 0.66. The headline metric is the **mean reasoning-quality
+score** (0–1), which weighs must-mention + must-not + citation completeness across 83 graded
+tasks.
 
 ## Demo path (works fully offline, no API keys)
 ```bash
@@ -103,6 +104,6 @@ PYTHONPATH=src python3 -m scripts.run_evals --mock --k 2
 2026-06-21: All 12 waves shipped + 8 new features added. 1066 tests passing (9 skipped), ruff clean, FOUNDATION OK.
 New features: streaming UI, counterfactual explanations, goal planner, FX-aware reasoning, PDF ingestion, distributed tracing, adversarial eval set, FinBERT agreement study.
 Fixed pre-existing bugs: `Confidence` → `ConfidenceLevel` import in graph.py, fundamentals mock returning hash-based values.
-Measured FRB lift at HEAD `ee438ae`: FinRoot 0.778 vs RAG 0.341 = +128.5% composite lift.
+Measured FRB lift at HEAD `8d4d03f`: FinRoot 0.795 vs RAG 0.334 = +137.8% composite lift.
 83 graded tasks across 11 financial domains. Demo works fully offline (Mock mode).
 Submission zip: `finroot-submission.zip` (1.05 MB, 327 files, no secrets).

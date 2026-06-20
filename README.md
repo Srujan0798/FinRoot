@@ -1,7 +1,9 @@
 <div align="center">
 
-# 🌳 FinRoot
+# FinRoot
 ### Sovereign · Reasoning-First · Auditable AI Financial Agent
+
+<img src="docs/assets/finroot-logo.svg" width="120" alt="FinRoot logo">
 
 **Institutional-grade financial reasoning for the individual — local, explainable, trustworthy.**
 
@@ -19,9 +21,9 @@ SCALE ML Club — Problem Statement 1: **Build an AI Agent for Finance**.*
 
 <div align="center">
 
-## ⚡ See it in action
+## See it in action
 
-[![FinRoot CLI Demo — Portfolio, Tax, Refusal](docs/demo/screenshots/03_trap_refusal.png)](docs/demo/hero.md)
+[![FinRoot — Portfolio Analysis + Trap Refusal](docs/demo/screenshots/03_trap_refusal.png)](docs/demo/hero.md)
 
 *Click the image for the full CLI demo — portfolio review, tax calculation, and prudence refusal.*
 
@@ -204,7 +206,7 @@ Mock mode is the default in `docker-compose.yml`. No keys, no network calls.
 
 ```bash
 pip install -e .[ui]                       # editable install with UI extras
-python -m src.interface.cli --mock \
+python -m interface.cli --mock \
   "Should I rebalance my 70/30 equity portfolio before FY-end?"
 streamlit run src/interface/ui/app.py       # dark UI at http://localhost:8501
 ```
@@ -260,31 +262,31 @@ That is it. Mock mode is the default — no API keys, no network, no friction.
 
 | System | pass@1 | pass@k | pass^k | Mean score (0–1) | Lift vs RAG |
 |---|---:|---:|---:|---:|---:|
-| Baseline RAG (retrieve + single LLM) | 0.289 | 0.289 | 0.289 | 0.341 | — |
-| Single-agent (no critic) | 0.181 | 0.181 | 0.181 | 0.327 | −4.1% |
-| **FinRoot (full pipeline)** | **0.193** | **0.193** | **0.193** | **0.778** | **+128.5%** |
+| Baseline RAG (retrieve + single LLM) | 0.289 | 0.434 | 0.036 | 0.334 | — |
+| Single-agent (no critic) | 0.181 | 0.398 | 0.000 | 0.329 | −1.5% |
+| **FinRoot (full pipeline)** | **0.193** | **0.193** | **0.193** | **0.795** | **+137.8%** |
 
-**Measured at:** `as_of_sha = ee438ae` · `n_tasks = 83` · `k = 1` · `mock = True` ·
-regenerate anytime with `python -m scripts.run_evals --mock --k 1`.
+**Measured at:** `as_of_sha = 8d4d03f` · `n_tasks = 83` · `k = 3` · `mock = True` ·
+regenerate anytime with `make evals`.
 
 ### Per-domain mean scores (FinRoot)
 
 | Domain | Score |
 |---|---:|
-| portfolio | 0.829 |
-| tax | 0.846 |
-| general | 0.899 |
-| behavioral | 0.740 |
+| general | 0.921 |
+| tax | 0.873 |
+| portfolio | 0.852 |
+| credit | 0.853 |
+| news_impact | 0.767 |
+| risk | 0.765 |
 | international | 0.750 |
-| news_impact | 0.734 |
-| risk | 0.784 |
-| credit | 0.780 |
-| cashflow | 0.706 |
-| insurance | 0.671 |
+| behavioral | 0.740 |
+| cashflow | 0.736 |
 | estate_planning | 0.692 |
+| insurance | 0.664 |
 
-**Composite lift vs RAG: +128.5%.** The RAG baseline scores 0.341 mean — it cannot
-satisfy most tasks' must-mention + must-not + citation requirements. **FinRoot scores 0.778
+**Composite lift vs RAG: +137.8%.** The RAG baseline scores 0.334 mean — it cannot
+satisfy most tasks' must-mention + must-not + citation requirements. **FinRoot scores 0.795
 mean across 83 tasks across 11 financial domains** — see `results/metrics.json` for the full
 breakdown. Pre-captured demo transcripts live in `docs/demo/transcript_*.md` so judges can
 inspect qualitative outputs offline.
@@ -319,22 +321,18 @@ with its proof.
 ```
 finroot/
 ├── README.md              ← you are here
-├── CLAUDE.md / AGENTS.md  ← orchestrator kernel (auto-loaded)
+├── AGENTS.md              ← agent instructions
 ├── HANDOFF.md             ← current state for cold sessions
-├── plan/                  ← PRD · ARCHITECTURE · EXECUTION (living strategy)
-├── .specify/              ← spec-driven per-wave contracts
 ├── src/finroot/           ← agent code (agents, tools, memory, reasoning, audit, llm, …)
 ├── src/interface/         ← Streamlit UI · Typer CLI · FastAPI
+├── config/                ← settings (pydantic-settings) + prompt registry
 ├── evals/                 ← FRB reasoning-quality benchmark + graders
-├── docs/                  ← architecture, ADRs, demo script, business, audits
+├── docs/                  ← architecture, ADRs, demo script, business, submissions
+├── data/                  ← FRB question bank, tax rules, sample profiles
 ├── tests/                 ← unit / integration / golden / fuzz / perf / security
-├── orchestrator/          ← Tier-1 apparatus (Tier-2 workers do not edit)
-├── work/                  ← Tier-1 ↔ Tier-2 bridge (task briefs + reports)
+├── results/               ← measured metrics (regenerated via `make evals`)
 └── scripts/               ← smoke, run_evals, capture_demo, make_submission
 ```
-
-Full ownership table: [`HIERARCHY.md`](HIERARCHY.md).  How the dual-tier build works:
-[`HOW_TO_RUN.md`](HOW_TO_RUN.md).  PS-1 deliverable checklist: [`docs/SUBMISSION.md`](docs/SUBMISSION.md).
 
 ---
 
