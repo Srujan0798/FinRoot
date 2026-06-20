@@ -126,3 +126,18 @@ class TestTraceInternals:
 
         state = AgentState(query="test", plan=[], tool_outputs=[], audit_events=[])
         _render_citations_table(state)
+
+    def test_render_streaming_exists(self) -> None:
+        """render_streaming function exists and is callable."""
+        from interface.ui.components.trace import render_streaming
+
+        assert callable(render_streaming)
+
+    def test_render_streaming_signature(self) -> None:
+        """render_streaming accepts state parameter."""
+        from interface.ui.components.trace import render_streaming
+        import inspect
+
+        sig = inspect.signature(render_streaming)
+        params = list(sig.parameters.keys())
+        assert "state" in params

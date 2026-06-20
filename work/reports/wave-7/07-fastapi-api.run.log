@@ -1,0 +1,504 @@
+=== dispatch opencode opencode/deepseek-v4-flash-free -> work/wave-7/07-fastapi-api.md @ Sat Jun 20 15:59:34 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 16:11:35 IST 2026 ===
+ work/WORKER_PROMPT.md
+[0m→ [0mRead work/wave-7/07-fastapi-api.md
+[0m✱ [0mGlob "src/finroot/**/*.py"[90m 58 matches[0m
+[0m✱ [0mGlob "src/interface/**/*.py"[90m 12 matches[0m
+[0m✱ [0mGlob "results/metrics.json"[90m 1 match[0m
+[0m✱ [0mGlob ".specify/specs/wave-7/contracts/**"[90m 0 matches[0m
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead results/metrics.json
+[0m→ [0mRead src/interface/core.py
+[0m→ [0mRead src/finroot/schemas/recommendation.py
+[0m→ [0mRead src/finroot/schemas/finance.py
+[0m→ [0mRead src/finroot/schemas/audit.py
+[0m→ [0mRead src/finroot/schemas/state.py
+[0m→ [0mRead src/finroot/schemas/enums.py
+[0m✱ [0mGlob "tests/**/*.py"[90m 36 matches[0m
+[0m
+[0m$ [0mpython3 -c "import uvicorn; print(uvicorn.__version__)" 2>&1
+0.44.0
+[0m
+[0m$ [0mpython3 -c "import fastapi; print(fastapi.__version__)" 2>&1
+0.136.0
+[0m
+[0m→ [0mRead tests/conftest.py
+[0m→ [0mRead tests/unit/test_cli.py
+[0m
+[0m$ [0mmkdir -p src/interface/api
+(no output)
+[0m
+[0m✗ [0mRead src/interface/__init__.py failed
+[91m[1mError: [0mFile not found: /Users/srujansai/Desktop/FinRoot/src/interface/__init__.py
+[0m
+[0m$ [0mpython3 -c "import importlib.metadata; print(importlib.metadata.version('finroot'))" 2>&1
+0.1.0
+[0m
+[0m✱ [0mGrep "__version__|version"[90m 2 matches[0m
+[0m
+[0m# [0mTodos
+[•] Implement src/interface/api/__init__.py
+[ ] Implement src/interface/api/models.py
+[ ] Implement src/interface/api/routes.py
+[ ] Implement src/interface/api/app.py
+[ ] Implement tests/unit/test_api.py
+[ ] Run acceptance tests and capture output
+[ ] Write report to work/reports/wave-7/07-fastapi-api.report.md
+[0m
+[0m← [0mWrite src/interface/api/__init__.py
+Wrote file successfully.
+[0m
+[0m← [0mWrite src/interface/api/models.py
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Implement src/interface/api/__init__.py
+[✓] Implement src/interface/api/models.py
+[•] Implement src/interface/api/routes.py
+[ ] Implement src/interface/api/app.py
+[ ] Implement tests/unit/test_api.py
+[ ] Run acceptance tests and capture output
+[ ] Write report to work/reports/wave-7/07-fastapi-api.report.md
+[0m
+[0m← [0mWrite src/interface/api/routes.py
+Wrote file successfully.
+[0m
+[0m← [0mWrite src/interface/api/app.py
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Implement src/interface/api/__init__.py
+[✓] Implement src/interface/api/models.py
+[✓] Implement src/interface/api/routes.py
+[✓] Implement src/interface/api/app.py
+[•] Implement tests/unit/test_api.py
+[ ] Run acceptance tests and capture output
+[ ] Write report to work/reports/wave-7/07-fastapi-api.report.md
+[0m
+[0m← [0mWrite tests/unit/test_api.py
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Implement src/interface/api/__init__.py
+[✓] Implement src/interface/api/models.py
+[✓] Implement src/interface/api/routes.py
+[✓] Implement src/interface/api/app.py
+[✓] Implement tests/unit/test_api.py
+[•] Run acceptance tests and capture output
+[ ] Write report to work/reports/wave-7/07-fastapi-api.report.md
+[0m
+[0m$ [0mPYTHONPATH=src:. python3 -c "import interface.api.app; print('API app import OK')" 2>&1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+API app import OK
+[0m
+[0m$ [0mPYTHONPATH=src:. python3 -m pytest tests/unit/test_api.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 20 items
+
+tests/unit/test_api.py ....................                              [100%]
+
+=============================== warnings summary ===============================
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    from pydantic.v1.fields import FieldInfo as FieldInfoV1
+
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77: DeprecationWarning: ForwardRef._evaluate is a private API and is retained for compatibility, but will be removed in Python 3.16. Use ForwardRef.evaluate() or typing.evaluate_forward_ref() instead.
+    return cast(Any, type_)._evaluate(globalns, localns, type_params=(), recursive_guard=set())
+
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+
+tests/unit/test_api.py::TestQuery::test_query_returns_200
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    if asyncio.iscoroutinefunction(f):
+
+tests/unit/test_api.py: 40 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:384: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    asyncio.iscoroutinefunction(func)
+
+tests/unit/test_api.py: 40 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:386: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    and asyncio.iscoroutinefunction(func.__call__)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 20 passed, 90 warnings in 57.19s =======================
+[0m
+[0m$ [0mPYTHONPATH=src:. ruff check src/interface/api/ 2>&1
+E402 Module level import not at top of file
+  --> src/interface/api/app.py:20:1
+   |
+18 |     logger.warning("fastapi not installed — API endpoints unavailable")
+19 |
+20 | from interface.api.models import QueryRequest
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+21 | from interface.api.routes import handle_health, handle_metrics, handle_query
+   |
+
+E402 Module level import not at top of file
+  --> src/interface/api/app.py:21:1
+   |
+20 | from interface.api.models import QueryRequest
+21 | from interface.api.routes import handle_health, handle_metrics, handle_query
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+
+F401 [*] `os` imported but unused
+ --> src/interface/api/routes.py:7:8
+  |
+5 | import json
+6 | import logging
+7 | import os
+  |        ^^
+8 | from pathlib import Path
+  |
+help: Remove unused import: `os`
+
+Found 3 errors.
+[*] 1 fixable with the `--fix` option.
+[0m
+[0m← [0mEdit src/interface/api/routes.py
+Index: /Users/srujansai/Desktop/FinRoot/src/interface/api/routes.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/interface/api/routes.py
++++ /Users/srujansai/Desktop/FinRoot/src/interface/api/routes.py
+@@ -3,9 +3,8 @@
+ from __future__ import annotations
+ 
+ import json
+ import logging
+-import os
+ from pathlib import Path
+ 
+ from interface.api.models import HealthResponse, QueryRequest, QueryResponse
+ from interface.core import answer, build_trace
+
+[0m
+[0m← [0mEdit src/interface/api/app.py
+Index: /Users/srujansai/Desktop/FinRoot/src/interface/api/app.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/interface/api/app.py
++++ /Users/srujansai/Desktop/FinRoot/src/interface/api/app.py
+@@ -9,19 +9,18 @@
+ import logging
+ 
+ logger = logging.getLogger(__name__)
+ 
++from interface.api.routes import handle_health, handle_metrics, handle_query
++
+ try:
+     from fastapi import FastAPI
+     from fastapi.middleware.cors import CORSMiddleware
+ except ImportError:
+     FastAPI = None  # type: ignore[assignment]
+     logger.warning("fastapi not installed — API endpoints unavailable")
+ 
+-from interface.api.models import QueryRequest
+-from interface.api.routes import handle_health, handle_metrics, handle_query
+ 
+-
+ def create_app() -> FastAPI | None:
+     """Build and return the FastAPI application instance."""
+     if FastAPI is None:
+         return None
+
+[0m
+[0m→ [0mRead src/interface/api/app.py
+[0m
+[0m← [0mEdit src/interface/api/app.py
+Index: /Users/srujansai/Desktop/FinRoot/src/interface/api/app.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/interface/api/app.py
++++ /Users/srujansai/Desktop/FinRoot/src/interface/api/app.py
+@@ -9,8 +9,9 @@
+ import logging
+ 
+ logger = logging.getLogger(__name__)
+ 
++from interface.api.models import QueryRequest
+ from interface.api.routes import handle_health, handle_metrics, handle_query
+ 
+ try:
+     from fastapi import FastAPI
+
+[0m
+[0m$ [0mPYTHONPATH=src:. ruff check src/interface/api/ 2>&1
+E402 Module level import not at top of file
+  --> src/interface/api/app.py:13:1
+   |
+11 | logger = logging.getLogger(__name__)
+12 |
+13 | from interface.api.models import QueryRequest
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14 | from interface.api.routes import handle_health, handle_metrics, handle_query
+   |
+
+E402 Module level import not at top of file
+  --> src/interface/api/app.py:14:1
+   |
+13 | from interface.api.models import QueryRequest
+14 | from interface.api.routes import handle_health, handle_metrics, handle_query
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+15 |
+16 | try:
+   |
+
+Found 2 errors.
+[0m
+[0m← [0mEdit src/interface/api/app.py
+Index: /Users/srujansai/Desktop/FinRoot/src/interface/api/app.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/interface/api/app.py
++++ /Users/srujansai/Desktop/FinRoot/src/interface/api/app.py
+@@ -7,13 +7,13 @@
+ from __future__ import annotations
+ 
+ import logging
+ 
+-logger = logging.getLogger(__name__)
+-
+ from interface.api.models import QueryRequest
+ from interface.api.routes import handle_health, handle_metrics, handle_query
+ 
++logger = logging.getLogger(__name__)
++
+ try:
+     from fastapi import FastAPI
+     from fastapi.middleware.cors import CORSMiddleware
+ except ImportError:
+
+[0m
+[0m$ [0mPYTHONPATH=src:. ruff check src/interface/api/ 2>&1
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src:. ruff check tests/unit/test_api.py 2>&1
+F401 [*] `json` imported but unused
+ --> tests/unit/test_api.py:5:8
+  |
+3 | from __future__ import annotations
+4 |
+5 | import json
+  |        ^^^^
+6 | from pathlib import Path
+  |
+help: Remove unused import: `json`
+
+F401 [*] `pathlib.Path` imported but unused
+ --> tests/unit/test_api.py:6:21
+  |
+5 | import json
+6 | from pathlib import Path
+  |                     ^^^^
+7 |
+8 | import pytest
+  |
+help: Remove unused import: `pathlib.Path`
+
+B017 Do not assert blind exception: `Exception`
+   --> tests/unit/test_api.py:119:14
+    |
+118 |     def test_query_request_empty_query_rejected(self) -> None:
+119 |         with pytest.raises(Exception):
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^
+120 |             QueryRequest(query="")
+    |
+
+Found 3 errors.
+[*] 2 fixable with the `--fix` option.
+[0m
+[0m← [0mEdit tests/unit/test_api.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_api.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_api.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_api.py
+@@ -1,13 +1,11 @@
+ """Tests for the FinRoot FastAPI API (wave-7, task 07)."""
+ 
+ from __future__ import annotations
+ 
+-import json
+-from pathlib import Path
+-
+ import pytest
+ from fastapi.testclient import TestClient
++from pydantic import ValidationError
+ 
+ from interface.api.app import app
+ from interface.api.models import HealthResponse, QueryRequest, QueryResponse
+ 
+
+[0m
+[0m← [0mEdit tests/unit/test_api.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_api.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_api.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_api.py
+@@ -113,9 +113,9 @@
+     assert req.user_id == "custom"
+     assert req.mock is False
+ 
+ def test_query_request_empty_query_rejected(self) -> None:
+-    with pytest.raises(Exception):
++    with pytest.raises(ValidationError):
+         QueryRequest(query="")
+ 
+ def test_health_response_model(self) -> None:
+     h = HealthResponse(status="ok", version="0.1.0", test_count=42)
+
+[0m
+[0m$ [0mPYTHONPATH=src:. ruff check tests/unit/test_api.py 2>&1
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src:. python3 -m pytest tests/unit/test_api.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 20 items
+
+tests/unit/test_api.py ....................                              [100%]
+
+=============================== warnings summary ===============================
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    from pydantic.v1.fields import FieldInfo as FieldInfoV1
+
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77: DeprecationWarning: ForwardRef._evaluate is a private API and is retained for compatibility, but will be removed in Python 3.16. Use ForwardRef.evaluate() or typing.evaluate_forward_ref() instead.
+    return cast(Any, type_)._evaluate(globalns, localns, type_params=(), recursive_guard=set())
+
+../../../../Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+
+tests/unit/test_api.py::TestQuery::test_query_returns_200
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    if asyncio.iscoroutinefunction(f):
+
+tests/unit/test_api.py: 40 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:384: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    asyncio.iscoroutinefunction(func)
+
+tests/unit/test_api.py: 40 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:386: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    and asyncio.iscoroutinefunction(func.__call__)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 20 passed, 90 warnings in 32.97s =======================
+[0m
+[0m# [0mTodos
+[✓] Implement src/interface/api/__init__.py
+[✓] Implement src/interface/api/models.py
+[✓] Implement src/interface/api/routes.py
+[✓] Implement src/interface/api/app.py
+[✓] Implement tests/unit/test_api.py
+[✓] Run acceptance tests and capture output
+[•] Write report to work/reports/wave-7/07-fastapi-api.report.md
+[0m
+[0m✱ [0mGlob "docs/waves/*-gotchas.md"[90m 5 matches[0m
+[0m
+[0m$ [0mmkdir -p work/reports/wave-7
+(no output)
+[0m
+[0m← [0mWrite work/reports/wave-7/07-fastapi-api.report.md
+Wrote file successfully.
+[0m
+[0m$ [0mgit diff --name-only --diff-filter=MAR 2>&1
+README.md
+data/gold/frb_questions.json
+docs/waves/wave-6-gotchas.md
+scripts/run_evals.py
+src/finroot/evaluation/harness.py
+src/interface/ui/components/chat.py
+src/interface/ui/components/harness.py
+src/interface/ui/components/trace.py
+src/interface/ui/components/twin.py
+tests/unit/test_components.py
+tests/unit/test_frb_bank.py
+tests/unit/test_harness.py
+work/reports/wave-6/04-harness.run.log
+[0m
+[0m$ [0mgit status --short 2>&1
+M README.md
+ M data/gold/frb_questions.json
+ M docs/waves/wave-6-gotchas.md
+ M scripts/run_evals.py
+ M src/finroot/evaluation/harness.py
+ M src/interface/ui/components/chat.py
+ M src/interface/ui/components/harness.py
+ M src/interface/ui/components/trace.py
+ M src/interface/ui/components/twin.py
+ M tests/unit/test_components.py
+ M tests/unit/test_frb_bank.py
+ M tests/unit/test_harness.py
+ M work/reports/wave-6/04-harness.run.log
+?? docs/architecture/architecture.png
+?? scripts/_render_svg.py
+?? scripts/render_diagram.sh
+?? src/interface/api/__init__.py
+?? src/interface/api/app.py
+?? src/interface/api/models.py
+?? src/interface/api/routes.py
+?? src/interface/ui/components/charts.py
+?? tests/conftest.py
+?? tests/unit/test_api.py
+?? tests/unit/test_charts.py
+?? work/reports/wave-1/07-mock-expansion.run.log
+?? work/reports/wave-6/01-frb-expansion.report.md
+?? work/reports/wave-6/01-frb-expansion.run.log
+?? work/reports/wave-7/06-plotly-charts.run.log
+?? work/reports/wave-7/07-fastapi-api.report.md
+?? work/reports/wave-7/07-fastapi-api.run.log
+?? work/reports/wave-7/08-streaming-trace.report.md
+?? work/reports/wave-7/08-streaming-trace.run.log
+?? work/reports/wave-8/07-arch-diagram-render.report.md
+?? work/reports/wave-8/07-arch-diagram-render.run.log
+?? work/wave-1/07-mock-expansion.md
+?? work/wave-6/01-frb-expansion.md
+?? work/wave-7/06-plotly-charts.md
+?? work/wave-7/07-fastapi-api.md
+?? work/wave-7/08-streaming-trace.md
+?? work/wave-8/07-arch-diagram-render.md
+[0m
+[0m# [0mTodos
+[✓] Implement src/interface/api/__init__.py
+[✓] Implement src/interface/api/models.py
+[✓] Implement src/interface/api/routes.py
+[✓] Implement src/interface/api/app.py
+[✓] Implement tests/unit/test_api.py
+[✓] Run acceptance tests and capture output
+[✓] Write report to work/reports/wave-7/07-fastapi-api.report.md
+[0m
+Done. Implemented the FastAPI REST API layer for FinRoot:
+
+- **`src/interface/api/__init__.py`** — package marker
+- **`src/interface/api/models.py`** — Pydantic v2 `QueryRequest`, `QueryResponse`, `HealthResponse`
+- **`src/interface/api/routes.py`** — handlers for POST `/query` (calls `answer()` pipeline), GET `/health`, GET `/metrics`
+- **`src/interface/api/app.py`** — FastAPI app with CORS, import guard for fastapi, routes registered
+- **`tests/unit/test_api.py`** — 20 tests (health shape, query response, mock mode, 422 on empty query, metrics, model validation)
+
+All 20 tests pass, ruff clean, report written to `work/reports/wave-7/07-fastapi-api.report.md`.
+=== opencode exited rc=0 @ Sat Jun 20 16:11:35 IST 2026 ===

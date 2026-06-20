@@ -7,6 +7,7 @@ argument or from ``st.session_state["last_state"]``.
 
 from __future__ import annotations
 
+import time
 from typing import Any
 
 try:
@@ -165,3 +166,76 @@ def render(state: Any = None) -> None:
 
     # 4. Citations table
     _render_citations_table(state)
+
+
+def render_streaming(state: Any = None) -> None:
+    """Render the Reasoning Trace tab with streaming effect.
+
+    Parameters
+    ----------
+    state:
+        An ``AgentState`` (or any object with ``critique``, ``verifier_verdict``
+        and the fields expected by ``build_trace()``).  When ``None``, reads
+        from ``st.session_state.get("last_state")``.
+    """
+    if st is None:
+        msg = "Streamlit is required. Install it with: pip install streamlit"
+        raise ImportError(msg)
+
+    if state is None:
+        state = st.session_state.get("last_state")
+
+    if state is None:
+        st.info("Ask a question in the Chat tab to see the reasoning trace.")
+        return
+
+    # CSS for fade-in and flash effects
+    st.markdown(
+        """
+        <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes flash {
+            0% { background-color: rgba(255, 255, 0, 0.5); }
+            100% { background-color: transparent; }
+        }
+        .trace-step {
+            animation: fadeIn 0.3s ease-out;
+            margin: 8px 0;
+        }
+        .critic-verdict {
+            animation: flash 1s ease-out;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 0, 0.1);
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    with st.status("Thinking...", expanded=True):
+        st.markdown("### Reasoning Trace")
+        trace = build_trace(state)
+
+        # Render each trace event with delay
+        for event in trace:
+            step_div = st.empty()
+            step_div.markdown(
+                f"<div class='trace-step'><strong>{event.get('node', '?')}</strong> — {event.get('action', '?')}"
+                + (f"  <code>{event.get('source')}</code>" if event.get('source') else "")
+                + f"</div><div>{event.get('detail', '')}</div>",
+                unsafe_allow_html=True,
+            )
+            time.sleep(0.3)
+
+        # Render critic verdict with flash effect
+        _render_critic_verdict(state)
+
+        # Render verifier verdict
+        _render_verifier_verdict(state)
+
+        # Render citations table
+        _render_citations_table(state)

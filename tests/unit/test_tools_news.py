@@ -63,6 +63,10 @@ class TestNewsSearchToolMock:
             NewsInput(query="test", max_results=21)
 
 
+@pytest.mark.skipif(
+    os.environ.get("FINROOT_LLM_PROVIDER", "").lower() == "mock",
+    reason="Live tests skipped in mock mode",
+)
 class TestNewsSearchToolLive:
     """Tests for NewsSearchTool in live mode."""
 

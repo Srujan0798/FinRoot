@@ -1,0 +1,8 @@
+=== dispatch opencode opencode/nemotron-3-ultra-free -> work/wave-1/07-mock-expansion.md @ Sat Jun 20 15:59:34 IST 2026 ===
+=== opencode exited rc=1 @ Sat Jun 20 16:05:51 IST 2026 ===
+work/WORKER_PROMPT.md
+[0m→ [0mRead work/wave-1/07-mock-expansion.md
+[0m→ [0mRead src/finroot/llm/mock.py
+[0m→ [0mRead tests/unit/test_llm_provider.py
+[91m[1mError: [0m"Upstream idle timeout exceeded"
+=== opencode exited rc=1 @ Sat Jun 20 16:05:51 IST 2026 ===

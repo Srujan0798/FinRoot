@@ -70,9 +70,16 @@ A **multi-agent reasoning pipeline** that *decides, defends, and documents*.
 
 ## 🏗 Architecture
 
+![FinRoot Architecture](docs/architecture/architecture.png)
+
+<details>
+<summary>Full diagram source (mermaid)</summary>
+
+[docs/architecture/architecture.mmd](docs/architecture/architecture.mmd) — re-render with `bash scripts/render_diagram.sh`.
+
 ```mermaid
 %% FinRoot Architecture Diagram
-%% Render to PNG: mmdc -i docs/architecture/architecture.mmd -o docs/architecture/architecture.png
+%% Render to PNG: bash scripts/render_diagram.sh
 %%
 %% Legend:
 %%   [User]     — human end-user (investor / family office)
@@ -151,9 +158,7 @@ flowchart TD
 
     FIN --> EVAL[FRB Eval Harness — pass@k vs baseline]
 ```
-
-Full diagram source: [`docs/architecture/architecture.mmd`](docs/architecture/architecture.mmd).
-Render to PNG: `mmdc -i docs/architecture/architecture.mmd -o docs/architecture/architecture.png`.
+</details>
 
 ---
 

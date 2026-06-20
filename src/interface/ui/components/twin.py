@@ -11,6 +11,12 @@ try:
 except ImportError:
     st = None  # type: ignore[assignment]
 
+try:
+    from interface.ui.components.charts import allocation_pie, is_plotly_available
+except ImportError:  # pragma: no cover - charts module is always present in this wave
+    allocation_pie = None  # type: ignore[assignment]
+    is_plotly_available = None  # type: ignore[assignment]
+
 _PROFILES_PATH = Path(__file__).resolve().parents[4] / "data" / "samples" / "twin_profiles.json"
 
 
@@ -127,7 +133,17 @@ def render(twin: dict[str, Any] | None = None) -> None:
 
     st.metric("Total Portfolio Value", f"\u20b9{total_value:,.2f}")
 
-    # Allocation bar chart
+    # Allocation pie chart (Plotly)
     st.subheader("Allocation Breakdown")
-    alloc = {h.get("name", h.get("asset_id", "—")): h.get("quantity", 0) * h.get("unit_price", 0) for h in holdings}
-    st.bar_chart(alloc)
+    if is_plotly_available is not None and is_plotly_available() and allocation_pie is not None:
+        st.plotly_chart(allocation_pie(holdings), use_container_width=True)
+    else:
+        st.info(
+            "Plotly is not installed — install with `pip install plotly` for an "
+            "interactive allocation pie chart."
+        )
+        alloc = {
+            h.get("name", h.get("asset_id", "—")): h.get("quantity", 0) * h.get("unit_price", 0)
+            for h in holdings
+        }
+        st.bar_chart(alloc)

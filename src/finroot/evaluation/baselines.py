@@ -68,6 +68,13 @@ class NaiveRAGBaseline:
             summary=result.text[:120],
             analysis=result.text,
             confidence=_map_confidence(result.confidence),
+            citations=[
+                Citation(
+                    source="mock_llm",
+                    detail="Response from MockProvider (no real data retrieval)",
+                    retrieved_at=datetime.now(UTC),
+                )
+            ],
         )
 
         return AgentState(

@@ -17,6 +17,12 @@ try:
 except ImportError:
     _HAS_ST = False
 
+try:
+    from interface.ui.components.charts import domain_bar_chart, is_plotly_available
+except ImportError:  # pragma: no cover - charts module is always present in this wave
+    domain_bar_chart = None  # type: ignore[assignment]
+    is_plotly_available = None  # type: ignore[assignment]
+
 if TYPE_CHECKING:  # pragma: no cover
     pass
 
@@ -67,7 +73,14 @@ def _render_domain_chart(st: Any, metrics: dict[str, Any]) -> None:
         return
 
     st.subheader("FinRoot Mean Score by Domain")
-    st.bar_chart(per_domain)
+    if is_plotly_available is not None and is_plotly_available() and domain_bar_chart is not None:
+        st.plotly_chart(domain_bar_chart(per_domain), use_container_width=True)
+    else:
+        st.info(
+            "Plotly is not installed — install with `pip install plotly` for an "
+            "interactive domain bar chart."
+        )
+        st.bar_chart(per_domain)
 
 
 def render() -> None:

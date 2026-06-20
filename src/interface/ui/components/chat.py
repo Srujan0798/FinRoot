@@ -152,3 +152,8 @@ def render(*, user_id: str = "demo", mock: bool = True) -> None:
         st.session_state["chat_history"].append(
             {"role": "assistant", "content": summary}
         )
+
+        # Render the trace with streaming effect
+        from interface.ui.components.trace import render_streaming
+
+        render_streaming(state)

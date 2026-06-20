@@ -583,3 +583,746 @@ for b_name, baseline in [('RAG', NaiveRAGBaseline()), ('SingleAgent', SingleAgen
 RAG: mean=0.072, scores=[0.1, 0.11, 0.0, 0.0, 0.15]
 SingleAgent: mean=0.152, scores=[0.11, 0.4, 0.15, 0.05, 0.05]
 [0m
+</think>
+[0m← [0mWrite src/finroot/evaluation/harness.py
+Wrote file successfully.
+[0m
+Now let me write the CLI script:
+[0m← [0mWrite scripts/run_evals.py
+Wrote file successfully.
+[0m
+Now let me write the test file:
+[0m← [0mWrite tests/unit/test_harness.py
+Wrote file successfully.
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && PYTHONPATH=src python3 -c "
+import sys
+sys.path.insert(0, '.')
+from finroot.evaluation.harness import HarnessConfig, run_harness
+config = HarnessConfig(k=1, task_filter='frb-001')
+results = run_harness(config)
+for r in results:
+    print(r.system, r.mean_score, r.pass_at_1, r.pass_at_k, r.pass_hat_k, r.n_tasks)
+" 2>&1 | tail -10
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+finroot 0.66 0.0 0.0 0.0 1
+rag 0.1 0.0 0.0 0.0 1
+single_agent 0.17 0.0 0.0 0.0 1
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && PYTHONPATH=src python3 -m pytest tests/unit/test_harness.py -v 2>&1 | tail -60
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && timeout 180 env PYTHONPATH=src python3 -m pytest tests/unit/test_harness.py -v --no-header 2>&1 | tail -80
+============================= test session starts ==============================
+collected 39 items
+
+tests/unit/test_harness.py .......................................       [100%]
+
+=============================== warnings summary ===============================
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    from pydantic.v1.fields import FieldInfo as FieldInfoV1
+
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77: DeprecationWarning: ForwardRef._evaluate is a private API and is retained for compatibility, but will be removed in Python 3.16. Use ForwardRef.evaluate() or typing.evaluate_forward_ref() instead.
+    return cast(Any, type_)._evaluate(globalns, localns, type_params=(), recursive_guard=set())
+
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    if asyncio.iscoroutinefunction(f):
+
+tests/unit/test_harness.py: 170 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:384: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    asyncio.iscoroutinefunction(func)
+
+tests/unit/test_harness.py: 170 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:386: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    and asyncio.iscoroutinefunction(func.__call__)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 39 passed, 350 warnings in 120.70s (0:02:00) =================
+[0m
+All 39 tests pass. Now let me run the CLI acceptance commands.
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && timeout 60 env PYTHONPATH=src python3 scripts/run_evals.py --mock --task frb-001 2>&1 | tail -40
+confidence:   expected=high actual=medium
+
+  trial 0  system=rag  passed=False  score=0.1000  elapsed=0.00s
+    must_mention: 0.00 (missing: ['concentration', 'risk', 'tax', 'LTCG', 'diversif'])
+    citations:    0 (min_required: 2)
+    numeric:      expected=None extracted=None diff=None
+    confidence:   expected=high actual=high
+
+  trial 1  system=rag  passed=False  score=0.1100  elapsed=0.00s
+    must_mention: 0.20 (missing: ['concentration', 'tax', 'LTCG', 'diversif'])
+    citations:    0 (min_required: 2)
+    numeric:      expected=None extracted=None diff=None
+    confidence:   expected=high actual=low
+
+  trial 2  system=rag  passed=False  score=0.0500  elapsed=0.00s
+    must_mention: 0.00 (missing: ['concentration', 'risk', 'tax', 'LTCG', 'diversif'])
+    citations:    0 (min_required: 2)
+    numeric:      expected=None extracted=None diff=None
+    confidence:   expected=high actual=medium
+
+  trial 0  system=single_agent  passed=False  score=0.1700  elapsed=0.00s
+    must_mention: 0.40 (missing: ['concentration', 'tax', 'LTCG'])
+    citations:    1 (min_required: 2)
+    numeric:      expected=None extracted=None diff=None
+    confidence:   expected=high actual=medium
+
+  trial 1  system=single_agent  passed=False  score=0.1100  elapsed=0.00s
+    must_mention: 0.20 (missing: ['concentration', 'tax', 'LTCG', 'diversif'])
+    citations:    1 (min_required: 2)
+    numeric:      expected=None extracted=None diff=None
+    confidence:   expected=high actual=low
+
+  trial 2  system=single_agent  passed=False  score=0.0500  elapsed=0.00s
+    must_mention: 0.00 (missing: ['concentration', 'risk', 'tax', 'LTCG', 'diversif'])
+    citations:    1 (min_required: 2)
+    numeric:      expected=None extracted=None diff=None
+    confidence:   expected=high actual=medium
+
+Wrote metrics (single-task subset) to results/metrics.json
+  as_of_sha=7afd827  n_tasks=1  k=3
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && cat results/metrics.json | python3 -m json.tool | head -30
+{
+    "as_of_sha": "7afd827",
+    "generated_at": "2026-06-20T10:45:17.812821+00:00",
+    "systems": {
+        "finroot": {
+            "system": "finroot",
+            "pass_at_1": 0.0,
+            "pass_at_k": 0.0,
+            "pass_hat_k": 0.0,
+            "mean_score": 0.66,
+            "per_domain": {
+                "portfolio": 0.66
+            },
+            "n_tasks": 1
+        },
+        "rag": {
+            "system": "rag",
+            "pass_at_1": 0.0,
+            "pass_at_k": 0.0,
+            "pass_hat_k": 0.0,
+            "mean_score": 0.0867,
+            "per_domain": {
+                "portfolio": 0.0867
+            },
+            "n_tasks": 1
+        },
+        "single_agent": {
+            "system": "single_agent",
+            "pass_at_1": 0.0,
+            "pass_at_k": 0.0,
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && timeout 300 env PYTHONPATH=src python3 scripts/run_evals.py --mock 2>&1 | tail -30
+2026-06-20 16:18:48,120 INFO finroot.workflows.graph: Intent classified: risk (confidence=1.00)
+2026-06-20 16:18:48,695 INFO finroot.workflows.graph: Context assembled for intent=Intent.RISK
+2026-06-20 16:18:48,699 INFO finroot.workflows.graph: Plan: selected agents ['risk_assessor'] for intent=risk
+2026-06-20 16:18:48,700 INFO finroot.workflows.graph: Executing agent: risk_assessor
+2026-06-20 16:18:48,897 INFO finroot.workflows.graph: Synthesis complete: confidence=medium
+2026-06-20 16:18:48,949 INFO finroot.workflows.graph: Intent classified: risk (confidence=1.00)
+2026-06-20 16:18:49,621 INFO finroot.workflows.graph: Context assembled for intent=Intent.RISK
+2026-06-20 16:18:49,623 INFO finroot.workflows.graph: Plan: selected agents ['risk_assessor'] for intent=risk
+2026-06-20 16:18:49,624 INFO finroot.workflows.graph: Executing agent: risk_assessor
+2026-06-20 16:18:49,809 INFO finroot.workflows.graph: Synthesis complete: confidence=medium
+2026-06-20 16:18:49,912 INFO finroot.evaluation.harness: Wrote metrics.json: as_of_sha=7afd827 n_tasks=52 systems=['finroot', 'rag', 'single_agent'] lift=734.00%
+FRB harness: k=3 systems=['finroot', 'rag', 'single_agent'] mock=True judge_with_llm=False
+FRB bank: data/gold/frb_questions.json
+
+system          n_tasks   pass@1    pass@k    pass^k    mean_score 
+--------------  --------  --------  --------  --------  -----------
+finroot         52         0.3462    0.3462    0.3462    0.6722    
+rag             52         0.0000    0.0000    0.0000    0.0806    
+single_agent    52         0.0385    0.0769    0.0000    0.3085    
+
+Per-domain mean_score:
+system          behavioral  cashflow    credit      estate_planning  general     insurance   international  news_impact  portfolio   risk        tax       
+finroot             0.7025      0.6200      0.6533      0.6000      0.7371      0.6375      0.7000      0.5520      0.7012      0.6625      0.7100
+rag                 0.0792      0.0667      0.0911      0.0667      0.0971      0.0792      0.1056      0.0873      0.0887      0.0875      0.0405
+single_agent        0.5025      0.3733      0.5022      0.4833      0.4343      0.5000      0.3889      0.2307      0.1400      0.2042      0.1048
+
+Composite lift vs RAG: +734.00%
+Total time: 183.9s
+
+Wrote results/metrics.json  as_of_sha=7afd827  generated_at=2026-06-20T10:48:49.910228+00:00
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && python3 -c "
+import json
+data = json.load(open('data/gold/frb_questions.json'))
+ids = [q.get('id') for q in data]
+print(f'len: {len(data)}')
+print(f'unique IDs: {len(set(ids))}')
+print(f'duplicates:', [id for id in set(ids) if ids.count(id) > 1])
+"
+len: 52
+unique IDs: 52
+duplicates: []
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && python3 -c "
+import json
+data = json.load(open('data/gold/frb_questions.json'))
+domains = {}
+for q in data:
+    d = q.get('domain', 'unknown')
+    domains[d] = domains.get(d, 0) + 1
+print(f'Total: {len(data)}')
+print('Domains:', sorted(domains.items()))
+"
+Total: 52
+Domains: [('behavioral', 4), ('cashflow', 3), ('credit', 3), ('estate_planning', 2), ('general', 7), ('insurance', 4), ('international', 3), ('news_impact', 5), ('portfolio', 8), ('risk', 6), ('tax', 7)]
+[0m
+Let me check the metrics.json output and fix a small issue in run_evals.py:
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && cat results/metrics.json | python3 -m json.tool | head -30
+{
+    "as_of_sha": "7afd827",
+    "generated_at": "2026-06-20T10:48:49.910228+00:00",
+    "systems": {
+        "finroot": {
+            "system": "finroot",
+            "pass_at_1": 0.3462,
+            "pass_at_k": 0.3462,
+            "pass_hat_k": 0.3462,
+            "mean_score": 0.6722,
+            "per_domain": {
+                "behavioral": 0.7025,
+                "cashflow": 0.62,
+                "credit": 0.6533,
+                "estate_planning": 0.6,
+                "general": 0.7371,
+                "insurance": 0.6375,
+                "international": 0.7,
+                "news_impact": 0.552,
+                "portfolio": 0.7012,
+                "risk": 0.6625,
+                "tax": 0.71
+            },
+            "n_tasks": 52
+        },
+        "rag": {
+            "system": "rag",
+            "pass_at_1": 0.0,
+            "pass_at_k": 0.0,
+            "pass_hat_k": 0.0,
+[0m
+[0m→ [0mRead scripts/run_evals.py[90m [offset=315, limit=30][0m
+[0m✱ [0mGrep "n_tasks = len\(\{tid for r in results for tid in \[\]\}\)"[90m in scripts/run_evals.py · 1 match[0m
+[0m
+[0m← [0mEdit scripts/run_evals.py
+Index: /Users/srujansai/Desktop/FinRoot/scripts/run_evals.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/scripts/run_evals.py
++++ /Users/srujansai/Desktop/FinRoot/scripts/run_evals.py
+@@ -401,10 +401,8 @@
+ results = run_harness(config)
+ elapsed = time.monotonic() - t0
+ 
+ # n_tasks = number of unique task ids we actually ran.
+-n_tasks = len({tid for r in results for tid in []})  # placeholder; recompute
+-# Simpler: pull from config — the FRB bank size (or filtered size).
+ frb_full = json.loads(config.frb_path.read_text(encoding="utf-8"))
+ n_tasks = len(frb_full) if isinstance(frb_full, list) else 0
+ 
+ print_summary_table(results)
+
+[0m
+Now let me check the test that runs the CLI and confirms metrics.json:
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && timeout 60 env PYTHONPATH=src python3 scripts/run_evals.py --mock --task frb-001 2>&1 | tail -10
+confidence:   expected=high actual=medium
+
+  trial 2  system=single_agent  passed=False  score=0.1500  elapsed=0.00s
+    must_mention: 0.00 (missing: ['concentration', 'risk', 'tax', 'LTCG', 'diversif'])
+    citations:    1 (min_required: 2)
+    numeric:      expected=None extracted=None diff=None
+    confidence:   expected=high actual=high
+
+Wrote metrics (single-task subset) to results/metrics.json
+  as_of_sha=7afd827  n_tasks=1  k=3
+[0m
+Now let me verify ruff is clean and re-run all the tests:
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && python3 -m ruff check src/finroot/evaluation/harness.py scripts/run_evals.py tests/unit/test_harness.py 2>&1 | head -40
+F401 [*] `typing.Any` imported but unused
+  --> scripts/run_evals.py:33:20
+   |
+31 | import time
+32 | from pathlib import Path
+33 | from typing import Any
+   |                    ^^^
+34 |
+35 | # Repo root on sys.path BEFORE anything else imports ``evals``.
+   |
+help: Remove unused import: `typing.Any`
+
+F401 [*] `finroot.evaluation.harness.build_transcript` imported but unused
+  --> scripts/run_evals.py:47:5
+   |
+45 |     HarnessResult,
+46 |     TrialResult,
+47 |     build_transcript,
+   |     ^^^^^^^^^^^^^^^^
+48 |     compute_composite_lift,
+49 |     run_harness,
+   |
+help: Remove unused import: `finroot.evaluation.harness.build_transcript`
+
+SIM102 Use a single `if` statement instead of nested `if` statements
+   --> src/finroot/evaluation/harness.py:474:5
+    |
+472 |       finroot = next((r for r in results if r.system == "finroot"), None)
+473 |       rag = next((r for r in results if r.system == "rag"), None)
+474 | /     if (
+475 | |         finroot is not None
+476 | |         and rag is not None
+477 | |         and "rag" in systems
+478 | |         and "finroot" in systems
+479 | |     ):
+480 | |         if finroot.mean_score + 1e-9 < rag.mean_score:
+    | |______________________________________________________^
+481 |               raise ValueError(
+482 |                   "FinRoot underperforms RAG baseline — pipeline or graders are "
+    |
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && python3 -m ruff check src/finroot/evaluation/harness.py scripts/run_evals.py tests/unit/test_harness.py 2>&1 | tail -50
+|     ^^^^^^^^^^^^^^^^
+48 |     compute_composite_lift,
+49 |     run_harness,
+   |
+help: Remove unused import: `finroot.evaluation.harness.build_transcript`
+
+SIM102 Use a single `if` statement instead of nested `if` statements
+   --> src/finroot/evaluation/harness.py:474:5
+    |
+472 |       finroot = next((r for r in results if r.system == "finroot"), None)
+473 |       rag = next((r for r in results if r.system == "rag"), None)
+474 | /     if (
+475 | |         finroot is not None
+476 | |         and rag is not None
+477 | |         and "rag" in systems
+478 | |         and "finroot" in systems
+479 | |     ):
+480 | |         if finroot.mean_score + 1e-9 < rag.mean_score:
+    | |______________________________________________________^
+481 |               raise ValueError(
+482 |                   "FinRoot underperforms RAG baseline — pipeline or graders are "
+    |
+help: Combine `if` statements using `and`
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> tests/unit/test_harness.py:31:1
+   |
+29 |       sys.path.insert(0, str(REPO_ROOT))
+30 |
+31 | / import pytest  # noqa: E402
+32 | |
+33 | | from finroot.evaluation import harness as harness_mod  # noqa: E402
+34 | | from finroot.evaluation.harness import (  # noqa: E402
+35 | |     DEFAULT_FRB_PATH,
+36 | |     DEFAULT_METRICS_PATH,
+37 | |     HarnessConfig,
+38 | |     HarnessResult,
+39 | |     MetricsReport,
+40 | |     TrialResult,
+41 | |     compute_composite_lift,
+42 | |     run_harness,
+43 | |     write_metrics,
+44 | | )
+45 | | from finroot.schemas.state import AgentState  # noqa: E402
+   | |____________________________________________^
+   |
+help: Organize imports
+
+Found 4 errors.
+[*] 3 fixable with the `--fix` option (1 hidden fix can be enabled with the `--unsafe-fixes` option).
+[0m
+[0m← [0mEdit scripts/run_evals.py
+Index: /Users/srujansai/Desktop/FinRoot/scripts/run_evals.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/scripts/run_evals.py
++++ /Users/srujansai/Desktop/FinRoot/scripts/run_evals.py
+@@ -29,9 +29,8 @@
+ import logging
+ import sys
+ import time
+ from pathlib import Path
+-from typing import Any
+ 
+ # Repo root on sys.path BEFORE anything else imports ``evals``.
+ _REPO_ROOT = Path(__file__).resolve().parents[1]
+ if str(_REPO_ROOT) not in sys.path:
+@@ -43,9 +42,8 @@
+     DEFAULT_METRICS_PATH,
+     HarnessConfig,
+     HarnessResult,
+     TrialResult,
+-    build_transcript,
+     compute_composite_lift,
+     run_harness,
+     write_metrics,
+ )
+
+[0m
+[0m← [0mEdit src/finroot/evaluation/harness.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/evaluation/harness.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/evaluation/harness.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/evaluation/harness.py
+@@ -475,15 +475,15 @@
+     finroot is not None
+     and rag is not None
+     and "rag" in systems
+     and "finroot" in systems
++    and finroot.mean_score + 1e-9 < rag.mean_score
+ ):
+-    if finroot.mean_score + 1e-9 < rag.mean_score:
+-        raise ValueError(
+-            "FinRoot underperforms RAG baseline — pipeline or graders are "
+-            f"broken. finroot.mean_score={finroot.mean_score} < "
+-            f"rag.mean_score={rag.mean_score}"
+-        )
++    raise ValueError(
++        "FinRoot underperforms RAG baseline — pipeline or graders are "
++        f"broken. finroot.mean_score={finroot.mean_score} < "
++        f"rag.mean_score={rag.mean_score}"
++    )
+ 
+ return results
+ 
+ 
+
+[0m
+[0m✗ [0mEdit tests/unit/test_harness.py failed
+[91m[1mError: [0mNo changes to apply: oldString and newString are identical.
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && python3 -m ruff check --fix tests/unit/test_harness.py 2>&1 | tail -10
+Found 1 error (1 fixed, 0 remaining).
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && python3 -m ruff check src/finroot/evaluation/harness.py scripts/run_evals.py tests/unit/test_harness.py 2>&1 | tail -10
+All checks passed!
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && head -45 tests/unit/test_harness.py
+"""Tests for the FRB harness runner (wave-6, task 04).
+
+The harness is the runtime backbone for the 35%-weight Reasoning-Quality
+score; its tests must guard every contract invariant listed in
+``.specify/specs/wave-6/contracts/evals.contract.md`` plus the headline
+"FinRoot beats baselines" promise.
+
+Run with::
+
+    PYTHONPATH=src python3 -m pytest tests/unit/test_harness.py -v
+
+Per the W6-02 gotcha, ``evals.graders`` is a PEP-420 package under ``evals/``
+at the repo root, so it is NOT importable with only ``PYTHONPATH=src``. The
+harness internally prepends the repo root to ``sys.path``; these tests must
+do the same.
+"""
+from __future__ import annotations
+
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any
+
+# Make `evals.graders` importable from this test module.
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+import pytest  # noqa: E402
+
+from finroot.evaluation import harness as harness_mod  # noqa: E402
+from finroot.evaluation.harness import (  # noqa: E402
+    DEFAULT_FRB_PATH,
+    DEFAULT_METRICS_PATH,
+    HarnessConfig,
+    HarnessResult,
+    MetricsReport,
+    TrialResult,
+    compute_composite_lift,
+    run_harness,
+    write_metrics,
+)
+from finroot.schemas.state import AgentState  # noqa: E402
+[0m
+Now let me re-run the tests to confirm everything still passes after cleanup:
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && timeout 240 env PYTHONPATH=src python3 -m pytest tests/unit/test_harness.py -v --no-header 2>&1 | tail -60
+============================= test session starts ==============================
+collected 39 items
+
+tests/unit/test_harness.py .......................................       [100%]
+
+=============================== warnings summary ===============================
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    from pydantic.v1.fields import FieldInfo as FieldInfoV1
+
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/pydantic/v1/typing.py:77: DeprecationWarning: ForwardRef._evaluate is a private API and is retained for compatibility, but will be removed in Python 3.16. Use ForwardRef.evaluate() or typing.evaluate_forward_ref() instead.
+    return cast(Any, type_)._evaluate(globalns, localns, type_params=(), recursive_guard=set())
+
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+
+tests/unit/test_harness.py::TestRunHarness::test_returns_results_for_each_system
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    if asyncio.iscoroutinefunction(f):
+
+tests/unit/test_harness.py: 170 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:384: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    asyncio.iscoroutinefunction(func)
+
+tests/unit/test_harness.py: 170 warnings
+  /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/utils/runnable.py:386: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    and asyncio.iscoroutinefunction(func.__call__)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 39 passed, 350 warnings in 68.02s (0:01:08) ==================
+[0m
+All 39 tests pass. Let me also re-confirm the full acceptance run and metrics output:
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && timeout 30 env PYTHONPATH=src python3 scripts/run_evals.py --mock --task frb-001 2>&1 | head -25
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+2026-06-20 16:24:20,179 INFO finroot.workflows.graph: Intent classified: portfolio (confidence=1.00)
+2026-06-20 16:24:20,705 INFO finroot.workflows.graph: Context assembled for intent=Intent.PORTFOLIO
+2026-06-20 16:24:20,706 INFO finroot.workflows.graph: Plan: selected agents ['portfolio_optimizer', 'risk_assessor'] for intent=portfolio
+2026-06-20 16:24:20,707 INFO finroot.workflows.graph: Executing agent: portfolio_optimizer
+2026-06-20 16:24:20,926 INFO finroot.workflows.graph: Executing agent: risk_assessor
+2026-06-20 16:24:21,109 INFO finroot.workflows.graph: Synthesis complete: confidence=medium
+2026-06-20 16:24:21,173 INFO finroot.workflows.graph: Intent classified: portfolio (confidence=1.00)
+2026-06-20 16:24:21,861 INFO finroot.workflows.graph: Context assembled for intent=Intent.PORTFOLIO
+2026-06-20 16:24:21,862 INFO finroot.workflows.graph: Plan: selected agents ['portfolio_optimizer', 'risk_assessor'] for intent=portfolio
+2026-06-20 16:24:21,863 INFO finroot.workflows.graph: Executing agent: portfolio_optimizer
+2026-06-20 16:24:22,053 INFO finroot.workflows.graph: Executing agent: risk_assessor
+2026-06-20 16:24:22,238 INFO finroot.workflows.graph: Synthesis complete: confidence=medium
+2026-06-20 16:24:22,269 INFO finroot.workflows.graph: Intent classified: portfolio (confidence=1.00)
+2026-06-20 16:24:22,557 INFO finroot.workflows.graph: Context assembled for intent=Intent.PORTFOLIO
+2026-06-20 16:24:22,558 INFO finroot.workflows.graph: Plan: selected agents ['portfolio_optimizer', 'risk_assessor'] for intent=portfolio
+2026-06-20 16:24:22,559 INFO finroot.workflows.graph: Executing agent: portfolio_optimizer
+2026-06-20 16:24:22,774 INFO finroot.workflows.graph: Executing agent: risk_assessor
+2026-06-20 16:24:22,953 INFO finroot.workflows.graph: Synthesis complete: confidence=medium
+2026-06-20 16:24:23,025 INFO finroot.evaluation.harness: Wrote metrics.json: as_of_sha=7afd827 n_tasks=1 systems=['finroot', 'rag', 'single_agent'] lift=842.86%
+==============================================================================
+Task: frb-001  domain=portfolio  difficulty=easy  twin_id=None
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && timeout 30 env PYTHONPATH=src python3 scripts/run_evals.py --mock --task frb-001 2>&1 | tail -15
+trial 1  system=single_agent  passed=False  score=0.1100  elapsed=0.00s
+    must_mention: 0.20 (missing: ['concentration', 'risk', 'tax', 'LTCG'])
+    citations:    1 (min_required: 2)
+    numeric:      expected=None extracted=None diff=None
+    confidence:   expected=high actual=medium
+
+  trial 2  system=single_agent  passed=False  score=0.1500  elapsed=0.00s
+    must_mention: 0.00 (missing: ['concentration', 'risk', 'tax', 'LTCG', 'diversif'])
+    citations:    1 (min_required: 2)
+    numeric:      expected=None extracted=None diff=None
+    confidence:   expected=high actual=high
+
+Wrote metrics (single-task subset) to results/metrics.json
+  as_of_sha=7afd827  n_tasks=1  k=3
+[0m
+Now let me check the existing baselines test still passes (no collisions):
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && timeout 60 env PYTHONPATH=src python3 -m pytest tests/unit/test_baselines.py tests/unit/test_graders.py tests/unit/test_frb_bank.py -v --no-header 2>&1 | tail -20
+E           For further information visit https://errors.pydantic.dev/2.12/v/value_error
+
+src/finroot/evaluation/baselines.py:67: ValidationError
+=========================== short test summary info ============================
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_returns_agent_state
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_final_has_analysis
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_plan_is_populated
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_deterministic
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_twin_none_ok
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_twin_provided_ok
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_no_citations_by_default
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_confidence_is_set
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_created_at_is_set
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_no_tool_outputs
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_no_risk_framing
+FAILED tests/unit/test_baselines.py::TestBaselineComparison::test_rag_has_fewer_citations_than_single_agent
+FAILED tests/unit/test_baselines.py::TestBaselineComparison::test_single_agent_has_tool_outputs_rag_does_not
+FAILED tests/unit/test_baselines.py::TestBaselineComparison::test_both_return_same_state_shape
+FAILED tests/unit/test_baselines.py::TestSharedMockProvider::test_same_provider_consistent_across_calls
+======================== 15 failed, 65 passed in 1.20s =========================
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && timeout 30 env PYTHONPATH=src python3 -m pytest tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_returns_agent_state -v --no-header 2>&1 | tail -30
+query = 'What is the S&P 500 PE ratio?', twin = None
+
+    def answer(self, query: str, twin: dict | None = None) -> AgentState:
+        """Produce a naive RAG answer.
+    
+        Args:
+            query: The user's financial query.
+            twin: Optional user profile/twin snapshot (unused in naive RAG).
+    
+        Returns:
+            An AgentState with a ``final`` Recommendation and a simple
+            two-step plan.
+        """
+        context = self._build_context(twin)
+        prompt = self._build_prompt(query, context)
+        result = self.llm.complete(prompt)
+    
+>       rec = Recommendation(
+            summary=result.text[:120],
+            analysis=result.text,
+            confidence=_map_confidence(result.confidence),
+        )
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for Recommendation
+E         Value error, Recommendation.analysis contains numeric content but citations is empty. Every numeric claim must cite its source (FM-11). [type=value_error, input_value={'summary': 'Annual portf...enceLevel.HIGH: 'high'>}, input_type=dict]
+E           For further information visit https://errors.pydantic.dev/2.12/v/value_error
+
+src/finroot/evaluation/baselines.py:67: ValidationError
+=========================== short test summary info ============================
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_returns_agent_state
+============================== 1 failed in 0.96s ===============================
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && timeout 30 env PYTHONPATH=src python3 -m pytest tests/unit/test_baselines.py -v --no-header 2>&1 | tail -25
+analysis=result.text,
+            confidence=_map_confidence(result.confidence),
+        )
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for Recommendation
+E         Value error, Recommendation.analysis contains numeric content but citations is empty. Every numeric claim must cite its source (FM-11). [type=value_error, input_value={'summary': 'Home loan at...Level.MEDIUM: 'medium'>}, input_type=dict]
+E           For further information visit https://errors.pydantic.dev/2.12/v/value_error
+
+src/finroot/evaluation/baselines.py:67: ValidationError
+=========================== short test summary info ============================
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_returns_agent_state
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_final_has_analysis
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_plan_is_populated
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_deterministic
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_twin_none_ok
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_twin_provided_ok
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_no_citations_by_default
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_confidence_is_set
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_created_at_is_set
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_no_tool_outputs
+FAILED tests/unit/test_baselines.py::TestNaiveRAGBaseline::test_no_risk_framing
+FAILED tests/unit/test_baselines.py::TestBaselineComparison::test_rag_has_fewer_citations_than_single_agent
+FAILED tests/unit/test_baselines.py::TestBaselineComparison::test_single_agent_has_tool_outputs_rag_does_not
+FAILED tests/unit/test_baselines.py::TestBaselineComparison::test_both_return_same_state_shape
+FAILED tests/unit/test_baselines.py::TestSharedMockProvider::test_same_provider_consistent_across_calls
+======================== 15 failed, 10 passed in 0.85s =========================
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && git status 2>&1 | head -30
+On branch main
+Your branch is based on 'origin/main', but the upstream is gone.
+  (use "git branch --unset-upstream" to fixup)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   README.md
+	modified:   data/gold/frb_questions.json
+	modified:   docs/waves/wave-6-gotchas.md
+	modified:   results/metrics.json
+	modified:   scripts/run_evals.py
+	modified:   src/finroot/evaluation/harness.py
+	modified:   src/finroot/llm/mock.py
+	modified:   src/interface/ui/components/chat.py
+	modified:   src/interface/ui/components/harness.py
+	modified:   src/interface/ui/components/trace.py
+	modified:   src/interface/ui/components/twin.py
+	modified:   tests/unit/test_components.py
+	modified:   tests/unit/test_frb_bank.py
+	modified:   tests/unit/test_harness.py
+	modified:   work/reports/wave-6/04-harness.run.log
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	docs/architecture/architecture.png
+	scripts/_render_svg.py
+	scripts/render_diagram.sh
+	src/interface/api/__init__.py
+	src/interface/api/app.py
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && git diff src/finroot/llm/mock.py 2>&1 | head -50
+diff --git a/src/finroot/llm/mock.py b/src/finroot/llm/mock.py
+index 3f2e0ca..9543a1c 100644
+--- a/src/finroot/llm/mock.py
++++ b/src/finroot/llm/mock.py
+@@ -3,6 +3,8 @@
+ Responses are keyed by prompt hash so the same prompt always produces the same
+ output. Always embeds ``<reasoning>`` and ``<confidence>`` tags so downstream
+ parsing is exercised in every test.
++
++Expanded to 55+ canned responses for rich demo variety.
+ """
+ 
+ from __future__ import annotations
+@@ -11,37 +13,84 @@ import hashlib
+ 
+ from finroot.llm.base import LLMResult, parse_reasoning_confidence
+ 
+-# Five canned responses rotated by prompt hash modulo 5.
+ _CANNED: list[str] = [
+-    (
+-        "<reasoning>The user sent a short greeting. No financial analysis "
+-        "is needed.</reasoning>\nHello! How can I help with your finances today?"
+-        "\n<confidence>high</confidence>"
+-    ),
+-    (
+-        "<reasoning>The query touches portfolio allocation. Without specific "
+-        "holdings I can only give general guidance.</reasoning>\nDiversification "
+-        "across asset classes reduces idiosyncratic risk."
+-        "\n<confidence>medium</confidence>"
+-    ),
+-    (
+-        "<reasoning>Risk assessment requires concrete position data. This is a "
+-        "placeholder response for offline testing.</reasoning>\nRisk cannot be "
+-        "quantified without portfolio details."
+-        "\n<confidence>low</confidence>"
+-    ),
+-    (
+-        "<reasoning>Tax optimisation depends on jurisdiction and holding period. "
+-        "Generic advice: harvest losses to offset gains.</reasoning>\nConsider "
+-        "tax-loss harvesting before year-end."
+-        "\n<confidence>medium</confidence>"
+-    ),
+-    (
+-        "<reasoning>General financial query. Providing a safe, cited response."
+-        "</reasoning>\nMarkets are influenced by macro factors including interest "
+-        "rates, inflation, and geopolitical events."
+-        "\n<confidence>medium</confidence>"
+-    ),
++    # ---- Portfolio analysis (10) ----
++    "<reasoning>Portfolio allocation review. The holdings show a balanced mix across equity, debt, and alternatives.</reasoning>\nYour current allocation is 45% equity, 35% debt, 15% gold, 5% cash. This is well-diversified for a moderate risk profile. Consider rebalancing if equity exceeds 55%.\n<confidence>high</confidence>",
+[0m
+</think>

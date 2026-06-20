@@ -24,7 +24,7 @@ BANK_PATH = REPO_ROOT / "data" / "gold" / "frb_questions.json"
 TWINS_PATH = REPO_ROOT / "data" / "samples" / "twin_profiles.json"
 TAX_RULES_PATH = REPO_ROOT / "data" / "tax_rules.json"
 
-VALID_DOMAINS = {"portfolio", "risk", "tax", "news_impact", "cashflow", "credit", "general"}
+VALID_DOMAINS = {"portfolio", "risk", "tax", "news_impact", "cashflow", "credit", "general", "insurance", "estate_planning", "behavioral", "international"}
 VALID_DIFFICULTIES = {"easy", "medium", "hard"}
 VALID_CONFIDENCES = {"high", "medium", "low", None}
 REQUIRED_TOP_KEYS = {"id", "domain", "difficulty", "query", "twin_id", "expected", "rationale"}
@@ -76,9 +76,9 @@ class TestBankIntegrity:
         for i, item in enumerate(bank):
             assert isinstance(item, dict), f"item {i} is not a dict"
 
-    def test_at_least_24_questions(self, bank):
-        """Brief requires >= 24 questions."""
-        assert len(bank) >= 24, f"got {len(bank)} questions; need >= 24"
+    def test_at_least_50_questions(self, bank):
+        """Wave-6 expansion requires >= 50 questions."""
+        assert len(bank) >= 50, f"got {len(bank)} questions; need >= 50"
 
     def test_unique_ids(self, bank):
         """All question IDs are unique."""
@@ -176,7 +176,7 @@ class TestDomainCoverage:
     def test_each_required_domain_present(self, bank):
         """Each domain required by the brief is represented."""
         domains = {q["domain"] for q in bank}
-        for required in ("portfolio", "risk", "tax", "news_impact"):
+        for required in ("portfolio", "risk", "tax", "news_impact", "insurance", "estate_planning", "behavioral", "international"):
             assert required in domains, f"required domain '{required}' missing"
 
     def test_minimum_per_domain(self, bank):
@@ -184,7 +184,7 @@ class TestDomainCoverage:
         from collections import Counter
 
         counts = Counter(q["domain"] for q in bank)
-        minima = {"portfolio": 4, "risk": 4, "tax": 4, "news_impact": 3}
+        minima = {"portfolio": 4, "risk": 4, "tax": 4, "news_impact": 3, "insurance": 3, "estate_planning": 2, "behavioral": 3, "international": 2}
         for domain, n in minima.items():
             assert counts[domain] >= n, (
                 f"domain '{domain}' has {counts[domain]} items; need >= {n}"

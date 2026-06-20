@@ -17,6 +17,7 @@ Covers:
 from __future__ import annotations
 
 import json
+import os
 import urllib.error
 from unittest import mock
 
@@ -117,6 +118,10 @@ class TestMacroMock:
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.skipif(
+    os.environ.get("FINROOT_LLM_PROVIDER", "").lower() == "mock",
+    reason="Live tests skipped in mock mode",
+)
 class TestMacroLive:
     def _payload(self, value: float, date: str = "2024") -> bytes:
         return json.dumps(
@@ -299,6 +304,10 @@ class TestCurrencyMock:
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.skipif(
+    os.environ.get("FINROOT_LLM_PROVIDER", "").lower() == "mock",
+    reason="Live tests skipped in mock mode",
+)
 class TestCurrencyLive:
     def _payload(self, from_ccy: str, rates: dict[str, float]) -> bytes:
         return json.dumps(
