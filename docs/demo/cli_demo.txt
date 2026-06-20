@@ -1,0 +1,202 @@
+=== FinRoot CLI Demo Transcript (Mock Mode) ===
+Generated: Sat Jun 20 15:23:32 IST 2026
+Environment: PYTHONPATH=src FINROOT_LLM_PROVIDER=mock
+
+======================================================================
+COMMAND: python -m interface.cli --mock "Review my portfolio and flag risks"
+======================================================================
+
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+╭─────────────────────────────────── Answer ───────────────────────────────────╮
+│ Current allocation: FD_HDFC_001: 22.46%, MF_ICICI_BALANCED_001: 27.36%,      │
+│ MF_SBI_DEBT_001: 34.46%, PPF_ACCOUNT_001: 15.72% | Monte Carlo: expected     │
+│ return=20.37%, probability of loss=16.50%                                    │
+│                                                                              │
+│ Portfolio allocation: FD_HDFC_001: 22.46%, MF_ICICI_BALANCED_001: 27.36%,    │
+│ MF_SBI_DEBT_001: 34.46%, PPF_ACCOUNT_001: 15.72%.                            │
+│                                                                              │
+│ Monte Carlo simulation: expected return 20.37%, probability of loss 16.50%.  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+  Confidence    medium                         
+  Risks         No specific risks identified.  
+
+Reasoning Steps
+  0.  plan_step: portfolio_optimizer
+  1.  plan_step: risk_assessor
+  2.  tool_output: output={'intent': 'portfolio', 'confidence': 1.0, 'entities':
+{'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 
+  3.  tool_output: output={'query': 'Review my portfolio and flag risks', 
+'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'r
+  4.  tool_output: input=symbol='FD_HDFC_001' period='1d', 
+output=symbol='FD_HDFC_001' currency='USD' prices=[PricePoint(date='2026-06-16',
+  5.  tool_output: input=symbol='MF_ICICI_BALANCED_001' period='1d', 
+output=symbol='MF_ICICI_BALANCED_001' currency='USD' prices=[PricePoin
+  6.  tool_output: input=symbol='MF_SBI_DEBT_001' period='1d', 
+output=symbol='MF_SBI_DEBT_001' currency='USD' prices=[PricePoint(date='2026
+  7.  tool_output: input=symbol='PPF_ACCOUNT_001' period='1d', 
+output=symbol='PPF_ACCOUNT_001' currency='USD' prices=[PricePoint(date='2026
+  8.  current_prices: prices={'FD_HDFC_001': 36300.0, 'MF_ICICI_BALANCED_001': 
+11500.0, 'MF_SBI_DEBT_001': 44400.0, 'PPF_ACCOUNT_001': 4300.0}
+  9.  allocation_analysis: current_allocation=[{'symbol': 'FD_HDFC_001', 
+'weight': 0.224601, 'price': 36300.0}, {'symbol': 'MF_ICICI_BALANCED_001',
+  10.  tool_output: input=holdings=[{'symbol': 'FD_HDFC_001', 'weight': 
+0.224601}, {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.273574}, 
+  11.  tool_output: input=holdings=[{'symbol': 'FD_HDFC_001', 'weight': 0.25}, 
+{'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.25}, {'symbol
+  12.  rebalancing_comparison: simulations=[{'label': 'current', 
+'expected_return': 0.208268, 'p10_return': -0.055892, 'p90_return': 0.526538, 
+'probabi
+  13.  tool_output: input=holdings=[{'asset_id': 'FD_HDFC_001', 'asset_type': 
+'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quantity'
+  14.  monte_carlo: expected_return=0.203746, p10_return=-0.071418, 
+p90_return=0.541139, probability_of_loss=0.165, citation=Monte Carlo sim
+  15.  critique: SelfCritic failed (overall=0.54, threshold=0.6). Axes: 
+correctness=0.10, risk_awareness=0.80, actionability=0.50, explai
+  16.  recommendation: Current allocation: FD_HDFC_001: 22.46%, 
+MF_ICICI_BALANCED_001: 27.36%, MF_SBI_DEBT_001: 34.46%, PPF_ACCOUNT_001: 15.72%
+
+Citations
+  1. intent_classifier: Output from intent_classifier — {'intent': 'portfolio', 
+'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': 
+"Keyword 'portfolio' matched for intent portfolio"}
+  2. context_assembler: Output from context_assembler — {'query': 'Review my 
+portfolio and flag risks', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 
+'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>, 
+'investment_horizon': <In
+  3. market_data: Output from market_data — symbol='FD_HDFC_001' currency='USD' 
+prices=[PricePoint(date='2026-06-16', open=36298.9, high=36299.5, low=36298.5, 
+close=36299.0, volume=1255294), PricePoint(date='2026-06-17', open=36300.4, 
+high=3630
+  4. market_data: Output from market_data — symbol='MF_ICICI_BALANCED_001' 
+currency='USD' prices=[PricePoint(date='2026-06-16', open=11498.9, high=11499.5,
+low=11498.5, close=11499.0, volume=1896883), PricePoint(date='2026-06-17', 
+open=11500.4,
+  5. market_data: Output from market_data — symbol='MF_SBI_DEBT_001' 
+currency='USD' prices=[PricePoint(date='2026-06-16', open=44398.9, high=44399.5,
+low=44398.5, close=44399.0, volume=1878908), PricePoint(date='2026-06-17', 
+open=44400.4, high=
+  6. market_data: Output from market_data — symbol='PPF_ACCOUNT_001' 
+currency='USD' prices=[PricePoint(date='2026-06-16', open=4298.9, high=4299.5, 
+low=4298.5, close=4299.0, volume=1596647), PricePoint(date='2026-06-17', 
+open=4300.4, high=4301.
+  7. portfolio_simulator: Output from portfolio_simulator — 
+expected_return=0.208268 p10_return=-0.055892 p90_return=0.526538 
+probability_of_loss=0.16 citation='Monte Carlo simulation: 500 paths, 1-year 
+horizon'
+  8. portfolio_simulator: Output from portfolio_simulator — 
+expected_return=0.208268 p10_return=-0.055892 p90_return=0.526538 
+probability_of_loss=0.16 citation='Monte Carlo simulation: 500 paths, 1-year 
+horizon'
+  9. portfolio_simulator: Output from portfolio_simulator — 
+expected_return=0.203746 p10_return=-0.071418 p90_return=0.541139 
+probability_of_loss=0.165 citation='Monte Carlo simulation: 1000 paths, 1-year 
+horizon'
+
+Critic Verdict: FAILED (overall=0.535)
+  SelfCritic failed (overall=0.54, threshold=0.6). Axes: correctness=0.10, 
+risk_awareness=0.80, actionability=0.50, explainability=0.70, evidence=1.00. 
+Must fix: correctness.
+
+
+======================================================================
+COMMAND: python -m interface.cli --mock "Calculate tax on ₹2,00,000 LTCG from equity"
+======================================================================
+
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+╭─────────────────────────────────── Answer ───────────────────────────────────╮
+│ Tax on ₹200,000 LTCG: ₹10,400.00 (effective rate 5.20%)                      │
+│                                                                              │
+│ TaxPlanner computed ₹10,400.00 tax on a ₹200,000 LTCG gain. Rule:            │
+│ LTCG_EQUITY — equity 10% over ₹100,000 exempt (Budget 2024). Breakdown:      │
+│ {'taxable_gain': 100000.0, 'base_tax': 10000.0, 'surcharge': 0.0, 'cess':    │
+│ 400.0}                                                                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+  Confidence    medium                         
+  Risks         No specific risks identified.  
+
+Reasoning Steps
+  0.  plan_step: tax_planner
+  1.  tool_output: output={'intent': 'tax', 'confidence': 1.0, 'entities': 
+{'symbols': ['LTCG'], 'timeframe': None}, 'reasoning': "Keyword 
+  2.  tool_output: output={'query': 'Calculate tax on ₹2,00,000 LTCG from 
+equity', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age
+  3.  tool_output: input=gain=200000.0 gain_type='LTCG' annual_income=1800000.0 
+cess=True, output=tax_amount=10400.0 effective_rate_pct=5.2
+  4.  tax_computation: gain=200000.0, gain_type=LTCG, annual_income=1800000.0, 
+tax_amount=10400.0, effective_rate_pct=5.2, breakdown={'taxable_
+  5.  critique: SelfCritic passed (overall=0.68, threshold=0.6). Axes: 
+correctness=0.84, risk_awareness=0.50, actionability=0.50, explai
+  6.  recommendation: Tax on ₹200,000 LTCG: ₹10,400.00 (effective rate 5.20%)
+
+Citations
+  1. intent_classifier: Output from intent_classifier — {'intent': 'tax', 
+'confidence': 1.0, 'entities': {'symbols': ['LTCG'], 'timeframe': None}, 
+'reasoning': "Keyword 'tax' matched for intent tax"}
+  2. context_assembler: Output from context_assembler — {'query': 'Calculate tax
+on ₹2,00,000 LTCG from equity', 'twin': {'user_id': 'demo', 'name': 'Priya 
+Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 
+'conservative'>, 'investment_hori
+  3. tax_rule: Output from tax_rule — tax_amount=10400.0 effective_rate_pct=5.2 
+breakdown={'taxable_gain': 100000.0, 'base_tax': 10000.0, 'surcharge': 0.0, 
+'cess': 400.0} rule_applied='LTCG_EQUITY — equity 10% over ₹100,000 exempt 
+(Budget
+
+Critic Verdict: PASSED (overall=0.6809)
+  SelfCritic passed (overall=0.68, threshold=0.6). Axes: correctness=0.84, 
+risk_awareness=0.50, actionability=0.50, explainability=0.70, evidence=1.00.
+
+
+======================================================================
+COMMAND: python -m interface.cli --mock "Should I put my entire emergency fund into a hot small-cap stock?"
+======================================================================
+
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+╭─────────────────────────────────── Answer ───────────────────────────────────╮
+│ ⚠️ Prudence check failed: Emergency fund first — Query proposes investing the │
+│ emergency fund — agent must refuse / caveat. Recommendation: do not act yet  │
+│ — verify against your full financial picture.                                │
+│                                                                              │
+│ Monte Carlo: expected return=20.37%, probability of loss=16.50%              │
+│                                                                              │
+│ Monte Carlo simulation: expected return 20.37%, probability of loss 16.50%.  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+  Confidence    low                            
+  Risks         No specific risks identified.  
+
+Reasoning Steps
+  0.  plan_step: risk_assessor
+  1.  tool_output: output={'intent': 'risk', 'confidence': 1.0, 'entities': 
+{'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 'emer
+  2.  tool_output: output={'query': 'Should I put my entire emergency fund into 
+a hot small-cap stock?', 'twin': {'user_id': 'demo', 'name'
+  3.  tool_output: input=holdings=[{'asset_id': 'FD_HDFC_001', 'asset_type': 
+'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quantity'
+  4.  monte_carlo: expected_return=0.203746, p10_return=-0.071418, 
+p90_return=0.541139, probability_of_loss=0.165, citation=Monte Carlo sim
+  5.  critique: SelfCritic failed (overall=0.48, threshold=0.6). Axes: 
+correctness=0.10, risk_awareness=0.80, actionability=0.50, explai
+  6.  recommendation: ⚠️ Prudence check failed: Emergency fund first — Query 
+proposes investing the emergency fund — agent must refuse / cavea
+
+Citations
+  1. intent_classifier: Output from intent_classifier — {'intent': 'risk', 
+'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': 
+"Keyword 'emergency fund' matched for intent risk"}
+  2. context_assembler: Output from context_assembler — {'query': 'Should I put 
+my entire emergency fund into a hot small-cap stock?', 'twin': {'user_id': 
+'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': 
+<RiskTolerance.CONSERVATIVE: 'conservati
+  3. portfolio_simulator: Output from portfolio_simulator — 
+expected_return=0.203746 p10_return=-0.071418 p90_return=0.541139 
+probability_of_loss=0.165 citation='Monte Carlo simulation: 1000 paths, 1-year 
+horizon'
+
+Critic Verdict: FAILED (overall=0.475)
+  SelfCritic failed (overall=0.48, threshold=0.6). Axes: correctness=0.10, 
+risk_awareness=0.80, actionability=0.50, explainability=0.30, evidence=1.00. 
+Must fix: correctness, explainability.
+
+

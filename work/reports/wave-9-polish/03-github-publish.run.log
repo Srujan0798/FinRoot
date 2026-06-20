@@ -1,0 +1,73 @@
+=== dispatch opencode xiaomi-token-plan-sgp/mimo-v2.5-pro -> work/wave-9-polish/03-github-publish.md @ Sat Jun 20 15:16:36 IST 2026 ===
+[0m
+> build · mimo-v2.5-pro
+[0m
+[0m→ [0mRead work/WORKER_PROMPT.md
+[0m→ [0mRead work/wave-9-polish/03-github-publish.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m✱ [0mGlob ".specify/specs/wave-9-polish/contracts/*"[90m in . · 0 matches[0m
+[0m→ [0mRead results/metrics.json
+[0m✱ [0mGlob "scripts/*"[90m in . · 4 matches[0m
+Now let me check for contracts and the current metrics file:
+[0m→ [0mRead scripts/make_submission.sh
+[0m✱ [0mGlob "docs/demo/*"[90m in . · 4 matches[0m
+Let me check existing scripts for style reference and the demo directory:
+[0m
+[0m$ [0mgit -C /Users/srujansai/Desktop/FinRoot log --oneline -3
+676e6db chore(wave-9): polish task briefs — UI screenshots, CLI demo cast, GitHub publish (assignment sheet)
+904c133 chore: track results/metrics.json — single-source FRB metrics (FM-05/12 deliverable)
+9f7f0ec docs: fix README module ref (principles.py); refresh FRB metrics + report at current HEAD
+[0m
+[0m# [0mTodos
+[•] Create scripts/publish_github.sh
+[ ] Create docs/RELEASE_NOTES.md with metrics from metrics.json
+[ ] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-9-polish/03-github-publish.report.md
+[0m
+[0m→ [0mRead README.md[90m [limit=50][0m
+Now I'll create both files:
+[0m
+[0m← [0mWrite scripts/publish_github.sh
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create scripts/publish_github.sh
+[•] Create docs/RELEASE_NOTES.md with metrics from metrics.json
+[ ] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-9-polish/03-github-publish.report.md
+[0m
+[0m← [0mWrite docs/RELEASE_NOTES.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create scripts/publish_github.sh
+[✓] Create docs/RELEASE_NOTES.md with metrics from metrics.json
+[•] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-9-polish/03-github-publish.report.md
+[0m
+[0m$ [0mbash scripts/publish_github.sh finroot-demo 2>&1; echo "EXIT: $?"
+ERROR: working tree is dirty. Commit or stash changes first.
+?? docs/RELEASE_NOTES.md
+?? scripts/publish_github.sh
+?? work/reports/wave-9-polish/
+EXIT: 1
+[0m
+[0m$ [0mgrep -qi "v1.0.0" docs/RELEASE_NOTES.md && echo "release notes present"
+release notes present
+[0m
+[0m$ [0mbash -n scripts/publish_github.sh && echo "script syntax OK"
+script syntax OK
+[0m
+The dry-run fails because the working tree is dirty (our new files are untracked). This is correct behavior — the script detects uncommitted files. Let me stage them to a clean tree for the acceptance test:
+[0m$ [0mgit add scripts/publish_github.sh docs/RELEASE_NOTES.md && git status --short
+A  docs/RELEASE_NOTES.md
+A  scripts/publish_github.sh
+?? work/reports/wave-9-polish/
+[0m
+[0m$ [0mgit check-ignore work/reports/wave-9-polish/ 2>&1; grep -n "work" .gitignore 2>/dev/null || echo "no .gitignore or no work entry"
+no .gitignore or no work entry
+[0m
+[0m$ [0mls -la .gitignore 2>/dev/null || echo "no .gitignore"
+-rw-r--r--@ 1 srujansai  staff  654 Jun 20 14:53 .gitignore
+[0m
+=== opencode exited rc=0 @ Sat Jun 20 15:21:16 IST 2026 ===
