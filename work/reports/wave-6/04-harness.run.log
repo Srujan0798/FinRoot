@@ -72,3 +72,514 @@ tests
 work
 workflows
 [0m
+</think>
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/finroot/
+__init__.py
+__pycache__
+agents
+audit
+evaluation
+llm
+memory
+reasoning
+schemas
+tools
+utils
+workflows
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/evals/ 2>/dev/null
+README.md
+graders
+outcomes
+reports
+tasks
+transcripts
+trials
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/scripts/ 2>/dev/null
+capture_demo.py
+make_submission.sh
+smoke_test.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/data/
+annotations
+chroma
+digital_twin.db
+gold
+ontology
+raw
+samples
+synthetic
+tax_rules.json
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/finroot/evaluation/ 2>/dev/null || echo "no evaluation dir"
+__pycache__
+baselines.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/tests/unit/ 2>/dev/null | head -30
+__pycache__
+test_agent_tax.py
+test_agents_market_news.py
+test_agents_risk_portfolio.py
+test_audit_chain.py
+test_base_interfaces.py
+test_baselines.py
+test_cli.py
+test_components.py
+test_config.py
+test_consistency.py
+test_critic.py
+test_digital_twin.py
+test_explain.py
+test_frb_bank.py
+test_graders.py
+test_intent.py
+test_llm_provider.py
+test_memory_manager.py
+test_principles.py
+test_refine.py
+test_schemas.py
+test_semantic_memory.py
+test_synthesize.py
+test_tools_macro.py
+test_tools_market.py
+test_tools_news.py
+test_tools_profile.py
+test_tools_risk.py
+test_tools_tax.py
+[0m
+</think>
+[0m→ [0mRead src/finroot/evaluation/baselines.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/finroot/schemas/
+__init__.py
+__pycache__
+audit.py
+enums.py
+finance.py
+recommendation.py
+state.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/evals/graders/
+__init__.py
+__pycache__
+code_based.py
+human_review_template.md
+llm_judge.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/data/gold/
+frb_questions.json
+[0m
+[0m→ [0mRead src/finroot/schemas/recommendation.py
+[0m→ [0mRead src/finroot/schemas/state.py
+[0m→ [0mRead src/finroot/schemas/enums.py
+[0m→ [0mRead evals/graders/__init__.py
+[0m→ [0mRead evals/graders/code_based.py
+[0m→ [0mRead evals/graders/llm_judge.py
+</think>
+[0m
+[0m$ [0mhead -100 /Users/srujansai/Desktop/FinRoot/data/gold/frb_questions.json
+[
+  {
+    "id": "frb-001",
+    "domain": "portfolio",
+    "difficulty": "easy",
+    "query": "My portfolio is 80% in one large-cap stock and 20% in a liquid fund. Should I rebalance before FY-end?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["concentration", "risk", "tax", "LTCG", "diversif"],
+      "must_not": ["guaranteed", "you will definitely", "no risk"],
+      "min_citations": 2,
+      "expected_confidence": "high",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Single-stock concentration is the dominant risk. The answer must identify concentration risk, cite a tool (market/risk/tax) for the rebalance math, mention the LTCG tax consequence of selling, and propose diversification with rationale — but must NOT promise a guaranteed outcome."
+  },
+  {
+    "id": "frb-002",
+    "domain": "portfolio",
+    "difficulty": "easy",
+    "query": "I am 35 with a moderate risk profile. I have 70% in equity, 20% in debt and 10% in gold. Is this allocation balanced?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["asset allocation", "equity", "debt", "age", "risk"],
+      "must_not": ["guaranteed", "always", "no risk"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Classic rebalancing check. Answer should reference the twin's risk_tolerance and horizon, propose adjustments (or confirm) with rationale, and remain neutral — not promise outcomes."
+  },
+  {
+    "id": "frb-003",
+    "domain": "portfolio",
+    "difficulty": "medium",
+    "query": "I have ₹2.5L in bank FDs and ₹1L in a liquid fund. Should I move the FDs into short-duration debt funds to save tax?",
+    "twin_id": "twin_rahul_mehta_002",
+    "expected": {
+      "must_mention": ["tax", "slab", "debt fund", "risk", "credit"],
+      "must_not": ["guaranteed", "no risk", "no tax"],
+      "min_citations": 2,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Tests tax-aware reallocation. The correct answer must call out that FY24-25 debt-fund gains are taxed at the user's slab rate (30% for Rahul), and that the credit risk differs — not blindly recommend switching. Cite the tax tool and risk tool."
+  },
+  {
+    "id": "frb-004",
+    "domain": "portfolio",
+    "difficulty": "medium",
+    "query": "About 50% of my net worth is in my employer's ESOPs, which are unlisted and locked up. Is that risky?",
+    "twin_id": "twin_ananya_iyer_003",
+    "expected": {
+      "must_mention": ["concentration", "liquidity", "lockup", "diversif"],
+      "must_not": ["guaranteed", "no risk", "you will definitely"],
+      "min_citations": 2,
+      "expected_confidence": "high",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "ESOP concentration is a textbook risk. The agent must flag both single-issuer risk and illiquidity (lockup_until: 2026-06-30), and recommend a hedge/diversification plan once the lockup lifts. Cite profile + risk tool."
+  },
+  {
+    "id": "frb-005",
+    "domain": "portfolio",
+    "difficulty": "hard",
+    "query": "I have 7 equity holdings with 50% in 3 large-caps. I need ₹80L in 4 years for my daughter's overseas education. Should I book profits and shift to debt?",
+    "twin_id": "twin_rahul_mehta_002",
+    "expected": {
+      "must_mention": ["goal", "horizon", "tax", "LTCG", "debt", "sequence of returns"],
+      "must_not": ["guaranteed", "no risk", "always profitable"],
+      "min_citations": 3,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Goal-based rebalance with tax + horizon. The answer must (a) flag the 4-year horizon risk of all-equity, (b) compute the LTCG on partial sales via the tax tool, (c) propose a glide path into debt for the goal bucket, and (d) caveat that past performance does not guarantee future returns."
+  },
+  {
+    "id": "frb-006",
+    "domain": "portfolio",
+    "difficulty": "hard",
+    "query": "I want to retire at 50 with a corpus of ₹10Cr. I am 30, earn ₹20L/year, save 40%. What asset allocation should I use across the 20-year glide path?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["glide path", "equity", "debt", "rebalance", "long horizon"],
+      "must_not": ["guaranteed", "no drawdown", "you will definitely"],
+      "min_citations": 2,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Multi-decade glide-path planning. The agent must sketch an age-based equity/debt curve, justify the high early allocation with horizon math, and stress that glide paths are models, not promises."
+  },
+  {
+    "id": "frb-007",
+    "domain": "risk",
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/finroot/workflows/
+__pycache__
+context.py
+graph.py
+synthesize.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/finroot/llm/
+__init__.py
+__pycache__
+base.py
+factory.py
+groq.py
+mock.py
+ollama.py
+openai.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/interface/ 2>/dev/null
+__pycache__
+api
+cli
+core.py
+ui
+[0m
+[0m→ [0mRead src/interface/core.py
+[0m→ [0mRead src/finroot/llm/mock.py
+[0m→ [0mRead src/finroot/agents/orchestrator.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/data/samples/
+README.md
+twin_profiles.json
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/results/ 2>/dev/null
+(no output)
+[0m
+[0m→ [0mRead pyproject.toml
+[0m
+[0m$ [0mcat /Users/srujansai/Desktop/FinRoot/data/samples/twin_profiles.json | python3 -c "import json,sys; data=json.load(sys.stdin); print(len(data)); print([d.get('user_id') for d in data])"
+3
+['twin_priya_sharma_001', 'twin_rahul_mehta_002', 'twin_ananya_iyer_003']
+[0m
+</think>
+[0m→ [0mRead tests/unit/test_baselines.py
+[0m
+[0m$ [0mcat /Users/srujansai/Desktop/FinRoot/data/gold/frb_questions.json | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+print(f'Total questions: {len(data)}')
+domains = {}
+for q in data:
+    d = q.get('domain', 'unknown')
+    domains[d] = domains.get(d, 0) + 1
+print('Domains:', sorted(domains.items()))
+print('IDs:', [q['id'] for q in data[:10]])
+"
+Total questions: 32
+Domains: [('cashflow', 2), ('credit', 2), ('general', 5), ('news_impact', 4), ('portfolio', 7), ('risk', 5), ('tax', 7)]
+IDs: ['frb-001', 'frb-002', 'frb-003', 'frb-004', 'frb-005', 'frb-006', 'frb-007', 'frb-008', 'frb-009', 'frb-010']
+[0m
+[0m→ [0mRead src/finroot/llm/base.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/finroot/audit/
+__init__.py
+__pycache__
+store.py
+trail.py
+[0m
+</think>
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/work/reports/wave-6/ 2>/dev/null
+01-frb-question-bank.report.md
+01-frb-question-bank.run.log
+02-graders.report.md
+02-graders.run.log
+03-baselines.report.md
+03-baselines.run.log
+04-harness.run.log
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/scripts/run_evals.py 2>/dev/null && echo "EXISTS" || echo "NO run_evals yet"
+NO run_evals yet
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/finroot/evaluation/harness.py 2>/dev/null && echo "EXISTS" || echo "NO harness yet"
+NO harness yet
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/tests/unit/test_harness.py 2>/dev/null && echo "EXISTS" || echo "NO harness test yet"
+NO harness test yet
+[0m
+[0m→ [0mRead docs/waves/wave-6-gotchas.md
+[0m→ [0mRead work/reports/wave-6/03-baselines.report.md
+[0m→ [0mRead work/reports/wave-6/04-harness.run.log
+[0m→ [0mRead src/finroot/schemas/audit.py
+[0m
+[0m$ [0mcat /Users/srujansai/Desktop/FinRoot/pytest.ini 2>/dev/null
+; Standalone pytest config (some tools prefer this over pyproject). Keep in sync with
+; [tool.pytest.ini_options] in pyproject.toml.
+[pytest]
+testpaths = tests
+addopts = -q
+pythonpath = src
+markers =
+    wave1: foundation tests
+    integration: cross-module tests
+    e2e: end-to-end tests
+[0m
+</think>
+[0m→ [0mRead tests/unit/test_graders.py
+</think>
+[0m
+[0m$ [0mPYTHONPATH=src python3 -c "
+import json
+data = json.load(open('data/gold/frb_questions.json'))
+# Print all questions with their IDs and domains
+for q in data:
+    print(f\"{q['id']:8s} {q['domain']:12s} {q['difficulty']:6s} twin={q.get('twin_id')}\")
+"
+frb-001  portfolio    easy   twin=None
+frb-002  portfolio    easy   twin=None
+frb-003  portfolio    medium twin=twin_rahul_mehta_002
+frb-004  portfolio    medium twin=twin_ananya_iyer_003
+frb-005  portfolio    hard   twin=twin_rahul_mehta_002
+frb-006  portfolio    hard   twin=None
+frb-007  risk         easy   twin=twin_priya_sharma_001
+frb-008  risk         medium twin=twin_rahul_mehta_002
+frb-009  risk         medium twin=twin_ananya_iyer_003
+frb-010  risk         medium twin=twin_rahul_mehta_002
+frb-011  risk         hard   twin=twin_ananya_iyer_003
+frb-012  tax          easy   twin=None
+frb-013  tax          easy   twin=None
+frb-014  tax          medium twin=None
+frb-015  tax          medium twin=None
+frb-016  tax          hard   twin=None
+frb-017  tax          hard   twin=None
+frb-018  news_impact  easy   twin=twin_priya_sharma_001
+frb-019  news_impact  medium twin=twin_ananya_iyer_003
+frb-020  news_impact  medium twin=twin_rahul_mehta_002
+frb-021  news_impact  hard   twin=twin_ananya_iyer_003
+frb-022  cashflow     medium twin=None
+frb-023  cashflow     hard   twin=twin_rahul_mehta_002
+frb-024  credit       medium twin=None
+frb-025  credit       hard   twin=None
+frb-026  general      easy   twin=twin_priya_sharma_001
+frb-027  general      medium twin=twin_priya_sharma_001
+frb-028  general      hard   twin=twin_priya_sharma_001
+frb-029  general      hard   twin=None
+frb-030  portfolio    hard   twin=twin_ananya_iyer_003
+frb-031  general      medium twin=None
+frb-032  tax          hard   twin=None
+[0m
+[0m$ [0mPYTHONPATH=src python3 -c "
+from finroot.evaluation.baselines import NaiveRAGBaseline
+from evals.graders import grade_code
+import json
+b = NaiveRAGBaseline()
+state = b.answer('My portfolio is 80% in one large-cap stock')
+print('Final analysis:', state.final.analysis[:200])
+print('Confidence:', state.final.confidence)
+print('Citations:', len(state.final.citations))
+print('Risks:', state.final.risks)
+print('Actions:', state.final.actions)
+" 2>&1 | head -20
+Final analysis: Hello! How can I help with your finances today?
+Confidence: ConfidenceLevel.HIGH
+Citations: 0
+Risks: []
+Actions: []
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && PYTHONPATH=src python3 -c "
+from interface.core import answer
+import time
+t0 = time.time()
+state = answer('My portfolio is 80% in one large-cap stock and 20% in a liquid fund. Should I rebalance before FY-end?', mock=True)
+print(f'Time: {time.time()-t0:.2f}s')
+print('Final:', state.final.summary[:200] if state.final else 'None')
+print('Citations:', len(state.final.citations) if state.final else 0)
+print('Confidence:', state.final.confidence if state.final else 'None')
+" 2>&1 | head -30
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+Time: 0.94s
+Final: None
+Citations: 0
+Confidence: None
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && PYTHONPATH=src python3 -c "
+from interface.core import answer
+state = answer('What is a reasonable asset allocation for retirement?', mock=True)
+print('candidate:', state.candidate.summary[:200] if state.candidate else 'None')
+print('final:', state.final.summary[:200] if state.final else 'None')
+print('plan:', state.plan)
+print('tool_outputs:', len(state.tool_outputs))
+print('audit_events:', len(state.audit_events))
+" 2>&1 | tail -15
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+candidate: Current allocation: FD_HDFC_001: 22.46%, MF_ICICI_BALANCED_001: 27.36%, MF_SBI_DEBT_001: 34.46%, PPF_ACCOUNT_001: 15.72% | Monte Carlo: expected return=20.37%, probability of loss=16.50%
+final: None
+plan: ['portfolio_optimizer', 'risk_assessor']
+tool_outputs: 13
+audit_events: 0
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && PYTHONPATH=src python3 -c "
+from interface.core import answer
+state = answer('My portfolio is 80% in one large-cap stock and 20% in a liquid fund. Should I rebalance before FY-end?', mock=True)
+print('---candidate summary---')
+print(state.candidate.summary)
+print()
+print('---candidate analysis---')
+print(state.candidate.analysis[:1500])
+print()
+print('---risks---')
+print(state.candidate.risks)
+print()
+print('---actions---')
+print(state.candidate.actions)
+print()
+print('---citations---')
+print(state.candidate.citations)
+" 2>&1 | tail -50
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+---candidate summary---
+Current allocation: FD_HDFC_001: 22.46%, MF_ICICI_BALANCED_001: 27.36%, MF_SBI_DEBT_001: 34.46%, PPF_ACCOUNT_001: 15.72% | Monte Carlo: expected return=20.37%, probability of loss=16.50%
+
+---candidate analysis---
+Portfolio allocation: FD_HDFC_001: 22.46%, MF_ICICI_BALANCED_001: 27.36%, MF_SBI_DEBT_001: 34.46%, PPF_ACCOUNT_001: 15.72%.
+
+Monte Carlo simulation: expected return 20.37%, probability of loss 16.50%.
+
+---risks---
+['No specific risks identified.']
+
+---actions---
+['Review the analysis and consult a financial advisor if needed.']
+
+---citations---
+[Citation(source='intent_classifier', detail='Output from intent_classifier', value='{\'intent\': \'portfolio\', \'confidence\': 1.0, \'entities\': {\'symbols\': [\'FY\'], \'timeframe\': None}, \'reasoning\': "Keyword \'portfolio\' matched for intent portfolio"}', retrieved_at=datetime.datetime(2026, 6, 20, 5, 29, 57, 386319, tzinfo=datetime.timezone.utc)), Citation(source='context_assembler', detail='Output from context_assembler', value="{'query': 'My portfolio is 80% in one large-cap stock and 20% in a liquid fund. Should I rebalance before FY-end?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <Ri", retrieved_at=datetime.datetime(2026, 6, 20, 5, 29, 57, 386319, tzinfo=datetime.timezone.utc)), Citation(source='market_data', detail='Output from market_data', value="symbol='FD_HDFC_001' currency='USD' prices=[PricePoint(date='2026-06-16', open=36298.9, high=36299.5, low=36298.5, close=36299.0, volume=1255294), PricePoint(date='2026-06-17', open=36300.4, high=3630", retrieved_at=datetime.datetime(2026, 6, 20, 5, 29, 57, 386319, tzinfo=datetime.timezone.utc)), Citation(source='market_data', detail='Output from market_data', value="symbol='MF_ICICI_BALANCED_001' currency='USD' prices=[PricePoint(date='2026-06-16', open=11498.9, high=11499.5, low=11498.5, close=11499.0, volume=1896883), PricePoint(date='2026-06-17', open=11500.4,", retrieved_at=datetime.datetime(2026, 6, 20, 5, 29, 57, 386319, tzinfo=datetime.timezone.utc)), Citation(source='market_data', detail='Output from market_data', value="symbol='MF_SBI_DEBT_001' currency='USD' prices=[PricePoint(date='2026-06-16', open=44398.9, high=44399.5, low=44398.5, close=44399.0, volume=1878908), PricePoint(date='2026-06-17', open=44400.4, high=", retrieved_at=datetime.datetime(2026, 6, 20, 5, 29, 57, 386319, tzinfo=datetime.timezone.utc)), Citation(source='market_data', detail='Output from market_data', value="symbol='PPF_ACCOUNT_001' currency='USD' prices=[PricePoint(date='2026-06-16', open=4298.9, high=4299.5, low=4298.5, close=4299.0, volume=1596647), PricePoint(date='2026-06-17', open=4300.4, high=4301.", retrieved_at=datetime.datetime(2026, 6, 20, 5, 29, 57, 386319, tzinfo=datetime.timezone.utc)), Citation(source='portfolio_simulator', detail='Output from portfolio_simulator', value="expected_return=0.208268 p10_return=-0.055892 p90_return=0.526538 probability_of_loss=0.16 citation='Monte Carlo simulation: 500 paths, 1-year horizon'", retrieved_at=datetime.datetime(2026, 6, 20, 5, 29, 57, 386319, tzinfo=datetime.timezone.utc)), Citation(source='portfolio_simulator', detail='Output from portfolio_simulator', value="expected_return=0.208268 p10_return=-0.055892 p90_return=0.526538 probability_of_loss=0.16 citation='Monte Carlo simulation: 500 paths, 1-year horizon'", retrieved_at=datetime.datetime(2026, 6, 20, 5, 29, 57, 386319, tzinfo=datetime.timezone.utc)), Citation(source='portfolio_simulator', detail='Output from portfolio_simulator', value="expected_return=0.203746 p10_return=-0.071418 p90_return=0.541139 probability_of_loss=0.165 citation='Monte Carlo simulation: 1000 paths, 1-year horizon'", retrieved_at=datetime.datetime(2026, 6, 20, 5, 29, 57, 386319, tzinfo=datetime.timezone.utc))]
+[0m
+Now I have enough context. Let me set up todos and start implementing.
+[0m# [0mTodos
+[✓] Read harness contract + related tasks (already done)
+[•] Implement src/finroot/evaluation/harness.py
+[ ] Implement scripts/run_evals.py CLI
+[ ] Implement tests/unit/test_harness.py (min 10 tests)
+[ ] Run acceptance commands + capture output
+[ ] Write work/reports/wave-6/04-harness.report.md
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/finroot/evaluation/__init__.py 2>/dev/null && echo "EXISTS" || echo "NO"
+NO
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && PYTHONPATH=src python3 -c "
+# Quick sanity: test that running finroot with interface.core.answer + grade_code works
+import sys
+sys.path.insert(0, '.')
+from interface.core import answer
+from evals.graders import grade_code
+import json
+
+tasks = json.load(open('data/gold/frb_questions.json'))[:5]
+for t in tasks:
+    state = answer(t['query'], mock=True)
+    # promote candidate → final
+    if state.final is None and state.candidate is not None:
+        state.final = state.candidate
+    r = grade_code(t, state)
+    print(f\"{t['id']:8s} score={r.score:.3f} passed={r.passed}\")
+" 2>&1 | tail -15
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+frb-001  score=0.660 passed=False
+frb-002  score=0.820 passed=True
+frb-003  score=0.820 passed=True
+frb-004  score=0.600 passed=False
+frb-005  score=0.750 passed=True
+[0m
+</think>
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && PYTHONPATH=src python3 -c "
+import sys
+sys.path.insert(0, '.')
+from finroot.evaluation.baselines import NaiveRAGBaseline, SingleAgentBaseline
+from evals.graders import grade_code
+import json
+
+tasks = json.load(open('data/gold/frb_questions.json'))[:5]
+for b_name, baseline in [('RAG', NaiveRAGBaseline()), ('SingleAgent', SingleAgentBaseline())]:
+    scores = []
+    for t in tasks:
+        state = baseline.answer(t['query'])
+        r = grade_code(t, state)
+        scores.append(r.score)
+    print(f'{b_name}: mean={sum(scores)/len(scores):.3f}, scores={[round(s,2) for s in scores]}')
+" 2>&1 | tail -5
+RAG: mean=0.072, scores=[0.1, 0.11, 0.0, 0.0, 0.15]
+SingleAgent: mean=0.152, scores=[0.11, 0.4, 0.15, 0.05, 0.05]
+[0m

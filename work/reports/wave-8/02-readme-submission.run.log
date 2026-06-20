@@ -1,0 +1,422 @@
+=== dispatch opencode minimax-coding-plan/MiniMax-M3 -> work/wave-8/02-readme-submission.md @ Sat Jun 20 11:29:59 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 11:38:14 IST 2026 ===
+rk/REPORT_TEMPLATE.md
+[0m→ [0mRead work/WORKER_PROMPT.md
+[0m→ [0mRead work/wave-8/02-readme-submission.md
+</think>
+[0m→ [0mRead CLAUDE.md
+[0m→ [0mRead .specify/specs/wave-8/contracts/submission.contract.md
+[0m→ [0mRead docs/architecture/architecture.mmd
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/results/ 2>/dev/null && echo "---" && ls /Users/srujansai/Desktop/FinRoot/docs/ 2>/dev/null
+---
+REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+SCOPE_GUARD.md
+agents
+architecture
+audits
+benchmarks
+business
+conventions.md
+decisions
+demo
+flows
+historical
+interview_runbook.md
+operational
+runbook.md
+runtime
+schemas
+waves
+[0m
+</think>
+[0m$ [0mtest -f /Users/srujansai/Desktop/FinRoot/README.md && echo "README exists" || echo "README absent"; test -f /Users/srujansai/Desktop/FinRoot/docs/SUBMISSION.md && echo "SUBMISSION exists" || echo "SUBMISSION absent"
+README exists
+SUBMISSION absent
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/docs/business /Users/srujansai/Desktop/FinRoot/docs/decisions /Users/srujansai/Desktop/FinRoot/docs/demo 2>/dev/null
+/Users/srujansai/Desktop/FinRoot/docs/business:
+7_minute_demo_script.md
+
+/Users/srujansai/Desktop/FinRoot/docs/decisions:
+0001-tier-and-archetype.md
+0002-stack-selection.md
+0003-langgraph-plan-and-execute.md
+0004-four-tier-memory-and-digital-twin.md
+0005-five-axis-self-critic.md
+0006-sovereign-first-mock-default.md
+0007-hash-chained-audit-trail.md
+0008-deterministic-tax-engine.md
+
+/Users/srujansai/Desktop/FinRoot/docs/demo:
+transcript_1_portfolio.md
+transcript_2_tax_with_number.md
+transcript_3_news_impact.md
+transcript_4_trap_question.md
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/
+total 992
+drwxr-xr-x@ 58 srujansai  staff    1856 Jun 20 09:54 .
+drwx------@ 37 srujansai  staff    1184 Jun 19 19:29 ..
+drwxr-xr-x@  3 srujansai  staff      96 Jun 19 09:00 .claude
+-rw-r--r--@  1 srujansai  staff     105 Jun 20 10:06 .dockerignore
+-rw-r--r--@  1 srujansai  staff     736 Jun 19 09:16 .env.example
+drwxr-xr-x@ 15 srujansai  staff     480 Jun 20 10:55 .git
+drwxr-xr-x@  3 srujansai  staff      96 Jun 19 08:35 .github
+-rw-r--r--@  1 srujansai  staff     599 Jun 19 09:15 .gitignore
+-rw-r--r--@  1 srujansai  staff    1088 Jun 19 09:16 .pre-commit-config.yaml
+drwxr-xr-x@  6 srujansai  staff     192 Jun 19 15:39 .pytest_cache
+drwxr-xr-x@  5 srujansai  staff     160 Jun 19 15:15 .ruff_cache
+drwxr-xr-x@  5 srujansai  staff     160 Jun 19 08:43 .specify
+-rw-r--r--@  1 srujansai  staff    5037 Jun 19 08:37 AGENTS.md
+-rw-r--r--@  1 srujansai  staff    1535 Jun 19 08:39 BACKLOG.md
+-rw-r--r--@  1 srujansai  staff    1041 Jun 19 08:39 CHANGELOG.md
+-rw-r--r--@  1 srujansai  staff    5037 Jun 19 08:36 CLAUDE.md
+-rw-r--r--@  1 srujansai  staff    2591 Jun 19 08:39 CONTRIBUTING.md
+-rw-r--r--@  1 srujansai  staff     856 Jun 20 10:06 Dockerfile
+-rw-r--r--@  1 srujansai  staff    2324 Jun 19 08:40 HALL_OF_SHAME.md
+-rw-r--r--@  1 srujansai  staff    3417 Jun 19 20:47 HANDOFF.md
+-rw-r--r--@  1 srujansai  staff    3613 Jun 19 08:37 HIERARCHY.md
+-rw-r--r--@  1 srujansai  staff    3439 Jun 19 08:39 HOW_TO_RUN.md
+-rw-r--r--@  1 srujansai  staff    5037 Jun 19 08:37 KIMI.md
+-rw-r--r--@  1 srujansai  staff    1289 Jun 19 08:40 LICENSE
+-rw-r--r--@  1 srujansai  staff    1208 Jun 19 09:15 Makefile
+-rw-r--r--@  1 srujansai  staff   76153 Jun 19 08:36 OS_SETUP.md
+-rw-r--r--@  1 srujansai  staff    4303 Jun 19 08:38 README.md
+drwxr-xr-x@  3 srujansai  staff      96 Jun 19 08:35 attic
+drwxr-xr-x@  6 srujansai  staff     192 Jun 19 18:53 config
+drwxr-xr-x@  3 srujansai  staff      96 Jun 19 08:35 corpus
+drwxr-xr-x@ 11 srujansai  staff     352 Jun 20 11:01 data
+drwxr-xr-x@  3 srujansai  staff      96 Jun 19 08:35 deployment
+-rw-r--r--@  1 srujansai  staff     514 Jun 19 09:17 docker-compose.dev.yml
+-rw-r--r--@  1 srujansai  staff     546 Jun 20 10:06 docker-compose.yml
+drwxr-xr-x@ 20 srujansai  staff     640 Jun 20 10:28 docs
+drwxr-xr-x@  9 srujansai  staff     288 Jun 19 09:06 evals
+drwxr-xr-x@  3 srujansai  staff      96 Jun 19 08:35 evidence
+-rw-r--r--@  1 srujansai  staff  300688 Jun 20 09:54 finroot-submission.zip
+drwxr-xr-x@  3 srujansai  staff      96 Jun 19 08:35 logs
+-rw-r--r--@  1 srujansai  staff     858 Jun 19 09:14 mcp.json
+drwxr-xr-x@  3 srujansai  staff      96 Jun 19 08:35 models
+drwxr-xr-x@ 12 srujansai  staff     384 Jun 19 08:45 orchestrator
+drwxr-xr-x@  5 srujansai  staff     160 Jun 19 18:57 plan
+-rw-r--r--@  1 srujansai  staff     284 Jun 19 09:18 prometheus.yml
+drwxr-xr-x@  7 srujansai  staff     224 Jun 19 09:13 prompts
+-rw-r--r--@  1 srujansai  staff    1455 Jun 19 09:14 pyproject.toml
+-rw-r--r--@  1 srujansai  staff     290 Jun 19 09:15 pytest.ini
+-rw-r--r--@  1 srujansai  staff    1110 Jun 19 09:14 requirements.txt
+drwxr-xr-x@  4 srujansai  staff     128 Jun 19 08:36 resources
+drwxr-xr-x@  3 srujansai  staff      96 Jun 19 08:35 results
+drwxr-xr-x@  3 srujansai  staff      96 Jun 19 19:04 schema
+drwxr-xr-x@  5 srujansai  staff     160 Jun 20 10:31 scripts
+-rw-r--r--@  1 srujansai  staff    1557 Jun 19 09:19 skills-lock.json
+-rw-r--r--@  1 srujansai  staff     534 Jun 19 09:18 skills.manifest.json
+drwxr-xr-x@  6 srujansai  staff     192 Jun 19 18:47 src
+drwxr-xr-x@ 10 srujansai  staff     320 Jun 19 09:23 tests
+drwxr-xr-x@ 14 srujansai  staff     448 Jun 19 09:01 work
+drwxr-xr-x@  2 srujansai  staff      64 Jun 19 08:35 workflows
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/results 2>/dev/null; find /Users/srujansai/Desktop/FinRoot -maxdepth 3 -name "metrics.json" 2>/dev/null
+(no output)
+[0m
+</mm:think>
+[0m→ [0mRead README.md
+[0m→ [0mRead HOW_TO_RUN.md
+[0m
+[0m$ [0mtest -f /Users/srujansai/Desktop/FinRoot/results/metrics.json && cat /Users/srujansai/Desktop/FinRoot/results/metrics.json || echo "NO metrics.json present"
+NO metrics.json present
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/results /Users/srujansai/Desktop/FinRoot/evals 2>/dev/null; find /Users/srujansai/Desktop/FinRoot/evals /Users/srujansai/Desktop/FinRoot/results -type f 2>/dev/null | head -40
+/Users/srujansai/Desktop/FinRoot/evals:
+README.md
+graders
+outcomes
+reports
+tasks
+transcripts
+trials
+
+/Users/srujansai/Desktop/FinRoot/results:
+/Users/srujansai/Desktop/FinRoot/evals/trials/.gitkeep
+/Users/srujansai/Desktop/FinRoot/evals/transcripts/.gitkeep
+/Users/srujansai/Desktop/FinRoot/evals/tasks/003-tax-ltcg-harvest.task.yaml
+/Users/srujansai/Desktop/FinRoot/evals/tasks/002-risk-var-drawdown.task.yaml
+/Users/srujansai/Desktop/FinRoot/evals/tasks/README.md
+/Users/srujansai/Desktop/FinRoot/evals/tasks/004-news-impact.task.yaml
+/Users/srujansai/Desktop/FinRoot/evals/tasks/001-portfolio-rebalance.task.yaml
+/Users/srujansai/Desktop/FinRoot/evals/tasks/005-refusal-insufficient-evidence.task.yaml
+/Users/srujansai/Desktop/FinRoot/evals/README.md
+/Users/srujansai/Desktop/FinRoot/evals/outcomes/.gitkeep
+/Users/srujansai/Desktop/FinRoot/evals/graders/__init__.py
+/Users/srujansai/Desktop/FinRoot/evals/graders/__pycache__/code_based.cpython-314.pyc
+/Users/srujansai/Desktop/FinRoot/evals/graders/__pycache__/llm_judge.cpython-314.pyc
+/Users/srujansai/Desktop/FinRoot/evals/graders/__pycache__/__init__.cpython-314.pyc
+/Users/srujansai/Desktop/FinRoot/evals/graders/code_based.py
+/Users/srujansai/Desktop/FinRoot/evals/graders/llm_judge.py
+/Users/srujansai/Desktop/FinRoot/evals/graders/human_review_template.md
+/Users/srujansai/Desktop/FinRoot/evals/reports/.gitkeep
+/Users/srujansai/Desktop/FinRoot/results/.gitkeep
+[0m
+</think>
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src /Users/srujansai/Desktop/FinRoot/src/finroot /Users/srujansai/Desktop/FinRoot/src/interface 2>/dev/null
+/Users/srujansai/Desktop/FinRoot/src:
+README.md
+finroot
+finroot.egg-info
+interface
+
+/Users/srujansai/Desktop/FinRoot/src/finroot:
+__init__.py
+__pycache__
+agents
+audit
+evaluation
+llm
+memory
+reasoning
+schemas
+tools
+utils
+workflows
+
+/Users/srujansai/Desktop/FinRoot/src/interface:
+__pycache__
+api
+cli
+core.py
+ui
+[0m
+[0m→ [0mRead Makefile
+[0m→ [0mRead HIERARCHY.md
+[0m→ [0mRead evals/README.md
+</think>
+[0m→ [0mRead docs/business/7_minute_demo_script.md[90m [limit=60][0m
+[0m
+[0m$ [0mtest -f /Users/srujansai/Desktop/FinRoot/LICENSE && head -1 /Users/srujansai/Desktop/FinRoot/LICENSE
+MIT License
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/finroot/agents /Users/srujansai/Desktop/FinRoot/src/finroot/tools /Users/srujansai/Desktop/FinRoot/src/finroot/memory 2>/dev/null
+/Users/srujansai/Desktop/FinRoot/src/finroot/agents:
+__init__.py
+__pycache__
+base.py
+intent.py
+market_agent.py
+news_agent.py
+orchestrator.py
+portfolio_agent.py
+risk_agent.py
+tax_agent.py
+
+/Users/srujansai/Desktop/FinRoot/src/finroot/memory:
+__init__.py
+__pycache__
+digital_twin.py
+manager.py
+semantic.py
+working.py
+
+/Users/srujansai/Desktop/FinRoot/src/finroot/tools:
+__init__.py
+__pycache__
+base.py
+currency.py
+documents.py
+fundamentals.py
+macro.py
+market.py
+news.py
+portfolio_sim.py
+profile.py
+risk.py
+sentiment.py
+tax.py
+watchlist.py
+[0m
+</think>
+[0m# [0mTodos
+[•] Write README.md (judge-winning first read)
+[ ] Write docs/SUBMISSION.md (PS-1 checklist)
+[ ] Run acceptance commands; capture output
+[ ] Write report to work/reports/wave-8/02-readme-submission.report.md
+[0m
+[0m← [0mWrite README.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Write README.md (judge-winning first read)
+[•] Write docs/SUBMISSION.md (PS-1 checklist)
+[ ] Run acceptance commands; capture output
+[ ] Write report to work/reports/wave-8/02-readme-submission.report.md
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/docs/business /Users/srujansai/Desktop/FinRoot/docs/decisions 2>/dev/null
+/Users/srujansai/Desktop/FinRoot/docs/business:
+7_minute_demo_script.md
+presentation_outline.md
+
+/Users/srujansai/Desktop/FinRoot/docs/decisions:
+0001-tier-and-archetype.md
+0002-stack-selection.md
+0003-langgraph-plan-and-execute.md
+0004-four-tier-memory-and-digital-twin.md
+0005-five-axis-self-critic.md
+0006-sovereign-first-mock-default.md
+0007-hash-chained-audit-trail.md
+0008-deterministic-tax-engine.md
+[0m
+[0m← [0mWrite docs/SUBMISSION.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Write README.md (judge-winning first read)
+[✓] Write docs/SUBMISSION.md (PS-1 checklist)
+[•] Run acceptance commands; capture output
+[ ] Write report to work/reports/wave-8/02-readme-submission.report.md
+[0m
+[0m$ [0mtest -f /Users/srujansai/Desktop/FinRoot/results/metrics.json && echo "metrics present" || echo "metrics absent — README notes regenerate"
+metrics absent — README notes regenerate
+[0m
+[0m$ [0mtest -f /Users/srujansai/Desktop/FinRoot/README.md && test -f /Users/srujansai/Desktop/FinRoot/docs/SUBMISSION.md && echo "files present"; echo "exit=$?"
+files present
+exit=0
+[0m
+[0m$ [0mgrep -q "mermaid" /Users/srujansai/Desktop/FinRoot/README.md && echo "architecture embedded"; echo "exit=$?"
+architecture embedded
+exit=0
+[0m
+[0m$ [0mgrep -qi "35%" /Users/srujansai/Desktop/FinRoot/README.md && grep -qi "quickstart\|quick start" /Users/srujansai/Desktop/FinRoot/README.md && echo "criteria + quickstart present"; echo "exit=$?"
+criteria + quickstart present
+exit=0
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && git status --porcelain
+M data/digital_twin.db
+ M work/reports/wave-1/02-pydantic-schemas-state.run.log
+ M work/reports/wave-6/04-harness.run.log
+?? .claude/
+?? .env.example
+?? .gitignore
+?? .pre-commit-config.yaml
+?? .specify/memory/
+?? .specify/specs/wave-1/
+?? .specify/specs/wave-2/
+?? .specify/specs/wave-3/
+?? .specify/steering.md
+?? AGENTS.md
+?? BACKLOG.md
+?? CHANGELOG.md
+?? CLAUDE.md
+?? CONTRIBUTING.md
+?? HALL_OF_SHAME.md
+?? HANDOFF.md
+?? HIERARCHY.md
+?? HOW_TO_RUN.md
+?? KIMI.md
+?? LICENSE
+?? Makefile
+?? OS_SETUP.md
+?? README.md
+?? attic/
+?? corpus/
+?? deployment/
+?? docker-compose.dev.yml
+?? docs/REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+?? docs/SCOPE_GUARD.md
+?? docs/SUBMISSION.md
+?? docs/agents/
+?? docs/audits/
+?? docs/benchmarks/
+?? docs/business/presentation_outline.md
+?? docs/conventions.md
+?? docs/decisions/0001-tier-and-archetype.md
+?? docs/decisions/0002-stack-selection.md
+?? docs/flows/
+?? docs/historical/
+?? docs/interview_runbook.md
+?? docs/operational/
+?? docs/runbook.md
+?? docs/runtime/
+?? docs/schemas/
+?? docs/waves/wave-6-gotchas.md
+?? evidence/
+?? finroot-submission.zip
+?? logs/
+?? mcp.json
+?? models/
+?? orchestrator/
+?? plan/
+?? prometheus.yml
+?? prompts/
+?? pyproject.toml
+?? pytest.ini
+?? requirements.txt
+?? resources/
+?? results/
+?? skills-lock.json
+?? skills.manifest.json
+?? tests/unit/test_components.py
+?? work/REPORT_TEMPLATE.md
+?? work/TASK_TEMPLATE.md
+?? work/WORKER_PROMPT.md
+?? work/reports/wave-8/02-readme-submission.run.log
+?? work/reports/wave-8/05-deck-exec-summary.run.log
+?? work/wave-1/
+?? work/wave-2/
+?? work/wave-3/
+?? work/wave-4/
+[0m
+All three acceptance commands pass. Let me confirm the scope: only README.md and docs/SUBMISSION.md changed (the prior README was also untracked, so my Write effectively created/replaced it).
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && wc -l README.md docs/SUBMISSION.md
+281 README.md
+     116 docs/SUBMISSION.md
+     397 total
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && git diff --stat README.md docs/SUBMISSION.md 2>/dev/null; echo "---"; git log --oneline README.md docs/SUBMISSION.md 2>/dev/null | head -5
+---
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && ruff check README.md docs/SUBMISSION.md 2>&1 || true; echo "---ruff exit=$?"
+warning: No Python files found under the given path(s)
+All checks passed!
+---ruff exit=0
+[0m
+</think>
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/work/reports/wave-8/ 2>/dev/null; echo "---"; test -d /Users/srujansai/Desktop/FinRoot/docs/waves || mkdir -p /Users/srujansai/Desktop/FinRoot/docs/waves; ls /Users/srujansai/Desktop/FinRoot/docs/waves/
+01-docker.report.md
+01-docker.run.log
+02-readme-submission.run.log
+03-adrs.report.md
+03-adrs.run.log
+04-demo-script.report.md
+04-demo-script.run.log
+05-deck-exec-summary.run.log
+06-arch-diagram-submission.report.md
+06-arch-diagram-submission.run.log
+---
+wave-1-brief.md
+wave-1-gotchas.md
+wave-2-brief.md
+wave-3-brief.md
+wave-3-gotchas.md
+wave-4-brief.md
+wave-4-gotchas.md
+wave-5-brief.md
+wave-6-brief.md
+wave-6-gotchas.md
+wave-7-brief.md
+wave-8-brief.md
+[0m
+[0m# [0mTodos
+[✓] Write README.md (judge-winning first read)
+[✓] Write docs/SUBMISSION.md (PS-1 checklist)
+[✓] Run acceptance commands; capture output
+[•] Write report to work/reports/wave-8/02-readme-submission.report.md
+[0m
+[0m← [0mWrite work/reports/wave-8/02-readme-submission.report.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Write README.md (judge-winning first read)
+[✓] Write docs/SUBMISSION.md (PS-1 checklist)
+[✓] Run acceptance commands; capture output
+[✓] Write report to work/reports/wave-8/02-readme-submission.report.md
+[0m
+Done. `README.md` (281L) + `docs/SUBMISSION.md` (116L) written to the Writes set; acceptance commands all pass; report at `work/reports/wave-8/02-readme-submission.report.md`. `results/metrics.json` is absent — README shows the FRB table with `_regenerate_` placeholders + the `make evals` regen path (FM-12 honored, no fabricated numbers).
+=== opencode exited rc=0 @ Sat Jun 20 11:38:14 IST 2026 ===

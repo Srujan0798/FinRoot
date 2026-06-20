@@ -149,45 +149,55 @@ def answer(
     # In mock mode, also put the TOOLS in offline mode: they read
     # FINROOT_LLM_PROVIDER from the env (market_data, news, macro, currency, …).
     # Without this only the LLM would be mocked while tools hit live APIs.
+    # Save/restore so we don't leak the mock flag to other tests / callers.
+    _saved_provider_env: str | None = None
     if mock:
+        _saved_provider_env = os.environ.get("FINROOT_LLM_PROVIDER")
         os.environ["FINROOT_LLM_PROVIDER"] = "mock"
 
-    llm: LLMProvider = MockProvider() if mock else get_provider()
-    memory = _build_memory(user_id)
-    audit = AuditTrail(Path(tempfile.mkdtemp()) / "audit.jsonl")
-
-    orch = FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
-    state: AgentState = orch.run(query)
-
-    # Wire W5 reasoning critic if available — degrade gracefully (FM-11)
     try:
-        from finroot.reasoning.critic import SelfCritic
+        llm: LLMProvider = MockProvider() if mock else get_provider()
+        memory = _build_memory(user_id)
+        audit = AuditTrail(Path(tempfile.mkdtemp()) / "audit.jsonl")
 
-        critic = SelfCritic()
-        verdict = critic.evaluate(state)
-        state.critique = verdict.model_dump(mode="json")
-    except ImportError as exc:
-        logger.warning("Reasoning critic not available — skipping critique: %s", exc)
-    except Exception as exc:
-        logger.warning("Critic evaluation failed — skipping: %s", exc)
+        orch = FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+        state: AgentState = orch.run(query)
 
-    # Wire W5 Rooted Prudence verifier — the 'do no harm' gate. If the advice
-    # is non-compliant (e.g. touches the emergency fund, over-concentrates,
-    # promises returns), record the verdict and downgrade confidence so the UI
-    # surfaces the caution. Degrade gracefully (FM-11).
-    try:
-        from finroot.reasoning.principles import PrudentialVerifier
+        # Wire W5 reasoning critic if available — degrade gracefully (FM-11)
+        try:
+            from finroot.reasoning.critic import SelfCritic
 
-        prudential = PrudentialVerifier().verify(state)
-        state.verifier_verdict = prudential.model_dump(mode="json")
-        if not prudential.compliant:
-            _apply_prudence_downgrade(state, prudential.model_dump(mode="json"))
-    except ImportError as exc:
-        logger.warning("Prudence verifier not available — skipping: %s", exc)
-    except Exception as exc:
-        logger.warning("Prudence verification failed — skipping: %s", exc)
+            critic = SelfCritic()
+            verdict = critic.evaluate(state)
+            state.critique = verdict.model_dump(mode="json")
+        except ImportError as exc:
+            logger.warning("Reasoning critic not available — skipping critique: %s", exc)
+        except Exception as exc:
+            logger.warning("Critic evaluation failed — skipping: %s", exc)
 
-    return state
+        # Wire W5 Rooted Prudence verifier — the 'do no harm' gate. If the advice
+        # is non-compliant (e.g. touches the emergency fund, over-concentrates,
+        # promises returns), record the verdict and downgrade confidence so the UI
+        # surfaces the caution. Degrade gracefully (FM-11).
+        try:
+            from finroot.reasoning.principles import PrudentialVerifier
+
+            prudential = PrudentialVerifier().verify(state)
+            state.verifier_verdict = prudential.model_dump(mode="json")
+            if not prudential.compliant:
+                _apply_prudence_downgrade(state, prudential.model_dump(mode="json"))
+        except ImportError as exc:
+            logger.warning("Prudence verifier not available — skipping: %s", exc)
+        except Exception as exc:
+            logger.warning("Prudence verification failed — skipping: %s", exc)
+
+        return state
+    finally:
+        # Restore env so we don't leak the mock flag to other tests / callers.
+        if _saved_provider_env is None:
+            os.environ.pop("FINROOT_LLM_PROVIDER", None)
+        else:
+            os.environ["FINROOT_LLM_PROVIDER"] = _saved_provider_env
 
 
 def _apply_prudence_downgrade(state: AgentState, verdict: dict[str, Any]) -> None:

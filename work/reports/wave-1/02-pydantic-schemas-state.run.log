@@ -606,3 +606,4 @@ ERROR tests/unit/test_schemas.py
 !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
 =============================== 1 error in 0.23s ===============================
 [0m
+=== opencode exited rc=143 @ Fri Jun 19 20:32:18 IST 2026 ===

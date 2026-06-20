@@ -1,0 +1,96 @@
+=== dispatch opencode xiaomi-token-plan-sgp/mimo-v2.5-pro -> work/wave-8/05-deck-exec-summary.md @ Sat Jun 20 11:29:59 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 11:39:46 IST 2026 ===
+KER_PROMPT.md
+[0m→ [0mRead work/wave-8/05-deck-exec-summary.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead .specify/specs/wave-8/contracts/submission.contract.md
+[0m✗ [0mRead results/metrics.json failed
+[91m[1mError: [0mFile not found: /Users/srujansai/Desktop/FinRoot/results/metrics.json
+[0m→ [0mRead CLAUDE.md
+[0m
+[0m$ [0mls docs/business/ 2>/dev/null || echo "directory does not exist"
+7_minute_demo_script.md
+[0m
+[0m✱ [0mGlob "src/finroot/**/*.py"[90m 56 matches[0m
+[0m✱ [0mGlob "docs/architecture/**"[90m 1 match[0m
+[0m✱ [0mGlob "evals/**/*.py"[90m 3 matches[0m
+[0m
+[0m# [0mTodos
+[•] Create docs/business/presentation_outline.md (6-slide deck outline)
+[ ] Create docs/business/executive_summary.md (one-page exec summary)
+[ ] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-8/05-deck-exec-summary.report.md
+[0m
+[0m$ [0mgit rev-parse --short HEAD
+8b13085
+[0m
+[0m← [0mWrite docs/business/presentation_outline.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create docs/business/presentation_outline.md (6-slide deck outline)
+[•] Create docs/business/executive_summary.md (one-page exec summary)
+[ ] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-8/05-deck-exec-summary.report.md
+[0m
+[0m← [0mWrite docs/business/executive_summary.md
+Wrote file successfully.
+[0m
+[0m✗ [0mWrite  failed
+[91m[1mError: [0mTool execution aborted
+[0m
+[0m# [0mTodos
+[✓] Create docs/business/presentation_outline.md (6-slide deck outline)
+[✓] Create docs/business/executive_summary.md (one-page exec summary)
+[•] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-8/05-deck-exec-summary.report.md
+[0m
+[0m$ [0mtest -f docs/business/presentation_outline.md && test -f docs/business/executive_summary.md && echo "files present"
+files present
+[0m
+[0m$ [0mgrep -qiE "35%|reasoning" docs/business/presentation_outline.md && echo "reasoning slide present"
+reasoning slide present
+[0m
+[0m$ [0mwc -l docs/business/executive_summary.md
+54 docs/business/executive_summary.md
+[0m
+[0m# [0mTodos
+[✓] Create docs/business/presentation_outline.md (6-slide deck outline)
+[✓] Create docs/business/executive_summary.md (one-page exec summary)
+[✓] Run acceptance commands and capture output
+[•] Write report to work/reports/wave-8/05-deck-exec-summary.report.md
+[0m
+All acceptance commands pass. Now writing the report.
+[0m$ [0mls docs/waves/wave-8-gotchas.md 2>/dev/null || echo "does not exist"
+does not exist
+[0m
+[0m$ [0mls work/reports/wave-8/ 2>/dev/null || echo "directory does not exist"
+01-docker.report.md
+01-docker.run.log
+02-readme-submission.report.md
+02-readme-submission.run.log
+03-adrs.report.md
+03-adrs.run.log
+04-demo-script.report.md
+04-demo-script.run.log
+05-deck-exec-summary.run.log
+06-arch-diagram-submission.report.md
+06-arch-diagram-submission.run.log
+[0m
+[0m← [0mWrite work/reports/wave-8/05-deck-exec-summary.report.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create docs/business/presentation_outline.md (6-slide deck outline)
+[✓] Create docs/business/executive_summary.md (one-page exec summary)
+[✓] Run acceptance commands and capture output
+[✓] Write report to work/reports/wave-8/05-deck-exec-summary.report.md
+[0m
+Task complete. All acceptance commands pass:
+
+- **`docs/business/presentation_outline.md`** — 6-slide deck outline covering Problem, Solution/Idea, Agent Architecture, Reasoning Quality + FRB, Demo, Why We Win. Each slide has title, talking points, visual, and scoring-axis mapping.
+- **`docs/business/executive_summary.md`** — 54-line one-page summary: what, why it matters, measured edge (references `make evals` since `results/metrics.json` is absent at `8b13085`), moat (Digital Twin + sovereign + audit), ask.
+- **Report** written to `work/reports/wave-8/05-deck-exec-summary.report.md`.
+
+No data fabricated. Only Writes set touched. No gotchas.
+=== opencode exited rc=0 @ Sat Jun 20 11:39:46 IST 2026 ===

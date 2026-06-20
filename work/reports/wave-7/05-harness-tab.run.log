@@ -1,0 +1,148 @@
+=== dispatch opencode opencode/mimo-v2.5-free -> work/wave-7/05-harness-tab.md @ Sat Jun 20 11:43:22 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 11:46:17 IST 2026 ===
+RKER_PROMPT.md
+[0m→ [0mRead work/wave-7/05-harness-tab.md
+[0m→ [0mRead .specify/specs/wave-7/contracts/ui.contract.md
+[0m→ [0mRead .specify/specs/wave-6/contracts/evals.contract.md
+[0m✱ [0mGlob "src/finroot/evaluation/harness.py"[90m 1 match[0m
+[0m✱ [0mGlob "src/interface/ui/components/**"[90m 8 matches[0m
+[0m✱ [0mGlob "results/metrics.json"[90m 1 match[0m
+[0m→ [0mRead src/finroot/evaluation/harness.py
+[0m→ [0mRead results/metrics.json
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead src/interface/ui/components/__init__.py
+[0m
+[0m← [0mWrite src/interface/ui/components/harness.py
+Wrote file successfully.
+[0m
+[0m$ [0mPYTHONPATH=src python3 -c "import interface.ui.components.harness; print('harness tab import OK')"
+harness tab import OK
+[0m
+[0m$ [0mruff check src/interface/ui/components/harness.py
+All checks passed!
+[0m
+[0m← [0mWrite work/reports/wave-7/05-harness-tab.report.md
+Wrote file successfully.
+[0m
+[0m$ [0mls -la src/interface/ui/components/harness.py work/reports/wave-7/05-harness-tab.report.md
+-rw-r--r--@ 1 srujansai  staff  3733 Jun 20 11:44 src/interface/ui/components/harness.py
+-rw-r--r--@ 1 srujansai  staff  1614 Jun 20 11:45 work/reports/wave-7/05-harness-tab.report.md
+[0m
+[0m$ [0mgit diff --name-only
+data/digital_twin.db
+work/reports/wave-1/02-pydantic-schemas-state.run.log
+work/reports/wave-6/04-harness.run.log
+[0m
+[0m$ [0mgit status --short
+M data/digital_twin.db
+ M work/reports/wave-1/02-pydantic-schemas-state.run.log
+ M work/reports/wave-6/04-harness.run.log
+?? .claude/
+?? .env.example
+?? .gitignore
+?? .pre-commit-config.yaml
+?? .specify/memory/
+?? .specify/specs/wave-1/
+?? .specify/specs/wave-2/
+?? .specify/specs/wave-3/
+?? .specify/steering.md
+?? AGENTS.md
+?? BACKLOG.md
+?? CHANGELOG.md
+?? CLAUDE.md
+?? CONTRIBUTING.md
+?? HALL_OF_SHAME.md
+?? HANDOFF.md
+?? HIERARCHY.md
+?? HOW_TO_RUN.md
+?? KIMI.md
+?? LICENSE
+?? Makefile
+?? OS_SETUP.md
+?? README.md
+?? attic/
+?? corpus/
+?? deployment/
+?? docker-compose.dev.yml
+?? docs/REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+?? docs/SCOPE_GUARD.md
+?? docs/SUBMISSION.md
+?? docs/agents/
+?? docs/audits/
+?? docs/benchmarks/
+?? docs/business/executive_summary.md
+?? docs/business/presentation_outline.md
+?? docs/conventions.md
+?? docs/decisions/0001-tier-and-archetype.md
+?? docs/decisions/0002-stack-selection.md
+?? docs/flows/
+?? docs/historical/
+?? docs/interview_runbook.md
+?? docs/operational/
+?? docs/runbook.md
+?? docs/runtime/
+?? docs/schemas/
+?? docs/waves/wave-6-gotchas.md
+?? evidence/
+?? finroot-submission.zip
+?? logs/
+?? mcp.json
+?? models/
+?? orchestrator/
+?? plan/
+?? prometheus.yml
+?? prompts/
+?? pyproject.toml
+?? pytest.ini
+?? requirements.txt
+?? resources/
+?? results/
+?? scripts/run_evals.py
+?? skills-lock.json
+?? skills.manifest.json
+?? src/finroot/evaluation/harness.py
+?? src/finroot/evaluation/report.py
+?? src/interface/ui/components/harness.py
+?? tests/unit/test_components.py
+?? tests/unit/test_eval_report.py
+?? work/REPORT_TEMPLATE.md
+?? work/TASK_TEMPLATE.md
+?? work/WORKER_PROMPT.md
+?? work/reports/wave-6/05-report-generator.run.log
+?? work/reports/wave-7/05-harness-tab.report.md
+?? work/reports/wave-7/05-harness-tab.run.log
+?? work/reports/wave-8/02-readme-submission.report.md
+?? work/reports/wave-8/02-readme-submission.run.log
+?? work/reports/wave-8/05-deck-exec-summary.report.md
+?? work/reports/wave-8/05-deck-exec-summary.run.log
+?? work/wave-1/
+?? work/wave-2/
+?? work/wave-3/
+?? work/wave-4/
+[0m
+[0m$ [0mgit status --short src/interface/ui/components/harness.py work/reports/wave-7/05-harness-tab.report.md
+?? src/interface/ui/components/harness.py
+?? work/reports/wave-7/05-harness-tab.report.md
+[0m
+Task complete. Created `src/interface/ui/components/harness.py` implementing the Live Harness tab:
+
+- Loads `results/metrics.json` for fast display
+- "Run benchmark" button calls `run_harness(HarnessConfig(mock=True, k=3))` with spinner
+- Headline metric: `composite_lift_vs_rag_pct` as big `st.metric` with delta
+- System comparison table: finroot / rag / single_agent with pass@1, pass@k, pass^k, mean_score
+- Per-domain bar chart of finroot mean scores
+- Caption with k, n_tasks, and mock mode status
+- Import-safe with streamlit absent (guarded import)
+- All numbers from metrics.json only (FM-05/12)
+
+Acceptance passes:
+```
+$ PYTHONPATH=src python3 -c "import interface.ui.components.harness; print('harness tab import OK')"
+harness tab import OK
+
+$ ruff check src/interface/ui/components/harness.py
+All checks passed!
+```
+
+Report written to `work/reports/wave-7/05-harness-tab.report.md`.
+=== opencode exited rc=0 @ Sat Jun 20 11:46:17 IST 2026 ===
