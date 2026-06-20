@@ -122,3 +122,51 @@ class TestGoldenPortfolio:
         assert "portfolio_optimizer" in state.plan, (
             f"Plan should include portfolio_optimizer. Plan: {state.plan}"
         )
+
+    def test_portfolio_diversification_discussed(self, run_pipeline):
+        """Portfolio query should discuss diversification in analysis."""
+        state = run_pipeline("How diversified is my portfolio?")
+        text = _all_text(state)
+        assert "diversif" in text, (
+            f"Portfolio analysis should discuss diversification. "
+            f"Text preview: {text[:300]}"
+        )
+
+    def test_portfolio_rebalancing_has_comparison(self, run_pipeline):
+        """Rebalancing query should produce rebalancing comparison in tool outputs."""
+        state = run_pipeline("How should I rebalance my portfolio?")
+        tool_text = _all_tool_output_text(state)
+        has_rebalance = any(
+            kw in tool_text
+            for kw in ("rebalancing_comparison", "rebalanc")
+        )
+        assert has_rebalance, (
+            f"Rebalancing tool output should contain rebalancing comparison. "
+            f"Tool output preview: {tool_text[:500]}"
+        )
+
+    def test_portfolio_risk_assessment_in_outputs(self, run_pipeline):
+        """Portfolio pipeline should include risk assessor outputs."""
+        state = run_pipeline("Assess the risk in my portfolio")
+        tool_text = _all_tool_output_text(state)
+        has_risk_assessor = any(
+            kw in tool_text
+            for kw in ("risk_assessor", "monte_carlo", "probability_of_loss")
+        )
+        assert has_risk_assessor, (
+            f"Portfolio tool outputs should include risk assessment. "
+            f"Tool output preview: {tool_text[:500]}"
+        )
+
+    def test_portfolio_optimization_analysis(self, run_pipeline):
+        """Portfolio optimization query should mention optimization or allocation."""
+        state = run_pipeline("Optimize my portfolio allocation")
+        text = _all_text(state)
+        has_optimization = any(
+            kw in text
+            for kw in ("optim", "allocation", "weight", "rebalanc")
+        )
+        assert has_optimization, (
+            f"Portfolio analysis should mention optimization or allocation concepts. "
+            f"Text preview: {text[:300]}"
+        )

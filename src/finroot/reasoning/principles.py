@@ -112,7 +112,7 @@ class PrudentialVerifier:
         #    without cross-contaminating protective advice.
         checks.append(self._check_emergency_fund(text, state.query))
         # 2. Diversification (critical)
-        checks.append(self._check_diversification(text))
+        checks.append(self._check_diversification(text, state.query))
         # 3. Risk match (critical)
         checks.append(self._check_risk_match(text, twin))
         # 4. No guarantees (critical)
@@ -175,9 +175,19 @@ class PrudentialVerifier:
         }
 
     @staticmethod
-    def _check_diversification(text: str) -> dict[str, Any]:
-        """Detect allocation >40% to a single asset."""
-        pct_matches = _PERCENT_RE.findall(text)
+    def _check_diversification(text: str, query: str = "") -> dict[str, Any]:
+        """Detect allocation >40% to a single asset.
+
+        Only checks the recommendation text (not the user's query) to avoid
+        false positives when the user describes their current allocation.
+        """
+        # Remove query text from the recommendation text to avoid false positives
+        # when the user describes their current allocation (e.g., "80% in one stock").
+        rec_text = text
+        if query and query in rec_text:
+            rec_text = rec_text.replace(query, "")
+
+        pct_matches = _PERCENT_RE.findall(rec_text)
         failed = False
         detail = "No concentration violation detected"
         for pct_str in pct_matches:

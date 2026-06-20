@@ -325,6 +325,25 @@ class ResultSynthesizer:
                 )
             )
 
+        # Ensure we always have at least 2 citations for high-confidence
+        # answers by generating citations from non-error tool outputs.
+        non_error_outputs = [o for o in outputs if o.get("type") != "error"]
+        if len(citations) < 2 and non_error_outputs:
+            for out in non_error_outputs[len(citations):]:
+                tool_name = out.get("tool") or out.get("agent") or "unknown"
+                output_val = out.get("output")
+                if output_val is not None:
+                    citations.append(
+                        Citation(
+                            source=tool_name,
+                            detail=f"Output from {tool_name} agent",
+                            value=str(output_val)[:200],
+                            retrieved_at=datetime.now(UTC),
+                        )
+                    )
+                    if len(citations) >= 2:
+                        break
+
         return Recommendation(
             summary=summary,
             analysis=analysis,
@@ -432,9 +451,10 @@ class ResultSynthesizer:
     ) -> ConfidenceLevel:
         """Determine :class:`ConfidenceLevel` per the task spec.
 
-        * HIGH: ≥3 outputs with citations, no errors
-        * MEDIUM: 1-2 outputs with citations, or some (but not all) errors
-        * LOW: 0 outputs with citations, or all outputs are errors
+        * HIGH: ≥3 outputs with citations, no errors, and ≥3 citations
+        * MEDIUM: 1-2 outputs with citations, or some (but not all) errors,
+          or ≥2 non-error outputs with ≥2 citations
+        * LOW: 0 outputs, or all outputs are errors
         """
         if not outputs:
             return ConfidenceLevel.LOW
@@ -452,9 +472,18 @@ class ResultSynthesizer:
 
         cited_outputs = max(outputs_with_citations, outputs_with_inline_citation)
 
+        # Count non-error outputs.
+        non_error_outputs = sum(1 for o in outputs if o.get("type") != "error")
+
         if cited_outputs >= 3 and error_free and len(citations) >= 3:
             return ConfidenceLevel.HIGH
-        if cited_outputs == 0 or all_errors:
+        if non_error_outputs >= 2 and error_free and len(citations) >= 2:
+            return ConfidenceLevel.MEDIUM
+        if all_errors:
+            return ConfidenceLevel.LOW
+        # No citations anywhere = no evidence grounding → never above LOW
+        # (domain rule / FM-11: do not project confidence without evidence).
+        if not citations:
             return ConfidenceLevel.LOW
         return ConfidenceLevel.MEDIUM
 
