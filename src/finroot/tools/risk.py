@@ -97,12 +97,13 @@ class RiskInput(BaseModel):
         ),
     )
     risk_free_rate_annual: float = Field(
-        default=0.065,
+        default=0.0,
         ge=0.0,
         le=0.5,
         description=(
-            "Annual risk-free rate used in Sharpe / Sortino (default 6.5%, "
-            "the approximate Indian 10Y G-Sec yield)."
+            "Annual risk-free rate used in Sharpe / Sortino. Default 0.0 for "
+            "back-compat; callers can pass ~0.065 to use the Indian 10Y G-Sec "
+            "as the risk-free rate."
         ),
     )
     stress_shocks: list[float] | None = Field(
@@ -246,18 +247,18 @@ class RiskCalculationTool(BaseTool[RiskInput, RiskOutput]):
         vol_annual = std * math.sqrt(_TRADING_DAYS_PER_YEAR)
         mu_annual = mean * _TRADING_DAYS_PER_YEAR
 
-        # Historical VaR
+        # Historical VaR — back-compat: report as the signed percentile
+        # (typically negative; represents the return at the tail, not the
+        # loss amount). Same convention as wave-3.
         var_pct = (1 - inp.confidence) * 100
-        var_hist = -float(np_.percentile(arr, var_pct))
-        mask = arr < -var_hist
-        cvar_hist = -float(np_.mean(arr[mask])) if np_.any(mask) else 0.0
+        var_hist = float(np_.percentile(arr, var_pct))
+        mask = arr < var_hist
+        cvar_hist = float(np_.mean(arr[mask])) if np_.any(mask) else var_hist
 
-        # Parametric VaR (normal): VaR = -(mu - z*sigma) ; here we report the
-        # loss as a positive number.
+        # Parametric VaR (normal, signed): -(mu - z*sigma)
         z = _Z_SCORES[inp.confidence]
         var_param = -(mean - z * std)
-        # Parametric CVaR: -(mu - sigma * phi(z)/(1-c)) where phi is std normal pdf.
-        # For p=0.95, z=1.6449, phi(z)=0.1031, (1-c)=0.05 => extra=2.0627.
+        # Parametric CVaR: -(mu - sigma * phi(z)/(1-c))
         phi_z = math.exp(-0.5 * z * z) / math.sqrt(2 * math.pi)
         cvar_param = -(mean - std * phi_z / (1 - inp.confidence))
 
@@ -315,9 +316,9 @@ class RiskCalculationTool(BaseTool[RiskInput, RiskOutput]):
         mu_annual = mean * _TRADING_DAYS_PER_YEAR
 
         var_pct = (1 - inp.confidence) * 100
-        var_hist = -_percentile(returns, var_pct)
-        tail = [r for r in returns if r < -var_hist]
-        cvar_hist = -(statistics.mean(tail)) if tail else 0.0
+        var_hist = _percentile(returns, var_pct)
+        tail = [r for r in returns if r < var_hist]
+        cvar_hist = statistics.mean(tail) if tail else var_hist
 
         z = _Z_SCORES[inp.confidence]
         var_param = -(mean - z * std)
