@@ -46,3 +46,4 @@ evals/reports/*
 .vscode/
 *.swp
 data/*.db
+finroot-submission.zip
