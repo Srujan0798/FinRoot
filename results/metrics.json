@@ -1,0 +1,85 @@
+{
+  "as_of_sha": "98a377a",
+  "generated_at": "2026-06-20T09:22:31.715307+00:00",
+  "k": 2,
+  "mock": true,
+  "n_tasks": 32,
+  "systems": {
+    "finroot": {
+      "system": "finroot",
+      "pass_at_1": 0.34375,
+      "pass_at_k": 0.34375,
+      "pass_hat_k": 0.0,
+      "mean_score": 0.68578125,
+      "per_domain": {
+        "portfolio": 0.73,
+        "risk": 0.6749999999999999,
+        "tax": 0.71,
+        "news_impact": 0.54,
+        "cashflow": 0.63,
+        "credit": 0.63,
+        "general": 0.762
+      },
+      "per_difficulty": {
+        "easy": 0.735,
+        "medium": 0.6676923076923077,
+        "hard": 0.6766666666666666
+      },
+      "n_tasks": 32,
+      "n_trials": 2,
+      "elapsed_sec": 10.55
+    },
+    "rag": {
+      "system": "rag",
+      "pass_at_1": 0.0,
+      "pass_at_k": 0.0,
+      "pass_hat_k": 0.0,
+      "mean_score": 0.08984375,
+      "per_domain": {
+        "portfolio": 0.09428571428571429,
+        "risk": 0.085,
+        "tax": 0.04285714285714286,
+        "news_impact": 0.0875,
+        "cashflow": 0.13,
+        "credit": 0.155,
+        "general": 0.114
+      },
+      "per_difficulty": {
+        "easy": 0.07785714285714286,
+        "medium": 0.08076923076923077,
+        "hard": 0.10666666666666666
+      },
+      "n_tasks": 32,
+      "n_trials": 2,
+      "elapsed_sec": 0.0
+    },
+    "single_agent": {
+      "system": "single_agent",
+      "pass_at_1": 0.03125,
+      "pass_at_k": 0.03125,
+      "pass_hat_k": 0.0,
+      "mean_score": 0.2090625,
+      "per_domain": {
+        "portfolio": 0.13714285714285715,
+        "risk": 0.11,
+        "tax": 0.10714285714285715,
+        "news_impact": 0.1625,
+        "cashflow": 0.33,
+        "credit": 0.5800000000000001,
+        "general": 0.392
+      },
+      "per_difficulty": {
+        "easy": 0.22428571428571428,
+        "medium": 0.23076923076923078,
+        "hard": 0.17666666666666667
+      },
+      "n_tasks": 32,
+      "n_trials": 2,
+      "elapsed_sec": 0.0
+    }
+  },
+  "composite_lift_vs_rag_pct": 663.3,
+  "composite_lift_vs_rag_x": 7.63,
+  "headline_finroot_mean": 0.686,
+  "headline_rag_mean": 0.09
+}
