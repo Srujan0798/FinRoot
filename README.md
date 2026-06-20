@@ -222,7 +222,7 @@ make evals               # runs the FRB harness → results/metrics.json
 | Single-agent (no critic) | 0.031 | 0.031 | 0.000 | 0.209 | **+2.3×** |
 | **FinRoot (full pipeline)** | **0.344** | **0.344** | **0.000** | **0.686** | **+7.6× ( +662% )** |
 
-**Measured at:** `as_of_sha = 8b13085` · `n_tasks = 32` · `k = 2` · `mock = True` · `70s` ·
+**Measured at:** `as_of_sha = 5a4d105` · `n_tasks = 32` · `k = 2` · `mock = True` · `62s` ·
 regenerate anytime with `python -m scripts.run_evals --mock --k 2`. The RAG baseline literally
 scores 0.000 on pass@1 — it cannot satisfy a single task's must-mention + must-not + citation
 requirements. **FinRoot scores 0.686 mean across 32 tasks across 7 financial domains**

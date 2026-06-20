@@ -163,6 +163,12 @@ def answer(
         orch = FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
         state: AgentState = orch.run(query)
 
+        # Populate audit_events so the UI trace + build_trace() can render them
+        try:
+            state.audit_events = audit.replay()
+        except Exception as exc:
+            logger.warning("Could not replay audit trail: %s", exc)
+
         # Wire W5 reasoning critic if available — degrade gracefully (FM-11)
         try:
             from finroot.reasoning.critic import SelfCritic
