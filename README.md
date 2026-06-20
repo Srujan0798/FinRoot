@@ -215,6 +215,33 @@ make evals               # runs the FRB harness → results/metrics.json
 
 ---
 
+## ⚡ Quick Demo — 30 seconds
+
+```bash
+git clone https://github.com/your-org/finroot.git && cd finroot
+docker compose up --build
+# open http://localhost:8501 → ask "Should I rebalance my 70/30 portfolio before FY-end?"
+```
+
+That is it. Mock mode is the default — no API keys, no network, no friction.
+
+---
+
+## 🖼 Screenshots
+
+> All screenshots captured in Mock mode via `scripts/capture_screenshots.py`. Click any
+> thumbnail to enlarge.
+
+| # | Screenshot | What it shows |
+|---|---|---|
+| 1 | ![Chat — Portfolio query](docs/demo/screenshots/01_chat_portfolio.png) | Chat tab with a portfolio-risk query. Structured finance card: summary, confidence badge, risk profile, analysis, actions, risks, alternatives, citations. |
+| 2 | ![Reasoning Trace](docs/demo/screenshots/02_reasoning_trace.png) | Step-by-step plan, tool calls, 5-axis self-critic scores (pass/fail + must-fix), prudential principles verifier, and citations table. The "show your work" transparency. |
+| 3 | ![Trap Refusal](docs/demo/screenshots/03_trap_refusal.png) | Agent refuses an unsafe advice request ("put emergency fund into hot small-cap stock"). Flags risk, explains why, offers safer alternatives. |
+| 4 | ![Digital Twin](docs/demo/screenshots/04_digital_twin.png) | Digital Twin tab: investor profile, risk tolerance, horizon, tax bracket, goals, constraints, portfolio holdings, allocation chart, total value. |
+| 5 | ![FRB Harness](docs/demo/screenshots/05_harness.png) | FRB benchmark runner: composite lift vs RAG, system comparison table, per-domain bar chart. Numbers sourced from `results/metrics.json`. |
+
+---
+
 ## 📊 FRB Results — Reasoning Quality (the 35% proof)
 
 > **Single source of truth: `results/metrics.json`.** Numbers in this table are **regenerated
@@ -223,18 +250,33 @@ make evals               # runs the FRB harness → results/metrics.json
 
 | System | pass@1 | pass@k | pass^k | Mean score (0–1) | Lift vs RAG |
 |---|---:|---:|---:|---:|---:|
-| Baseline RAG (retrieve + single LLM) | 0.000 | 0.000 | 0.000 | 0.090 | — |
-| Single-agent (no critic) | 0.031 | 0.031 | 0.000 | 0.209 | **+2.3×** |
-| **FinRoot (full pipeline)** | **0.344** | **0.344** | **0.000** | **0.686** | **+7.6× ( +662% )** |
+| Baseline RAG (retrieve + single LLM) | 0.038 | 0.038 | 0.038 | 0.337 | — |
+| Single-agent (no critic) | 0.000 | 0.000 | 0.000 | 0.318 | −5.4% |
+| **FinRoot (full pipeline)** | **0.346** | **0.346** | **0.346** | **0.672** | **+99.7%** |
 
-**Measured at:** `as_of_sha = 5a4d105` · `n_tasks = 32` · `k = 2` · `mock = True` · `62s` ·
-regenerate anytime with `python -m scripts.run_evals --mock --k 2`. The RAG baseline literally
-scores 0.000 on pass@1 — it cannot satisfy a single task's must-mention + must-not + citation
-requirements. **FinRoot scores 0.686 mean across 32 tasks across 7 financial domains**
-(portfolio, risk, tax, news_impact, cashflow, credit, general) — see `results/metrics.json` for
-the full breakdown including per-domain scores (portfolio 0.73, tax 0.71, general 0.76,
-news_impact 0.54, risk 0.67).
-harness emits. Pre-captured demo transcripts live in `docs/demo/transcript_*.md` so judges can
+**Measured at:** `as_of_sha = 2b4f879` · `n_tasks = 52` · `k = 1` · `mock = True` ·
+regenerate anytime with `python -m scripts.run_evals --mock --k 1`.
+
+### Per-domain mean scores (FinRoot)
+
+| Domain | Score |
+|---|---:|
+| portfolio | 0.701 |
+| tax | 0.710 |
+| general | 0.737 |
+| behavioral | 0.703 |
+| international | 0.700 |
+| news_impact | 0.552 |
+| risk | 0.663 |
+| credit | 0.653 |
+| cashflow | 0.620 |
+| insurance | 0.638 |
+| estate_planning | 0.600 |
+
+**Composite lift vs RAG: +99.7%.** The RAG baseline scores 0.038 on pass@1 — it cannot
+satisfy most tasks' must-mention + must-not + citation requirements. **FinRoot scores 0.672
+mean across 52 tasks across 11 financial domains** — see `results/metrics.json` for the full
+breakdown. Pre-captured demo transcripts live in `docs/demo/transcript_*.md` so judges can
 inspect qualitative outputs offline.
 
 **Pass thresholds** (from `evals/README.md`):

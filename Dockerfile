@@ -8,12 +8,19 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-# deps first (layer cache)
+# Copy everything needed for install
 COPY pyproject.toml ./
-RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
-
-# source
 COPY src/ ./src/
+COPY config/ ./config/
+COPY data/ ./data/
+COPY scripts/ ./scripts/
+COPY evals/ ./evals/
+COPY results/ ./results/
+
+# Install dependencies
+RUN pip install --upgrade pip && \
+    pip install streamlit typer rich && \
+    pip install -e .
 
 # non-root user
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
