@@ -5,6 +5,9 @@ LLM, runs the FinRootOrchestrator, and returns the full ``AgentState`` for
 the caller to render.  Also provides ``build_trace()`` which derives the
 reasoning-trace event list from the state.
 
+Provides ``stream_answer()`` — a generator that yields progress updates
+during the pipeline execution for real-time UI feedback.
+
 Writes: ``src/interface/core.py`` (wave-7, task 01).
 """
 
@@ -14,6 +17,7 @@ import json
 import logging
 import os
 import tempfile
+from collections.abc import Generator
 from pathlib import Path
 from typing import Any
 
@@ -197,9 +201,117 @@ def answer(
         except Exception as exc:
             logger.warning("Prudence verification failed — skipping: %s", exc)
 
+        # Generate counterfactual explanations — "what would change this recommendation"
+        try:
+            from finroot.reasoning.counterfactual import CounterfactualGenerator
+
+            counterfactuals = CounterfactualGenerator().generate(state)
+            rec = state.candidate or state.final
+            if rec is not None and counterfactuals:
+                existing = list(rec.invalidation_conditions)
+                for cf in counterfactuals:
+                    if cf not in existing:
+                        existing.append(cf)
+                rec.invalidation_conditions = existing
+        except (ImportError, Exception) as exc:
+            logger.warning("Counterfactual generator skipped: %s", exc)
+
         return state
     finally:
         # Restore env so we don't leak the mock flag to other tests / callers.
+        if _saved_provider_env is None:
+            os.environ.pop("FINROOT_LLM_PROVIDER", None)
+        else:
+            os.environ["FINROOT_LLM_PROVIDER"] = _saved_provider_env
+
+
+def stream_answer(
+    query: str,
+    *,
+    user_id: str = "demo",
+    mock: bool = True,
+) -> Generator[dict[str, Any], None, None]:
+    """Streaming version of :func:`answer`.
+
+    Yields progress dicts as the pipeline executes::
+
+        {"type": "status", "message": "Classifying intent..."}
+        {"type": "status", "message": "Assembling context..."}
+        {"type": "status", "message": "Executing market_analyst..."}
+        {"type": "status", "message": "Synthesizing recommendation..."}
+        {"type": "result", "state": AgentState}
+
+    The caller can use these to show real-time progress in the UI.
+    """
+    if not query or not query.strip():
+        raise ValueError("query must be a non-empty string")
+
+    _saved_provider_env: str | None = None
+    if mock:
+        _saved_provider_env = os.environ.get("FINROOT_LLM_PROVIDER")
+        os.environ["FINROOT_LLM_PROVIDER"] = "mock"
+
+    try:
+        llm: LLMProvider = MockProvider() if mock else get_provider()
+
+        yield {"type": "status", "message": "Building memory and audit trail..."}
+        memory = _build_memory(user_id)
+        audit = AuditTrail(Path(tempfile.mkdtemp()) / "audit.jsonl")
+
+        yield {"type": "status", "message": "Initializing orchestrator..."}
+        orch = FinRootOrchestrator(memory=memory, audit=audit, llm=llm)
+
+        yield {"type": "status", "message": "Classifying intent and planning..."}
+        # The orchestrator runs the full graph — we can't intercept individual
+        # nodes easily, so we stream status around the main call.
+        state: AgentState = orch.run(query)
+
+        yield {"type": "status", "message": "Running self-critique..."}
+        try:
+            from finroot.reasoning.critic import SelfCritic
+
+            critic = SelfCritic()
+            verdict = critic.evaluate(state)
+            state.critique = verdict.model_dump(mode="json")
+        except (ImportError, Exception) as exc:
+            logger.warning("Critic skipped: %s", exc)
+
+        yield {"type": "status", "message": "Verifying prudential principles..."}
+        try:
+            from finroot.reasoning.principles import PrudentialVerifier
+
+            prudential = PrudentialVerifier().verify(state)
+            state.verifier_verdict = prudential.model_dump(mode="json")
+            if not prudential.compliant:
+                _apply_prudence_downgrade(state, prudential.model_dump(mode="json"))
+        except (ImportError, Exception) as exc:
+            logger.warning("Prudence verifier skipped: %s", exc)
+
+        yield {"type": "status", "message": "Generating counterfactual explanations..."}
+        try:
+            from finroot.reasoning.counterfactual import CounterfactualGenerator
+
+            counterfactuals = CounterfactualGenerator().generate(state)
+            # Add counterfactuals to the recommendation's invalidation_conditions
+            rec = state.candidate or state.final
+            if rec is not None and counterfactuals:
+                existing = list(rec.invalidation_conditions)
+                for cf in counterfactuals:
+                    if cf not in existing:
+                        existing.append(cf)
+                rec.invalidation_conditions = existing
+        except (ImportError, Exception) as exc:
+            logger.warning("Counterfactual generator skipped: %s", exc)
+
+        try:
+            state.audit_events = audit.replay()
+        except Exception as exc:
+            logger.warning("Could not replay audit trail: %s", exc)
+
+        yield {"type": "status", "message": "Done!"}
+        yield {"type": "result", "state": state}
+
+    finally:
         if _saved_provider_env is None:
             os.environ.pop("FINROOT_LLM_PROVIDER", None)
         else:
@@ -318,4 +430,4 @@ def build_trace(state: AgentState) -> list[dict[str, Any]]:
     return events
 
 
-__all__ = ["answer", "build_trace"]
+__all__ = ["answer", "build_trace", "stream_answer"]

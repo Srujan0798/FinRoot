@@ -10,6 +10,8 @@ Expanded to 55+ canned responses for rich demo variety.
 from __future__ import annotations
 
 import hashlib
+import time
+from collections.abc import Generator
 
 from finroot.llm.base import LLMResult, parse_reasoning_confidence
 
@@ -99,6 +101,11 @@ class MockProvider:
 
     name: str = "mock"
 
+    def _get_canned(self, prompt: str) -> str:
+        """Return the canned response for *prompt*."""
+        idx = int(hashlib.sha256(prompt.encode()).hexdigest(), 16) % len(_CANNED)
+        return _CANNED[idx]
+
     def complete(
         self,
         prompt: str,
@@ -107,8 +114,7 @@ class MockProvider:
         temperature: float = 0.2,
         max_tokens: int = 1024,
     ) -> LLMResult:
-        idx = int(hashlib.sha256(prompt.encode()).hexdigest(), 16) % len(_CANNED)
-        raw = _CANNED[idx]
+        raw = self._get_canned(prompt)
         clean, reasoning, confidence = parse_reasoning_confidence(raw)
         return LLMResult(
             text=clean,
@@ -118,6 +124,22 @@ class MockProvider:
             model="mock",
             tokens=None,
         )
+
+    def stream(
+        self,
+        prompt: str,
+        *,
+        system: str | None = None,
+        temperature: float = 0.2,
+        max_tokens: int = 1024,
+    ) -> Generator[str, None, None]:
+        """Simulate streaming by yielding words with small delays."""
+        raw = self._get_canned(prompt)
+        clean, _, _ = parse_reasoning_confidence(raw)
+        words = clean.split()
+        for i, word in enumerate(words):
+            yield word + (" " if i < len(words) - 1 else "")
+            time.sleep(0.02)  # 20ms per word — fast enough to feel snappy
 
 
 __all__ = ["MockProvider"]

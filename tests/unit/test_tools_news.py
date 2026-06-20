@@ -22,11 +22,11 @@ from finroot.tools.sentiment import (
 class TestNewsSearchToolMock:
     """Tests for NewsSearchTool in mock mode."""
 
-    def test_mock_returns_three_articles(self) -> None:
+    def test_mock_returns_articles(self) -> None:
         tool = NewsSearchTool(mock=True)
         result = tool(NewsInput(query="indian markets"))
         assert isinstance(result, NewsOutput)
-        assert len(result.articles) == 3
+        assert len(result.articles) >= 2  # Topic-based: market has 2 articles
 
     def test_mock_article_shape(self) -> None:
         tool = NewsSearchTool(mock=True)
@@ -43,7 +43,7 @@ class TestNewsSearchToolMock:
         tool = NewsSearchTool(mock=True)
         result = tool(NewsInput(query="test"))
         assert result.source == "mock"
-        assert result.citation == "Mock news feed"
+        assert result.citation == "Mock news feed for 'test'"
 
     def test_mock_respects_max_results(self) -> None:
         tool = NewsSearchTool(mock=True)

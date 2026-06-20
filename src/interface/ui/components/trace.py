@@ -132,6 +132,24 @@ def _render_citations_table(state: Any) -> None:
     st.dataframe(rows, use_container_width=True)
 
 
+def _render_counterfactuals(state: Any) -> None:
+    """Render counterfactual explanations — what would change the recommendation."""
+    rec: Recommendation | None = getattr(state, "candidate", None) or getattr(
+        state, "final", None
+    )
+    if rec is None:
+        return
+
+    invalidation = getattr(rec, "invalidation_conditions", None)
+    if not invalidation:
+        return
+
+    st.markdown("### What Would Change This Recommendation")
+    st.caption("These are conditions under which the advice above would need to be revised.")
+    for i, condition in enumerate(invalidation, 1):
+        st.markdown(f"{i}. {condition}")
+
+
 def render(state: Any = None) -> None:
     """Render the Reasoning Trace tab.
 
@@ -164,7 +182,10 @@ def render(state: Any = None) -> None:
     # 3. Prudential principles verifier
     _render_verifier_verdict(state)
 
-    # 4. Citations table
+    # 4. Counterfactual explanations
+    _render_counterfactuals(state)
+
+    # 5. Citations table
     _render_citations_table(state)
 
 
@@ -236,6 +257,9 @@ def render_streaming(state: Any = None) -> None:
 
         # Render verifier verdict
         _render_verifier_verdict(state)
+
+        # Render counterfactual explanations
+        _render_counterfactuals(state)
 
         # Render citations table
         _render_citations_table(state)

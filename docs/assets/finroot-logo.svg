@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="trunk" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#2D1B0E"/>
+      <stop offset="100%" stop-color="#5C3A1E"/>
+    </linearGradient>
+    <linearGradient id="canopy" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#1A6B3C"/>
+      <stop offset="50%" stop-color="#228B4A"/>
+      <stop offset="100%" stop-color="#2EA85A"/>
+    </linearGradient>
+    <linearGradient id="root" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5C3A1E"/>
+      <stop offset="100%" stop-color="#3A2210"/>
+    </linearGradient>
+    <linearGradient id="circuit" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00D4AA"/>
+      <stop offset="100%" stop-color="#00A88A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Trunk -->
+  <path d="M95 130 Q93 110 96 90 Q98 75 100 65 Q102 75 104 90 Q107 110 105 130 Z" fill="url(#trunk)"/>
+
+  <!-- Left branch -->
+  <path d="M96 95 Q85 85 75 80 Q82 82 90 88 Z" fill="url(#trunk)" opacity="0.8"/>
+  <!-- Right branch -->
+  <path d="M104 90 Q115 80 125 78 Q118 82 110 86 Z" fill="url(#trunk)" opacity="0.8"/>
+
+  <!-- Canopy - layered circles for organic tree shape -->
+  <circle cx="75" cy="62" r="18" fill="url(#canopy)" opacity="0.9"/>
+  <circle cx="100" cy="48" r="22" fill="url(#canopy)"/>
+  <circle cx="125" cy="60" r="17" fill="url(#canopy)" opacity="0.9"/>
+  <circle cx="88" cy="42" r="15" fill="url(#canopy)" opacity="0.8"/>
+  <circle cx="112" cy="40" r="14" fill="url(#canopy)" opacity="0.8"/>
+  <circle cx="100" cy="32" r="12" fill="url(#canopy)" opacity="0.7"/>
+
+  <!-- Roots - circuit-board style -->
+  <!-- Main root -->
+  <path d="M100 130 L100 155 L100 170" stroke="url(#root)" stroke-width="3" fill="none"/>
+  <!-- Left roots -->
+  <path d="M97 135 L80 155 L65 165" stroke="url(#root)" stroke-width="2.5" fill="none"/>
+  <path d="M95 140 L75 160 L55 175" stroke="url(#root)" stroke-width="2" fill="none" opacity="0.8"/>
+  <path d="M98 145 L85 165 L70 180" stroke="url(#root)" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <!-- Right roots -->
+  <path d="M103 135 L120 155 L135 165" stroke="url(#root)" stroke-width="2.5" fill="none"/>
+  <path d="M105 140 L125 160 L145 175" stroke="url(#root)" stroke-width="2" fill="none" opacity="0.8"/>
+  <path d="M102 145 L115 165 L130 180" stroke="url(#root)" stroke-width="1.5" fill="none" opacity="0.6"/>
+
+  <!-- Circuit nodes on roots -->
+  <circle cx="80" cy="155" r="3" fill="url(#circuit)"/>
+  <circle cx="120" cy="155" r="3" fill="url(#circuit)"/>
+  <circle cx="100" cy="155" r="3" fill="url(#circuit)"/>
+  <circle cx="65" cy="165" r="2.5" fill="url(#circuit)" opacity="0.8"/>
+  <circle cx="135" cy="165" r="2.5" fill="url(#circuit)" opacity="0.8"/>
+  <circle cx="75" cy="160" r="2" fill="url(#circuit)" opacity="0.6"/>
+  <circle cx="125" cy="160" r="2" fill="url(#circuit)" opacity="0.6"/>
+
+  <!-- Circuit traces connecting roots to trunk -->
+  <path d="M80 155 L90 145 L97 135" stroke="url(#circuit)" stroke-width="1" fill="none" opacity="0.4"/>
+  <path d="M120 155 L110 145 L103 135" stroke="url(#circuit)" stroke-width="1" fill="none" opacity="0.4"/>
+
+  <!-- Small circuit dots in canopy (data flow visualization) -->
+  <circle cx="90" cy="55" r="1.5" fill="#00D4AA" opacity="0.6"/>
+  <circle cx="110" cy="50" r="1.5" fill="#00D4AA" opacity="0.6"/>
+  <circle cx="100" cy="40" r="1.5" fill="#00D4AA" opacity="0.7"/>
+  <circle cx="82" cy="65" r="1.2" fill="#00D4AA" opacity="0.5"/>
+  <circle cx="118" cy="62" r="1.2" fill="#00D4AA" opacity="0.5"/>
+</svg>

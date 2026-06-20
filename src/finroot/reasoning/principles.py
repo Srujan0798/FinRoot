@@ -51,6 +51,18 @@ _EMERGENCY_FUND_INVEST_RE = re.compile(
 )
 
 _PERCENT_RE = re.compile(r"(\d+(?:\.\d+)?)\s*%")
+# A percentage only counts as a concentration signal when near allocation words.
+_ALLOCATION_CONTEXT_RE = re.compile(
+    r"\b(?:allocat|portfolio|weight|holding|concentrat|single\s+(?:stock|asset)|"
+    r"in\s+(?:one|a\s+single)|exposure|invest(?:ed|ing)?\s+\d|put\s+\d)\b",
+    re.IGNORECASE,
+)
+# …but never when it's clearly a tax/rate/exemption figure.
+_NON_ALLOCATION_CONTEXT_RE = re.compile(
+    r"\b(?:tax|cess|ltcg|stcg|slab|exemption|hra|surcharge|rate|gst|tds|"
+    r"interest|yield|coupon|inflation|of\s+basic|return\s+of)\b",
+    re.IGNORECASE,
+)
 
 _GUARANTEE_RE = re.compile(
     r"\b(?:guarantee[ds]?|will\s+definitely|promise[sd]?|certain\s+to|"
@@ -189,12 +201,17 @@ class PrudentialVerifier:
         if query and query in rec_text:
             rec_text = rec_text.replace(query, "")
 
-        pct_matches = _PERCENT_RE.findall(rec_text)
         failed = False
         detail = "No concentration violation detected"
-        for pct_str in pct_matches:
-            pct = float(pct_str)
-            if pct > _MAX_SINGLE_ASSET_PCT:
+        # Only flag a >40% figure when it sits in an ALLOCATION context. Tax
+        # answers are full of non-allocation percentages (rates, exemptions,
+        # cess, HRA "50% of basic") that must NOT trip the concentration gate.
+        for m in _PERCENT_RE.finditer(rec_text):
+            pct = float(m.group(1))
+            if pct <= _MAX_SINGLE_ASSET_PCT:
+                continue
+            window = rec_text[max(0, m.start() - 45): m.end() + 45].lower()
+            if _ALLOCATION_CONTEXT_RE.search(window) and not _NON_ALLOCATION_CONTEXT_RE.search(window):
                 failed = True
                 detail = f"Recommends {pct}% allocation to single asset (>40% limit)"
                 break

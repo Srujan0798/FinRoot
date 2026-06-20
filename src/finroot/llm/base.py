@@ -7,6 +7,7 @@ this protocol so providers are interchangeable at runtime.
 from __future__ import annotations
 
 import re
+from collections.abc import Generator
 from typing import Protocol, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict
@@ -65,3 +66,17 @@ class LLMProvider(Protocol):
     ) -> LLMResult:
         """Send *prompt* (with optional *system* message) and return an :class:`LLMResult`."""
         ...
+
+    def stream(
+        self,
+        prompt: str,
+        *,
+        system: str | None = None,
+        temperature: float = 0.2,
+        max_tokens: int = 1024,
+    ) -> Generator[str, None, None]:
+        """Yield text chunks as they arrive. Default falls back to complete()."""
+        result = self.complete(
+            prompt, system=system, temperature=temperature, max_tokens=max_tokens
+        )
+        yield result.text

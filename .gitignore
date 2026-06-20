@@ -49,9 +49,24 @@ evals/reports/*
 data/*.db
 finroot-submission.zip
 
-# --- chat session logs (developer scratch, NOT shipped) ---
+# --- internal build artifacts (orchestrator / agent sessions) ---
+/agent session*
 /agents session
 /claude session
+orchestrator/
+work/
+.specify/
+plan/
+prompts/
+mcp.json
+prometheus.yml
+skills-lock.json
+skills.manifest.json
+HALL_OF_SHAME.md
+BACKLOG.md
+OS_SETUP.md
+KIMI.md
+CLAUDE.md
 
 # --- media artifacts (hosted via GitHub Release, not in tree) ---
 docs/demo/finroot_demo.mp4

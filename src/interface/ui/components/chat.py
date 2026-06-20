@@ -4,6 +4,9 @@ Renders a ``st.chat_input`` bar, calls ``interface.core.answer()`` on submit,
 and displays the response as a structured finance card: summary, confidence
 badge, risk badge, action items, and citations.  Stores the full ``AgentState``
 in ``st.session_state["last_state"]`` for the Trace tab.
+
+Supports streaming mode: uses ``stream_answer()`` to show real-time progress
+and token-by-token output for reduced perceived latency.
 """
 
 from __future__ import annotations
@@ -16,7 +19,7 @@ except ImportError:
     st = None  # type: ignore[assignment]
 
 from finroot.schemas.recommendation import Recommendation
-from interface.core import answer
+from interface.core import stream_answer
 from interface.ui.theme import confidence_badge, risk_badge
 
 
@@ -129,14 +132,26 @@ def render(*, user_id: str = "demo", mock: bool = True) -> None:
     with st.chat_message("user"):
         st.markdown(query)
 
-    # Call the pipeline
+    # Call the pipeline with streaming progress
     with st.chat_message("assistant"):
-        with st.spinner("Reasoning…"):
-            try:
-                state = answer(query, user_id=user_id, mock=mock)
-            except Exception as exc:
-                st.error(f"Failed to get answer: {exc}")
-                return
+        state = None
+        status_container = st.status("Reasoning...", expanded=True)
+
+        try:
+            for update in stream_answer(query, user_id=user_id, mock=mock):
+                if update["type"] == "status":
+                    status_container.update(label=update["message"], state="running")
+                elif update["type"] == "result":
+                    state = update["state"]
+                    status_container.update(label="Done!", state="complete")
+        except Exception as exc:
+            status_container.update(label="Failed", state="error")
+            st.error(f"Failed to get answer: {exc}")
+            return
+
+        if state is None:
+            st.error("No result produced.")
+            return
 
         # Store full state for the Trace tab
         st.session_state["last_state"] = state

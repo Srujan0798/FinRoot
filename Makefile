@@ -20,7 +20,7 @@ test:  ## run pytest
 	pytest
 
 cli:  ## run the CLI (ARGS="--mock 'your question'")
-	$(PY) -m src.interface.cli $(ARGS)
+	$(PY) -m interface.cli $(ARGS)
 
 ui:  ## run the Streamlit UI
 	streamlit run src/interface/ui/app.py

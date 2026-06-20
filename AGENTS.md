@@ -1,82 +1,88 @@
-# FinRoot — Orchestrator Kernel
+# FinRoot — Agent Instructions
 
-> Auto-loaded every session. Keep this ≤ ~3K tokens. Deep detail is **lazy-loaded** from
-> `orchestrator/core/*`, `plan/*`, `.specify/*`, and `docs/*` — read those on demand, not up front.
+> Sovereign, reasoning-first AI financial agent (LangChain + LangGraph). Python 3.11, Pydantic v2.
 
-## What FinRoot is
-A **Sovereign, Reasoning-First AI Financial Agent** (LangChain + LangGraph). Not a chatbot
-wrapper — a multi-agent reasoning pipeline that *shows its work*, flags risk, cites evidence,
-self-critiques, and keeps a tamper-evident audit trail. Built to win SCALE ML Club PS-1
-("Build an AI Agent for Finance"). One-line goal:
+## Quick commands
 
-> **Give an individual investor / small family office institutional-grade, explainable,
-> auditable financial reasoning — locally and on their own terms.**
-
-Scoring we optimize for (memorize): **Reasoning Quality 35% · Agent Architecture 30% ·
-Code Implementation 20% · Solution Idea 15%.** Every decision serves these weights.
-
-## The two-tier methodology (NEVER violate)
-- **TIER 1 — Orchestrator (this Claude/Kimi session).** Plans, writes task files into `work/`,
-  reviews reports, runs acceptance, merges, updates state. **Never writes implementation code.**
-- **TIER 2 — Workers (OpenCode CLI windows / your agents).** Receive ONE self-contained task
-  file from `work/<wave>/<task>.md`, implement into `src/`, write a report to
-  `work/reports/<wave>/<task>.report.md`. Stateless, parallel.
-- Handoff is the file boundary: `work/<wave>/<task>.md` → `work/reports/<wave>/<task>.report.md`.
-- Orchestrator never executes; workers never plan.
-
-## Read order on a cold start (wake)
-1. `HANDOFF.md` — current state, active wave, what's in flight.
-2. This kernel.
-3. `plan/EXECUTION.md` — wave status table (one row per wave, commit hashes).
-4. Active wave spec: `.specify/specs/wave-N/spec.md`.
-5. Recent `orchestrator/memory/session/<wave>-<task>.events.jsonl`.
-Then act. Run `bash orchestrator/scripts/replay_session.sh <wave> <task>` to reconstruct context.
-
-## The wave loop
+```bash
+make install          # pip install -r requirements.txt && pip install -e .
+make smoke            # end-to-end foundation check → "FOUNDATION OK"
+make lint             # ruff check src/ tests/ scripts/
+make test             # pytest (1002 tests, 9 skipped)
+make cli ARGS="--mock 'your question'"   # CLI in mock mode
+make evals            # FRB benchmark → results/metrics.json
+make docker           # full stack (mock default)
 ```
-/plan wave-N  → .specify/specs/wave-N/{spec,plan,tasks,contracts}
-/dispatch     → work/wave-N/0X-*.md (DISJOINT write-sets, parallel-safe)
-workers run   → work/reports/wave-N/0X.report.md
-/review       → APPROVE→/merge | REVISE→rewrite brief | REJECT→attic/
-/ship         → acceptance + tests + EXECUTION.md(commit) + CHANGELOG
+
+All commands work offline with zero API keys (mock provider is the default).
+
+## PYTHONPATH gotcha
+
+For standalone `python` commands outside pytest/make, always prefix:
+```bash
+PYTHONPATH=src python3 -m interface.cli --mock "question"
 ```
-Waves: see `plan/EXECUTION.md`. Tasks per wave have **disjoint `writes` and explicit `forbid`**
-(FM-13). Extras nobody asked for → `BACKLOG.md`, never silently built (FM-08).
+pytest auto-handles this via `pyproject.toml` (`pythonpath = ["src"]`).
 
-## Tech stack (the smallest winning stack)
-Python 3.11 · LangChain + LangGraph · Pydantic v2 · ChromaDB (vector) + SQLite (structured +
-audit) + JSON fallback · Streamlit (dark UI) + Typer CLI · LLM providers: **Ollama (local,
-sovereign default)** / OpenAI / Groq / Mock (offline judging) · Docker · pytest · ruff.
-Sovereign-first: local model preference, offline fallback, no blind reliance on closed APIs.
+## Project structure
 
-## The non-negotiables (failure-mode guardrails — full table: §13 of OS_SETUP.md)
-- **FM-09 Evidence required.** Never claim "done/passing" without the command + its output this
-  session. Never round "partly" up to "done". Own bugs.
-- **FM-11 No silent failures.** No bare `except: pass`. Fallbacks log loud. Missing required
-  input fails loud — NEVER substitute synthetic/hallucinated financial data.
-- **FM-08 Scope guard.** `docs/SCOPE_GUARD.md` is law. IN / OUT / LATER.
-- **FM-13 No parallel collisions.** Disjoint write-sets per wave; check before dispatch.
-- **FM-01 No state drift.** `EXECUTION.md`/`HANDOFF.md` are rewritten to current truth, one row
-  per item; active wave matches across files.
-- **FM-05/12 One source for metrics.** Numbers live in `results/metrics.json` + eval reports;
-  docs regenerate, never hand-type. Stamp "as of <sha>".
-- **FM-07 Publish gate.** No secrets / cheat-sheets / raw prompts committed. Brainstorm inputs
-  live in `resources/brainstorm/` (design inputs, not shipped code).
-- **Domain rule.** Financial advice must be explainable, risk-aware, cited, and confidence-
-  labeled. When evidence is insufficient, the agent says so and may recommend "do not act yet".
+| Path | What it is |
+|---|---|
+| `src/finroot/` | Core agent code: `agents/ tools/ memory/ reasoning/ workflows/ schemas/ llm/ audit/ evaluation/` |
+| `src/interface/` | UI (`ui/app.py` Streamlit) + CLI (`cli/` Typer) + API (`api/` FastAPI) |
+| `config/` | `settings.py` (pydantic-settings, `FINROOT_*` env prefix) + `prompts.py` |
+| `tests/` | `unit/ integration/ e2e/ golden/ fuzz/ performance/ security/` |
+| `evals/` | FRB benchmark (83 tasks, 11 domains), graders, trials |
+| `orchestrator/` | Tier-1 planning apparatus — do NOT write here |
+| `work/` | Task files + reports bridge — read task files, write reports |
+| `docs/` | Architecture, ADRs, demo scripts, submission materials |
+| `data/` | `gold/frb_questions.json` (83-question bank), `tax_rules.json`, samples |
+| `scripts/` | `smoke_test.py`, `run_evals.py`, `capture_demo.py`, `make_submission.sh` |
+| `results/metrics.json` | Single source of truth for measured metrics |
 
-## Blast radius (governance — full: orchestrator/core/blast-radius.md)
-r0 read · r1 local repo (auto) · r2 local services (confirm) · r3 remote/push (confirm) ·
-r4 external humans (always confirm) · r5 money/data-loss (block). Auto-mode skips r0/r1 only.
+## Two-tier methodology
 
-## Where things live
-`orchestrator/` Tier-1 apparatus · `work/` the bridge · `src/finroot/` agent code (workers) ·
-`src/interface/` UI+CLI · `evals/` reasoning-quality proof (the 35% weapon) · `plan/` strategy ·
-`.specify/` specs · `docs/` everything explanatory · `attic/` superseded (never delete).
-Full map: `HIERARCHY.md`.
+- **Tier 1 (Orchestrator):** Plans, reviews, merges. Never writes `src/` code.
+- **Tier 2 (You — Worker):** Implement into `src/`, write tests into `tests/`, report to `work/reports/`.
+- Only touch files listed in your task brief's `writes` set. Never edit `orchestrator/`, `plan/`, `.specify/`.
 
-## Commands (orchestrator/skills + orchestrator/commands)
-`/plan` `/dispatch` `/review` `/merge` `/ship` `/status` `/next` `/handoff` `/audit` `/reflect`.
+## Critical gotchas
 
-> When in doubt: read `HANDOFF.md` and `plan/EXECUTION.md` first. Plan, dispatch, review, merge.
-> Discipline over speed. Evidence over assertion.
+- **G-1:** `config/settings.py` must NOT import from `finroot.*` — circular import. `llm_provider` is `str`, not enum.
+- **G-2:** Parameter named `type` shadows built-in — use `event_type` or `.__class__.__name__`.
+- **G-3:** `answer()` saves/restores `FINROOT_LLM_PROVIDER` env var — don't leak mock flag to tests.
+- **G-4:** Superseded files go to `attic/` — never delete history.
+- **G-5:** Metrics live in `results/metrics.json` — regenerate, never hand-type. Stamp with commit SHA.
+
+## Environment
+
+All optional — mock mode needs nothing:
+```bash
+FINROOT_LLM_PROVIDER=mock|ollama|groq|openai   # default: mock
+FINROOT_OLLAMA_BASE_URL=http://localhost:11434
+FINROOT_OLLAMA_MODEL=llama3.1:8b
+FINROOT_GROQ_API_KEY=    # leave blank to stay sovereign
+FINROOT_OPENAI_API_KEY=
+```
+
+## Quality gates
+
+Pre-commit runs: `ruff --fix`, `ruff-format`, trailing whitespace, end-of-file, check-yaml/json, detect-private-key, plus two custom hooks:
+- `block-secrets` (FM-07) — no secrets in commits
+- `execution-no-drift` (FM-01) — `EXECUTION.md` matches reality
+
+## Test markers
+
+```python
+@pytest.mark.wave1        # foundation tests
+@pytest.mark.integration  # cross-module
+@pytest.mark.e2e          # end-to-end
+@pytest.mark.golden       # hand-graded reasoning quality
+```
+
+## Key files to read first
+
+1. `HANDOFF.md` — current state, what's in flight
+2. `plan/EXECUTION.md` — wave status table
+3. `docs/SCOPE_GUARD.md` — IN / OUT / LATER scope rules
+4. `HIERARCHY.md` — full directory ownership map

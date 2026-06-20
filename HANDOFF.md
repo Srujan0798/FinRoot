@@ -7,7 +7,7 @@
 - **Project:** FinRoot — Sovereign, Reasoning-First AI Financial Agent
 - **Tier:** T2 (Production) · **Archetype:** hackathon/competition + research-ml emphasis
 - **Phase:** ALL 12 WAVES SHIPPED — submission ready for SCALE ML Club PS-1
-- **Latest commit:** `ee438ae` (1002 tests passing / 9 skipped, ruff clean, FOUNDATION OK)
+- **Latest commit:** `ee438ae` (1066 tests passing / 9 skipped, ruff clean, FOUNDATION OK)
 - **Orchestrator:** Claude Code / Kimi / Codex (interchangeable)
 - **Workers:** Srujan's agent swarm (OpenCode CLI windows / external agents)
 
@@ -18,15 +18,17 @@
 - `src/finroot/utils/config.py` — Startup assertions + banner
 - `config/settings.py` — pydantic-settings, `FINROOT_*` env prefix, `get_settings()`
 - `config/prompts.py` — Prompt registry
-- `src/finroot/tools/` — 12 tools: market, fundamentals, news, sentiment, risk, portfolio_sim, tax, macro, currency, profile, documents, watchlist
+- `src/finroot/tools/` — 14 tools: market, fundamentals, news, sentiment, risk, portfolio_sim, tax, macro, currency, profile, documents, watchlist, goal_planner, pdf_ingestion
 - `src/finroot/memory/` — WorkingMemory, SemanticMemory (ChromaDB+JSON fallback), DigitalTwin (SQLite), MemoryManager
 - `src/finroot/agents/` — IntentClassifier, 6 specialized ReAct agents + orchestrator
 - `src/finroot/workflows/` — LangGraph Plan-and-Execute graph + context assembler + synthesizer
-- `src/finroot/reasoning/` — 5-axis SelfCritic, Refinement loop, PrudentialVerifier, SelfConsistency, Explainability
+- `src/finroot/reasoning/` — 5-axis SelfCritic, Refinement loop, PrudentialVerifier, SelfConsistency, Explainability, CounterfactualGenerator, FxAwareAnalyzer
+- `src/finroot/audit/` — Hash-chained JSONL audit trail + OpenTelemetry-style distributed tracing
 - `src/finroot/evaluation/` — FRB harness, baselines (RAG + SingleAgent), report generator
-- `src/interface/` — answer() entry, Typer CLI, Streamlit dark UI (4 tabs: Chat, Trace, Twin, Harness)
+- `src/interface/` — answer() + stream_answer() entry, Typer CLI, Streamlit dark UI (4 tabs: Chat, Trace, Twin, Harness)
 - `evals/graders/` — deterministic code-based + LLM-judge graders + human review template
 - `data/gold/frb_questions.json` — 83-question FRB bank (11 domains, class-balanced, adversarial traps)
+- `data/gold/adversarial_questions.json` — 20-question adversarial eval set (unsafe advice, hallucination, manipulation, bias)
 - `data/tax_rules.json` — Indian FY 2024-25 tax rules (deterministic)
 - `data/samples/` — 3 DigitalTwin profiles + conversation fixture
 - `scripts/smoke_test.py` — End-to-end smoke test → `FOUNDATION OK`
@@ -47,7 +49,17 @@
 - `docs/SUBMISSION_MESSAGE.md` — ≤250-word paste-ready message for organizers
 - `docs/JUDGE_QUICKSTART.md` — 30-second zero-key judge run
 - `.github/workflows/` — CI (6 workflows)
-- **1002 unit + integration tests passing** (9 skipped), ruff clean across all src/
+- **1066 unit + integration tests passing** (9 skipped), ruff clean across all src/
+
+## New features (added post wave-12)
+- **Streaming UI** — `stream_answer()` yields real-time progress updates; Chat component shows status as pipeline executes
+- **Counterfactual Explanations** — `CounterfactualGenerator` produces "what would change this recommendation" from assumptions/risks/confidence
+- **Goal Planner Tool** — `GoalPlannerTool` calculates SIP, corpus, and allocation for financial goals with inflation adjustment
+- **FX-Aware Reasoning** — `FxAwareAnalyzer` assesses multi-currency portfolios for FX risk, hedging needs, NRI-specific advice
+- **PDF Statement Ingestion** — `PDFIngestionTool` parses CDSL/NSDL CAS, AMC statements to auto-build Digital Twin
+- **Distributed Tracing** — OpenTelemetry-style spans with JSONL export for pipeline observability
+- **FinBERT Agreement Study** — `evals/graders/agreement_study.py` calculates Cohen's kappa for grader calibration
+- **Adversarial Eval Set** — 20 red-team prompts testing refusal of unsafe advice, hallucination, manipulation, bias
 
 ## FRB Results (measured at `as_of_sha = ee438ae`)
 | System | pass@1 | mean score | Lift vs RAG (mean) |
@@ -88,7 +100,9 @@ PYTHONPATH=src python3 -m scripts.run_evals --mock --k 2
 - Final demo narrative owner (wave-8) — script written, capture_demo.py generates transcripts.
 
 ## Last session note
-2026-06-20: All 12 waves shipped. 1002 tests passing (9 skipped), ruff clean, FOUNDATION OK.
+2026-06-21: All 12 waves shipped + 8 new features added. 1066 tests passing (9 skipped), ruff clean, FOUNDATION OK.
+New features: streaming UI, counterfactual explanations, goal planner, FX-aware reasoning, PDF ingestion, distributed tracing, adversarial eval set, FinBERT agreement study.
+Fixed pre-existing bugs: `Confidence` → `ConfidenceLevel` import in graph.py, fundamentals mock returning hash-based values.
 Measured FRB lift at HEAD `ee438ae`: FinRoot 0.778 vs RAG 0.341 = +128.5% composite lift.
 83 graded tasks across 11 financial domains. Demo works fully offline (Mock mode).
 Submission zip: `finroot-submission.zip` (1.05 MB, 327 files, no secrets).
