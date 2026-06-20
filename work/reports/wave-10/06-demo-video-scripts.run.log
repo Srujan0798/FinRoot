@@ -1,0 +1,83 @@
+=== dispatch opencode opencode/big-pickle -> work/wave-10/06-demo-video-scripts.md @ Sat Jun 20 17:36:52 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 17:38:56 IST 2026 ===
+_PROMPT.md
+[0m→ [0mRead work/wave-10/06-demo-video-scripts.md
+[0m→ [0mRead docs/business/7_minute_demo_script.md
+[0m→ [0mRead docs/business
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m✗ [0mRead .specify/specs/wave-10/contracts failed
+[91m[1mError: [0mFile not found: /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-10/contracts
+[0m✱ [0mGlob "docs/demo/screenshots/*"[90m 6 matches[0m
+[0m→ [0mRead docs/demo/screenshots/README.md
+[0m✱ [0mGlob "docs/waves/wave-10-gotchas.md"[90m 0 matches[0m
+[0m
+[0m# [0mTodos
+[•] Write docs/business/demo_recording_guide.md
+[ ] Write docs/business/highlight_reel_script.md
+[ ] Run acceptance commands and capture output
+[ ] Write work/reports/wave-10/06-demo-video-scripts.report.md
+[0m
+Now I have all context. Let me build both files.
+[0m← [0mWrite docs/business/demo_recording_guide.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Write docs/business/demo_recording_guide.md
+[•] Write docs/business/highlight_reel_script.md
+[ ] Run acceptance commands and capture output
+[ ] Write work/reports/wave-10/06-demo-video-scripts.report.md
+[0m
+[0m← [0mWrite docs/business/highlight_reel_script.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Write docs/business/demo_recording_guide.md
+[✓] Write docs/business/highlight_reel_script.md
+[•] Run acceptance commands and capture output
+[ ] Write work/reports/wave-10/06-demo-video-scripts.report.md
+[0m
+[0m$ [0mtest -f docs/business/demo_recording_guide.md && echo "recording guide present"
+recording guide present
+[0m
+[0m$ [0mtest -f docs/business/highlight_reel_script.md && echo "highlight reel present"
+highlight reel present
+[0m
+[0m$ [0mgrep -q "0:00" docs/business/demo_recording_guide.md && echo "timestamps present"
+timestamps present
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && git status --short
+M README.md
+ M docs/demo/screenshots/README.md
+ M results/metrics.json
+?? docs/business/demo_recording_guide.md
+?? docs/business/highlight_reel_script.md
+?? work/reports/wave-10/
+?? work/wave-10/
+[0m
+All three acceptance commands pass. Now let me verify only the Writes files were touched and write the report.
+[0m# [0mTodos
+[✓] Write docs/business/demo_recording_guide.md
+[✓] Write docs/business/highlight_reel_script.md
+[✓] Run acceptance commands and capture output
+[•] Write work/reports/wave-10/06-demo-video-scripts.report.md
+[0m
+[0m$ [0mmkdir -p /Users/srujansai/Desktop/FinRoot/work/reports/wave-10
+(no output)
+[0m
+[0m← [0mWrite work/reports/wave-10/06-demo-video-scripts.report.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Write docs/business/demo_recording_guide.md
+[✓] Write docs/business/highlight_reel_script.md
+[✓] Run acceptance commands and capture output
+[✓] Write work/reports/wave-10/06-demo-video-scripts.report.md
+[0m
+Done.
+
+- `docs/business/demo_recording_guide.md` — 7-minute recording guide with OBS setup, 8 beats at exact timestamps, 3 showcase queries, and reliability fallbacks per beat
+- `docs/business/highlight_reel_script.md` — 2-minute, 5-beat highlight reel covering problem → portfolio demo → trap refusal (the "money shot") → FRB results → architecture wrap
+- All 3 acceptance checks pass (files exist, timestamps present)
+- Report written to `work/reports/wave-10/06-demo-video-scripts.report.md`
+- Only the Writes set was touched (FM-13 compliant)
+=== opencode exited rc=0 @ Sat Jun 20 17:38:56 IST 2026 ===

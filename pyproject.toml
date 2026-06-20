@@ -60,4 +60,5 @@ markers = [
   "wave1: foundation tests",
   "integration: cross-module tests",
   "e2e: end-to-end tests",
+  "golden: hand-graded reasoning quality tests",
 ]

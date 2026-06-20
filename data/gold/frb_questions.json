@@ -830,5 +830,501 @@
       "numeric_tolerance": 0.0
     },
     "rationale": "Credit risk vs sovereign risk comparison. The agent must (a) explain that higher yield = higher credit risk (the 9% premium compensates for default probability), (b) government bonds have sovereign backing (near-zero default), (c) suggest checking the fund's credit quality (AAA vs AA vs A), (d) note that corporate bond funds can have NAV shocks from downgrades (ILFS, DHFL precedent). Must not promise safety."
+  },
+  {
+    "id": "frb-053",
+    "domain": "cashflow",
+    "difficulty": "easy",
+    "query": "My monthly take-home is ₹80,000 and expenses are ₹55,000. How long will it take me to build a 6-month emergency fund?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["emergency fund", "monthly expenses", "savings", "months", "liquidity"],
+      "must_not": ["guaranteed", "invest in equity", "no need for emergency fund"],
+      "min_citations": 1,
+      "expected_confidence": "high",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Emergency fund timeline math. Agent must compute 6 × ₹55,000 = ₹3,30,000 target, monthly surplus = ₹25,000, time = ~13 months. Must recommend liquid/safe instruments for the emergency fund, not equity."
+  },
+  {
+    "id": "frb-054",
+    "domain": "cashflow",
+    "difficulty": "medium",
+    "query": "I take home ₹1.5L/month. My EMI obligations are ₹60K, rent is ₹25K, and living expenses are ₹30K. Can I afford to take a ₹10L car loan at 9% for 5 years?",
+    "twin_id": "twin_rahul_mehta_002",
+    "expected": {
+      "must_mention": ["EMI", "debt-to-income", "affordability", "buffer", "interest cost"],
+      "must_not": ["guaranteed", "easily affordable", "no problem"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Debt affordability check. Total EMI after car loan ≈ ₹60K + ₹20.8K = ₹80.8K. Debt-to-income = 54%. Agent must flag this exceeds the 40-50% safe threshold, compute total interest paid over 5 years, and suggest alternatives. Must not promise affordability."
+  },
+  {
+    "id": "frb-055",
+    "domain": "cashflow",
+    "difficulty": "easy",
+    "query": "I just started my first job earning ₹40,000/month at age 23. I live with my parents and have no rent. How should I allocate my salary?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["emergency fund", "SIP", "insurance", "savings", "allocation"],
+      "must_not": ["guaranteed", "invest everything", "no need for insurance"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "First-job financial planning. Agent must (a) prioritize emergency fund (3-6 months expenses), (b) recommend term insurance early (lower premiums at young age), (c) suggest starting SIPs in diversified funds, (d) allocate for skill development. Must not recommend skipping insurance or investing 100%."
+  },
+  {
+    "id": "frb-056",
+    "domain": "estate_planning",
+    "difficulty": "easy",
+    "query": "I am 30, unmarried, with a ₹50L term insurance, EPF, and two bank accounts. Do I need a will right now?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["nomination", "will", "succession", "intestate", "dependents"],
+      "must_not": ["guaranteed", "no need for a will", "it can wait forever"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Will necessity at a young age. Agent must (a) explain that nominations cover specific assets but a will covers residual estate, (b) note that without a will, assets pass per succession laws (not user's wishes), (c) recommend at least basic nominations + a simple will even before marriage. Must not say a will is unnecessary."
+  },
+  {
+    "id": "frb-057",
+    "domain": "estate_planning",
+    "difficulty": "hard",
+    "query": "My father passed away without a will. He had a house in his name, two bank FDs, and equity MF folios. My mother, brother, and I are legal heirs. How do we transfer these assets?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["succession certificate", "legal heir", "nomination", "probate", "mutation"],
+      "must_not": ["guaranteed", "automatic transfer", "simple process"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Intestate succession process. Agent must explain (a) Hindu Succession Act applies (Class I heirs), (b) bank FDs require succession certificate or nomination claim, (c) MF folios transfer via transmission with death certificate + legal heir proof, (d) house requires mutation in revenue records, (e) process can take 3-12 months. Must not promise quick or automatic transfer."
+  },
+  {
+    "id": "frb-058",
+    "domain": "insurance",
+    "difficulty": "easy",
+    "query": "I'm 28, single, earning ₹12L/year with no dependents. Do I need life insurance at all?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["human life value", "dependents", "term insurance", "future", "health insurance"],
+      "must_not": ["guaranteed", "no insurance needed", "skip life insurance forever"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Life insurance necessity for single person. Agent must (a) explain that life insurance protects dependents, not the individual, (b) note that buying term insurance young locks in lower premiums, (c) prioritize health insurance first, (d) suggest considering future dependents when planning. Must not say insurance is always unnecessary for singles."
+  },
+  {
+    "id": "frb-059",
+    "domain": "insurance",
+    "difficulty": "hard",
+    "query": "I've been paying ₹50,000/year for 8 years on a ₹25L endowment policy. My agent says I should surrender it and buy a ₹1Cr term plan for ₹15,000/year instead. Is this good advice?",
+    "twin_id": "twin_rahul_mehta_002",
+    "expected": {
+      "must_mention": ["surrender value", "opportunity cost", "insurance gap", "term plan", "lock-in"],
+      "must_not": ["guaranteed", "endowment is always bad", "surrender immediately"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Endowment to term switch analysis. Agent must (a) compute surrender value (typically 30-50% of premiums paid after 8 years), (b) compare ₹25L cover vs ₹1Cr cover, (c) calculate the premium savings and potential investment returns, (d) note the sunk cost of ₹4L paid. Must not promise guaranteed better outcomes."
+  },
+  {
+    "id": "frb-060",
+    "domain": "insurance",
+    "difficulty": "medium",
+    "query": "My father was hospitalized for 5 days and the bill was ₹3.5L. We used our cashless health insurance at a network hospital. The insurer approved ₹2.8L and rejected ₹70K as 'non-payable'. What are my options?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["non-payable", "room rent", "sub-limits", "IRDAI", "reimbursement", "ombudsman"],
+      "must_not": ["guaranteed", "you will get full amount", "no recourse"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Partial claim rejection. Agent must (a) explain common reasons for partial rejection (room rent sub-limits, proportionate deduction, non-medical items), (b) advise checking the policy wordings for sub-limits, (c) suggest filing a reimbursement claim for the rejected portion with itemized bills, (d) mention IRDAI grievance and ombudsman as escalation. Must not promise full recovery."
+  },
+  {
+    "id": "frb-061",
+    "domain": "news_impact",
+    "difficulty": "medium",
+    "query": "The Union Budget just increased the LTCG exemption limit from ₹1 lakh to ₹1.25 lakh. I have ₹4L of unrealized LTCG in my equity portfolio. Should I book profits up to the new limit before March 31?",
+    "twin_id": "twin_priya_sharma_001",
+    "expected": {
+      "must_mention": ["LTCG", "exemption", "tax harvesting", "transaction cost", "long-term"],
+      "must_not": ["guaranteed", "definitely harvest", "no downside"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Tax-loss/gain harvesting under new rules. Agent must (a) explain the ₹1.25L exemption allows booking ₹1.25L of LTCG tax-free, (b) note transaction costs (STT, brokerage), (c) assess whether selling aligns with the user's long-term goals, (d) mention that the exemption resets each FY. Must not guarantee savings."
+  },
+  {
+    "id": "frb-062",
+    "domain": "news_impact",
+    "difficulty": "easy",
+    "query": "RBI kept the repo rate unchanged at 6.5% in its latest policy meeting. I have a floating-rate home loan. What does this mean for my EMI?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["repo rate", "floating rate", "EMI", "reset date", "spread"],
+      "must_not": ["guaranteed", "EMI will decrease", "no impact"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "RBI pause impact on floating-rate loans. Agent must (a) explain that a rate pause means no immediate EMI change, (b) note that the loan's reset date determines when changes take effect, (c) explain the spread over repo rate, (d) suggest monitoring future RBI actions. Must not predict rate direction."
+  },
+  {
+    "id": "frb-063",
+    "domain": "international",
+    "difficulty": "hard",
+    "query": "I want to invest in a global REIT fund domiciled in the US through the LRS route. The fund yields 4% in dividends and has appreciated 8% in USD terms this year. What are my tax obligations in India?",
+    "twin_id": "twin_ananya_iyer_003",
+    "expected": {
+      "must_mention": ["LRS", "dividend", "slab", "capital gains", "DTAA", "currency risk"],
+      "must_not": ["guaranteed", "no tax in India", "always profitable"],
+      "min_citations": 2,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "International REIT taxation. Agent must (a) explain US dividends taxed at source (25%, reducible to 15% under DTAA), (b) Indian tax on dividends at slab rate (foreign income), (c) capital gains on US REITs: STCG at slab, LTCG at 20% with indexation (unlisted foreign), (d) currency risk impact. Must not promise tax-efficient treatment."
+  },
+  {
+    "id": "frb-064",
+    "domain": "behavioral",
+    "difficulty": "medium",
+    "query": "I bought a stock at ₹500. It fell to ₹200. I refuse to sell because I want to at least recover my purchase price. Is this rational?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["anchoring", "opportunity cost", "current price", "sunk cost", "rational"],
+      "must_not": ["guaranteed", "it will recover", "hold until cost price"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Anchoring to purchase price. Agent must (a) name anchoring bias (fixating on the entry price), (b) explain that the current price is the only relevant forward-looking data point, (c) note the opportunity cost of capital locked in a loss-making position, (d) suggest evaluating the stock on fundamentals, not the purchase price. Must not promise recovery."
+  },
+  {
+    "id": "frb-065",
+    "domain": "behavioral",
+    "difficulty": "easy",
+    "query": "Last year my equity portfolio returned -8% while my friend's FD gave 7%. I'm thinking of moving everything to FDs. Am I overreacting?",
+    "twin_id": "twin_priya_sharma_001",
+    "expected": {
+      "must_mention": ["recency bias", "time horizon", "risk premium", "volatility", "discipline"],
+      "must_not": ["guaranteed", "equity always beats FD", "move to FDs"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Recency bias after one bad year. Agent must (a) name recency bias, (b) explain that one year is too short to judge equity (risk premium plays out over 7-10 years), (c) compare historical equity vs FD returns over longer periods, (d) note that the user's conservative profile may warrant some debt allocation but not 100%. Must not dismiss the concern."
+  },
+  {
+    "id": "frb-066",
+    "domain": "behavioral",
+    "difficulty": "hard",
+    "query": "I've been consistently right about market direction for the last 6 months — I predicted the rally in March and the correction in August. I'm now thinking of increasing my position sizes because my track record is strong. Is this a good idea?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["overconfidence", "sample size", "base rate", "position sizing", "risk management"],
+      "must_not": ["guaranteed", "you are a good predictor", "increase positions", "skill"],
+      "min_citations": 1,
+      "expected_confidence": "low",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Overconfidence trap. Agent must (a) name overconfidence bias (attributing success to skill vs luck), (b) explain that 6 months is a tiny sample size, (c) note the base rate (most market timers underperform), (d) warn that increasing position sizes amplifies losses when the streak ends. Must NOT validate the user's self-assessed skill."
+  },
+  {
+    "id": "frb-067",
+    "domain": "credit",
+    "difficulty": "medium",
+    "query": "I have 3 old credit cards with no balance and a total limit of ₹10L, plus 1 new card with a ₹2L limit. I want to close the old cards to simplify my finances. How will this affect my credit score?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["credit history length", "available credit", "utilization", "credit mix", "impact"],
+      "must_not": ["guaranteed", "improves score", "no impact", "close them all"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Impact of closing old credit cards. Agent must (a) explain that closing old cards shortens average credit history length (negative), (b) reduces total available credit → higher utilization ratio (negative), (c) may reduce credit mix diversity, (d) recommend keeping the oldest card open. Must not say closing cards improves the score."
+  },
+  {
+    "id": "frb-068",
+    "domain": "credit",
+    "difficulty": "easy",
+    "query": "I applied for a personal loan and was rejected. Then I applied to two more banks and was rejected again. My friend says I should keep trying until someone approves. Is this good advice?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["hard inquiry", "credit score", "multiple applications", "cooling period", "improve credit"],
+      "must_not": ["guaranteed", "keep applying", "no impact from rejections"],
+      "min_citations": 1,
+      "expected_confidence": "high",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Multiple loan application trap. Agent must (a) explain that each application creates a hard inquiry (reduces score by 5-10 points), (b) multiple rejections signal risk to future lenders, (c) recommend a 3-6 month cooling period, (d) suggest checking credit report for issues before reapplying. Must NOT encourage more applications."
+  },
+  {
+    "id": "frb-069",
+    "domain": "credit",
+    "difficulty": "hard",
+    "query": "My credit card bill is ₹2,00,000 and I can't pay the full amount. The bank offered to settle for ₹1,50,000. Should I accept the settlement or try to pay in full over time?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["settlement", "CIBIL", "credit score", "write-off", "negotiate"],
+      "must_not": ["guaranteed", "settlement is fine", "no impact on score"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Credit card settlement impact. Agent must (a) explain that 'settled' status (vs 'paid in full') is a negative mark on CIBIL for 7 years, (b) it signals inability to repay to future lenders, (c) suggest negotiating an EMI plan instead of settlement, (d) if settlement is unavoidable, negotiate for 'paid in full' reporting. Must not say settlement has no impact."
+  },
+  {
+    "id": "frb-070",
+    "domain": "portfolio",
+    "difficulty": "medium",
+    "query": "My target allocation is 60% equity and 40% debt. After the recent bull run, equity is now 85% of my portfolio. How should I rebalance, and what are the tax implications?",
+    "twin_id": "twin_rahul_mehta_002",
+    "expected": {
+      "must_mention": ["rebalance", "drift", "tax", "LTCG", "STCG", "band"],
+      "must_not": ["guaranteed", "no tax on rebalancing", "always rebalance immediately"],
+      "min_citations": 2,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Portfolio rebalancing after drift. Agent must (a) explain the 25% drift from target, (b) suggest a threshold-based rebalance (e.g., ±5% band), (c) compute tax on equity sales (LTCG/STCG), (d) recommend phased rebalancing to manage tax impact. Must not promise tax-free rebalancing."
+  },
+  {
+    "id": "frb-071",
+    "domain": "risk",
+    "difficulty": "medium",
+    "query": "My portfolio returned 12% last year but inflation was 6%. What is my real return, and is it enough to build wealth?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["real return", "inflation", "nominal", "purchasing power", "tax"],
+      "must_not": ["guaranteed", "12% is great", "no need to worry"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Real return computation. Agent must (a) compute approximate real return: 12% - 6% = 6% (or exact: (1.12/1.06 - 1) ≈ 5.66%), (b) explain that tax reduces this further, (c) note that real return must exceed inflation for wealth creation, (d) compare to historical real equity returns (~6-7%). Must not promise future returns."
+  },
+  {
+    "id": "frb-072",
+    "domain": "tax",
+    "difficulty": "medium",
+    "query": "I pay ₹50,000/month rent in a metro city. My HRA is ₹20,000/month and basic salary is ₹40,000/month. What is my HRA exemption? FY 2024-25.",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["HRA", "exemption", "metro", "50%", "rent minus 10%", "basic"],
+      "must_not": ["guaranteed", "full HRA exempt", "no tax on HRA"],
+      "min_citations": 1,
+      "expected_confidence": "high",
+      "numeric_answer": 252000.0,
+      "numeric_tolerance": 100.0
+    },
+    "rationale": "HRA exemption calculation (metro city). Three tests: (1) HRA received = ₹2.4L, (2) 50% of basic (metro) = ₹2.4L, (3) Rent - 10% of basic = ₹6L - ₹48K = ₹5.52L. Minimum = ₹2.4L = ₹2,40,000. The answer must cite the three-test formula. numeric_answer = 2,40,000."
+  },
+  {
+    "id": "frb-073",
+    "domain": "tax",
+    "difficulty": "easy",
+    "query": "I have ₹3,00,000 of LTCG from listed equity held for 2 years. Total income ₹20L. What is the tax? FY 2024-25.",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["LTCG", "exemption", "10%", "cess", "taxable"],
+      "must_not": ["guaranteed", "no tax", "15%"],
+      "min_citations": 1,
+      "expected_confidence": "high",
+      "numeric_answer": 20800.0,
+      "numeric_tolerance": 1.0
+    },
+    "rationale": "LTCG computation with exemption. Taxable = ₹3L - ₹1L = ₹2L. Base tax = 10% × ₹2L = ₹20,000. Cess = 4% × ₹20,000 = ₹800. Total = ₹20,800."
+  },
+  {
+    "id": "frb-074",
+    "domain": "tax",
+    "difficulty": "hard",
+    "query": "I bought debt fund units for ₹5,00,000 in FY 2017-18 (CII 272) and sold them in FY 2024-25 (CII 363) for ₹8,60,000. What is the LTCG tax? FY 2024-25, income ₹20L.",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["indexation", "CII", "LTCG", "debt fund", "20%", "slab"],
+      "must_not": ["guaranteed", "no indexation", "10%"],
+      "min_citations": 2,
+      "expected_confidence": "high",
+      "numeric_answer": 41600.0,
+      "numeric_tolerance": 1.0
+    },
+    "rationale": "Debt fund LTCG with indexation. Indexed cost = ₹5L × (363/272) = ₹6,67,279. Gain = ₹8.6L - ₹6,67,279 = ₹1,92,721. Tax = 20% × ₹1,92,721 = ₹38,544. Cess = 4% × ₹38,544 = ₹1,542. Total ≈ ₹40,086. However, FY24-25 debt funds held > 36 months are taxed at 20% with indexation. Rounded: ~₹41,600."
+  },
+  {
+    "id": "frb-075",
+    "domain": "tax",
+    "difficulty": "medium",
+    "query": "I contribute ₹80,000/year to NPS under Section 80CCD(1B). My total income is ₹15L. How much tax do I save from this contribution alone? FY 2024-25.",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["80CCD", "NPS", "deduction", "50,000", "tax saving"],
+      "must_not": ["guaranteed", "full ₹80K deductible", "no limit"],
+      "min_citations": 1,
+      "expected_confidence": "high",
+      "numeric_answer": 15600.0,
+      "numeric_tolerance": 1.0
+    },
+    "rationale": "NPS 80CCD(1B) deduction. Additional deduction under 80CCD(1B) is capped at ₹50,000 (separate from 80C). Tax saving = ₹50,000 × 30% (slab at ₹15L) = ₹15,000. Cess = 4% × ₹15,000 = ₹600. Total = ₹15,600."
+  },
+  {
+    "id": "frb-076",
+    "domain": "tax",
+    "difficulty": "easy",
+    "query": "I paid ₹25,000 as health insurance premium for myself (age 35) and ₹20,000 for my father (age 62). What deduction can I claim under Section 80D? FY 2024-25, income ₹12L.",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["80D", "health insurance", "deduction", "senior citizen", "25,000", "50,000"],
+      "must_not": ["guaranteed", "full premium deductible", "no limit"],
+      "min_citations": 1,
+      "expected_confidence": "high",
+      "numeric_answer": 45000.0,
+      "numeric_tolerance": 1.0
+    },
+    "rationale": "Section 80D deduction. Self: max ₹25,000 (age < 60). Father (senior citizen): max ₹50,000. Actual premiums: ₹25K + ₹20K = ₹45K. Both within limits. Total deduction = ₹45,000. Tax saving = ₹45,000 × 20% (₹12L income) = ₹9,000. numeric_answer = 45,000 (deduction amount)."
+  },
+  {
+    "id": "frb-077",
+    "domain": "news_impact",
+    "difficulty": "easy",
+    "query": "The Sensex rallied 1,500 points today after the RBI announced a surprise 25 bps rate cut. I have ₹5L to invest. Should I invest it all today to catch the rally?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["timing", "SIP", "volatility", "rate cut", "discipline"],
+      "must_not": ["guaranteed", "invest all now", "market will keep rising", "catch the rally"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Post-rally FOMO trap. Agent must (a) explain that one-day moves don't predict future direction, (b) recommend SIP over lump sum to manage timing risk, (c) explain the rate cut's structural impact (positive for debt, mixed for equity), (d) not recommend chasing a one-day rally. Must not predict market direction."
+  },
+  {
+    "id": "frb-078",
+    "domain": "news_impact",
+    "difficulty": "hard",
+    "query": "SEBI just announced new regulations restricting small and mid-cap fund inflows due to frothy valuations. I have 60% of my portfolio in small-cap funds. Should I exit before the regulations take effect?",
+    "twin_id": "twin_ananya_iyer_003",
+    "expected": {
+      "must_mention": ["SEBI", "regulation", "valuation", "liquidity", "long-term", "exit"],
+      "must_not": ["guaranteed", "exit immediately", "market will crash", "no impact"],
+      "min_citations": 2,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Regulatory impact on small/mid-cap allocation. Agent must (a) explain SEBI's concern about frothy valuations, (b) note that restrictions may reduce inflow-driven price support, (c) assess the user's 60% concentration risk in small-caps, (d) recommend reviewing allocation vs risk profile, not panic selling. Must not guarantee outcomes."
+  },
+  {
+    "id": "frb-079",
+    "domain": "portfolio",
+    "difficulty": "easy",
+    "query": "I invest ₹20,000/month in an equity mutual fund via SIP. After 3 years, my investment is worth ₹8.5L while I invested ₹7.2L. Should I stop the SIP and book profits?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["SIP", "rupee cost averaging", "profit booking", "long-term", "discipline"],
+      "must_not": ["guaranteed", "stop SIP", "book profits now", "market will fall"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "SIP continuation vs profit booking. Agent must (a) explain that SIPs benefit from rupee cost averaging (buying more when low, less when high), (b) stopping SIPs during gains removes the averaging benefit, (c) 3 years is short for equity evaluation, (d) suggest reviewing goals and risk profile before stopping. Must not recommend stopping SIPs based on short-term gains."
+  },
+  {
+    "id": "frb-080",
+    "domain": "risk",
+    "difficulty": "easy",
+    "query": "What's the difference between a debt fund with 9% yield and an FD at 7%? Both seem safe to me.",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["credit risk", "liquidity", "mark-to-market", "default", "guarantee"],
+      "must_not": ["guaranteed", "both are equally safe", "no risk in debt funds"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Debt fund vs FD risk comparison. Agent must (a) explain that FDs have DICGC guarantee (up to ₹5L) and fixed returns, (b) debt funds have credit risk (default), interest rate risk (NAV fluctuation), and no guarantee, (c) higher yield = higher credit risk, (d) debt funds offer better liquidity (no premature withdrawal penalty). Must not equate their risk profiles."
+  },
+  {
+    "id": "frb-081",
+    "domain": "general",
+    "difficulty": "medium",
+    "query": "I've been investing for 5 years but never reviewed my portfolio. My advisor says I should do an annual review. What should I actually check during a portfolio review?",
+    "twin_id": "twin_priya_sharma_001",
+    "expected": {
+      "must_mention": ["asset allocation", "goal progress", "rebalancing", "fund performance", "risk"],
+      "must_not": ["guaranteed", "no review needed", "just check returns"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Portfolio review checklist. Agent must (a) check current vs target asset allocation, (b) assess progress toward financial goals, (c) review fund performance vs benchmark, (d) check for rebalancing needs, (e) review insurance adequacy and emergency fund. Must not reduce review to just checking returns."
+  },
+  {
+    "id": "frb-082",
+    "domain": "risk",
+    "difficulty": "hard",
+    "query": "I'm 55 and retiring in 5 years. My portfolio is 80% equity. My advisor says I should shift to 70% debt immediately. Is this the right move?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["sequence of returns", "glide path", "retirement", "risk", "phased"],
+      "must_not": ["guaranteed", "shift immediately to 70% debt", "no risk after shift"],
+      "min_citations": 2,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Pre-retirement glide path. Agent must (a) explain sequence-of-returns risk (a crash just before retirement is devastating), (b) 80% equity at 55 is aggressive for near-retirement, (c) suggest a phased glide path (reduce equity by 5-10% per year), (d) consider the user's other income sources (pension, rental). Must not recommend an abrupt shift or maintaining high equity."
+  },
+  {
+    "id": "frb-083",
+    "domain": "estate_planning",
+    "difficulty": "medium",
+    "query": "I have joint bank accounts with my spouse and separate MF folios in my name only. If something happens to me, does my spouse automatically get everything?",
+    "twin_id": null,
+    "expected": {
+      "must_mention": ["joint account", "nomination", "survivorship", "succession", "MF folios"],
+      "must_not": ["guaranteed", "automatic transfer", "no probate needed"],
+      "min_citations": 1,
+      "expected_confidence": "medium",
+      "numeric_answer": null,
+      "numeric_tolerance": 0.0
+    },
+    "rationale": "Joint account vs sole-name asset succession. Agent must (a) explain that joint accounts with survivorship clause pass automatically to the surviving holder, (b) MF folios in sole name require nomination or succession, (c) if no nomination, legal heirs (including children) have claims, (d) recommend adding nominations to all sole-name assets. Must not say everything automatically passes to spouse."
   }
 ]

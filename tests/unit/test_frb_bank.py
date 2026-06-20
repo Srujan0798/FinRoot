@@ -76,9 +76,9 @@ class TestBankIntegrity:
         for i, item in enumerate(bank):
             assert isinstance(item, dict), f"item {i} is not a dict"
 
-    def test_at_least_50_questions(self, bank):
-        """Wave-6 expansion requires >= 50 questions."""
-        assert len(bank) >= 50, f"got {len(bank)} questions; need >= 50"
+    def test_at_least_80_questions(self, bank):
+        """Wave-10 expansion requires >= 80 questions."""
+        assert len(bank) >= 80, f"got {len(bank)} questions; need >= 80"
 
     def test_unique_ids(self, bank):
         """All question IDs are unique."""
