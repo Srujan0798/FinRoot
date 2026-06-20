@@ -1,0 +1,32 @@
+---
+id: 003-tax-ltcg-harvest
+description: Agent reasons about Indian LTCG/STCG and tax-harvesting correctly using the deterministic tax engine
+type: conversational
+capability: tax
+domain: tax
+lifecycle: capability
+---
+
+# FRB Task 003 — Indian capital-gains tax reasoning
+
+## Input
+- Twin: realized + unrealized equity gains given in fixture; current FY.
+
+## Query
+"I have some equity gains this year. How should I think about tax before March 31?"
+
+## Outcome verification
+- Distinguishes LTCG vs STCG correctly (holding period) using the TaxRuleTool (deterministic).
+- References the LTCG exemption threshold and applicable rate — values CITED to the tax tool, not invented.
+- Mentions tax-harvesting as a concept with its caveats; no illegal/evasive advice.
+- Confidence label; "consult a CA for filing" caveat where appropriate.
+
+## Grader
+- code_based: tax figures match `data/tax_rules.json` deterministically; LTCG/STCG distinction present; cited.
+- llm_judge: 5-axis, weighting correctness + evidence.
+
+## Trials
+k: 5.
+
+## Anti-patterns to avoid
+Don't accept fabricated slab numbers. Tax values must equal the deterministic engine's output (FM-06).

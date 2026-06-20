@@ -1,0 +1,4070 @@
+=== dispatch opencode opencode/north-mini-code-free -> work/wave-8/01-docker.md @ Sat Jun 20 10:06:09 IST 2026 ===
+[0m
+> build · north-mini-code-free
+[0m
+[0m→ [0mRead work/WORKER_PROMPT.md
+[0m→ [0mRead work/wave-8/01-docker.md
+[0m✱ [0mGlob ".specify/specs/wave-8/contracts/*.md"[90m 0 matches[0m
+[0m✱ [0mGlob ".specify/specs/wave-8/contracts/*.md"[90m 0 matches[0m
+[0m✱ [0mGlob ".specify/specs/wave-8/contracts/*.md"[90m 0 matches[0m
+[0m
+[0m$ [0mfind /Users/srujansai/Desktop/FinRoot -name "*.md" -path "*/wave-8/contracts/*" 2>/dev/null
+/Users/srujansai/Desktop/FinRoot/.specify/specs/wave-8/contracts/submission.contract.md
+[0m
+[0m→ [0mRead .specify/specs/wave-8/contracts/submission.contract.md
+[0m→ [0mRead pyproject.toml
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/ | grep -E "(Dockerfile|docker-compose|.dockerignore)"
+-rw-r--r--@  1 srujansai  staff     333 Jun 19 09:16 .dockerignore
+-rw-r--r--@  1 srujansai  staff     901 Jun 19 09:17 Dockerfile
+-rw-r--r--@  1 srujansai  staff     514 Jun 19 09:17 docker-compose.dev.yml
+-rw-r--r--@  1 srujansai  staff     822 Jun 19 09:17 docker-compose.yml
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/src/interface/ui/ 2>/dev/null | head -20
+total 24
+drwxr-xr-x@ 8 srujansai  staff   256 Jun 20 09:57 .
+drwxr-xr-x@ 7 srujansai  staff   224 Jun 20 09:55 ..
+-rw-r--r--@ 1 srujansai  staff     0 Jun 19 09:22 .gitkeep
+-rw-r--r--@ 1 srujansai  staff   171 Jun 20 09:57 __init__.py
+drwxr-xr-x@ 5 srujansai  staff   160 Jun 20 09:57 __pycache__
+-rw-r--r--@ 1 srujansai  staff  3169 Jun 20 09:57 app.py
+drwxr-xr-x@ 4 srujansai  staff   128 Jun 20 09:54 components
+-rw-r--r--@ 1 srujansai  staff  2698 Jun 20 09:57 theme.py
+[0m
+[0m→ [0mRead docker-compose.yml
+[0m→ [0mRead Dockerfile
+[0m→ [0mRead .dockerignore
+[0m
+[0m← [0mWrite Dockerfile
+Wrote file successfully.
+[0m
+[0m← [0mWrite .dockerignore
+Wrote file successfully.
+[0m
+[0m← [0mWrite docker-compose.yml
+Wrote file successfully.
+[0m
+[0m$ [0mfind /Users/srujansai/Desktop/FinRoot/tests -name "*.py" -type f | head -20
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_market.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_consistency.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_llm_provider.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_tax.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_frb_bank.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_critic.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_synthesize.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_principles.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_agents_market_news.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_base_interfaces.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_intent.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_profile.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_agent_tax.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_risk.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_baselines.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_config.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_agents_risk_portfolio.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_schemas.py
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_explain.py
+[0m
+[0m$ [0mruff check Dockerfile docker-compose.yml .dockerignore 2>&1 || true
+invalid-syntax: Expected a statement
+ --> .dockerignore:1:1
+  |
+1 | .git
+  | ^
+2 | __pycache__
+3 | *.pyc
+  |
+
+invalid-syntax: Expected an expression
+ --> .dockerignore:3:2
+  |
+1 | .git
+2 | __pycache__
+3 | *.pyc
+  |  ^
+4 | .venv
+5 | venv
+  |
+
+invalid-syntax: Expected a statement
+ --> .dockerignore:4:1
+  |
+2 | __pycache__
+3 | *.pyc
+4 | .venv
+  | ^
+5 | venv
+6 | *.db
+  |
+
+invalid-syntax: Expected an expression
+ --> .dockerignore:6:2
+  |
+4 | .venv
+5 | venv
+6 | *.db
+  |  ^
+7 | data/chroma
+8 | logs
+  |
+
+invalid-syntax: Expected a statement
+  --> .dockerignore:9:1
+   |
+ 7 | data/chroma
+ 8 | logs
+ 9 | .env
+   | ^
+10 | *.key
+11 | .pytest_cache
+   |
+
+invalid-syntax: Expected an expression
+  --> .dockerignore:10:2
+   |
+ 8 | logs
+ 9 | .env
+10 | *.key
+   |  ^
+11 | .pytest_cache
+12 | .ruff_cache
+   |
+
+invalid-syntax: Expected a statement
+  --> .dockerignore:11:1
+   |
+ 9 | .env
+10 | *.key
+11 | .pytest_cache
+   | ^
+12 | .ruff_cache
+13 | work/
+   |
+
+invalid-syntax: Expected a statement
+  --> .dockerignore:12:1
+   |
+10 | *.key
+11 | .pytest_cache
+12 | .ruff_cache
+   | ^
+13 | work/
+14 | attic/
+   |
+
+invalid-syntax: Expected an expression
+  --> .dockerignore:13:6
+   |
+11 | .pytest_cache
+12 | .ruff_cache
+13 | work/
+   |      ^
+14 | attic/
+   |
+
+invalid-syntax: Expected an expression
+  --> .dockerignore:14:7
+   |
+12 | .ruff_cache
+13 | work/
+14 | attic/
+   |       ^
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+ --> Dockerfile:2:6
+  |
+1 | # FinRoot — single-image build (Streamlit UI + core). Runs in Mock mode with zero keys.
+2 | FROM python:3.11-slim AS base
+  |      ^^^^^^
+3 |
+4 | ENV PYTHONUNBUFFERED=1 \
+  |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+ --> Dockerfile:2:23
+  |
+1 | # FinRoot — single-image build (Streamlit UI + core). Runs in Mock mode with zero keys.
+2 | FROM python:3.11-slim AS base
+  |                       ^^
+3 |
+4 | ENV PYTHONUNBUFFERED=1 \
+  |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+ --> Dockerfile:2:26
+  |
+1 | # FinRoot — single-image build (Streamlit UI + core). Runs in Mock mode with zero keys.
+2 | FROM python:3.11-slim AS base
+  |                          ^^^^
+3 |
+4 | ENV PYTHONUNBUFFERED=1 \
+  |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+ --> Dockerfile:4:5
+  |
+2 | FROM python:3.11-slim AS base
+3 |
+4 | ENV PYTHONUNBUFFERED=1 \
+  |     ^^^^^^^^^^^^^^^^
+5 |     PYTHONDONTWRITEBYTECODE=1 \
+6 |     PIP_NO_CACHE_DIR=1 \
+  |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+ --> Dockerfile:5:5
+  |
+4 | ENV PYTHONUNBUFFERED=1 \
+5 |     PYTHONDONTWRITEBYTECODE=1 \
+  |     ^^^^^^^^^^^^^^^^^^^^^^^
+6 |     PIP_NO_CACHE_DIR=1 \
+7 |     FINROOT_LLM_PROVIDER=mock
+  |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+ --> Dockerfile:6:5
+  |
+4 | ENV PYTHONUNBUFFERED=1 \
+5 |     PYTHONDONTWRITEBYTECODE=1 \
+6 |     PIP_NO_CACHE_DIR=1 \
+  |     ^^^^^^^^^^^^^^^^
+7 |     FINROOT_LLM_PROVIDER=mock
+  |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+ --> Dockerfile:7:5
+  |
+5 |     PYTHONDONTWRITEBYTECODE=1 \
+6 |     PIP_NO_CACHE_DIR=1 \
+7 |     FINROOT_LLM_PROVIDER=mock
+  |     ^^^^^^^^^^^^^^^^^^^^
+8 |
+9 | WORKDIR /app
+  |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:12:6
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+   |      ^^^^^^^^^
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |
+
+invalid-syntax: Expected an identifier
+  --> Dockerfile:12:22
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+   |                      ^
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |
+
+invalid-syntax: Expected an expression
+  --> Dockerfile:12:23
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+   |                       ^
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:13:5
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |     ^^^
+14 |
+15 | # source
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:13:9
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |         ^^^^^^^
+14 |
+15 | # source
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:13:27
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |                           ^^^
+14 |
+15 | # source
+   |
+
+invalid-syntax: Expected an expression
+  --> Dockerfile:13:32
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |                                ^
+14 |
+15 | # source
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:13:38
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |                                      ^^^^^^^
+14 |
+15 | # source
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:13:46
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |                                              ^^^^^^^^^
+14 |
+15 | # source
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:13:56
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |                                                        ^^^^^
+14 |
+15 | # source
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:13:62
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |                                                              ^^^^
+14 |
+15 | # source
+   |
+
+invalid-syntax: Expected an expression
+  --> Dockerfile:13:68
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |                                                                    ^
+14 |
+15 | # source
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:13:74
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |                                                                          ^^^^^^^
+14 |
+15 | # source
+   |
+
+invalid-syntax: Expected an identifier
+  --> Dockerfile:13:86
+   |
+11 | # deps first (layer cache)
+12 | COPY pyproject.toml ./
+13 | RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+   |                                                                                      ^
+14 |
+15 | # source
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:16:6
+   |
+15 | # source
+16 | COPY src/ ./src/
+   |      ^^^
+17 |
+18 | # non-root user
+   |
+
+invalid-syntax: Expected an expression
+  --> Dockerfile:16:11
+   |
+15 | # source
+16 | COPY src/ ./src/
+   |           ^
+17 |
+18 | # non-root user
+   |
+
+invalid-syntax: Expected an identifier
+  --> Dockerfile:16:12
+   |
+15 | # source
+16 | COPY src/ ./src/
+   |            ^
+17 |
+18 | # non-root user
+   |
+
+invalid-syntax: Expected an expression
+  --> Dockerfile:16:17
+   |
+15 | # source
+16 | COPY src/ ./src/
+   |                 ^
+17 |
+18 | # non-root user
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:19:5
+   |
+18 | # non-root user
+19 | RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+   |     ^^^^^^^
+20 | USER appuser
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:19:19
+   |
+18 | # non-root user
+19 | RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+   |                   ^^^^
+20 | USER appuser
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:19:24
+   |
+18 | # non-root user
+19 | RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+   |                        ^^^^^^^
+20 | USER appuser
+   |
+
+invalid-syntax: Expected an expression
+  --> Dockerfile:19:33
+   |
+18 | # non-root user
+19 | RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+   |                                 ^
+20 | USER appuser
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:19:44
+   |
+18 | # non-root user
+19 | RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+   |                                            ^^^^^^^
+20 | USER appuser
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:20:6
+   |
+18 | # non-root user
+19 | RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+20 | USER appuser
+   |      ^^^^^^^
+21 |
+22 | EXPOSE 8501
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:22:8
+   |
+20 | USER appuser
+21 |
+22 | EXPOSE 8501
+   |        ^^^^
+23 |
+24 | # healthcheck hits the Streamlit endpoint
+   |
+
+invalid-syntax: Invalid assignment target
+  --> Dockerfile:25:1
+   |
+24 | # healthcheck hits the Streamlit endpoint
+25 | HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+   | ^^^^^^^^^^^^^^^^^^^^^^
+26 |   CMD python -c "import urllib.request,sys; urllib.request.urlopen('http://localhost:8501/_stcore/health'); " || exit 1
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:25:26
+   |
+24 | # healthcheck hits the Streamlit endpoint
+25 | HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+   |                          ^
+26 |   CMD python -c "import urllib.request,sys; urllib.request.urlopen('http://localhost:8501/_stcore/health'); " || exit 1
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:25:39
+   |
+24 | # healthcheck hits the Streamlit endpoint
+25 | HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+   |                                       ^
+26 |   CMD python -c "import urllib.request,sys; urllib.request.urlopen('http://localhost:8501/_stcore/health'); " || exit 1
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:25:58
+   |
+24 | # healthcheck hits the Streamlit endpoint
+25 | HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+   |                                                          ^
+26 |   CMD python -c "import urllib.request,sys; urllib.request.urlopen('http://localhost:8501/_stcore/health'); " || exit 1
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:26:3
+   |
+24 | # healthcheck hits the Streamlit endpoint
+25 | HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+26 |   CMD python -c "import urllib.request,sys; urllib.request.urlopen('http://localhost:8501/_stcore/health'); " || exit 1
+   |   ^^^
+27 |
+28 | CMD ["streamlit", "run", "src/interface/ui/app.py", "--server.address=0.0.0.0", "--server.port=8501"]
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:26:7
+   |
+24 | # healthcheck hits the Streamlit endpoint
+25 | HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+26 |   CMD python -c "import urllib.request,sys; urllib.request.urlopen('http://localhost:8501/_stcore/health'); " || exit 1
+   |       ^^^^^^
+27 |
+28 | CMD ["streamlit", "run", "src/interface/ui/app.py", "--server.address=0.0.0.0", "--server.port=8501"]
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:26:17
+   |
+24 | # healthcheck hits the Streamlit endpoint
+25 | HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+26 |   CMD python -c "import urllib.request,sys; urllib.request.urlopen('http://localhost:8501/_stcore/health'); " || exit 1
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+27 |
+28 | CMD ["streamlit", "run", "src/interface/ui/app.py", "--server.address=0.0.0.0", "--server.port=8501"]
+   |
+
+invalid-syntax: Expected an expression
+  --> Dockerfile:26:112
+   |
+24 | # healthcheck hits the Streamlit endpoint
+25 | HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+26 |   CMD python -c "import urllib.request,sys; urllib.request.urlopen('http://localhost:8501/_stcore/health'); " || exit 1
+   |                                                                                                                ^
+27 |
+28 | CMD ["streamlit", "run", "src/interface/ui/app.py", "--server.address=0.0.0.0", "--server.port=8501"]
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> Dockerfile:26:119
+   |
+24 | # healthcheck hits the Streamlit endpoint
+25 | HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+26 |   CMD python -c "import urllib.request,sys; urllib.request.urlopen('http://localhost:8501/_stcore/health'); " || exit 1
+   |                                                                                                                       ^
+27 |
+28 | CMD ["streamlit", "run", "src/interface/ui/app.py", "--server.address=0.0.0.0", "--server.port=8501"]
+   |
+
+invalid-syntax: Expected an expression
+ --> docker-compose.yml:2:10
+  |
+1 | # FinRoot default stack. `docker compose up` → UI on :8501, Mock mode, no keys needed.
+2 | services:
+  |          ^
+3 |   finroot:
+4 |     build: { context: ., dockerfile: Dockerfile }
+  |
+
+invalid-syntax: Unexpected indentation
+ --> docker-compose.yml:3:1
+  |
+1 | # FinRoot default stack. `docker compose up` → UI on :8501, Mock mode, no keys needed.
+2 | services:
+3 |   finroot:
+  | ^^
+4 |     build: { context: ., dockerfile: Dockerfile }
+5 |     image: finroot:demo
+  |
+
+invalid-syntax: Expected an expression
+ --> docker-compose.yml:3:11
+  |
+1 | # FinRoot default stack. `docker compose up` → UI on :8501, Mock mode, no keys needed.
+2 | services:
+3 |   finroot:
+  |           ^
+4 |     build: { context: ., dockerfile: Dockerfile }
+5 |     image: finroot:demo
+  |
+
+invalid-syntax: Unexpected indentation
+ --> docker-compose.yml:4:1
+  |
+2 | services:
+3 |   finroot:
+4 |     build: { context: ., dockerfile: Dockerfile }
+  | ^^^^
+5 |     image: finroot:demo
+6 |     ports:
+  |
+
+invalid-syntax: Expected an expression
+ --> docker-compose.yml:4:23
+  |
+2 | services:
+3 |   finroot:
+4 |     build: { context: ., dockerfile: Dockerfile }
+  |                       ^
+5 |     image: finroot:demo
+6 |     ports:
+  |
+
+invalid-syntax: Expected an identifier
+ --> docker-compose.yml:4:24
+  |
+2 | services:
+3 |   finroot:
+4 |     build: { context: ., dockerfile: Dockerfile }
+  |                        ^
+5 |     image: finroot:demo
+6 |     ports:
+  |
+
+invalid-syntax: Expected a statement
+ --> docker-compose.yml:5:19
+  |
+3 |   finroot:
+4 |     build: { context: ., dockerfile: Dockerfile }
+5 |     image: finroot:demo
+  |                   ^
+6 |     ports:
+7 |       - "8501:8501"
+  |
+
+invalid-syntax: Expected an expression
+ --> docker-compose.yml:6:11
+  |
+4 |     build: { context: ., dockerfile: Dockerfile }
+5 |     image: finroot:demo
+6 |     ports:
+  |           ^
+7 |       - "8501:8501"
+8 |     environment:
+  |
+
+invalid-syntax: Unexpected indentation
+ --> docker-compose.yml:7:1
+  |
+5 |     image: finroot:demo
+6 |     ports:
+7 |       - "8501:8501"
+  | ^^^^^^
+8 |     environment:
+9 |       FINROOT_LLM_PROVIDER: mock
+  |
+
+invalid-syntax: Expected a statement
+  --> docker-compose.yml:8:5
+   |
+ 6 |     ports:
+ 7 |       - "8501:8501"
+ 8 |     environment:
+   |     ^
+ 9 |       FINROOT_LLM_PROVIDER: mock
+10 |     # optional .env mount (commented)
+   |
+
+invalid-syntax: Expected an expression
+  --> docker-compose.yml:8:17
+   |
+ 6 |     ports:
+ 7 |       - "8501:8501"
+ 8 |     environment:
+   |                 ^
+ 9 |       FINROOT_LLM_PROVIDER: mock
+10 |     # optional .env mount (commented)
+   |
+
+invalid-syntax: Unexpected indentation
+  --> docker-compose.yml:9:1
+   |
+ 7 |       - "8501:8501"
+ 8 |     environment:
+ 9 |       FINROOT_LLM_PROVIDER: mock
+   | ^^^^^^
+10 |     # optional .env mount (commented)
+11 |     # volumes:
+   |
+
+invalid-syntax: Expected a statement
+  --> docker-compose.yml:13:5
+   |
+11 |     # volumes:
+12 |     #   - ./.env:/app/.env:ro
+13 |     restart: unless-stopped
+   |     ^
+14 |     healthcheck:
+15 |       test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+   |
+
+invalid-syntax: Expected an expression
+  --> docker-compose.yml:14:17
+   |
+12 |     #   - ./.env:/app/.env:ro
+13 |     restart: unless-stopped
+14 |     healthcheck:
+   |                 ^
+15 |       test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+16 |       interval: 30s
+   |
+
+invalid-syntax: Unexpected indentation
+  --> docker-compose.yml:15:1
+   |
+13 |     restart: unless-stopped
+14 |     healthcheck:
+15 |       test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+   | ^^^^^^
+16 |       interval: 30s
+17 |       timeout: 10s
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> docker-compose.yml:16:19
+   |
+14 |     healthcheck:
+15 |       test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+16 |       interval: 30s
+   |                   ^
+17 |       timeout: 10s
+18 |       retries: 3
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> docker-compose.yml:17:18
+   |
+15 |       test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+16 |       interval: 30s
+17 |       timeout: 10s
+   |                  ^
+18 |       retries: 3
+19 |       start_period: 30s
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> docker-compose.yml:19:23
+   |
+17 |       timeout: 10s
+18 |       retries: 3
+19 |       start_period: 30s
+   |                       ^
+   |
+
+invalid-syntax: Expected a statement
+  --> docker-compose.yml:19:24
+   |
+17 |       timeout: 10s
+18 |       retries: 3
+19 |       start_period: 30s
+   |                        ^
+   |
+
+Found 70 errors.
+[0m
+[0m$ [0mruff check src/ tests/ 2>&1 | head -50
+I001 [*] Import block is un-sorted or un-formatted
+  --> tests/unit/test_agents_market_news.py:12:1
+   |
+10 |   """
+11 |
+12 | / from __future__ import annotations
+13 | |
+14 | | from pathlib import Path
+15 | | from tempfile import mkdtemp
+16 | |
+17 | | import pytest
+18 | |
+19 | | from finroot.agents.market_agent import MarketAnalystAgent
+20 | | from finroot.agents.news_agent import NewsInterpreterAgent
+21 | | from finroot.audit.trail import AuditTrail
+22 | | from finroot.llm.mock import MockProvider
+23 | | from finroot.schemas.enums import Intent
+24 | | from finroot.schemas.state import AgentState
+25 | | from finroot.tools.base import BaseTool
+26 | | from finroot.tools.fundamentals import FundamentalAnalysisTool, FundamentalInput, FundamentalOutput
+27 | | from finroot.tools.market import MarketDataInput, MarketDataOutput, MarketDataTool
+28 | | from finroot.tools.news import NewsInput, NewsOutput, NewsSearchTool
+29 | | from finroot.tools.sentiment import SentimentAnalysisTool, SentimentInput, SentimentOutput
+   | |__________________________________________________________________________________________^
+   |
+help: Organize imports
+
+F401 [*] `pytest` imported but unused
+  --> tests/unit/test_agents_market_news.py:17:8
+   |
+15 | from tempfile import mkdtemp
+16 |
+17 | import pytest
+   |        ^^^^^^
+18 |
+19 | from finroot.agents.market_agent import MarketAnalystAgent
+   |
+help: Remove unused import: `pytest`
+
+F401 [*] `finroot.tools.fundamentals.FundamentalInput` imported but unused
+  --> tests/unit/test_agents_market_news.py:26:65
+   |
+24 | from finroot.schemas.state import AgentState
+25 | from finroot.tools.base import BaseTool
+26 | from finroot.tools.fundamentals import FundamentalAnalysisTool, FundamentalInput, FundamentalOutput
+   |                                                                 ^^^^^^^^^^^^^^^^
+27 | from finroot.tools.market import MarketDataInput, MarketDataOutput, MarketDataTool
+28 | from finroot.tools.news import NewsInput, NewsOutput, NewsSearchTool
+   |
+help: Remove unused import
+[0m
+[0m$ [0mtest -f Dockerfile && test -f .dockerignore && echo "files present"
+files present
+[0m
+[0m$ [0mpython3 -c "import yaml; yaml.safe_load(open('docker-compose.yml')); print('compose YAML valid')"
+compose YAML valid
+[0m
+[0m$ [0mdocker build -t finroot:demo . 2>&1 | tail -5
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m← [0mWrite work/reports/wave-8/01-docker.report.md
+Wrote file successfully.
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/docs/waves/ 2>/dev/null || echo "No waves directory"
+total 88
+drwxr-xr-x@ 13 srujansai  staff   416 Jun 19 21:32 .
+drwxr-xr-x@ 18 srujansai  staff   576 Jun 19 09:12 ..
+-rw-r--r--@  1 srujansai  staff  1565 Jun 19 09:01 wave-1-brief.md
+-rw-r--r--@  1 srujansai  staff  2780 Jun 19 18:56 wave-1-gotchas.md
+-rw-r--r--@  1 srujansai  staff  1587 Jun 19 09:01 wave-2-brief.md
+-rw-r--r--@  1 srujansai  staff  1932 Jun 19 09:02 wave-3-brief.md
+-rw-r--r--@  1 srujansai  staff  1144 Jun 19 19:12 wave-3-gotchas.md
+-rw-r--r--@  1 srujansai  staff  1790 Jun 19 09:02 wave-4-brief.md
+-rw-r--r--@  1 srujansai  staff  2084 Jun 19 21:39 wave-4-gotchas.md
+-rw-r--r--@  1 srujansai  staff  1948 Jun 19 09:02 wave-5-brief.md
+-rw-r--r--@  1 srujansai  staff  1794 Jun 19 09:02 wave-6-brief.md
+-rw-r--r--@  1 srujansai  staff  1640 Jun 19 09:03 wave-7-brief.md
+-rw-r--r--@  1 srujansai  staff  1885 Jun 19 09:03 wave-8-brief.md
+[0m
+[0m→ [0mRead work/reports/wave-8/01-docker.report.md
+[0m
+[0m$ [0mcat /Users/srujansai/Desktop/FinRoot/docker-compose.yml
+# FinRoot default stack. `docker compose up` → UI on :8501, Mock mode, no keys needed.
+services:
+  finroot:
+    build: { context: ., dockerfile: Dockerfile }
+    image: finroot:demo
+    ports:
+      - "8501:8501"
+    environment:
+      FINROOT_LLM_PROVIDER: mock
+    # optional .env mount (commented)
+    # volumes:
+    #   - ./.env:/app/.env:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+[0m
+[0m$ [0mcat /Users/srujansai/Desktop/FinRoot/.dockerignore
+.git
+__pycache__
+*.pyc
+.venv
+venv
+*.db
+data/chroma
+logs
+.env
+*.key
+.pytest_cache
+.ruff_cache
+work/
+attic/
+[0m
+[0m$ [0mcat /Users/srujansai/Desktop/FinRoot/Dockerfile | head -20
+# FinRoot — single-image build (Streamlit UI + core). Runs in Mock mode with zero keys.
+FROM python:3.11-slim AS base
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    FINROOT_LLM_PROVIDER=mock
+
+WORKDIR /app
+
+# deps first (layer cache)
+COPY pyproject.toml ./
+RUN pip install --upgrade pip && pip install streamlit typer rich && pip install -e .
+
+# source
+COPY src/ ./src/
+
+# non-root user
+RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+USER appuser
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/docs/waves/ | grep wave-8
+-rw-r--r--@  1 srujansai  staff  1885 Jun 19 09:03 wave-8-brief.md
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/work/wave-8/ 2>/dev/null || echo "No wave-8 directory in work/"
+total 48
+drwxr-xr-x@  8 srujansai  staff   256 Jun 20 09:54 .
+drwxr-xr-x@ 14 srujansai  staff   448 Jun 19 09:01 ..
+-rw-r--r--@  1 srujansai  staff  2016 Jun 20 09:54 01-docker.md
+-rw-r--r--@  1 srujansai  staff  2633 Jun 20 09:54 02-readme-submission.md
+-rw-r--r--@  1 srujansai  staff  2516 Jun 20 09:51 03-adrs.md
+-rw-r--r--@  1 srujansai  staff  2227 Jun 20 09:54 04-demo-script.md
+-rw-r--r--@  1 srujansai  staff  2080 Jun 20 09:54 05-deck-exec-summary.md
+-rw-r--r--@  1 srujansai  staff  2382 Jun 20 09:51 06-arch-diagram-submission.md
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/docs/waves/ | grep -E "(wave-8|gotchas)"
+-rw-r--r--@  1 srujansai  staff  2780 Jun 19 18:56 wave-1-gotchas.md
+-rw-r--r--@  1 srujansai  staff  1144 Jun 19 19:12 wave-3-gotchas.md
+-rw-r--r--@  1 srujansai  staff  2084 Jun 19 21:39 wave-4-gotchas.md
+-rw-r--r--@  1 srujansai  staff  1885 Jun 19 09:03 wave-8-brief.md
+[0m
+[0m$ [0mgit status
+On branch main
+Your branch is based on 'origin/main', but the upstream is gone.
+  (use "git branch --unset-upstream" to fixup)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   data/digital_twin.db
+	modified:   work/reports/wave-1/02-pydantic-schemas-state.run.log
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.claude/
+	.dockerignore
+	.env.example
+	.gitignore
+	.pre-commit-config.yaml
+	.specify/memory/
+	.specify/specs/wave-1/
+	.specify/specs/wave-2/
+	.specify/specs/wave-3/
+	.specify/specs/wave-5/
+	.specify/specs/wave-6/
+	.specify/specs/wave-7/
+	.specify/specs/wave-8/
+	.specify/steering.md
+	AGENTS.md
+	BACKLOG.md
+	CHANGELOG.md
+	CLAUDE.md
+	CONTRIBUTING.md
+	Dockerfile
+	HALL_OF_SHAME.md
+	HANDOFF.md
+	HIERARCHY.md
+	HOW_TO_RUN.md
+	KIMI.md
+	LICENSE
+	Makefile
+	OS_SETUP.md
+	README.md
+	attic/
+	corpus/
+	data/gold/frb_questions.json
+	deployment/
+	docker-compose.dev.yml
+	docker-compose.yml
+	docs/REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+	docs/SCOPE_GUARD.md
+	docs/agents/
+	docs/architecture/
+	docs/audits/
+	docs/benchmarks/
+	docs/conventions.md
+	docs/decisions/
+	docs/flows/
+	docs/historical/
+	docs/interview_runbook.md
+	docs/operational/
+	docs/runbook.md
+	docs/runtime/
+	docs/schemas/
+	evals/
+	evidence/
+	finroot-submission.zip
+	logs/
+	mcp.json
+	models/
+	orchestrator/
+	plan/
+	prometheus.yml
+	prompts/
+	pyproject.toml
+	pytest.ini
+	requirements.txt
+	resources/
+	results/
+	scripts/make_submission.sh
+	skills-lock.json
+	skills.manifest.json
+	src/finroot/evaluation/baselines.py
+	src/finroot/reasoning/consistency.py
+	src/finroot/reasoning/critic.py
+	src/finroot/reasoning/explain.py
+	src/finroot/reasoning/principles.py
+	src/finroot/reasoning/refine.py
+	src/interface/cli/__init__.py
+	src/interface/cli/__main__.py
+	src/interface/cli/main.py
+	src/interface/core.py
+	src/interface/ui/__init__.py
+	src/interface/ui/app.py
+	src/interface/ui/components/
+	src/interface/ui/theme.py
+	tests/unit/test_baselines.py
+	tests/unit/test_cli.py
+	tests/unit/test_components.py
+	tests/unit/test_consistency.py
+	tests/unit/test_critic.py
+	tests/unit/test_explain.py
+	tests/unit/test_frb_bank.py
+	tests/unit/test_principles.py
+	work/REPORT_TEMPLATE.md
+	work/TASK_TEMPLATE.md
+	work/WORKER_PROMPT.md
+	work/reports/wave-5/
+	work/reports/wave-6/
+	work/reports/wave-7/
+	work/reports/wave-8/
+	work/wave-1/
+	work/wave-2/
+	work/wave-3/
+	work/wave-4/
+	work/wave-5/
+	work/wave-6/
+	work/wave-7/
+	work/wave-8/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/work/reports/wave-8/
+total 160
+drwxr-xr-x@  9 srujansai  staff    288 Jun 20 10:09 .
+drwxr-xr-x@ 10 srujansai  staff    320 Jun 19 08:35 ..
+-rw-r--r--@  1 srujansai  staff      0 Jun 19 08:35 .gitkeep
+-rw-r--r--@  1 srujansai  staff   1328 Jun 20 10:09 01-docker.report.md
+-rw-r--r--@  1 srujansai  staff  31618 Jun 20 10:09 01-docker.run.log
+-rw-r--r--@  1 srujansai  staff   1830 Jun 20 09:54 03-adrs.report.md
+-rw-r--r--@  1 srujansai  staff   8919 Jun 20 09:54 03-adrs.run.log
+-rw-r--r--@  1 srujansai  staff   2792 Jun 20 09:54 06-arch-diagram-submission.report.md
+-rw-r--r--@  1 srujansai  staff  21036 Jun 20 09:55 06-arch-diagram-submission.run.log
+[0m
+[0m$ [0mgit diff --name-only
+data/digital_twin.db
+work/reports/wave-1/02-pydantic-schemas-state.run.log
+[0m
+[0m$ [0mgit diff --stat
+data/digital_twin.db                                | Bin 12288 -> 12288 bytes
+ .../wave-1/02-pydantic-schemas-state.run.log        |   1 +
+ 2 files changed, 1 insertion(+)
+[0m
+[0m$ [0mgit status --porcelain | grep -E "(Dockerfile|docker-compose.yml|.dockerignore|01-docker.report.md)"
+?? .dockerignore
+?? Dockerfile
+?? docker-compose.yml
+[0m
+[0m$ [0mgit diff HEAD -- Dockerfile docker-compose.yml .dockerignore 2>&1 | head -50
+(no output)
+[0m
+[0m$ [0mgit status
+On branch main
+Your branch is based on 'origin/main', but the upstream is gone.
+  (use "git branch --unset-upstream" to fixup)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   data/digital_twin.db
+	modified:   work/reports/wave-1/02-pydantic-schemas-state.run.log
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.claude/
+	.dockerignore
+	.env.example
+	.gitignore
+	.pre-commit-config.yaml
+	.specify/memory/
+	.specify/specs/wave-1/
+	.specify/specs/wave-2/
+	.specify/specs/wave-3/
+	.specify/specs/wave-5/
+	.specify/specs/wave-6/
+	.specify/specs/wave-7/
+	.specify/specs/wave-8/
+	.specify/steering.md
+	AGENTS.md
+	BACKLOG.md
+	CHANGELOG.md
+	CLAUDE.md
+	CONTRIBUTING.md
+	Dockerfile
+	HALL_OF_SHAME.md
+	HANDOFF.md
+	HIERARCHY.md
+	HOW_TO_RUN.md
+	KIMI.md
+	LICENSE
+	Makefile
+	OS_SETUP.md
+	README.md
+	attic/
+	corpus/
+	data/gold/frb_questions.json
+	deployment/
+	docker-compose.dev.yml
+	docker-compose.yml
+	docs/REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+	docs/SCOPE_GUARD.md
+	docs/agents/
+	docs/architecture/
+	docs/audits/
+	docs/benchmarks/
+	docs/conventions.md
+	docs/decisions/
+	docs/flows/
+	docs/historical/
+	docs/interview_runbook.md
+	docs/operational/
+	docs/runbook.md
+	docs/runtime/
+	docs/schemas/
+	evals/
+	evidence/
+	finroot-submission.zip
+	logs/
+	mcp.json
+	models/
+	orchestrator/
+	plan/
+	prometheus.yml
+	prompts/
+	pyproject.toml
+	pytest.ini
+	requirements.txt
+	resources/
+	results/
+	scripts/make_submission.sh
+	skills-lock.json
+	skills.manifest.json
+	src/finroot/evaluation/baselines.py
+	src/finroot/reasoning/consistency.py
+	src/finroot/reasoning/critic.py
+	src/finroot/reasoning/explain.py
+	src/finroot/reasoning/principles.py
+	src/finroot/reasoning/refine.py
+	src/interface/cli/__init__.py
+	src/interface/cli/__main__.py
+	src/interface/cli/main.py
+	src/interface/core.py
+	src/interface/ui/__init__.py
+	src/interface/ui/app.py
+	src/interface/ui/components/
+	src/interface/ui/theme.py
+	tests/unit/test_baselines.py
+	tests/unit/test_cli.py
+	tests/unit/test_components.py
+	tests/unit/test_consistency.py
+	tests/unit/test_critic.py
+	tests/unit/test_explain.py
+	tests/unit/test_frb_bank.py
+	tests/unit/test_principles.py
+	work/REPORT_TEMPLATE.md
+	work/TASK_TEMPLATE.md
+	work/WORKER_PROMPT.md
+	work/reports/wave-5/
+	work/reports/wave-6/
+	work/reports/wave-7/
+	work/reports/wave-8/
+	work/wave-1/
+	work/wave-2/
+	work/wave-3/
+	work/wave-4/
+	work/wave-5/
+	work/wave-6/
+	work/wave-7/
+	work/wave-8/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[0m
+[0m→ [0mRead Dockerfile
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/ | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)"
+-rw-r--r--@  1 srujansai  staff     105 Jun 20 10:06 .dockerignore
+-rw-r--r--@  1 srujansai  staff     856 Jun 20 10:06 Dockerfile
+-rw-r--r--@  1 srujansai  staff     546 Jun 20 10:06 docker-compose.yml
+[0m
+[0m$ [0mgit show HEAD:Dockerfile 2>/dev/null | head -5
+(no output)
+[0m
+[0m$ [0mgit log --oneline --all -5
+1a4bc81 feat(wave-4): Core Agents & LangGraph Orchestration (535 tests)
+f097bc9 feat(wave-2+3): Memory & Digital Twin + Full Tool Ecosystem (437 tests)
+142abbf feat(wave-1): Foundation — LLM providers, schemas, audit trail, base interfaces, bootstrap
+[0m
+[0m$ [0mgit log --all --oneline | head -20
+1a4bc81 feat(wave-4): Core Agents & LangGraph Orchestration (535 tests)
+f097bc9 feat(wave-2+3): Memory & Digital Twin + Full Tool Ecosystem (437 tests)
+142abbf feat(wave-1): Foundation — LLM providers, schemas, audit trail, base interfaces, bootstrap
+[0m
+[0m$ [0mgit log --all --oneline -- Dockerfile docker-compose.yml .dockerignore | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --grep="docker" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit ls-files Dockerfile docker-compose.yml .dockerignore 2>/dev/null || echo "Files not in git"
+(no output)
+[0m
+[0m$ [0mgit status --short | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)"
+?? .dockerignore
+?? Dockerfile
+?? docker-compose.yml
+[0m
+[0m$ [0mgit status --porcelain
+M data/digital_twin.db
+ M work/reports/wave-1/02-pydantic-schemas-state.run.log
+?? .claude/
+?? .dockerignore
+?? .env.example
+?? .gitignore
+?? .pre-commit-config.yaml
+?? .specify/memory/
+?? .specify/specs/wave-1/
+?? .specify/specs/wave-2/
+?? .specify/specs/wave-3/
+?? .specify/specs/wave-5/
+?? .specify/specs/wave-6/
+?? .specify/specs/wave-7/
+?? .specify/specs/wave-8/
+?? .specify/steering.md
+?? AGENTS.md
+?? BACKLOG.md
+?? CHANGELOG.md
+?? CLAUDE.md
+?? CONTRIBUTING.md
+?? Dockerfile
+?? HALL_OF_SHAME.md
+?? HANDOFF.md
+?? HIERARCHY.md
+?? HOW_TO_RUN.md
+?? KIMI.md
+?? LICENSE
+?? Makefile
+?? OS_SETUP.md
+?? README.md
+?? attic/
+?? corpus/
+?? data/gold/frb_questions.json
+?? deployment/
+?? docker-compose.dev.yml
+?? docker-compose.yml
+?? docs/REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+?? docs/SCOPE_GUARD.md
+?? docs/agents/
+?? docs/architecture/
+?? docs/audits/
+?? docs/benchmarks/
+?? docs/conventions.md
+?? docs/decisions/
+?? docs/flows/
+?? docs/historical/
+?? docs/interview_runbook.md
+?? docs/operational/
+?? docs/runbook.md
+?? docs/runtime/
+?? docs/schemas/
+?? evals/
+?? evidence/
+?? finroot-submission.zip
+?? logs/
+?? mcp.json
+?? models/
+?? orchestrator/
+?? plan/
+?? prometheus.yml
+?? prompts/
+?? pyproject.toml
+?? pytest.ini
+?? requirements.txt
+?? resources/
+?? results/
+?? scripts/make_submission.sh
+?? skills-lock.json
+?? skills.manifest.json
+?? src/finroot/evaluation/baselines.py
+?? src/finroot/reasoning/consistency.py
+?? src/finroot/reasoning/critic.py
+?? src/finroot/reasoning/explain.py
+?? src/finroot/reasoning/principles.py
+?? src/finroot/reasoning/refine.py
+?? src/interface/cli/__init__.py
+?? src/interface/cli/__main__.py
+?? src/interface/cli/main.py
+?? src/interface/core.py
+?? src/interface/ui/__init__.py
+?? src/interface/ui/app.py
+?? src/interface/ui/components/
+?? src/interface/ui/theme.py
+?? tests/unit/test_baselines.py
+?? tests/unit/test_cli.py
+?? tests/unit/test_components.py
+?? tests/unit/test_consistency.py
+?? tests/unit/test_critic.py
+?? tests/unit/test_explain.py
+?? tests/unit/test_frb_bank.py
+?? tests/unit/test_principles.py
+?? work/REPORT_TEMPLATE.md
+?? work/TASK_TEMPLATE.md
+?? work/WORKER_PROMPT.md
+?? work/reports/wave-5/
+?? work/reports/wave-6/
+?? work/reports/wave-7/
+?? work/reports/wave-8/
+?? work/wave-1/
+?? work/wave-2/
+?? work/wave-3/
+?? work/wave-4/
+?? work/wave-5/
+?? work/wave-6/
+?? work/wave-7/
+?? work/wave-8/
+[0m
+[0m$ [0mgit status --porcelain | grep -E "^ D|^ M|^ A"
+M data/digital_twin.db
+ M work/reports/wave-1/02-pydantic-schemas-state.run.log
+[0m
+[0m$ [0mgit log --all --oneline | wc -l
+3
+[0m
+[0m$ [0mgit log --all --oneline --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all | head -10
+1a4bc81 feat(wave-4): Core Agents & LangGraph Orchestration (535 tests)
+f097bc9 feat(wave-2+3): Memory & Digital Twin + Full Tool Ecosystem (437 tests)
+142abbf feat(wave-1): Foundation — LLM providers, schemas, audit trail, base interfaces, bootstrap
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | head -50
+1a4bc81 feat(wave-4): Core Agents & LangGraph Orchestration (535 tests)
+ .specify/specs/wave-4/contracts/graph.contract.md  |  120 +
+ docs/waves/wave-4-gotchas.md                       |   22 +
+ src/finroot/agents/intent.py                       |  129 ++
+ src/finroot/agents/market_agent.py                 |  160 ++
+ src/finroot/agents/news_agent.py                   |  172 ++
+ src/finroot/agents/orchestrator.py                 |  355 +++
+ src/finroot/agents/portfolio_agent.py              |  276 +++
+ src/finroot/agents/risk_agent.py                   |  164 ++
+ src/finroot/agents/tax_agent.py                    |  262 +++
+ src/finroot/workflows/context.py                   |   82 +
+ src/finroot/workflows/graph.py                     |  229 ++
+ src/finroot/workflows/synthesize.py                |  217 ++
+ tests/integration/test_orchestrator.py             |  275 +++
+ tests/unit/test_agent_tax.py                       |  322 +++
+ tests/unit/test_agents_market_news.py              |  288 +++
+ tests/unit/test_agents_risk_portfolio.py           |  427 ++++
+ tests/unit/test_intent.py                          |  244 ++
+ tests/unit/test_synthesize.py                      |  231 ++
+ work/reports/wave-4/.gitkeep                       |    0
+ .../wave-4/01-intent-classifier-context.run.log    |  317 +++
+ work/reports/wave-4/01-intent-classifier.report.md |   53 +
+ work/reports/wave-4/01-intent-classifier.run.log   |    2 +
+ .../reports/wave-4/02-market-news-agents.report.md |   53 +
+ work/reports/wave-4/02-market-news-agents.run.log  |  457 ++++
+ .../wave-4/03-risk-portfolio-agents.report.md      |   56 +
+ .../wave-4/03-risk-portfolio-agents.run.log        |  275 +++
+ work/reports/wave-4/04-tax-planner-agent.report.md |   50 +
+ work/reports/wave-4/04-tax-planner-agent.run.log   |  268 +++
+ work/reports/wave-4/05-orchestrator.report.md      |   52 +
+ work/reports/wave-4/05-orchestrator.run.log        | 2350 ++++++++++++++++++++
+ work/reports/wave-4/06-synthesizer.report.md       |   52 +
+ work/reports/wave-4/06-synthesizer.run.log         |  373 ++++
+ 32 files changed, 8333 insertions(+)
+f097bc9 feat(wave-2+3): Memory & Digital Twin + Full Tool Ecosystem (437 tests)
+ data/annotations/.gitkeep                          |    0
+ data/digital_twin.db                               |  Bin 0 -> 12288 bytes
+ data/gold/.gitkeep                                 |    0
+ data/ontology/.gitkeep                             |    0
+ data/raw/.gitkeep                                  |    0
+ data/samples/.gitkeep                              |    0
+ data/samples/README.md                             |   38 +
+ data/samples/twin_profiles.json                    |  309 +++++
+ data/synthetic/.gitkeep                            |    0
+ data/synthetic/sample_conversation.json            |   52 +
+ data/tax_rules.json                                |   54 +
+ docs/waves/wave-3-gotchas.md                       |   27 +
+ schema/db_struct.sql                               |   18 +
+ src/finroot/memory/__init__.py                     |   21 +
+ src/finroot/memory/digital_twin.py                 |  236 ++++
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --name-only | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -20
+(no output)
+[0m
+[0m$ [0mgit log --all --oneline --all --stat | grep -E "(Dockerfile|docker-compose.yml|.dockerignore)" | head -10
+(no output)
+[0m

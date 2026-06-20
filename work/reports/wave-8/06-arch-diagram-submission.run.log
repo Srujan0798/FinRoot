@@ -1,0 +1,509 @@
+=== dispatch opencode opencode/big-pickle -> work/wave-8/06-arch-diagram-submission.md @ Sat Jun 20 09:52:32 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 09:55:30 IST 2026 ===
+_PROMPT.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead work/wave-8/06-arch-diagram-submission.md
+[0m✱ [0mGlob ".specify/specs/wave-8/contracts/**"[90m 0 matches[0m
+[0m→ [0mRead docs/architecture
+[0m→ [0mRead scripts
+[0m→ [0mRead .specify/specs/wave-8/contracts
+[0m→ [0mRead docs/architecture/architecture.mmd
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/src/
+total 8
+drwxr-xr-x@  6 srujansai  staff   192 Jun 19 18:47 .
+drwxr-xr-x@ 57 srujansai  staff  1824 Jun 19 18:57 ..
+-rw-r--r--@  1 srujansai  staff  3015 Jun 19 09:22 README.md
+drwxr-xr-x@ 14 srujansai  staff   448 Jun 19 18:52 finroot
+drwxr-xr-x@  8 srujansai  staff   256 Jun 19 18:48 finroot.egg-info
+drwxr-xr-x@  5 srujansai  staff   160 Jun 19 08:35 interface
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/tests/
+total 8
+drwxr-xr-x@ 10 srujansai  staff   320 Jun 19 09:23 .
+drwxr-xr-x@ 57 srujansai  staff  1824 Jun 19 18:57 ..
+-rw-r--r--@  1 srujansai  staff  1230 Jun 19 09:23 README.md
+drwxr-xr-x@  3 srujansai  staff    96 Jun 19 08:35 e2e
+drwxr-xr-x@  3 srujansai  staff    96 Jun 19 08:35 fuzz
+drwxr-xr-x@  3 srujansai  staff    96 Jun 19 08:35 golden
+drwxr-xr-x@  6 srujansai  staff   192 Jun 19 21:27 integration
+drwxr-xr-x@  3 srujansai  staff    96 Jun 19 08:35 performance
+drwxr-xr-x@  3 srujansai  staff    96 Jun 19 08:35 security
+drwxr-xr-x@ 26 srujansai  staff   832 Jun 20 09:43 unit
+[0m
+[0m→ [0mRead .specify/specs/wave-8/contracts/submission.contract.md
+[0m→ [0mRead scripts/smoke_test.py
+[0m→ [0mRead .
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/evals/ 2>/dev/null; echo "---"; ls /Users/srujansai/Desktop/FinRoot/config/ 2>/dev/null; echo "---"; ls /Users/srujansai/Desktop/FinRoot/data/ 2>/dev/null; echo "---"; ls /Users/srujansai/Desktop/FinRoot/results/ 2>/dev/null
+README.md
+graders
+outcomes
+reports
+tasks
+transcripts
+trials
+---
+__init__.py
+__pycache__
+prompts.py
+settings.py
+---
+annotations
+chroma
+digital_twin.db
+gold
+ontology
+raw
+samples
+synthetic
+tax_rules.json
+---
+[0m
+Let me check a few more project files to build the submission script correctly.
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/.github/ 2>/dev/null
+workflows
+[0m
+[0m$ [0mtest -f /Users/srujansai/Desktop/FinRoot/results/metrics.json && echo "EXISTS" || echo "NOT FOUND"
+NOT FOUND
+[0m
+[0m→ [0mRead CHANGELOG.md[90m [limit=20][0m
+[0m→ [0mRead docs
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/data/samples/ 2>/dev/null; echo "---"; ls /Users/srujansai/Desktop/FinRoot/data/gold/ 2>/dev/null; echo "---"; bash /Users/srujansai/Desktop/FinRoot/scripts/make_submission.sh 2>&1 || true
+README.md
+twin_profiles.json
+---
+---
+bash: /Users/srujansai/Desktop/FinRoot/scripts/make_submission.sh: No such file or directory
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/evals/reports/ 2>/dev/null; echo "---"; ls /Users/srujansai/Desktop/FinRoot/docs/waves/ 2>/dev/null
+---
+wave-1-brief.md
+wave-1-gotchas.md
+wave-2-brief.md
+wave-3-brief.md
+wave-3-gotchas.md
+wave-4-brief.md
+wave-4-gotchas.md
+wave-5-brief.md
+wave-6-brief.md
+wave-7-brief.md
+wave-8-brief.md
+[0m
+[0m# [0mTodos
+[•] Update docs/architecture/architecture.mmd per task spec
+[ ] Create scripts/make_submission.sh per task spec
+[ ] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-8/06-arch-diagram-submission.report.md
+[0m
+[0m$ [0mtest -d /Users/srujansai/Desktop/FinRoot/data/watchlists && echo "EXISTS" || echo "NOT FOUND"
+NOT FOUND
+[0m
+Now I'll write both files. Starting with the updated architecture diagram:
+[0m← [0mWrite docs/architecture/architecture.mmd
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Update docs/architecture/architecture.mmd per task spec
+[•] Create scripts/make_submission.sh per task spec
+[ ] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-8/06-arch-diagram-submission.report.md
+[0m
+[0m← [0mWrite scripts/make_submission.sh
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Update docs/architecture/architecture.mmd per task spec
+[✓] Create scripts/make_submission.sh per task spec
+[•] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-8/06-arch-diagram-submission.report.md
+[0m
+[0m$ [0mchmod +x /Users/srujansai/Desktop/FinRoot/scripts/make_submission.sh
+(no output)
+[0m
+[0m$ [0mrm -f /Users/srujansai/Desktop/FinRoot/finroot-submission.zip && bash /Users/srujansai/Desktop/FinRoot/scripts/make_submission.sh
+Packaging submission...
+  adding: src/ (stored 0%)
+  adding: src/interface/ (stored 0%)
+  adding: src/interface/ui/ (stored 0%)
+  adding: src/interface/ui/.gitkeep (stored 0%)
+  adding: src/interface/ui/__init__.py (stored 0%)
+  adding: src/interface/ui/components/ (stored 0%)
+  adding: src/interface/ui/components/twin.py (deflated 63%)
+  adding: src/interface/core.py (deflated 64%)
+  adding: src/interface/cli/ (stored 0%)
+  adding: src/interface/cli/.gitkeep (stored 0%)
+  adding: src/interface/cli/__init__.py (deflated 12%)
+  adding: src/interface/api/ (stored 0%)
+  adding: src/interface/api/.gitkeep (stored 0%)
+  adding: src/finroot/ (stored 0%)
+  adding: src/finroot/tools/ (stored 0%)
+  adding: src/finroot/tools/tax.py (deflated 66%)
+  adding: src/finroot/tools/sentiment.py (deflated 68%)
+  adding: src/finroot/tools/fundamentals.py (deflated 67%)
+  adding: src/finroot/tools/market.py (deflated 65%)
+  adding: src/finroot/tools/portfolio_sim.py (deflated 65%)
+  adding: src/finroot/tools/documents.py (deflated 74%)
+  adding: src/finroot/tools/profile.py (deflated 73%)
+  adding: src/finroot/tools/.gitkeep (stored 0%)
+  adding: src/finroot/tools/__init__.py (deflated 24%)
+  adding: src/finroot/tools/watchlist.py (deflated 69%)
+  adding: src/finroot/tools/risk.py (deflated 69%)
+  adding: src/finroot/tools/currency.py (deflated 69%)
+  adding: src/finroot/tools/base.py (deflated 66%)
+  adding: src/finroot/tools/news.py (deflated 64%)
+  adding: src/finroot/tools/macro.py (deflated 68%)
+  adding: src/finroot/llm/ (stored 0%)
+  adding: src/finroot/llm/__init__.py (deflated 50%)
+  adding: src/finroot/llm/factory.py (deflated 55%)
+  adding: src/finroot/llm/groq.py (deflated 59%)
+  adding: src/finroot/llm/openai.py (deflated 60%)
+  adding: src/finroot/llm/ollama.py (deflated 56%)
+  adding: src/finroot/llm/base.py (deflated 57%)
+  adding: src/finroot/llm/mock.py (deflated 56%)
+  adding: src/finroot/memory/ (stored 0%)
+  adding: src/finroot/memory/semantic.py (deflated 70%)
+  adding: src/finroot/memory/digital_twin.py (deflated 73%)
+  adding: src/finroot/memory/.gitkeep (stored 0%)
+  adding: src/finroot/memory/__init__.py (deflated 43%)
+  adding: src/finroot/memory/working.py (deflated 64%)
+  adding: src/finroot/memory/manager.py (deflated 68%)
+  adding: src/finroot/workflows/ (stored 0%)
+  adding: src/finroot/workflows/graph.py (deflated 71%)
+  adding: src/finroot/workflows/.gitkeep (stored 0%)
+  adding: src/finroot/workflows/synthesize.py (deflated 71%)
+  adding: src/finroot/workflows/context.py (deflated 59%)
+  adding: src/finroot/__init__.py (deflated 53%)
+  adding: src/finroot/agents/ (stored 0%)
+  adding: src/finroot/agents/intent.py (deflated 62%)
+  adding: src/finroot/agents/tax_agent.py (deflated 73%)
+  adding: src/finroot/agents/.gitkeep (stored 0%)
+  adding: src/finroot/agents/market_agent.py (deflated 69%)
+  adding: src/finroot/agents/__init__.py (deflated 26%)
+  adding: src/finroot/agents/orchestrator.py (deflated 72%)
+  adding: src/finroot/agents/news_agent.py (deflated 73%)
+  adding: src/finroot/agents/risk_agent.py (deflated 74%)
+  adding: src/finroot/agents/base.py (deflated 65%)
+  adding: src/finroot/agents/portfolio_agent.py (deflated 75%)
+  adding: src/finroot/utils/ (stored 0%)
+  adding: src/finroot/utils/config.py (deflated 64%)
+  adding: src/finroot/utils/__init__.py (stored 0%)
+  adding: src/finroot/reasoning/ (stored 0%)
+  adding: src/finroot/reasoning/consistency.py (deflated 67%)
+  adding: src/finroot/reasoning/.gitkeep (stored 0%)
+  adding: src/finroot/reasoning/principles.py (deflated 70%)
+  adding: src/finroot/reasoning/critic.py (deflated 70%)
+  adding: src/finroot/schemas/ (stored 0%)
+  adding: src/finroot/schemas/enums.py (deflated 52%)
+  adding: src/finroot/schemas/finance.py (deflated 67%)
+  adding: src/finroot/schemas/audit.py (deflated 54%)
+  adding: src/finroot/schemas/.gitkeep (stored 0%)
+  adding: src/finroot/schemas/__init__.py (deflated 53%)
+  adding: src/finroot/schemas/recommendation.py (deflated 63%)
+  adding: src/finroot/schemas/state.py (deflated 52%)
+  adding: src/finroot/audit/ (stored 0%)
+  adding: src/finroot/audit/store.py (deflated 58%)
+  adding: src/finroot/audit/.gitkeep (stored 0%)
+  adding: src/finroot/audit/trail.py (deflated 69%)
+  adding: src/finroot/audit/__init__.py (deflated 56%)
+  adding: src/finroot/evaluation/ (stored 0%)
+  adding: src/finroot/evaluation/baselines.py (deflated 68%)
+  adding: src/finroot/evaluation/.gitkeep (stored 0%)
+  adding: src/finroot.egg-info/ (stored 0%)
+  adding: src/finroot.egg-info/PKG-INFO (deflated 51%)
+  adding: src/finroot.egg-info/SOURCES.txt (deflated 70%)
+  adding: src/finroot.egg-info/entry_points.txt (stored 0%)
+  adding: src/finroot.egg-info/requires.txt (deflated 37%)
+  adding: src/finroot.egg-info/top_level.txt (stored 0%)
+  adding: src/finroot.egg-info/dependency_links.txt (stored 0%)
+  adding: src/README.md (deflated 57%)
+  adding: tests/ (stored 0%)
+  adding: tests/unit/ (stored 0%)
+  adding: tests/unit/test_tools_market.py (deflated 79%)
+  adding: tests/unit/test_consistency.py (deflated 74%)
+  adding: tests/unit/test_llm_provider.py (deflated 78%)
+  adding: tests/unit/test_tools_tax.py (deflated 79%)
+  adding: tests/unit/test_tools_macro.py (deflated 81%)
+  adding: tests/unit/test_critic.py (deflated 79%)
+  adding: tests/unit/test_synthesize.py (deflated 80%)
+  adding: tests/unit/test_principles.py (deflated 79%)
+  adding: tests/unit/test_agents_market_news.py (deflated 83%)
+  adding: tests/unit/test_base_interfaces.py (deflated 74%)
+  adding: tests/unit/test_intent.py (deflated 74%)
+  adding: tests/unit/test_tools_profile.py (deflated 80%)
+  adding: tests/unit/test_agent_tax.py (deflated 82%)
+  adding: tests/unit/test_tools_risk.py (deflated 77%)
+  adding: tests/unit/test_config.py (deflated 77%)
+  adding: tests/unit/test_agents_risk_portfolio.py (deflated 86%)
+  adding: tests/unit/test_schemas.py (deflated 79%)
+  adding: tests/unit/test_tools_news.py (deflated 79%)
+  adding: tests/unit/test_working_memory.py (deflated 77%)
+  adding: tests/unit/test_semantic_memory.py (deflated 77%)
+  adding: tests/unit/test_digital_twin.py (deflated 78%)
+  adding: tests/unit/test_memory_manager.py (deflated 83%)
+  adding: tests/unit/test_audit_chain.py (deflated 78%)
+  adding: tests/security/ (stored 0%)
+  adding: tests/security/.gitkeep (stored 0%)
+  adding: tests/integration/ (stored 0%)
+  adding: tests/integration/.gitkeep (stored 0%)
+  adding: tests/integration/test_memory_integration.py (deflated 66%)
+  adding: tests/integration/test_orchestrator.py (deflated 75%)
+  adding: tests/golden/ (stored 0%)
+  adding: tests/golden/.gitkeep (stored 0%)
+  adding: tests/README.md (deflated 38%)
+  adding: tests/fuzz/ (stored 0%)
+  adding: tests/fuzz/.gitkeep (stored 0%)
+  adding: tests/performance/ (stored 0%)
+  adding: tests/performance/.gitkeep (stored 0%)
+  adding: tests/e2e/ (stored 0%)
+  adding: tests/e2e/.gitkeep (stored 0%)
+  adding: docs/ (stored 0%)
+  adding: docs/conventions.md (deflated 42%)
+  adding: docs/audits/ (stored 0%)
+  adding: docs/audits/2026-06-19-baseline.md (deflated 41%)
+  adding: docs/runtime/ (stored 0%)
+  adding: docs/runtime/.gitkeep (stored 0%)
+  adding: docs/runbook.md (deflated 46%)
+  adding: docs/agents/ (stored 0%)
+  adding: docs/agents/ORCHESTRATION.md (deflated 49%)
+  adding: docs/decisions/ (stored 0%)
+  adding: docs/decisions/0004-four-tier-memory-and-digital-twin.md (deflated 55%)
+  adding: docs/decisions/0003-langgraph-plan-and-execute.md (deflated 48%)
+  adding: docs/decisions/0007-hash-chained-audit-trail.md (deflated 49%)
+  adding: docs/decisions/0005-five-axis-self-critic.md (deflated 50%)
+  adding: docs/decisions/0006-sovereign-first-mock-default.md (deflated 53%)
+  adding: docs/decisions/0008-deterministic-tax-engine.md (deflated 53%)
+  adding: docs/decisions/0001-tier-and-archetype.md (deflated 40%)
+  adding: docs/decisions/0002-stack-selection.md (deflated 41%)
+  adding: docs/schemas/ (stored 0%)
+  adding: docs/schemas/.gitkeep (stored 0%)
+  adding: docs/historical/ (stored 0%)
+  adding: docs/historical/.gitkeep (stored 0%)
+  adding: docs/interview_runbook.md (deflated 37%)
+  adding: docs/REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md (deflated 40%)
+  adding: docs/architecture/ (stored 0%)
+  adding: docs/architecture/architecture.mmd (deflated 53%)
+  adding: docs/benchmarks/ (stored 0%)
+  adding: docs/benchmarks/.gitkeep (stored 0%)
+  adding: docs/waves/ (stored 0%)
+  adding: docs/waves/wave-5-brief.md (deflated 49%)
+  adding: docs/waves/wave-4-brief.md (deflated 51%)
+  adding: docs/waves/wave-3-gotchas.md (deflated 41%)
+  adding: docs/waves/wave-1-gotchas.md (deflated 50%)
+  adding: docs/waves/wave-2-brief.md (deflated 46%)
+  adding: docs/waves/wave-3-brief.md (deflated 50%)
+  adding: docs/waves/wave-4-gotchas.md (deflated 53%)
+  adding: docs/waves/wave-8-brief.md (deflated 48%)
+  adding: docs/waves/wave-6-brief.md (deflated 45%)
+  adding: docs/waves/wave-7-brief.md (deflated 48%)
+  adding: docs/waves/wave-1-brief.md (deflated 42%)
+  adding: docs/operational/ (stored 0%)
+  adding: docs/operational/INCIDENT_RESPONSE_PLAYBOOK.md (deflated 41%)
+  adding: docs/operational/OBSERVABILITY.md (deflated 41%)
+  adding: docs/operational/PERFORMANCE_SLOS.md (deflated 42%)
+  adding: docs/flows/ (stored 0%)
+  adding: docs/flows/.gitkeep (stored 0%)
+  adding: docs/SCOPE_GUARD.md (deflated 38%)
+  adding: evals/ (stored 0%)
+  adding: evals/trials/ (stored 0%)
+  adding: evals/trials/.gitkeep (stored 0%)
+  adding: evals/transcripts/ (stored 0%)
+  adding: evals/transcripts/.gitkeep (stored 0%)
+  adding: evals/tasks/ (stored 0%)
+  adding: evals/tasks/003-tax-ltcg-harvest.task.yaml (deflated 41%)
+  adding: evals/tasks/002-risk-var-drawdown.task.yaml (deflated 40%)
+  adding: evals/tasks/004-news-impact.task.yaml (deflated 42%)
+  adding: evals/tasks/001-portfolio-rebalance.task.yaml (deflated 43%)
+  adding: evals/tasks/005-refusal-insufficient-evidence.task.yaml (deflated 44%)
+  adding: evals/README.md (deflated 45%)
+  adding: evals/outcomes/ (stored 0%)
+  adding: evals/outcomes/.gitkeep (stored 0%)
+  adding: evals/graders/ (stored 0%)
+  adding: evals/graders/code_based.py (deflated 43%)
+  adding: evals/graders/llm_judge.py (deflated 44%)
+  adding: evals/graders/human_review_template.md (deflated 39%)
+  adding: evals/reports/ (stored 0%)
+  adding: evals/reports/.gitkeep (stored 0%)
+  adding: config/ (stored 0%)
+  adding: config/__init__.py (deflated 41%)
+  adding: config/prompts.py (deflated 63%)
+  adding: config/settings.py (deflated 45%)
+  adding: scripts/ (stored 0%)
+  adding: scripts/smoke_test.py (deflated 57%)
+  adding: scripts/make_submission.sh (deflated 49%)
+  adding: data/samples/ (stored 0%)
+  adding: data/samples/.gitkeep (stored 0%)
+  adding: data/samples/README.md (deflated 49%)
+  adding: data/samples/twin_profiles.json (deflated 76%)
+  adding: data/gold/ (stored 0%)
+  adding: data/gold/.gitkeep (stored 0%)
+  adding: data/tax_rules.json (deflated 70%)
+  adding: README.md (deflated 48%)
+  adding: pyproject.toml (deflated 46%)
+  adding: Dockerfile (deflated 36%)
+  adding: docker-compose.yml (deflated 49%)
+  adding: .github/ (stored 0%)
+  adding: .github/workflows/ (stored 0%)
+  adding: .github/workflows/evals.yml (deflated 55%)
+  adding: .github/workflows/security.yml (deflated 45%)
+  adding: .github/workflows/docs_sync.yml (deflated 43%)
+  adding: .github/workflows/test.yml (deflated 48%)
+  adding: .github/workflows/perf_regression.yml (deflated 47%)
+  adding: .github/workflows/ci.yml (deflated 55%)
+  adding: CHANGELOG.md (deflated 38%)
+  adding: AGENTS.md (deflated 47%)
+  adding: HANDOFF.md (deflated 48%)
+  adding: HIERARCHY.md (deflated 52%)
+  adding: OS_SETUP.md (deflated 64%)
+  adding: BACKLOG.md (deflated 50%)
+  adding: CONTRIBUTING.md (deflated 45%)
+  adding: HOW_TO_RUN.md (deflated 50%)
+  adding: LICENSE (deflated 40%)
+
+  ZIP: finroot-submission.zip
+  Size: 300688 bytes
+  Files: 236
+[0m
+[0m$ [0mtest -f /Users/srujansai/Desktop/FinRoot/docs/waves/wave-8-gotchas.md && echo "EXISTS" || echo "NOT FOUND"
+NOT FOUND
+[0m
+[0m$ [0mcd /Users/srujansai/Desktop/FinRoot && unzip -l finroot-submission.zip | grep -E "\.env|secret|\.key|\.git/" && echo "LEAK!" && exit 1 || echo "no secrets in zip"
+no secrets in zip
+[0m
+[0m$ [0mtest -f /Users/srujansai/Desktop/FinRoot/docs/architecture/architecture.mmd && echo "diagram present" || echo "diagram MISSING"
+diagram present
+[0m
+[0m# [0mTodos
+[✓] Update docs/architecture/architecture.mmd per task spec
+[✓] Create scripts/make_submission.sh per task spec
+[✓] Run acceptance commands and capture output
+[•] Write report to work/reports/wave-8/06-arch-diagram-submission.report.md
+[0m
+All acceptance commands pass. Now writing the report.
+[0m$ [0mmkdir -p /Users/srujansai/Desktop/FinRoot/work/reports/wave-8
+(no output)
+[0m
+[0m← [0mWrite work/reports/wave-8/06-arch-diagram-submission.report.md
+Wrote file successfully.
+[0m
+[0m$ [0mgit diff --name-only
+work/reports/wave-1/02-pydantic-schemas-state.run.log
+[0m
+[0m$ [0mgit status --short
+M work/reports/wave-1/02-pydantic-schemas-state.run.log
+?? .claude/
+?? .dockerignore
+?? .env.example
+?? .gitignore
+?? .pre-commit-config.yaml
+?? .specify/memory/
+?? .specify/specs/wave-1/
+?? .specify/specs/wave-2/
+?? .specify/specs/wave-3/
+?? .specify/specs/wave-5/
+?? .specify/specs/wave-6/
+?? .specify/specs/wave-7/
+?? .specify/specs/wave-8/
+?? .specify/steering.md
+?? AGENTS.md
+?? BACKLOG.md
+?? CHANGELOG.md
+?? CLAUDE.md
+?? CONTRIBUTING.md
+?? Dockerfile
+?? HALL_OF_SHAME.md
+?? HANDOFF.md
+?? HIERARCHY.md
+?? HOW_TO_RUN.md
+?? KIMI.md
+?? LICENSE
+?? Makefile
+?? OS_SETUP.md
+?? README.md
+?? attic/
+?? corpus/
+?? deployment/
+?? docker-compose.dev.yml
+?? docker-compose.yml
+?? docs/REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+?? docs/SCOPE_GUARD.md
+?? docs/agents/
+?? docs/architecture/
+?? docs/audits/
+?? docs/benchmarks/
+?? docs/conventions.md
+?? docs/decisions/
+?? docs/flows/
+?? docs/historical/
+?? docs/interview_runbook.md
+?? docs/operational/
+?? docs/runbook.md
+?? docs/runtime/
+?? docs/schemas/
+?? evals/
+?? evidence/
+?? finroot-submission.zip
+?? logs/
+?? mcp.json
+?? models/
+?? orchestrator/
+?? plan/
+?? prometheus.yml
+?? prompts/
+?? pyproject.toml
+?? pytest.ini
+?? requirements.txt
+?? resources/
+?? results/
+?? scripts/make_submission.sh
+?? skills-lock.json
+?? skills.manifest.json
+?? src/finroot/evaluation/baselines.py
+?? src/finroot/reasoning/consistency.py
+?? src/finroot/reasoning/critic.py
+?? src/finroot/reasoning/principles.py
+?? src/interface/cli/__init__.py
+?? src/interface/cli/__main__.py
+?? src/interface/cli/main.py
+?? src/interface/core.py
+?? src/interface/ui/__init__.py
+?? src/interface/ui/components/
+?? tests/unit/test_baselines.py
+?? tests/unit/test_consistency.py
+?? tests/unit/test_critic.py
+?? tests/unit/test_principles.py
+?? work/REPORT_TEMPLATE.md
+?? work/TASK_TEMPLATE.md
+?? work/WORKER_PROMPT.md
+?? work/reports/wave-5/
+?? work/reports/wave-6/
+?? work/reports/wave-7/
+?? work/reports/wave-8/
+?? work/wave-1/
+?? work/wave-2/
+?? work/wave-3/
+?? work/wave-4/
+?? work/wave-5/
+?? work/wave-6/
+?? work/wave-7/
+?? work/wave-8/
+[0m
+[0m→ [0mRead docs/architecture/architecture.mmd
+[0m→ [0mRead scripts/make_submission.sh
+[0m
+[0m# [0mTodos
+[✓] Update docs/architecture/architecture.mmd per task spec
+[✓] Create scripts/make_submission.sh per task spec
+[✓] Run acceptance commands and capture output
+[✓] Write report to work/reports/wave-8/06-arch-diagram-submission.report.md
+[0m
+Done. Touched only the Writes set:
+
+- **`docs/architecture/architecture.mmd`** — Updated mermaid `flowchart TD` with legend, all 6 agents, 12 tools in 6 groups, 4-tier memory, critic+principles, LLM layer, and mmdc render note.
+- **`scripts/make_submission.sh`** — Produces `finroot-submission.zip` with `set -euo pipefail`; includes all required paths (src, tests, docs, evals, config, scripts, data/samples, data/gold, data/tax_rules.json, README, pyproject.toml, Dockerfile, docker-compose.yml, .github, CHANGELOG.md, kernel docs); excludes .git, __pycache__, *.pyc, .venv, *.db, data/chroma, secrets, keys, work/, caches; prints zip name + size + file count.
+
+Acceptance passed — secret check clean, diagram present, zip built at 300688 bytes / 236 files.
+
+Report written to `work/reports/wave-8/06-arch-diagram-submission.report.md`.
+=== opencode exited rc=0 @ Sat Jun 20 09:55:30 IST 2026 ===

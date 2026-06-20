@@ -1,0 +1,250 @@
+=== dispatch opencode opencode/deepseek-v4-flash-free -> work/wave-6/03-baselines.md @ Sat Jun 20 09:52:17 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 09:55:43 IST 2026 ===
+ work/WORKER_PROMPT.md
+[0m→ [0mRead work/wave-6/03-baselines.md
+[0m→ [0mRead .specify/specs/wave-6/contracts/evals.contract.md
+[0m✱ [0mGlob "src/finroot/schemas*"[90m 0 matches[0m
+[0m✱ [0mGlob "**/AgentState*"[90m 0 matches[0m
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m✱ [0mGlob "src/finroot/**/*.py"[90m 53 matches[0m
+[0m✱ [0mGlob "src/**/*.py"[90m 53 matches[0m
+[0m→ [0mRead src/finroot/schemas/state.py
+[0m→ [0mRead src/finroot/schemas/__init__.py
+[0m→ [0mRead src/finroot/schemas/recommendation.py
+[0m→ [0mRead src/finroot/llm/mock.py
+[0m→ [0mRead src/finroot/llm/base.py
+[0m→ [0mRead src/finroot/schemas/enums.py
+[0m→ [0mRead src/finroot/schemas/audit.py
+[0m→ [0mRead src/finroot/evaluation
+[0m✱ [0mGlob "tests/**/*.py"[90m 25 matches[0m
+[0m→ [0mRead tests/unit/test_llm_provider.py
+[0m→ [0mRead src/finroot/tools/base.py
+[0m→ [0mRead src/finroot/agents/base.py
+[0m
+[0m# [0mTodos
+[✓] Read task and contracts fully
+[•] Implement src/finroot/evaluation/baselines.py with NaiveRAGBaseline and SingleAgentBaseline
+[ ] Write tests/unit/test_baselines.py with min 8 tests
+[ ] Run ruff check and pytest, capture output
+[ ] Write report to work/reports/wave-6/03-baselines.report.md
+[0m
+[0m$ [0mls -la docs/waves/ 2>/dev/null || echo "directory does not exist"
+total 88
+drwxr-xr-x@ 13 srujansai  staff   416 Jun 19 21:32 .
+drwxr-xr-x@ 18 srujansai  staff   576 Jun 19 09:12 ..
+-rw-r--r--@  1 srujansai  staff  1565 Jun 19 09:01 wave-1-brief.md
+-rw-r--r--@  1 srujansai  staff  2780 Jun 19 18:56 wave-1-gotchas.md
+-rw-r--r--@  1 srujansai  staff  1587 Jun 19 09:01 wave-2-brief.md
+-rw-r--r--@  1 srujansai  staff  1932 Jun 19 09:02 wave-3-brief.md
+-rw-r--r--@  1 srujansai  staff  1144 Jun 19 19:12 wave-3-gotchas.md
+-rw-r--r--@  1 srujansai  staff  1790 Jun 19 09:02 wave-4-brief.md
+-rw-r--r--@  1 srujansai  staff  2084 Jun 19 21:39 wave-4-gotchas.md
+-rw-r--r--@  1 srujansai  staff  1948 Jun 19 09:02 wave-5-brief.md
+-rw-r--r--@  1 srujansai  staff  1794 Jun 19 09:02 wave-6-brief.md
+-rw-r--r--@  1 srujansai  staff  1640 Jun 19 09:03 wave-7-brief.md
+-rw-r--r--@  1 srujansai  staff  1885 Jun 19 09:03 wave-8-brief.md
+[0m
+[0m✱ [0mGlob "pyproject.toml"[90m 1 match[0m
+[0m✱ [0mGlob "setup.cfg"[90m 0 matches[0m
+[0m✱ [0mGlob "ruff.toml"[90m 0 matches[0m
+[0m✱ [0mGlob ".ruff.toml"[90m 0 matches[0m
+[0m→ [0mRead pyproject.toml
+[0m
+[0m$ [0mls -la src/finroot/evaluation/
+total 0
+drwxr-xr-x@  3 srujansai  staff   96 Jun 19 09:22 .
+drwxr-xr-x@ 14 srujansai  staff  448 Jun 19 18:52 ..
+-rw-r--r--@  1 srujansai  staff    0 Jun 19 09:22 .gitkeep
+[0m
+[0m← [0mWrite src/finroot/evaluation/baselines.py
+Wrote file successfully.
+[0m
+Now I'll write the implementation and tests.
+[0m# [0mTodos
+[✓] Read task and contracts fully
+[✓] Implement src/finroot/evaluation/baselines.py with NaiveRAGBaseline and SingleAgentBaseline
+[•] Write tests/unit/test_baselines.py with min 8 tests
+[ ] Run ruff check and pytest, capture output
+[ ] Write report to work/reports/wave-6/03-baselines.report.md
+[0m
+[0m← [0mWrite tests/unit/test_baselines.py
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Read task and contracts fully
+[✓] Implement src/finroot/evaluation/baselines.py with NaiveRAGBaseline and SingleAgentBaseline
+[✓] Write tests/unit/test_baselines.py with min 8 tests
+[•] Run ruff check and pytest, capture output
+[ ] Write report to work/reports/wave-6/03-baselines.report.md
+[0m
+[0m$ [0mruff check src/finroot/evaluation/baselines.py
+All checks passed!
+[0m
+[0m$ [0mruff check tests/unit/test_baselines.py
+I001 [*] Import block is un-sorted or un-formatted
+  --> tests/unit/test_baselines.py:8:1
+   |
+ 6 |   """
+ 7 |
+ 8 | / from __future__ import annotations
+ 9 | |
+10 | | from datetime import UTC, datetime
+11 | |
+12 | | import pytest
+13 | |
+14 | | from finroot.evaluation.baselines import NaiveRAGBaseline, SingleAgentBaseline
+15 | | from finroot.llm.mock import MockProvider
+16 | | from finroot.schemas.enums import ConfidenceLevel
+17 | | from finroot.schemas.recommendation import Recommendation
+18 | | from finroot.schemas.state import AgentState
+   | |____________________________________________^
+   |
+help: Organize imports
+
+F401 [*] `datetime.UTC` imported but unused
+  --> tests/unit/test_baselines.py:10:22
+   |
+ 8 | from __future__ import annotations
+ 9 |
+10 | from datetime import UTC, datetime
+   |                      ^^^
+11 |
+12 | import pytest
+   |
+help: Remove unused import
+
+F401 [*] `datetime.datetime` imported but unused
+  --> tests/unit/test_baselines.py:10:27
+   |
+ 8 | from __future__ import annotations
+ 9 |
+10 | from datetime import UTC, datetime
+   |                           ^^^^^^^^
+11 |
+12 | import pytest
+   |
+help: Remove unused import
+
+F401 [*] `pytest` imported but unused
+  --> tests/unit/test_baselines.py:12:8
+   |
+10 | from datetime import UTC, datetime
+11 |
+12 | import pytest
+   |        ^^^^^^
+13 |
+14 | from finroot.evaluation.baselines import NaiveRAGBaseline, SingleAgentBaseline
+   |
+help: Remove unused import: `pytest`
+
+Found 4 errors.
+[*] 4 fixable with the `--fix` option.
+[0m
+[0m← [0mEdit tests/unit/test_baselines.py
+Index: /Users/srujansai/Desktop/FinRoot/tests/unit/test_baselines.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/tests/unit/test_baselines.py
++++ /Users/srujansai/Desktop/FinRoot/tests/unit/test_baselines.py
+@@ -6,12 +6,8 @@
+ """
+ 
+ from __future__ import annotations
+ 
+-from datetime import UTC, datetime
+-
+-import pytest
+-
+ from finroot.evaluation.baselines import NaiveRAGBaseline, SingleAgentBaseline
+ from finroot.llm.mock import MockProvider
+ from finroot.schemas.enums import ConfidenceLevel
+ from finroot.schemas.recommendation import Recommendation
+
+[0m
+[0m→ [0mRead tests/unit/test_baselines.py
+[0m
+[0m$ [0mruff check tests/unit/test_baselines.py
+I001 [*] Import block is un-sorted or un-formatted
+  --> tests/unit/test_baselines.py:8:1
+   |
+ 6 |   """
+ 7 |
+ 8 | / from __future__ import annotations
+ 9 | |
+10 | | from finroot.evaluation.baselines import NaiveRAGBaseline, SingleAgentBaseline
+11 | | from finroot.llm.mock import MockProvider
+12 | | from finroot.schemas.enums import ConfidenceLevel
+13 | | from finroot.schemas.recommendation import Recommendation
+14 | | from finroot.schemas.state import AgentState
+   | |____________________________________________^
+   |
+help: Organize imports
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.
+[0m
+[0m$ [0mruff check --fix tests/unit/test_baselines.py
+Found 1 error (1 fixed, 0 remaining).
+[0m
+[0m$ [0mruff check src/finroot/evaluation/baselines.py tests/unit/test_baselines.py
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_baselines.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 25 items
+
+tests/unit/test_baselines.py .........................                   [100%]
+
+============================== 25 passed in 0.30s ==============================
+[0m
+[0m# [0mTodos
+[✓] Read task and contracts fully
+[✓] Implement src/finroot/evaluation/baselines.py with NaiveRAGBaseline and SingleAgentBaseline
+[✓] Write tests/unit/test_baselines.py with min 8 tests
+[✓] Run ruff check and pytest, capture output
+[•] Write report to work/reports/wave-6/03-baselines.report.md
+[0m
+[0m$ [0mls -la work/reports/wave-6/ 2>/dev/null || echo "directory does not exist"
+total 40
+drwxr-xr-x@  5 srujansai  staff    160 Jun 20 09:52 .
+drwxr-xr-x@ 10 srujansai  staff    320 Jun 19 08:35 ..
+-rw-r--r--@  1 srujansai  staff      0 Jun 19 08:35 .gitkeep
+-rw-r--r--@  1 srujansai  staff  10984 Jun 20 09:54 01-frb-question-bank.run.log
+-rw-r--r--@  1 srujansai  staff   8063 Jun 20 09:55 03-baselines.run.log
+[0m
+[0m← [0mWrite work/reports/wave-6/03-baselines.report.md
+Wrote file successfully.
+[0m
+[0m$ [0mruff check src/finroot/evaluation/baselines.py tests/unit/test_baselines.py
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_baselines.py -v
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 25 items
+
+tests/unit/test_baselines.py .........................                   [100%]
+
+============================== 25 passed in 0.70s ==============================
+[0m
+[0m# [0mTodos
+[✓] Read task and contracts fully
+[✓] Implement src/finroot/evaluation/baselines.py with NaiveRAGBaseline and SingleAgentBaseline
+[✓] Write tests/unit/test_baselines.py with min 8 tests
+[✓] Run ruff check and pytest, capture output
+[✓] Write report to work/reports/wave-6/03-baselines.report.md
+[0m
+Done. All acceptance commands pass, ruff clean, 25/25 tests green, and the report is at `work/reports/wave-6/03-baselines.report.md`.
+
+**What was built:**
+- `src/finroot/evaluation/baselines.py` — `NaiveRAGBaseline` (single LLM call, no citations/risk framing) and `SingleAgentBaseline` (ReAct-style with simulated tool call + citation)
+- `tests/unit/test_baselines.py` — 25 tests covering return types, determinism, twin handling, citation counts, tool outputs, cross-baseline comparisons, shared MockProvider consistency
+=== opencode exited rc=0 @ Sat Jun 20 09:55:43 IST 2026 ===

@@ -24,6 +24,18 @@ _TIMEFRAME_RE: re.Pattern[str] = re.compile(
 )
 
 _KEYWORD_MAP: list[tuple[list[str], Intent]] = [
+    # High-priority risk/prudence signals — these phrases denote risk-laden
+    # decisions (concentration, leverage, touching the safety net) and must
+    # route to RISK so the risk assessor + prudence verifier engage, ahead of
+    # the generic "stock"/"market" keywords below.
+    (
+        [
+            "emergency fund", "small-cap", "small cap", "penny stock", "all in",
+            "entire savings", "life savings", "all my savings", "borrow to invest",
+            "loan to invest", "leverage", "margin trade", "f&o", "futures and options",
+        ],
+        Intent.RISK,
+    ),
     (["portfolio", "allocation", "holdings", "rebalance", "diversif"], Intent.PORTFOLIO),
     (["risk", "var", "volatility", "drawdown", "beta", "sharpe"], Intent.RISK),
     (["tax", "capital gains", "ltcg", "stcg", "tax-loss", "tax loss", "harvest"], Intent.TAX),

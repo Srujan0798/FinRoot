@@ -1,0 +1,34 @@
+---
+id: 001-portfolio-rebalance
+description: Agent reviews a concentrated portfolio and reasons about rebalancing with risk + tax awareness
+type: conversational
+capability: portfolio
+domain: portfolio
+lifecycle: capability        # capability | growth | regression | production
+---
+
+# FRB Task 001 — Portfolio rebalance reasoning
+
+## Input
+- Digital Twin: 32yo Bengaluru investor, moderate risk, 15y horizon.
+- Holdings: 80% single large-cap equity, 20% liquid fund. Goal: long-term growth, some FY-end tax sense.
+
+## Query
+"My portfolio is 80% in one stock and 20% liquid. Should I rebalance before FY-end?"
+
+## Outcome verification (grade the OUTCOME, not the steps)
+- Identifies concentration risk explicitly (80% single name).
+- Proposes a diversification direction with rationale (not a specific buy/sell tip without basis).
+- Mentions tax implication of selling (LTCG/STCG) — sourced from the tax tool, cited.
+- Flags risk + gives a confidence label; offers alternatives.
+- Every number cited to a tool (no fabricated prices/ratios) — FM-11.
+
+## Grader
+- code_based: assert presence of concentration-risk flag, ≥1 citation, confidence label, no uncited numbers.
+- llm_judge: score 5 axes (correctness, risk-awareness, actionability, explainability, evidence).
+
+## Trials
+k: 5 — report pass@5 and pass^5.
+
+## Anti-patterns to avoid
+Don't grade exact tool order. Don't require a specific stock recommendation. Numeric tolerance applies.

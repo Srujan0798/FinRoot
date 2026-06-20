@@ -1,0 +1,79 @@
+%% FinRoot Architecture Diagram
+%% Render to PNG: mmdc -i docs/architecture/architecture.mmd -o docs/architecture/architecture.png
+%%
+%% Legend:
+%%   [User]     — human end-user (investor / family office)
+%%   [UI/CLI]   — Streamlit dark UI + Typer CLI entry points
+%%   [Core]     — FinRootOrchestrator (LangGraph Plan-and-Execute loop)
+%%   [Agent]    — 6 specialized reasoning agents
+%%   [Tool]     — 12 tools in 6 functional groups (cache/rate-limit/loud-fail/audit)
+%%   [Memory]   — 4-tier memory (working / semantic / digital-twin / audit)
+%%   [Critic]   — Self-Critic (5-axis) + Rooted Prudence principles verifier
+%%   [Audit]    — Hash-chained tamper-evident audit trail
+%%   [LLM]      — LLM provider abstraction (Mock / Ollama / Groq / OpenAI)
+%%   Arrows     — data / control flow direction
+
+flowchart TD
+    USER([User]) --> CLI[Typer CLI]
+    USER --> UI[Streamlit dark UI]
+
+    CLI --> ANSWER[answer&#40;&#41; entry]
+    UI --> ANSWER
+
+    subgraph ORCH[FinRootOrchestrator — LangGraph Plan-and-Execute]
+        IC[Intent Classify] --> CA[Context Assemble]
+        CA --> PL[Plan]
+        PL --> EX[Execute Loop]
+        EX --> SY[Synthesize]
+        SY --> SC[Self-Critic 5-axis]
+        SC --> RP[Rooted Prudence]
+        RP --> FIN[Finalize]
+        FIN --> AU[Audit Emit]
+        SC -. refine .-> SY
+    end
+
+    ANSWER --> ORCH
+
+    EX --> IA[Intent Agent]
+    EX --> MA[Market Agent]
+    EX --> NA[News Agent]
+    EX --> PA[Portfolio Agent]
+    EX --> RA[Risk Agent]
+    EX --> TA[Tax Agent]
+
+    subgraph TOOLS[12 Tools — 6 Groups]
+        T1[market / fundamentals]
+        T2[news / sentiment]
+        T3[risk / portfolio_sim]
+        T4[tax]
+        T5[macro / currency]
+        T6[profile / documents / watchlist]
+    end
+
+    IA --> TOOLS
+    MA --> TOOLS
+    NA --> TOOLS
+    PA --> TOOLS
+    RA --> TOOLS
+    TA --> TOOLS
+
+    subgraph MEM[Memory — 4 Tiers]
+        WK[Working — session context]
+        SM[Semantic — ChromaDB / JSON]
+        DT[Digital Twin — SQLite]
+        AD[(Audit — hash-chained)]
+    end
+
+    CA --> MEM
+    AU --> AD
+
+    subgraph LLM[LLM Provider Layer]
+        MK[Mock — offline / judging]
+        OL[Ollama — local sovereign]
+        GQ[Groq — cloud low-latency]
+        OA[OpenAI — cloud full-featured]
+    end
+
+    ORCH --> LLM
+
+    FIN --> EVAL[FRB Eval Harness — pass@k vs baseline]

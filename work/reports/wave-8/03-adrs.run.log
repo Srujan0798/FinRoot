@@ -1,0 +1,164 @@
+=== dispatch opencode opencode/north-mini-code-free -> work/wave-8/03-adrs.md @ Sat Jun 20 09:52:32 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 09:54:39 IST 2026 ===
+.specify/specs/wave-8/contracts/*.md"[90m 0 matches[0m
+[0m→ [0mRead work/WORKER_PROMPT.md
+[0m→ [0mRead work/wave-8/03-adrs.md
+[0m✱ [0mGlob ".specify/specs/wave-8/contracts/*.md"[90m 0 matches[0m
+[0m
+[0m$ [0mfind .specify/specs/wave-8 -name "*.md" -type f
+.specify/specs/wave-8/contracts/submission.contract.md
+[0m
+[0m→ [0mRead .specify/specs/wave-8/contracts/submission.contract.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m
+[0m$ [0mls -la docs/decisions/ | head -20
+total 16
+drwxr-xr-x@  4 srujansai  staff   128 Jun 19 09:10 .
+drwxr-xr-x@ 18 srujansai  staff   576 Jun 19 09:12 ..
+-rw-r--r--@  1 srujansai  staff  1694 Jun 19 09:10 0001-tier-and-archetype.md
+-rw-r--r--@  1 srujansai  staff  2002 Jun 19 09:10 0002-stack-selection.md
+[0m
+[0m→ [0mRead docs/decisions/0002-stack-selection.md
+[0m→ [0mRead docs/decisions/0001-tier-and-archetype.md
+[0m→ [0mRead src/finroot/agents/orchestrator.py[90m [limit=100][0m
+[0m→ [0mRead src/finroot/workflows/graph.py[90m [limit=100][0m
+[0m
+[0m$ [0mls -la src/finroot/memory/
+total 96
+drwxr-xr-x@  9 srujansai  staff    288 Jun 19 20:35 .
+drwxr-xr-x@ 14 srujansai  staff    448 Jun 19 18:52 ..
+-rw-r--r--@  1 srujansai  staff      0 Jun 19 09:22 .gitkeep
+-rw-r--r--@  1 srujansai  staff    843 Jun 19 19:06 __init__.py
+drwxr-xr-x@  7 srujansai  staff    224 Jun 19 20:37 __pycache__
+-rw-r--r--@  1 srujansai  staff   8253 Jun 19 19:06 digital_twin.py
+-rw-r--r--@  1 srujansai  staff  14352 Jun 19 20:37 manager.py
+-rw-r--r--@  1 srujansai  staff   5680 Jun 19 19:05 semantic.py
+-rw-r--r--@  1 srujansai  staff   8175 Jun 19 19:05 working.py
+[0m
+[0m$ [0mls -la src/finroot/reasoning/
+total 80
+drwxr-xr-x@  7 srujansai  staff    224 Jun 20 09:41 .
+drwxr-xr-x@ 14 srujansai  staff    448 Jun 19 18:52 ..
+-rw-r--r--@  1 srujansai  staff      0 Jun 19 09:22 .gitkeep
+drwxr-xr-x@  5 srujansai  staff    160 Jun 20 09:51 __pycache__
+-rw-r--r--@  1 srujansai  staff   4387 Jun 19 22:48 consistency.py
+-rw-r--r--@  1 srujansai  staff  19113 Jun 20 09:50 critic.py
+-rw-r--r--@  1 srujansai  staff   9236 Jun 19 22:46 principles.py
+[0m
+[0m→ [0mRead src/finroot/audit/trail.py[90m [limit=100][0m
+[0m→ [0mRead src/finroot/tools/tax.py[90m [limit=100][0m
+[0m
+[0m$ [0mls -la work/ | grep -E "(REPORT|report)"
+-rw-r--r--@  1 srujansai  staff   921 Jun 19 09:00 REPORT_TEMPLATE.md
+drwxr-xr-x@ 10 srujansai  staff   320 Jun 19 08:35 reports
+[0m
+[0m$ [0mls -la | grep -i claude
+drwxr-xr-x@  3 srujansai  staff     96 Jun 19 09:00 .claude
+-rw-r--r--@  1 srujansai  staff   5037 Jun 19 08:36 CLAUDE.md
+[0m
+[0m→ [0mRead CLAUDE.md
+[0m
+[0m← [0mWrite docs/decisions/0003-langgraph-plan-and-execute.md
+Wrote file successfully.
+[0m
+[0m← [0mWrite docs/decisions/0004-four-tier-memory-and-digital-twin.md
+Wrote file successfully.
+[0m
+[0m← [0mWrite docs/decisions/0005-five-axis-self-critic.md
+Wrote file successfully.
+[0m
+[0m← [0mWrite docs/decisions/0006-sovereign-first-mock-default.md
+Wrote file successfully.
+[0m
+[0m← [0mWrite docs/decisions/0007-hash-chained-audit-trail.md
+Wrote file successfully.
+[0m
+[0m← [0mWrite docs/decisions/0008-deterministic-tax-engine.md
+Wrote file successfully.
+[0m
+[0m$ [0mls docs/decisions/000[3-8]-*.md | wc -l
+6
+[0m
+[0m$ [0mfor f in docs/decisions/000[3-8]-*.md; do grep -q "## Decision" "$f" && grep -q "## Consequences" "$f" && echo "$f OK" || echo "$f MISSING SECTIONS"; done
+docs/decisions/0003-langgraph-plan-and-execute.md OK
+docs/decisions/0004-four-tier-memory-and-digital-twin.md OK
+docs/decisions/0005-five-axis-self-critic.md OK
+docs/decisions/0006-sovereign-first-mock-default.md OK
+docs/decisions/0007-hash-chained-audit-trail.md OK
+docs/decisions/0008-deterministic-tax-engine.md OK
+[0m
+[0m$ [0mls -la work/reports/wave-8/ 2>/dev/null || echo "Directory does not exist"
+total 16
+drwxr-xr-x@  5 srujansai  staff   160 Jun 20 09:52 .
+drwxr-xr-x@ 10 srujansai  staff   320 Jun 19 08:35 ..
+-rw-r--r--@  1 srujansai  staff     0 Jun 19 08:35 .gitkeep
+-rw-r--r--@  1 srujansai  staff  3939 Jun 20 09:54 03-adrs.run.log
+-rw-r--r--@  1 srujansai  staff  4088 Jun 20 09:54 06-arch-diagram-submission.run.log
+[0m
+[0m← [0mWrite work/reports/wave-8/03-adrs.report.md
+Wrote file successfully.
+[0m
+[0m$ [0mls -la work/reports/wave-8/03-adrs.report.md
+-rw-r--r--@ 1 srujansai  staff  1830 Jun 20 09:54 work/reports/wave-8/03-adrs.report.md
+[0m
+[0m$ [0mls -la | grep -E "(ruff|pyproject|setup)" | head -10
+drwxr-xr-x@  5 srujansai  staff    160 Jun 19 15:15 .ruff_cache
+-rw-r--r--@  1 srujansai  staff   1455 Jun 19 09:14 pyproject.toml
+[0m
+[0m→ [0mRead pyproject.toml
+[0m
+[0m$ [0mruff check . --output-format=concise 2>&1 | head -20
+src/interface/core.py:16:22: F401 [*] `datetime.UTC` imported but unused
+src/interface/core.py:16:27: F401 [*] `datetime.datetime` imported but unused
+tests/unit/test_agents_market_news.py:12:1: I001 [*] Import block is un-sorted or un-formatted
+tests/unit/test_agents_market_news.py:17:8: F401 [*] `pytest` imported but unused
+tests/unit/test_agents_market_news.py:26:65: F401 [*] `finroot.tools.fundamentals.FundamentalInput` imported but unused
+tests/unit/test_agents_market_news.py:26:83: F401 [*] `finroot.tools.fundamentals.FundamentalOutput` imported but unused
+tests/unit/test_agents_market_news.py:27:34: F401 [*] `finroot.tools.market.MarketDataInput` imported but unused
+tests/unit/test_agents_market_news.py:27:51: F401 [*] `finroot.tools.market.MarketDataOutput` imported but unused
+tests/unit/test_agents_market_news.py:28:32: F401 [*] `finroot.tools.news.NewsInput` imported but unused
+tests/unit/test_agents_market_news.py:28:43: F401 [*] `finroot.tools.news.NewsOutput` imported but unused
+tests/unit/test_agents_market_news.py:29:60: F401 [*] `finroot.tools.sentiment.SentimentInput` imported but unused
+tests/unit/test_agents_market_news.py:29:76: F401 [*] `finroot.tools.sentiment.SentimentOutput` imported but unused
+tests/unit/test_llm_provider.py:3:1: I001 [*] Import block is un-sorted or un-formatted
+tests/unit/test_llm_provider.py:94:38: F401 [*] `finroot.llm.groq.GroqProvider` imported but unused
+tests/unit/test_llm_provider.py:95:40: F401 [*] `finroot.llm.openai.OpenAIProvider` imported but unused
+tests/unit/test_llm_provider.py:157:14: B017 Do not assert blind exception: `Exception`
+tests/unit/test_tools_market.py:16:1: I001 [*] Import block is un-sorted or un-formatted
+tests/unit/test_tools_market.py:18:8: F401 [*] `os` imported but unused
+tests/unit/test_tools_market.py:406:17: E731 Do not assign a `lambda` expression, use a `def`
+tests/unit/test_tools_market.py:437:17: E731 Do not assign a `lambda` expression, use a `def`
+[0m
+[0m$ [0mruff check docs/decisions/0003-langgraph-plan-and-execute.md docs/decisions/0004-four-tier-memory-and-digital-twin.md docs/decisions/0005-five-axis-self-critic.md docs/decisions/0006-sovereign-first-mock-default.md docs/decisions/0007-hash-chained-audit-trail.md docs/decisions/0008-deterministic-tax-engine.md 2>&1 || echo "Ruff check on markdown files completed"
+warning: No Python files found under the given path(s)
+All checks passed!
+[0m
+[0m$ [0mls -la docs/decisions/000[3-8]-*.md
+-rw-r--r--@ 1 srujansai  staff  2315 Jun 20 09:53 docs/decisions/0003-langgraph-plan-and-execute.md
+-rw-r--r--@ 1 srujansai  staff  2427 Jun 20 09:53 docs/decisions/0004-four-tier-memory-and-digital-twin.md
+-rw-r--r--@ 1 srujansai  staff  2356 Jun 20 09:53 docs/decisions/0005-five-axis-self-critic.md
+-rw-r--r--@ 1 srujansai  staff  2333 Jun 20 09:54 docs/decisions/0006-sovereign-first-mock-default.md
+-rw-r--r--@ 1 srujansai  staff  2121 Jun 20 09:54 docs/decisions/0007-hash-chained-audit-trail.md
+-rw-r--r--@ 1 srujansai  staff  2254 Jun 20 09:54 docs/decisions/0008-deterministic-tax-engine.md
+[0m
+[0m$ [0mls -la work/reports/wave-8/03-adrs.report.md
+-rw-r--r--@ 1 srujansai  staff  1830 Jun 20 09:54 work/reports/wave-8/03-adrs.report.md
+[0m
+Done! Created 6 Architecture Decision Records (ADRs) in MADR format:
+
+**Created files:**
+- `docs/decisions/0003-langgraph-plan-and-execute.md`
+- `docs/decisions/0004-four-tier-memory-and-digital-twin.md`
+- `docs/decisions/0005-five-axis-self-critic.md`
+- `docs/decisions/0006-sovereign-first-mock-default.md`
+- `docs/decisions/0007-hash-chained-audit-trail.md`
+- `docs/decisions/0008-deterministic-tax-engine.md`
+
+**Acceptance commands passed:**
+- Count: 6 ADRs created ✓
+- All have "## Decision" and "## Consequences" sections ✓
+
+**Report written:** `work/reports/wave-8/03-adrs.report.md`
+
+All requirements met: FM-13 (no extra files), FM-11 (no fabricated data), FM-09 (evidence captured), FM-07 (no secrets), FM-08 (scope compliance).
+=== opencode exited rc=0 @ Sat Jun 20 09:54:39 IST 2026 ===

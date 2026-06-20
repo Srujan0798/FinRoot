@@ -1,0 +1,74 @@
+=== dispatch opencode minimax-coding-plan/MiniMax-M3 -> work/wave-6/04-harness.md @ Sat Jun 20 10:53:50 IST 2026 ===
+[0m
+> build · MiniMax-M3
+[0m
+</think>
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead work/WORKER_PROMPT.md
+[0m→ [0mRead work/wave-6/04-harness.md
+</think>
+[0m→ [0mRead .specify/specs/wave-6/contracts/evals.contract.md
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-6/
+contracts
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/work/wave-6/
+01-frb-question-bank.md
+02-graders.md
+03-baselines.md
+04-harness.md
+05-report-generator.md
+[0m
+</think>
+[0m→ [0mRead work/wave-6/01-frb-question-bank.md
+[0m→ [0mRead work/wave-6/02-graders.md
+[0m→ [0mRead work/wave-6/03-baselines.md
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/
+AGENTS.md
+BACKLOG.md
+CHANGELOG.md
+CLAUDE.md
+CONTRIBUTING.md
+Dockerfile
+HALL_OF_SHAME.md
+HANDOFF.md
+HIERARCHY.md
+HOW_TO_RUN.md
+KIMI.md
+LICENSE
+Makefile
+OS_SETUP.md
+README.md
+attic
+config
+corpus
+data
+deployment
+docker-compose.dev.yml
+docker-compose.yml
+docs
+evals
+evidence
+finroot-submission.zip
+logs
+mcp.json
+models
+orchestrator
+plan
+prometheus.yml
+prompts
+pyproject.toml
+pytest.ini
+requirements.txt
+resources
+results
+schema
+scripts
+skills-lock.json
+skills.manifest.json
+src
+tests
+work
+workflows
+[0m

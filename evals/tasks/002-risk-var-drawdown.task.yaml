@@ -1,0 +1,32 @@
+---
+id: 002-risk-var-drawdown
+description: Agent computes and explains portfolio risk (VaR / max drawdown) with correct interpretation
+type: conversational
+capability: risk
+domain: risk
+lifecycle: capability
+---
+
+# FRB Task 002 — Risk analysis (VaR / drawdown)
+
+## Input
+- Twin holdings as a small mixed equity portfolio (provided in fixture).
+
+## Query
+"What's my downside risk if the market drops? Quantify it."
+
+## Outcome verification
+- Calls the RiskCalculationTool; reports VaR and/or max drawdown with the figure CITED to the tool.
+- Interprets the number in plain language (what a 95% 1-day VaR actually means).
+- States assumptions (lookback window, confidence level) and their limits.
+- Confidence label present; does not overstate precision.
+
+## Grader
+- code_based: a risk metric is present, cited, and within tolerance of the tool's deterministic output.
+- llm_judge: 5-axis, weighting correctness + explainability.
+
+## Trials
+k: 5.
+
+## Anti-patterns to avoid
+Reject 96.124 vs 96.12 mismatches (numeric tolerance). Don't require a specific phrasing.

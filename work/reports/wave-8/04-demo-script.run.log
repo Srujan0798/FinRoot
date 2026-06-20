@@ -1,0 +1,236 @@
+=== dispatch opencode xiaomi-token-plan-sgp/mimo-v2.5-pro -> work/wave-8/04-demo-script.md @ Sat Jun 20 10:28:03 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 10:32:50 IST 2026 ===
+KER_PROMPT.md
+[0m→ [0mRead work/wave-8/04-demo-script.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead .specify/specs/wave-8/contracts/submission.contract.md
+[0m→ [0mRead src/finroot
+[0m✱ [0mGlob "src/interface/**/*.py"[90m 11 matches[0m
+[0m→ [0mRead src/interface/core.py
+[0m✱ [0mGlob "src/finroot/schemas/**/*.py"[90m 6 matches[0m
+[0m→ [0mRead docs/waves
+[0m→ [0mRead src/finroot/schemas/state.py
+[0m→ [0mRead src/finroot/schemas/recommendation.py
+[0m→ [0mRead src/finroot/schemas/enums.py
+[0m✱ [0mGlob "docs/business/*.md"[90m 0 matches[0m
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/scripts/ 2>/dev/null || echo "scripts dir not found"; ls -la /Users/srujansai/Desktop/FinRoot/docs/business/ 2>/dev/null || echo "docs/business dir not found"; ls -la /Users/srujansai/Desktop/FinRoot/docs/demo/ 2>/dev/null || echo "docs/demo dir not found"
+total 16
+drwxr-xr-x@  4 srujansai  staff   128 Jun 20 09:54 .
+drwxr-xr-x@ 58 srujansai  staff  1856 Jun 20 09:54 ..
+-rwxr-xr-x@  1 srujansai  staff  1625 Jun 20 09:54 make_submission.sh
+-rw-r--r--@  1 srujansai  staff  2630 Jun 19 18:54 smoke_test.py
+docs/business dir not found
+docs/demo dir not found
+[0m
+[0m# [0mTodos
+[ ] Create docs/business/7_minute_demo_script.md with timed beats
+[ ] Create scripts/capture_demo.py that runs answer() on 4 queries
+[ ] Create required directories (docs/business, docs/demo)
+[ ] Run acceptance commands and capture output
+[ ] Write work/reports/wave-8/04-demo-script.report.md
+[0m
+[0m# [0mTodos
+[ ] Create docs/business/7_minute_demo_script.md with timed beats
+[ ] Create scripts/capture_demo.py that runs answer() on 4 queries
+[•] Create required directories (docs/business, docs/demo)
+[ ] Run acceptance commands and capture output
+[ ] Write work/reports/wave-8/04-demo-script.report.md
+[0m
+[0m$ [0mmkdir -p /Users/srujansai/Desktop/FinRoot/docs/business /Users/srujansai/Desktop/FinRoot/docs/demo
+(no output)
+[0m
+[0m✱ [0mGlob "data/samples/*.json"[90m 1 match[0m
+[0m✱ [0mGlob "results/metrics.json"[90m 0 matches[0m
+[0m→ [0mRead data/samples/twin_profiles.json
+[0m✱ [0mGlob "tests/**/*.py"[90m 32 matches[0m
+[0m→ [0mRead scripts/smoke_test.py
+[0m→ [0mRead tests/unit/test_schemas.py
+Now let me look at how the existing smoke test and tests use `answer()` to understand the patterns:
+[0m
+[0m# [0mTodos
+[•] Create docs/business/7_minute_demo_script.md with timed beats
+[ ] Create scripts/capture_demo.py that runs answer() on 4 queries
+[✓] Create required directories (docs/business, docs/demo)
+[ ] Run acceptance commands and capture output
+[ ] Write work/reports/wave-8/04-demo-script.report.md
+[0m
+Now I have everything I need. Let me create both files.
+[0m← [0mWrite docs/business/7_minute_demo_script.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create docs/business/7_minute_demo_script.md with timed beats
+[•] Create scripts/capture_demo.py that runs answer() on 4 queries
+[✓] Create required directories (docs/business, docs/demo)
+[ ] Run acceptance commands and capture output
+[ ] Write work/reports/wave-8/04-demo-script.report.md
+[0m
+[0m✱ [0mGlob "pyproject.toml"[90m 1 match[0m
+[0m→ [0mRead pyproject.toml
+[0m
+[0m← [0mWrite scripts/capture_demo.py
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create docs/business/7_minute_demo_script.md with timed beats
+[✓] Create scripts/capture_demo.py that runs answer() on 4 queries
+[✓] Create required directories (docs/business, docs/demo)
+[•] Run acceptance commands and capture output
+[ ] Write work/reports/wave-8/04-demo-script.report.md
+[0m
+[0m$ [0mruff check scripts/capture_demo.py
+F401 [*] `textwrap` imported but unused
+  --> scripts/capture_demo.py:18:8
+   |
+17 | import sys
+18 | import textwrap
+   |        ^^^^^^^^
+19 | from datetime import UTC, datetime
+20 | from pathlib import Path
+   |
+help: Remove unused import: `textwrap`
+
+F541 [*] f-string without any placeholders
+   --> scripts/capture_demo.py:199:9
+    |
+197 |         "",
+198 |         f"> Generated: {now}  ",
+199 |         f"> Mode: Mock (offline, no API keys)",
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+200 |         "",
+201 |         "---",
+    |
+help: Remove extraneous `f` prefix
+
+Found 2 errors.
+[*] 2 fixable with the `--fix` option.
+[0m
+[0m← [0mEdit scripts/capture_demo.py
+Index: /Users/srujansai/Desktop/FinRoot/scripts/capture_demo.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/scripts/capture_demo.py
++++ /Users/srujansai/Desktop/FinRoot/scripts/capture_demo.py
+@@ -14,9 +14,8 @@
+ 
+ from __future__ import annotations
+ 
+ import sys
+-import textwrap
+ from datetime import UTC, datetime
+ from pathlib import Path
+ 
+ # ---------------------------------------------------------------------------
+
+[0m
+[0m← [0mEdit scripts/capture_demo.py
+Index: /Users/srujansai/Desktop/FinRoot/scripts/capture_demo.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/scripts/capture_demo.py
++++ /Users/srujansai/Desktop/FinRoot/scripts/capture_demo.py
+@@ -194,9 +194,9 @@
+ sections = [
+     f"# Demo Transcript {index}: {slug.replace('_', ' ').title()}",
+     "",
+     f"> Generated: {now}  ",
+-    f"> Mode: Mock (offline, no API keys)",
++    "> Mode: Mock (offline, no API keys)",
+     "",
+     "---",
+     "",
+     "## Query",
+
+[0m
+[0m$ [0mruff check scripts/capture_demo.py
+All checks passed!
+[0m
+Now let me run the acceptance commands:
+[0m$ [0mPYTHONPATH=src python3 scripts/capture_demo.py
+FATAL: Could not import interface.core — No module named 'config'
+Ensure PYTHONPATH includes src/ and all dependencies are installed.
+[0m
+[0m✱ [0mGlob "src/config/**/*.py"[90m 0 matches[0m
+[0m✱ [0mGlob "config/**/*.py"[90m 3 matches[0m
+[0m
+[0m← [0mEdit scripts/capture_demo.py
+Index: /Users/srujansai/Desktop/FinRoot/scripts/capture_demo.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/scripts/capture_demo.py
++++ /Users/srujansai/Desktop/FinRoot/scripts/capture_demo.py
+@@ -22,8 +22,10 @@
+ # Path setup — ensure src/ is importable
+ # ---------------------------------------------------------------------------
+ _ROOT = Path(__file__).parent.parent
+ _SRC = _ROOT / "src"
++if str(_ROOT) not in sys.path:
++    sys.path.insert(0, str(_ROOT))
+ if str(_SRC) not in sys.path:
+     sys.path.insert(0, str(_SRC))
+ 
+ # ---------------------------------------------------------------------------
+
+[0m
+[0m$ [0mPYTHONPATH=src python3 scripts/capture_demo.py
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+[1/4] Running answer() for: 'What is my current portfolio allocation and risk level?' ...
+  -> docs/demo/transcript_1_portfolio.md
+[2/4] Running answer() for: 'How much tax will I owe if I sell my equity holdings this year?' ...
+  -> docs/demo/transcript_2_tax_with_number.md
+[3/4] Running answer() for: 'What is the impact of recent RBI policy changes on my debt fund holdings?' ...
+  -> docs/demo/transcript_3_news_impact.md
+[4/4] Running answer() for: 'I want to put my entire emergency fund into a high-growth small-cap stock.' ...
+  -> docs/demo/transcript_4_trap_question.md
+
+Done. 4 transcript(s) written:
+  docs/demo/transcript_1_portfolio.md
+  docs/demo/transcript_2_tax_with_number.md
+  docs/demo/transcript_3_news_impact.md
+  docs/demo/transcript_4_trap_question.md
+[0m
+[0m$ [0mls docs/demo/transcript_*.md
+docs/demo/transcript_1_portfolio.md
+docs/demo/transcript_2_tax_with_number.md
+docs/demo/transcript_3_news_impact.md
+docs/demo/transcript_4_trap_question.md
+[0m
+[0m$ [0mtest -f docs/business/7_minute_demo_script.md && grep -qE "[0-9]:[0-9][0-9]" docs/business/7_minute_demo_script.md && echo "timed script present"
+timed script present
+[0m
+[0m→ [0mRead docs/demo/transcript_1_portfolio.md
+[0m→ [0mRead docs/demo/transcript_4_trap_question.md
+All acceptance commands pass. Let me run ruff one final time and then write the report.
+[0m
+[0m$ [0mruff check scripts/capture_demo.py docs/business/7_minute_demo_script.md
+All checks passed!
+[0m
+[0m# [0mTodos
+[✓] Create docs/business/7_minute_demo_script.md with timed beats
+[✓] Create scripts/capture_demo.py that runs answer() on 4 queries
+[✓] Create required directories (docs/business, docs/demo)
+[✓] Run acceptance commands and capture output
+[•] Write work/reports/wave-8/04-demo-script.report.md
+[0m
+[0m← [0mWrite work/reports/wave-8/04-demo-script.report.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create docs/business/7_minute_demo_script.md with timed beats
+[✓] Create scripts/capture_demo.py that runs answer() on 4 queries
+[✓] Create required directories (docs/business, docs/demo)
+[✓] Run acceptance commands and capture output
+[✓] Write work/reports/wave-8/04-demo-script.report.md
+[0m
+Done. All acceptance commands pass. Here's what was built:
+
+**Files written (my Writes set only):**
+- `docs/business/7_minute_demo_script.md` — 8 timed beats (0:00–7:00) with click/narration/fallback per beat, mapped to scoring axes
+- `scripts/capture_demo.py` — runs `answer()` on 4 queries (portfolio, tax, news_impact, trap), writes formatted transcripts to `docs/demo/`
+
+**Key verification:**
+- Trap question correctly triggers prudence verifier: `Compliant: False`, confidence downgraded to LOW, "Emergency fund first" principle flagged
+- All 4 transcripts contain real answer cards, reasoning traces, 5-axis critic verdicts, and citations
+- `ruff check` clean, no fabricated data
+=== opencode exited rc=0 @ Sat Jun 20 10:32:50 IST 2026 ===

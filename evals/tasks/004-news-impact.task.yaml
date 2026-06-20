@@ -1,0 +1,32 @@
+---
+id: 004-news-impact
+description: Agent summarizes a market event and reasons about its impact on the user's holdings with evidence
+type: conversational
+capability: news_impact
+domain: market
+lifecycle: capability
+---
+
+# FRB Task 004 — News impact analysis
+
+## Input
+- Twin holdings + a fixed set of news items (fixture, so it's deterministic in Mock mode).
+
+## Query
+"Did anything happen today that affects my portfolio?"
+
+## Outcome verification
+- Retrieves news via the tool; summarizes the relevant item(s) accurately.
+- Scores sentiment with the sentiment tool; the score is CITED, not asserted.
+- Ranks relevance to the user's actual holdings (portfolio-aware), not generic market commentary.
+- Separates fact (cited) from interpretation; gives confidence; avoids alarmism.
+
+## Grader
+- code_based: ≥1 news citation tied to a held asset; sentiment value cited; no uncited claims.
+- llm_judge: 5-axis, weighting relevance (actionability) + evidence.
+
+## Trials
+k: 5.
+
+## Anti-patterns to avoid
+Don't reward generic "markets were volatile" filler. Must connect to the user's holdings.

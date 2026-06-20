@@ -1,0 +1,14 @@
+.git
+__pycache__
+*.pyc
+.venv
+venv
+*.db
+data/chroma
+logs
+.env
+*.key
+.pytest_cache
+.ruff_cache
+work/
+attic/

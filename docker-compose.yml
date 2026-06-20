@@ -1,0 +1,19 @@
+# FinRoot default stack. `docker compose up` → UI on :8501, Mock mode, no keys needed.
+services:
+  finroot:
+    build: { context: ., dockerfile: Dockerfile }
+    image: finroot:demo
+    ports:
+      - "8501:8501"
+    environment:
+      FINROOT_LLM_PROVIDER: mock
+    # optional .env mount (commented)
+    # volumes:
+    #   - ./.env:/app/.env:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s

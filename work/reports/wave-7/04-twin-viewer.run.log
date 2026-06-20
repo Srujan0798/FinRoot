@@ -1,0 +1,79 @@
+=== dispatch opencode opencode/mimo-v2.5-free -> work/wave-7/04-twin-viewer.md @ Sat Jun 20 09:52:32 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 09:55:04 IST 2026 ===
+RKER_PROMPT.md
+[0m→ [0mRead work/wave-7/04-twin-viewer.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead data/samples/twin_profiles.json
+[0m→ [0mRead src/finroot/memory/digital_twin.py
+[0m→ [0mRead .specify/specs/wave-7/contracts/ui.contract.md
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/interface/ui/components/ 2>/dev/null || echo "Directory does not exist"
+Directory does not exist
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/interface/ui/ 2>/dev/null || echo "Directory does not exist"
+(no output)
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/interface/ui/components/ 2>&1; ls /Users/srujansai/Desktop/FinRoot/src/interface/ 2>&1
+ls: /Users/srujansai/Desktop/FinRoot/src/interface/ui/components/: No such file or directory
+api
+cli
+ui
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/interface/ui/components/ 2>&1; ls /Users/srujansai/Desktop/FinRoot/src/interface/ui/ 2>&1
+ls: /Users/srujansai/Desktop/FinRoot/src/interface/ui/components/: No such file or directory
+[0m
+[0m✱ [0mGlob "src/interface/**/__init__.py"[90m in . · 0 matches[0m
+[0m✱ [0mGlob "**/*"[90m in src/interface · 3 matches[0m
+The interface directory has no `__init__.py` files yet. I need the directory structure for my file. Let me create the directories and the component, then verify.
+[0m
+[0m$ [0mmkdir -p /Users/srujansai/Desktop/FinRoot/src/interface/ui/components
+(no output)
+[0m
+Now let me check if `__init__.py` files exist at each level:
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/src/interface/__init__.py /Users/srujansai/Desktop/FinRoot/src/interface/ui/__init__.py /Users/srujansai/Desktop/FinRoot/src/interface/ui/components/__init__.py 2>&1
+ls: /Users/srujansai/Desktop/FinRoot/src/interface/__init__.py: No such file or directory
+ls: /Users/srujansai/Desktop/FinRoot/src/interface/ui/components/__init__.py: No such file or directory
+-rw-r--r--@ 1 srujansai  staff  64 Jun 20 09:53 /Users/srujansai/Desktop/FinRoot/src/interface/ui/__init__.py
+[0m
+[0m→ [0mRead src/interface/ui/__init__.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/interface/__init__.py 2>&1
+ls: /Users/srujansai/Desktop/FinRoot/src/interface/__init__.py: No such file or directory
+[0m
+I need to check if the acceptance import will work. The `interface` package lacks `__init__.py`, and `components` lacks `__init__.py`. Let me first write the component, then test.
+[0m← [0mWrite src/interface/ui/components/twin.py
+Wrote file successfully.
+[0m
+Now let me run the acceptance commands:
+[0m$ [0mPYTHONPATH=src python3 -c "import interface.ui.components.twin as t; print('twin viewer imports OK'); print(t.load_demo_twin()['name'])"
+twin viewer imports OK
+Priya Sharma
+[0m
+Import works. Now ruff:
+[0m$ [0mruff check src/interface/ui/components/twin.py
+All checks passed!
+[0m
+Now let me check the existing test patterns and write tests:
+[0m✱ [0mGlob "tests/**/*.py"[90m in . · 26 matches[0m
+[0m→ [0mRead tests/unit/test_digital_twin.py[90m [limit=20][0m
+[0m
+[0m← [0mWrite work/reports/wave-7/04-twin-viewer.report.md
+Wrote file successfully.
+[0m
+The task's Writes set only includes `twin.py`. The acceptance commands are the import test and ruff check, both of which pass. Let me write the report.
+Done. Here's a summary:
+
+**Created:** `src/interface/ui/components/twin.py`
+
+**Acceptance passes:**
+- `import interface.ui.components.twin` loads successfully, prints "Priya Sharma"
+- `ruff check` — all checks passed
+
+**What it does:**
+- `load_demo_twin()` — loads first profile from `data/samples/twin_profiles.json`
+- `render(twin)` — renders profile card (age, risk badge, horizon, tax bracket), monthly finances (income/expenses/surplus via `st.metric`), goals/constraints as bullets, holdings table via `st.dataframe`, total portfolio value metric, and allocation bar chart via `st.bar_chart`
+- Defensive: if Streamlit missing → `ImportError`; if data missing → `st.info`
+- Self-contained, importable standalone
+
+**Report:** `work/reports/wave-7/04-twin-viewer.report.md`
+=== opencode exited rc=0 @ Sat Jun 20 09:55:04 IST 2026 ===
