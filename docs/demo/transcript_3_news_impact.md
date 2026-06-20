@@ -1,6 +1,6 @@
 # Demo Transcript 3: News Impact
 
-> Generated: 2026-06-20 16:36 UTC  
+> Generated: 2026-06-20 21:04 UTC  
 > Mode: Mock (offline, no API keys)
 
 ---
@@ -16,14 +16,14 @@
 **Confidence:** `ConfidenceLevel.MEDIUM`
 
 ### Summary
-Domain: portfolio. Confidence: medium. Focus: asset allocation. Also: diversification. Query: What is the impact of recent RBI policy changes on my debt fund holdings?
+Your portfolio review reveals several areas to address. Concentration risk in individual holdings should be quantified — any single position above 15-20% of the portfolio warrants attention. Asset allocation should reflect your risk tolerance, tax slab, and investment horizon. Rebalancing should be tax-aware, considering LTCG/STCG implications on any sales. Diversification across equity, debt, and gold aligned with your risk profile is recommended. Use SIP and rupee cost averaging for gradual rebalancing. Key risks identified: Concentration risk: FD_HDFC_001 is 22% of portfolio (recommended max: 15-20%); Concentration risk: MF_ICICI_BALANCED_001 is 27% of portfolio (recommended max: 15-20%); Concentration risk: MF_SBI_DEBT_001 is 34% of portfolio (recommended max: 15-20%).
 
 ### Analysis
 ### Query context
 - What is the impact of recent RBI policy changes on my debt fund holdings?
 
 ### Domain analysis: portfolio
-The query falls in the **portfolio** domain. Key concepts to consider: asset allocation, diversification, concentration risk, rebalance, horizon, LTCG, tax, equity. A portfolio review should evaluate concentration risk, the user's risk tolerance, and the investment horizon. If rebalancing before FY-end, the LTCG tax on any sale is the dominant cost — sell only when the after-tax benefit exceeds the concentration-risk reduction. Diversification across asset classes (equity, debt, gold) is the primary defense against single-stock or single-sector shocks. Recommend gradual rebalancing rather than a single trade to manage tax outflows and timing risk.
+The query falls in the **portfolio** domain. Key concepts to consider: asset allocation, diversification, concentration risk, rebalance, horizon, LTCG, tax, equity. A portfolio review should evaluate concentration risk, the user's risk tolerance, and the investment horizon. If rebalancing before FY-end, the LTCG tax on any sale is the dominant cost — sell only when the after-tax benefit exceeds the concentration-risk reduction. Diversification across asset classes (equity, debt, gold) is the primary defense against single-stock or single-sector shocks. Asset allocation should reflect age, risk profile, and tax slab. Recommend gradual rebalancing via SIP and rupee cost averaging rather than a single trade to manage tax outflows, drift, and timing risk. Sequence of returns risk matters for long horizons.
 
 ### Reasoning process
 - intent_classifier: produced output
@@ -58,10 +58,21 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 - [risk_assessor] p90_return: 0.376208
 - [risk_assessor] probability_of_loss: 0.315
 
+### Risks
+- Concentration risk: FD_HDFC_001 is 22% of portfolio (recommended max: 15-20%)
+- Concentration risk: MF_ICICI_BALANCED_001 is 27% of portfolio (recommended max: 15-20%)
+- Concentration risk: MF_SBI_DEBT_001 is 34% of portfolio (recommended max: 15-20%)
+- High loss probability (31%) in current allocation scenario
+- High loss probability (31%) in equal_weight allocation scenario
+
 ### Recommended Actions
 - Quantify the concentration risk in the current holdings (largest single-stock weight).
 - Run a tax-aware rebalance simulation that accounts for LTCG/STCG on any sale.
 - Diversify into a target asset allocation aligned with risk profile and horizon.
+
+### Invalidation Conditions
+- If you diversify your portfolio, the concentration risk warning would no longer apply.
+- If your goals and constraints were more clearly defined, the recommendation could be more specific and actionable.
 
 ---
 
@@ -69,8 +80,8 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 
 | Source | Detail | Value | Retrieved At |
 |--------|--------|-------|--------------|
-| risk_assessor | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | 2026-06-20 16:36:54.748469+00:00 |
-| context_assembler | Output from context_assembler agent | {'query': 'What is the impact of recent RBI policy changes on my debt fund holdings?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'co | 2026-06-20 16:36:54.748689+00:00 |
+| risk_assessor | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | 2026-06-20 21:04:15.401112+00:00 |
+| context_assembler | Output from context_assembler agent | {'query': 'What is the impact of recent RBI policy changes on my debt fund holdings?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'co | 2026-06-20 21:04:15.402712+00:00 |
 
 ---
 
@@ -93,7 +104,7 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 | 12 | portfolio_optimizer | rebalancing_comparison | simulations=[{'label': 'current', 'expected_return': 0.093536, 'p10_return': -0.134036, 'p90_return': 0.363626, 'probabi |
 | 13 | portfolio_simulator | tool_output | input=holdings=[{'asset_id': 'FD_HDFC_001', 'asset_type': 'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quantity' |
 | 14 | risk_assessor | monte_carlo | expected_return=0.0895, p10_return=-0.1477, p90_return=0.376208, probability_of_loss=0.315, citation=Monte Carlo (GBM):  |
-| 15 | critic | critique | SelfCritic passed (overall=0.77, threshold=0.6). Axes: correctness=1.00, risk_awareness=0.30, actionability=0.70, explai |
+| 15 | critic | critique | SelfCritic passed (overall=0.94, threshold=0.6). Axes: correctness=1.00, risk_awareness=1.00, actionability=0.70, explai |
 | 16 | orchestrator | orchestrator.run | {"query": "What is the impact of recent RBI policy changes on my debt fund holdings?"} |
 | 17 | tool | tool.called | {"input": "symbol='FD_HDFC_001' period='1d'", "output": "symbol='FD_HDFC_001' currency='USD' prices=[PricePoint(date='20 |
 | 18 | tool | tool.called | {"input": "symbol='MF_ICICI_BALANCED_001' period='1d'", "output": "symbol='MF_ICICI_BALANCED_001' currency='USD' prices= |
@@ -103,18 +114,18 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 | 22 | tool | tool.called | {"input": "holdings=[{'symbol': 'FD_HDFC_001', 'weight': 0.25}, {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.25}, {'s |
 | 23 | tool | tool.called | {"input": "holdings=[{'asset_id': 'FD_HDFC_001', 'asset_type': 'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quan |
 | 24 | orchestrator | orchestrator.done | {"has_candidate": true, "intent": "portfolio", "query": "What is the impact of recent RBI policy changes on my debt fund |
-| 25 | synthesizer | recommendation | Domain: portfolio. Confidence: medium. Focus: asset allocation. Also: diversification. Query: What is the impact of rece |
+| 25 | synthesizer | recommendation | Your portfolio review reveals several areas to address. Concentration risk in individual holdings should be quantified — |
 
 ---
 
 ## Critic Verdict (5-Axis)
 
-**Verdict:** SelfCritic passed (overall=0.77, threshold=0.6). Axes: correctness=1.00, risk_awareness=0.30, actionability=0.70, explainability=1.00, evidence=1.00. Must fix: risk_awareness.
+**Verdict:** SelfCritic passed (overall=0.94, threshold=0.6). Axes: correctness=1.00, risk_awareness=1.00, actionability=0.70, explainability=1.00, evidence=1.00.
 
 | Axis | Score |
 |------|-------|
 | correctness | 1.0 |
-| risk_awareness | 0.3 |
+| risk_awareness | 1.0 |
 | actionability | 0.7 |
 | explainability | 1.0 |
 | evidence | 1.0 |
