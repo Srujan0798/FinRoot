@@ -78,66 +78,39 @@ Diagram source: [docs/architecture/architecture.mmd](docs/architecture/architect
 
 ## 🎯 Judging-criteria mapping (SCALE ML Club PS-1)
 
-We optimize for the four scoring weights and **show exactly where each is delivered**.
-
-| Weight | Criterion | Where FinRoot earns it | Evidence |
-|---:|---|---|---|
-| **35%** | **Reasoning Quality** | 5-axis Self-Critic loop · Rooted Prudence verifier · Digital-Twin-grounded synthesis · FRB harness with RAG baseline delta | `src/finroot/reasoning/critic.py` · `src/finroot/reasoning/principles.py` · `evals/` · `results/metrics.json` |
-| **30%** | **Agent Architecture** | LangGraph Plan-and-Execute supervisor · 6 specialized agents · 12-tool ecosystem · 4-tier memory · refine loops · hash-chained audit · LLM-provider abstraction | `src/finroot/workflows/orchestrator.py` · `src/finroot/agents/` · `src/finroot/tools/` · `src/finroot/memory/` · `src/finroot/audit/` · [`docs/architecture/architecture.mmd`](docs/architecture/architecture.mmd) |
-| **20%** | **Code Implementation** | Modular `src/finroot/*` package layout · Pydantic v2 typed boundaries · pytest taxonomy (unit/integration/golden/fuzz/perf/security) · ruff-clean · CI workflow · Dockerized stack | `src/finroot/` · `tests/` · `.github/workflows/` · `Dockerfile` · `docker-compose.yml` |
-| **15%** | **Solution Idea** | A new category: **sovereign, auditable reasoning over your financial Digital Twin** — long-term-thinking-first, downside-aware, locally runnable, with a reproducible proof harness | `plan/PRD.md` · [`docs/SUBMISSION.md`](docs/SUBMISSION.md) · [`docs/business/executive_summary.md`](docs/business/executive_summary.md) |
-
-> The 35% weapon is **proof**, not assertion: see the FRB Results table below.
+| Weight | Criterion | Where FinRoot earns it |
+|---:|---|---|
+| **35%** | **Reasoning Quality** | 5-axis Self-Critic + Rooted Prudence + Digital-Twin synthesis + FRB harness vs RAG baseline |
+| **30%** | **Agent Architecture** | LangGraph Plan-and-Execute + 6 agents + 14 tools + 4-tier memory + refine loops + audit + LLM abstraction |
+| **20%** | **Code Implementation** | Modular `src/finroot/` · Pydantic v2 · 1066 tests · ruff-clean · CI · Docker |
+| **15%** | **Solution Idea** | Sovereign, auditable reasoning over your Digital Twin — downside-aware, locally runnable, with proof harness |
 
 ---
 
 ## 🚀 Quickstart
 
-You need **one of** the following — Docker is the fastest path; Mock mode needs zero API keys.
-
-### Option A — Docker (recommended, judge-safe)
-
+### Docker (recommended, judge-safe)
 ```bash
-docker compose up --build
-# then open http://localhost:8501
+docker compose up --build    # open http://localhost:8501 — Mock mode, zero keys
 ```
 
-Mock mode is the default in `docker-compose.yml`. No keys, no network calls.
-
-### Option B — Local Python
-
+### Local Python
 ```bash
-pip install -e .[ui]                       # editable install with UI extras
-python -m interface.cli --mock \
-  "Should I rebalance my 70/30 equity portfolio before FY-end?"
-streamlit run src/interface/ui/app.py       # dark UI at http://localhost:8501
-```
-
-### Option C — Sovereign (Ollama, fully local)
-
-```bash
-ollama pull llama3.1:8b
-export FINROOT_LLM_PROVIDER=ollama
+pip install -e .[ui]
+python -m interface.cli --mock "Should I rebalance my 70/30 portfolio before FY-end?"
 streamlit run src/interface/ui/app.py
 ```
 
-### Verify the reasoning-quality claim
-
+### Sovereign (Ollama, fully local)
 ```bash
-make evals               # runs the FRB harness → results/metrics.json
+ollama pull llama3.1:8b && export FINROOT_LLM_PROVIDER=ollama
+streamlit run src/interface/ui/app.py
 ```
 
----
-
-## ⚡ Quick Demo — 30 seconds
-
+### Verify reasoning quality
 ```bash
-git clone https://github.com/your-org/finroot.git && cd finroot
-docker compose up --build
-# open http://localhost:8501 → ask "Should I rebalance my 70/30 portfolio before FY-end?"
+make evals    # FRB harness → results/metrics.json
 ```
-
-That is it. Mock mode is the default — no API keys, no network, no friction.
 
 ---
 

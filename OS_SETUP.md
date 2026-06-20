@@ -53,7 +53,7 @@ Failure modes: Brain crash → reopen + resume. Hand crash → provision new win
 
 ```
 <project>/
-├── CLAUDE.md / KIMI.md / AGENTS.md   # kernel (identical), auto-loaded
+├── CLAUDE.md / KIMI.md (alias) / AGENTS.md   # kernel, auto-loaded
 ├── HANDOFF.md                         # current state for cold sessions
 ├── HIERARCHY.md                       # repo map + ownership
 ├── README.md · HOW_TO_RUN.md · CHANGELOG.md · CONTRIBUTING.md

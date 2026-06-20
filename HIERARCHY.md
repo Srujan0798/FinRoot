@@ -5,7 +5,7 @@
 
 | Path | Purpose | Owner |
 |---|---|---|
-| `CLAUDE.md` / `KIMI.md` / `AGENTS.md` | Kernel, auto-loaded, identical | Orchestrator |
+| `CLAUDE.md` / `KIMI.md` (alias) / `AGENTS.md` | Kernel, auto-loaded | Orchestrator |
 | `HANDOFF.md` | Current state for cold sessions | Orchestrator |
 | `HIERARCHY.md` | This map | Orchestrator |
 | `README.md` / `HOW_TO_RUN.md` | Entry point + run instructions | Orchestrator |

@@ -150,15 +150,25 @@ class TestConfidenceLow:
         assert rec.confidence is ConfidenceLevel.LOW
 
     def test_no_citations_anywhere(self) -> None:
+        """Wave-13: 2 non-error outputs now produce fallback citations and
+        MEDIUM confidence. The previous FM-11 "no inline citations ⇒ LOW"
+        rule still applies when tool outputs themselves carry no evidence
+        AND the synthesizer cannot fall back (i.e. zero outputs, or
+        outputs with no observable content)."""
+        # Empty tool_outputs ⇒ still LOW.
+        state = AgentState(query="simple")
+        assert SYNTH.synthesize(state).confidence is ConfidenceLevel.LOW
+
+        # Outputs with output=None and no usable payload ⇒ still LOW
+        # because the synthesizer's fallback requires observable content.
         state = AgentState(
             query="simple",
             tool_outputs=[
-                _tool_output(tool="a", citations=None, output="some result"),
-                _tool_output(tool="b", citations=None, output="another result"),
+                _tool_output(tool="a", output=None, type_="empty"),
+                _tool_output(tool="b", output=None, type_="empty"),
             ],
         )
-        rec = SYNTH.synthesize(state)
-        assert rec.confidence is ConfidenceLevel.LOW
+        assert SYNTH.synthesize(state).confidence is ConfidenceLevel.LOW
 
 
 # ---------------------------------------------------------------------------
