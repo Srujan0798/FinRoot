@@ -116,7 +116,7 @@ _DOMAIN_ACTIONS: dict[str, list[str]] = {
     "general": [
         "Re-check the emergency fund and risk profile before any new investment decision.",
         "Diversify — avoid putting more than 10-15% of net worth in a single stock or theme.",
-        "Do not act yet on tips, rumors, or guarantees — verify with primary sources first.",
+        "Do not act yet on tips, rumors, or any 'risk-free' claim — verify with primary sources first.",
     ],
     "insurance": [
         "Check sum insured adequacy for the family's medical needs in a metro city.",
