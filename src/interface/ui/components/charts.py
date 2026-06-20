@@ -10,7 +10,7 @@ Writes: ``src/interface/ui/components/charts.py`` (wave-7, task 06).
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from interface.ui.theme import (
     ACCENT,
