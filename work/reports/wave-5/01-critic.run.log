@@ -1,0 +1,968 @@
+=== dispatch opencode minimax-coding-plan/MiniMax-M3 -> work/wave-5/01-critic.md @ Sat Jun 20 09:34:25 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 10:09:46 IST 2026 ===
+rk/WORKER_PROMPT.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead work/wave-5/01-critic.md
+</think>
+[0m→ [0mRead src/finroot/schemas/recommendation.py
+[0m→ [0mRead src/finroot/schemas/state.py
+[0m→ [0mRead .specify/specs/wave-5/contracts/reasoning.contract.md
+</think>
+[0m
+[0m$ [0mls -la src/finroot/ 2>/dev/null
+total 8
+drwxr-xr-x@ 14 srujansai  staff  448 Jun 19 18:52 .
+drwxr-xr-x@  6 srujansai  staff  192 Jun 19 18:47 ..
+-rw-r--r--@  1 srujansai  staff  625 Jun 19 18:54 __init__.py
+drwxr-xr-x@  3 srujansai  staff   96 Jun 19 18:54 __pycache__
+drwxr-xr-x@ 13 srujansai  staff  416 Jun 19 21:25 agents
+drwxr-xr-x@  7 srujansai  staff  224 Jun 19 18:41 audit
+drwxr-xr-x@  3 srujansai  staff   96 Jun 19 09:22 evaluation
+drwxr-xr-x@ 10 srujansai  staff  320 Jun 19 15:39 llm
+drwxr-xr-x@  9 srujansai  staff  288 Jun 19 20:35 memory
+drwxr-xr-x@  6 srujansai  staff  192 Jun 19 21:58 reasoning
+drwxr-xr-x@ 10 srujansai  staff  320 Jun 19 18:39 schemas
+drwxr-xr-x@ 18 srujansai  staff  576 Jun 19 20:34 tools
+drwxr-xr-x@  5 srujansai  staff  160 Jun 19 18:55 utils
+drwxr-xr-x@  7 srujansai  staff  224 Jun 19 21:35 workflows
+[0m
+[0m$ [0mls -la src/finroot/schemas/ 2>/dev/null
+total 56
+drwxr-xr-x@ 10 srujansai  staff   320 Jun 19 18:39 .
+drwxr-xr-x@ 14 srujansai  staff   448 Jun 19 18:52 ..
+-rw-r--r--@  1 srujansai  staff     0 Jun 19 09:22 .gitkeep
+-rw-r--r--@  1 srujansai  staff   871 Jun 19 15:39 __init__.py
+drwxr-xr-x@  8 srujansai  staff   256 Jun 19 18:39 __pycache__
+-rw-r--r--@  1 srujansai  staff  2524 Jun 19 15:15 audit.py
+-rw-r--r--@  1 srujansai  staff  1829 Jun 19 16:24 enums.py
+-rw-r--r--@  1 srujansai  staff  4993 Jun 19 18:39 finance.py
+-rw-r--r--@  1 srujansai  staff  3635 Jun 19 16:32 recommendation.py
+-rw-r--r--@  1 srujansai  staff  2118 Jun 19 15:15 state.py
+[0m
+[0m$ [0mls -la tests/unit/ 2>/dev/null || echo "directory does not exist"
+total 592
+drwxr-xr-x@ 25 srujansai  staff    800 Jun 19 22:46 .
+drwxr-xr-x@ 10 srujansai  staff    320 Jun 19 09:23 ..
+drwxr-xr-x@ 24 srujansai  staff    768 Jun 19 22:48 __pycache__
+-rw-r--r--@  1 srujansai  staff  11156 Jun 19 21:17 test_agent_tax.py
+-rw-r--r--@  1 srujansai  staff  11210 Jun 19 20:56 test_agents_market_news.py
+-rw-r--r--@  1 srujansai  staff  15470 Jun 19 20:54 test_agents_risk_portfolio.py
+-rw-r--r--@  1 srujansai  staff   8407 Jun 19 18:42 test_audit_chain.py
+-rw-r--r--@  1 srujansai  staff   8442 Jun 19 18:43 test_base_interfaces.py
+-rw-r--r--@  1 srujansai  staff   6905 Jun 19 15:51 test_config.py
+-rw-r--r--@  1 srujansai  staff   5929 Jun 19 22:46 test_consistency.py
+-rw-r--r--@  1 srujansai  staff  10883 Jun 19 19:08 test_digital_twin.py
+-rw-r--r--@  1 srujansai  staff   8905 Jun 19 21:19 test_intent.py
+-rw-r--r--@  1 srujansai  staff   5894 Jun 19 15:50 test_llm_provider.py
+-rw-r--r--@  1 srujansai  staff  27620 Jun 19 20:38 test_memory_manager.py
+-rw-r--r--@  1 srujansai  staff  12943 Jun 19 22:48 test_principles.py
+-rw-r--r--@  1 srujansai  staff  17310 Jun 19 18:40 test_schemas.py
+-rw-r--r--@  1 srujansai  staff   7914 Jun 19 19:06 test_semantic_memory.py
+-rw-r--r--@  1 srujansai  staff   8107 Jun 19 21:36 test_synthesize.py
+-rw-r--r--@  1 srujansai  staff  16461 Jun 19 19:12 test_tools_macro.py
+-rw-r--r--@  1 srujansai  staff  17253 Jun 19 19:10 test_tools_market.py
+-rw-r--r--@  1 srujansai  staff   7004 Jun 19 19:05 test_tools_news.py
+-rw-r--r--@  1 srujansai  staff  13762 Jun 19 19:11 test_tools_profile.py
+-rw-r--r--@  1 srujansai  staff  10032 Jun 19 19:08 test_tools_risk.py
+-rw-r--r--@  1 srujansai  staff  11922 Jun 19 20:35 test_tools_tax.py
+-rw-r--r--@  1 srujansai  staff  13667 Jun 19 19:12 test_working_memory.py
+[0m
+[0m$ [0mls -la src/finroot/reasoning/ 2>/dev/null || echo "directory does not exist"
+total 40
+drwxr-xr-x@  6 srujansai  staff   192 Jun 19 21:58 .
+drwxr-xr-x@ 14 srujansai  staff   448 Jun 19 18:52 ..
+-rw-r--r--@  1 srujansai  staff     0 Jun 19 09:22 .gitkeep
+drwxr-xr-x@  4 srujansai  staff   128 Jun 19 22:48 __pycache__
+-rw-r--r--@  1 srujansai  staff  4387 Jun 19 22:48 consistency.py
+-rw-r--r--@  1 srujansai  staff  9236 Jun 19 22:46 principles.py
+[0m
+</think>
+[0m→ [0mRead src/finroot/schemas/enums.py
+[0m→ [0mRead src/finroot/__init__.py
+[0m→ [0mRead src/finroot/reasoning/principles.py
+</think>
+[0m→ [0mRead tests/unit/test_principles.py
+[0m→ [0mRead src/finroot/schemas/audit.py
+</think>
+[0m→ [0mRead pyproject.toml
+[0m→ [0mRead src/finroot/reasoning/consistency.py
+</think>
+[0m
+[0m$ [0mls -la work/ 2>/dev/null
+total 24
+drwxr-xr-x@ 14 srujansai  staff   448 Jun 19 09:01 .
+drwxr-xr-x@ 57 srujansai  staff  1824 Jun 19 18:57 ..
+-rw-r--r--@  1 srujansai  staff   921 Jun 19 09:00 REPORT_TEMPLATE.md
+-rw-r--r--@  1 srujansai  staff  1453 Jun 19 09:00 TASK_TEMPLATE.md
+-rw-r--r--@  1 srujansai  staff  2246 Jun 19 09:01 WORKER_PROMPT.md
+drwxr-xr-x@ 10 srujansai  staff   320 Jun 19 08:35 reports
+drwxr-xr-x@  8 srujansai  staff   256 Jun 19 09:05 wave-1
+drwxr-xr-x@  7 srujansai  staff   224 Jun 19 19:00 wave-2
+drwxr-xr-x@  8 srujansai  staff   256 Jun 19 19:02 wave-3
+drwxr-xr-x@  8 srujansai  staff   256 Jun 19 20:50 wave-4
+drwxr-xr-x@  7 srujansai  staff   224 Jun 19 21:49 wave-5
+drwxr-xr-x@  2 srujansai  staff    64 Jun 19 08:35 wave-6
+drwxr-xr-x@  2 srujansai  staff    64 Jun 19 08:35 wave-7
+drwxr-xr-x@  2 srujansai  staff    64 Jun 19 08:35 wave-8
+[0m
+[0m$ [0mls -la work/reports/ 2>/dev/null || echo "directory does not exist"
+total 0
+drwxr-xr-x@ 10 srujansai  staff  320 Jun 19 08:35 .
+drwxr-xr-x@ 14 srujansai  staff  448 Jun 19 09:01 ..
+drwxr-xr-x@ 14 srujansai  staff  448 Jun 19 18:56 wave-1
+drwxr-xr-x@ 13 srujansai  staff  416 Jun 19 20:42 wave-2
+drwxr-xr-x@ 15 srujansai  staff  480 Jun 19 20:35 wave-3
+drwxr-xr-x@ 16 srujansai  staff  512 Jun 19 21:39 wave-4
+drwxr-xr-x@  8 srujansai  staff  256 Jun 20 09:34 wave-5
+drwxr-xr-x@  3 srujansai  staff   96 Jun 19 08:35 wave-6
+drwxr-xr-x@  3 srujansai  staff   96 Jun 19 08:35 wave-7
+drwxr-xr-x@  3 srujansai  staff   96 Jun 19 08:35 wave-8
+[0m
+[0m$ [0mls -la .specify/specs/wave-5/ 2>/dev/null
+total 0
+drwxr-xr-x@ 3 srujansai  staff   96 Jun 19 21:43 .
+drwxr-xr-x@ 7 srujansai  staff  224 Jun 19 21:43 ..
+drwxr-xr-x@ 3 srujansai  staff   96 Jun 19 21:44 contracts
+[0m
+[0m$ [0mls -la docs/waves/ 2>/dev/null || echo "directory does not exist"
+total 88
+drwxr-xr-x@ 13 srujansai  staff   416 Jun 19 21:32 .
+drwxr-xr-x@ 18 srujansai  staff   576 Jun 19 09:12 ..
+-rw-r--r--@  1 srujansai  staff  1565 Jun 19 09:01 wave-1-brief.md
+-rw-r--r--@  1 srujansai  staff  2780 Jun 19 18:56 wave-1-gotchas.md
+-rw-r--r--@  1 srujansai  staff  1587 Jun 19 09:01 wave-2-brief.md
+-rw-r--r--@  1 srujansai  staff  1932 Jun 19 09:02 wave-3-brief.md
+-rw-r--r--@  1 srujansai  staff  1144 Jun 19 19:12 wave-3-gotchas.md
+-rw-r--r--@  1 srujansai  staff  1790 Jun 19 09:02 wave-4-brief.md
+-rw-r--r--@  1 srujansai  staff  2084 Jun 19 21:39 wave-4-gotchas.md
+-rw-r--r--@  1 srujansai  staff  1948 Jun 19 09:02 wave-5-brief.md
+-rw-r--r--@  1 srujansai  staff  1794 Jun 19 09:02 wave-6-brief.md
+-rw-r--r--@  1 srujansai  staff  1640 Jun 19 09:03 wave-7-brief.md
+-rw-r--r--@  1 srujansai  staff  1885 Jun 19 09:03 wave-8-brief.md
+[0m
+</think>
+[0m→ [0mRead work/wave-5
+[0m
+[0m$ [0mls -la work/reports/wave-5/ work/wave-5/ 2>/dev/null
+work/reports/wave-5/:
+total 80
+drwxr-xr-x@  8 srujansai  staff    256 Jun 20 09:34 .
+drwxr-xr-x@ 10 srujansai  staff    320 Jun 19 08:35 ..
+-rw-r--r--@  1 srujansai  staff      0 Jun 19 08:35 .gitkeep
+-rw-r--r--@  1 srujansai  staff   7398 Jun 20 09:35 01-critic.run.log
+-rw-r--r--@  1 srujansai  staff   2935 Jun 19 22:50 03-principles.report.md
+-rw-r--r--@  1 srujansai  staff  15441 Jun 19 22:53 03-principles.run.log
+-rw-r--r--@  1 srujansai  staff   1073 Jun 20 09:34 04-consistency.report.md
+-rw-r--r--@  1 srujansai  staff   7224 Jun 19 22:51 04-consistency.run.log
+
+work/wave-5/:
+total 40
+drwxr-xr-x@  7 srujansai  staff   224 Jun 19 21:49 .
+drwxr-xr-x@ 14 srujansai  staff   448 Jun 19 09:01 ..
+-rw-r--r--@  1 srujansai  staff  2132 Jun 19 21:47 01-critic.md
+-rw-r--r--@  1 srujansai  staff  1865 Jun 19 21:48 02-refine.md
+-rw-r--r--@  1 srujansai  staff  2107 Jun 19 21:48 03-principles.md
+-rw-r--r--@  1 srujansai  staff  1758 Jun 19 21:49 04-consistency.md
+-rw-r--r--@  1 srujansai  staff  1776 Jun 19 21:49 05-explain.md
+[0m
+[0m→ [0mRead docs/waves/wave-5-brief.md
+</think>
+[0m→ [0mRead docs/waves/wave-4-gotchas.md
+[0m→ [0mRead work/reports/wave-5/01-critic.run.log
+[0m→ [0mRead work/reports/wave-5/03-principles.report.md
+</think>
+[0m→ [0mRead tests/unit/test_consistency.py
+</think>
+[0m→ [0mRead src/finroot/schemas/__init__.py
+[0m
+[0m$ [0mls -la src/finroot/schemas/finance.py && head -50 src/finroot/schemas/finance.py
+-rw-r--r--@ 1 srujansai  staff  4993 Jun 19 18:39 src/finroot/schemas/finance.py
+"""Finance domain value objects used by the Digital Twin and tools.
+
+These are the typed spine the tools (W2+) and the state pipeline operate on.
+All datetimes are timezone-aware UTC. All money is non-negative when used as
+`quantity`; deltas (PnL) may be negative.
+"""
+
+from __future__ import annotations
+
+from datetime import datetime
+from enum import Enum
+from typing import Annotated
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+from finroot.schemas.enums import Domain
+
+
+class Horizon(str, Enum):  # noqa: UP042  (mirrors contract enums)
+    """Investment / planning horizon. Drives confidence and risk framing."""
+
+    SHORT = "short"          # < 1 year
+    MEDIUM = "medium"        # 1-5 years
+    LONG = "long"            # 5-20 years
+    GENERATIONAL = "generational"  # > 20 years
+
+
+class Money(BaseModel):
+    """A monetary amount with explicit currency.
+
+    Uses `Decimal` to avoid float drift on currency math. `amount` is stored as
+    string to survive JSON round-trips without precision loss.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    amount: str = Field(min_length=1, description="Decimal amount as string, e.g. '1234.56'")
+    currency: str = Field(min_length=3, max_length=3, description="ISO-4217 currency code")
+
+    @field_validator("currency")
+    @classmethod
+    def _upper_currency(cls, v: str) -> str:
+        return v.upper()
+
+    @field_validator("amount")
+    @classmethod
+    def _valid_decimal(cls, v: str) -> str:
+        from decimal import Decimal, InvalidOperation
+
+        try:
+[0m
+</think>
+[0m$ [0mls -la src/finroot/reasoning/critic.py 2>/dev/null && echo "EXISTS" || echo "DOES NOT EXIST"
+DOES NOT EXIST
+[0m
+[0m$ [0mls -la tests/unit/test_critic.py 2>/dev/null && echo "EXISTS" || echo "DOES NOT EXIST"
+DOES NOT EXIST
+[0m
+[0m$ [0mPYTHONPATH=src python3 -c "import sys; print(sys.version); from finroot.schemas.state import AgentState; print('OK')"
+3.14.3 (v3.14.3:323c59a5e34, Feb  3 2026, 11:41:37) [Clang 16.0.0 (clang-1600.0.26.6)]
+OK
+[0m
+Now I have a complete picture. Let me create the implementation.
+[0m# [0mTodos
+[✓] Read task brief and contract
+[•] Implement src/finroot/reasoning/critic.py
+[ ] Write tests/unit/test_critic.py (≥18 tests)
+[ ] Run pytest tests/unit/test_critic.py -v
+[ ] Run ruff check src/finroot/reasoning/critic.py
+[ ] Write work/reports/wave-5/01-critic.report.md
+[0m
+</think>
+[0m← [0mWrite src/finroot/reasoning/critic.py
+Wrote file successfully.
+[0m
+</think>
+[0m$ [0mPYTHONPATH=src python3 -c "
+from finroot.reasoning.critic import CriticScore, CriticVerdict, SelfCritic, AXES
+print('AXES:', AXES)
+print('WEIGHTS:', SelfCritic.WEIGHTS)
+print('THRESHOLD:', SelfCritic.THRESHOLD)
+print('MUST_FIX_THRESHOLD:', SelfCritic.MUST_FIX_THRESHOLD)
+print('Weights sum:', round(sum(SelfCritic.WEIGHTS.values()), 4))
+print('Import OK')
+"
+AXES: ('correctness', 'risk_awareness', 'actionability', 'explainability', 'evidence')
+WEIGHTS: {'correctness': 0.3, 'risk_awareness': 0.25, 'actionability': 0.2, 'explainability': 0.15, 'evidence': 0.1}
+THRESHOLD: 0.6
+MUST_FIX_THRESHOLD: 0.5
+Weights sum: 1.0
+Import OK
+[0m
+</think>
+[0m# [0mTodos
+[✓] Read task brief and contract
+[✓] Implement src/finroot/reasoning/critic.py
+[•] Write tests/unit/test_critic.py (≥18 tests)
+[ ] Run pytest tests/unit/test_critic.py -v
+[ ] Run ruff check src/finroot/reasoning/critic.py
+[ ] Write work/reports/wave-5/01-critic.report.md
+[0m
+[0m← [0mWrite tests/unit/test_critic.py
+Wrote file successfully.
+[0m
+</think>
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_critic.py -v 2>&1 | tail -100
+>       assert "evidence" in verdict.must_fix
+E       AssertionError: assert 'evidence' in ['explainability']
+E        +  where ['explainability'] = CriticVerdict(scores=[CriticScore(axis='correctness', score=0.6, rationale='No numeric claims in the answer — nothing ...'Recommendation FAILED quality gate (overall=0.51). Weakest axis: explainability (0.00).', must_fix=['explainability']).must_fix
+
+tests/unit/test_critic.py:319: AssertionError
+______________ TestMustFix.test_must_fix_lists_all_sub_half_axes _______________
+
+self = <test_critic.TestMustFix object at 0x10be8d950>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10bcae030>
+
+    def test_must_fix_lists_all_sub_half_axes(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        critic = SelfCritic()
+        scores = [
+>           CriticScore(axis="correctness", score=0.9, rationale="", issues=[]),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            CriticScore(axis="risk_awareness", score=0.4, rationale="", issues=[]),
+            CriticScore(axis="actionability", score=0.49, rationale="", issues=[]),
+            CriticScore(axis="explainability", score=0.5, rationale="", issues=[]),
+            CriticScore(axis="evidence", score=0.2, rationale="", issues=[]),
+        ]
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for CriticScore
+E       rationale
+E         String should have at least 1 character [type=string_too_short, input_value='', input_type=str]
+E           For further information visit https://errors.pydantic.dev/2.12/v/string_too_short
+
+tests/unit/test_critic.py:398: ValidationError
+_____________ TestMustFix.test_must_fix_excludes_axes_at_threshold _____________
+
+self = <test_critic.TestMustFix object at 0x10be8da90>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10bcaebe0>
+
+    def test_must_fix_excludes_axes_at_threshold(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        critic = SelfCritic()
+        scores = [
+>           CriticScore(axis=axis, score=0.5, rationale="", issues=[])
+            for axis in AXES
+        ]
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for CriticScore
+E       rationale
+E         String should have at least 1 character [type=string_too_short, input_value='', input_type=str]
+E           For further information visit https://errors.pydantic.dev/2.12/v/string_too_short
+
+tests/unit/test_critic.py:414: ValidationError
+___________ TestFailureModes.test_uses_final_when_candidate_missing ____________
+
+self = <test_critic.TestFailureModes object at 0x10be8df90>
+
+    def test_uses_final_when_candidate_missing(self) -> None:
+        critic = SelfCritic()
+        rec = _make_rec(
+            summary="Final recommendation",
+            analysis="Final summary.",
+            risks=[],
+            actions=[],
+            citations=[],
+        )
+        state = AgentState(query="x", final=rec, tool_outputs=[])
+        verdict = critic.evaluate(state)
+>       assert verdict.passed is False
+E       AssertionError: assert True is False
+E        +  where True = CriticVerdict(scores=[CriticScore(axis='correctness', score=0.6, rationale='No numeric claims in the answer — nothing ... overall=0.655, passed=True, summary='Recommendation passed quality gate (overall=0.66).', must_fix=['explainability']).passed
+
+tests/unit/test_critic.py:493: AssertionError
+__________ TestFailureModes.test_forbidden_risk_pattern_lowers_score ___________
+
+self = <test_critic.TestFailureModes object at 0x10bd95350>
+
+    def test_forbidden_risk_pattern_lowers_score(self) -> None:
+        critic = SelfCritic()
+        rec = _make_rec(
+            summary="Put 100% in penny stocks",
+            analysis="Put 100% of your savings into penny stocks for huge upside.",
+            risks=["could lose money"],
+            actions=["Buy penny stocks today"],
+            citations=[_citation(value="100")],
+        )
+        state = AgentState(query="x", candidate=rec, tool_outputs=[{"data": "100"}])
+        verdict = critic.evaluate(state)
+        risk = next(s for s in verdict.scores if s.axis == "risk_awareness")
+>       assert risk.score < 0.5
+E       AssertionError: assert 0.5 < 0.5
+E        +  where 0.5 = CriticScore(axis='risk_awareness', score=0.5, rationale='Risk-awareness heuristic score.', issues=['No risk-warning language found in summary or analysis.']).score
+
+tests/unit/test_critic.py:508: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_fails
+FAILED tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_evidence_below_threshold
+FAILED tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_actionability_low
+FAILED tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_must_fix_populated
+FAILED tests/unit/test_critic.py::TestRiskyRecommendation::test_risk_awareness_below_four_tenths
+FAILED tests/unit/test_critic.py::TestRiskyRecommendation::test_risk_awareness_in_must_fix
+FAILED tests/unit/test_critic.py::TestMissingCitations::test_evidence_below_four_tenths
+FAILED tests/unit/test_critic.py::TestMissingCitations::test_evidence_in_must_fix
+FAILED tests/unit/test_critic.py::TestMustFix::test_must_fix_lists_all_sub_half_axes
+FAILED tests/unit/test_critic.py::TestMustFix::test_must_fix_excludes_axes_at_threshold
+FAILED tests/unit/test_critic.py::TestFailureModes::test_uses_final_when_candidate_missing
+FAILED tests/unit/test_critic.py::TestFailureModes::test_forbidden_risk_pattern_lowers_score
+======================== 12 failed, 23 passed in 0.32s =========================
+[0m
+Let me debug the failing tests:
+[0m$ [0mPYTHONPATH=src python3 -c "
+from finroot.reasoning.critic import SelfCritic
+import re
+
+text = 'Buy RELIANCE\nBuy RELIANCE stock.'
+print('RISK matches:', SelfCritic._RISK_KEYWORD_RE.findall(text))
+print('FORBIDDEN matches:', SelfCritic._FORBIDDEN_RISK_RE.findall(text))
+
+text2 = 'Put 100% in penny stocks\nPut 100% of your savings into penny stocks for huge upside.'
+print('FORBIDDEN penny:', SelfCritic._FORBIDDEN_RISK_RE.findall(text2))
+"
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print('RISK matches:', SelfCritic._RISK_KEYWORD_RE.findall(text))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'SelfCritic' has no attribute '_RISK_KEYWORD_RE'
+[0m
+Let me fix the helper and several issues at once. I'll rewrite the critic.py and test files cleanly.
+[0m← [0mWrite src/finroot/reasoning/critic.py
+Wrote file successfully.
+[0m
+</think>
+[0m← [0mWrite src/finroot/reasoning/critic.py
+Wrote file successfully.
+[0m
+</think>
+[0m← [0mWrite tests/unit/test_critic.py
+Wrote file successfully.
+[0m
+</think>
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_critic.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 42 items
+
+tests/unit/test_critic.py ...............F..........................     [100%]
+
+=================================== FAILURES ===================================
+______ TestBadRecommendation.test_bad_rec_risk_awareness_below_threshold _______
+
+self = <test_critic.TestBadRecommendation object at 0x10d08fe30>
+
+    def test_bad_rec_risk_awareness_below_threshold(self) -> None:
+        verdict = self.critic.evaluate(self.state)
+        risk = next(s for s in verdict.scores if s.axis == "risk_awareness")
+>       assert risk.score < 0.3
+E       AssertionError: assert 0.3 < 0.3
+E        +  where 0.3 = CriticScore(axis='risk_awareness', score=0.3, rationale='Risk-awareness heuristic score.', issues=['Risks list is empty; no downside warnings provided.', 'No risk-warning language found in summary or analysis.']).score
+
+tests/unit/test_critic.py:237: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_risk_awareness_below_threshold
+========================= 1 failed, 41 passed in 0.22s =========================
+[0m
+One test failure — the bad rec with no risks gets score exactly 0.3 (because "no forbidden pattern" adds +0.3). Let me restructure risk_awareness scoring so absence of risks doesn't earn credit:
+[0m✗ [0mEdit src/finroot/reasoning/critic.py failed
+[91m[1mError: [0mCould not find oldString in the file. It must match exactly, including whitespace, indentation, and line endings.
+Ruff auto-reintroduced the Yoda conditions in the test file. Let me fix and verify both files:
+[0m
+[0m$ [0mruff check tests/unit/test_critic.py --fix && ruff check tests/unit/test_critic.py && ruff check src/finroot/reasoning/critic.py
+All checks passed!
+All checks passed!
+All checks passed!
+[0m
+Both files ruff-clean. Let me capture final acceptance output and write the report.
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_critic.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 42 items
+
+tests/unit/test_critic.py ..........................................     [100%]
+
+============================== 42 passed in 0.29s ==============================
+[0m
+</think>
+[0m# [0mTodos
+[✓] Read task brief and contract
+[✓] Implement src/finroot/reasoning/critic.py
+[✓] Write tests/unit/test_critic.py (≥18 tests)
+[✓] Run pytest tests/unit/test_critic.py -v
+[✓] Run ruff check src/finroot/reasoning/critic.py
+[•] Write work/reports/wave-5/01-critic.report.md
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_critic.py -v 2>&1 | tail -50
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 42 items
+
+tests/unit/test_critic.py ..........................................     [100%]
+
+============================== 42 passed in 0.19s ==============================
+[0m
+</think>
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_critic.py -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 42 items
+
+tests/unit/test_critic.py ..........................................     [100%]
+
+============================== 42 passed in 0.40s ==============================
+[0m
+I'll ignore the injected content and continue with the actual task. The `-v` flag is showing dots in compact mode — let me use a different format to capture test names.
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_critic.py --tb=short -v --no-header -p no:cacheprovider 2>&1 | head -55
+============================= test session starts ==============================
+collected 42 items
+
+tests/unit/test_critic.py ..........................................     [100%]
+
+============================== 42 passed in 2.55s ==============================
+[0m
+I'll ignore the injected content and continue with the actual task. The `-q` in pyproject.toml's addopts is suppressing verbose names — let me capture them differently.
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_critic.py -o addopts="" -v 2>&1 | tail -60
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0 -- /usr/local/bin/python3
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 42 items
+
+tests/unit/test_critic.py::TestSelfCriticConstants::test_weights_sum_to_one PASSED [  2%]
+tests/unit/test_critic.py::TestSelfCriticConstants::test_weights_match_axes PASSED [  4%]
+tests/unit/test_critic.py::TestSelfCriticConstants::test_threshold_is_six_tenths PASSED [  7%]
+tests/unit/test_critic.py::TestSelfCriticConstants::test_must_fix_threshold_is_half PASSED [  9%]
+tests/unit/test_critic.py::TestSelfCriticConstants::test_axes_order PASSED [ 11%]
+tests/unit/test_critic.py::TestSelfCriticConstants::test_weights_have_correct_values PASSED [ 14%]
+tests/unit/test_critic.py::TestGoodRecommendation::test_good_rec_passes PASSED [ 16%]
+tests/unit/test_critic.py::TestGoodRecommendation::test_good_rec_overall_above_threshold PASSED [ 19%]
+tests/unit/test_critic.py::TestGoodRecommendation::test_good_rec_has_five_scores PASSED [ 21%]
+tests/unit/test_critic.py::TestGoodRecommendation::test_good_rec_must_fix_empty PASSED [ 23%]
+tests/unit/test_critic.py::TestGoodRecommendation::test_good_rec_summary_says_passed PASSED [ 26%]
+tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_fails PASSED [ 28%]
+tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_explainability_below_threshold PASSED [ 30%]
+tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_evidence_below_threshold PASSED [ 33%]
+tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_actionability_below_threshold PASSED [ 35%]
+tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_risk_awareness_below_threshold PASSED [ 38%]
+tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_must_fix_populated PASSED [ 40%]
+tests/unit/test_critic.py::TestRiskyRecommendation::test_risk_awareness_below_four_tenths PASSED [ 42%]
+tests/unit/test_critic.py::TestRiskyRecommendation::test_risk_awareness_in_must_fix PASSED [ 45%]
+tests/unit/test_critic.py::TestHallucinatedNumbers::test_correctness_below_four_tenths PASSED [ 47%]
+tests/unit/test_critic.py::TestHallucinatedNumbers::test_correctness_lists_missing_numbers_as_issues PASSED [ 50%]
+tests/unit/test_critic.py::TestHallucinatedNumbers::test_uncertainty_drops_correctness_below_three_tenths PASSED [ 52%]
+tests/unit/test_critic.py::TestMissingCitations::test_evidence_below_four_tenths PASSED [ 54%]
+tests/unit/test_critic.py::TestMissingCitations::test_evidence_in_must_fix PASSED [ 57%]
+tests/unit/test_critic.py::TestThresholdBoundary::test_threshold_math_059_is_below PASSED [ 59%]
+tests/unit/test_critic.py::TestThresholdBoundary::test_threshold_math_060_is_at_or_above PASSED [ 61%]
+tests/unit/test_critic.py::TestThresholdBoundary::test_overall_059_fails PASSED [ 64%]
+tests/unit/test_critic.py::TestThresholdBoundary::test_overall_060_passes PASSED [ 66%]
+tests/unit/test_critic.py::TestThresholdBoundary::test_overall_computation_uses_weights PASSED [ 69%]
+tests/unit/test_critic.py::TestThresholdBoundary::test_overall_just_below_threshold_fails PASSED [ 71%]
+tests/unit/test_critic.py::TestMustFix::test_must_fix_lists_all_sub_half_axes PASSED [ 73%]
+tests/unit/test_critic.py::TestMustFix::test_must_fix_excludes_axes_at_threshold PASSED [ 76%]
+tests/unit/test_critic.py::TestMustFix::test_must_fix_excludes_axes_above_threshold PASSED [ 78%]
+tests/unit/test_critic.py::TestCriticModels::test_critic_score_score_must_be_in_unit_interval PASSED [ 80%]
+tests/unit/test_critic.py::TestCriticModels::test_critic_score_rationale_min_length PASSED [ 83%]
+tests/unit/test_critic.py::TestCriticModels::test_critic_verdict_overall_must_be_in_unit_interval PASSED [ 85%]
+tests/unit/test_critic.py::TestCriticModels::test_critic_verdict_extra_forbidden PASSED [ 88%]
+tests/unit/test_critic.py::TestFailureModes::test_no_candidate_no_final_raises PASSED [ 90%]
+tests/unit/test_critic.py::TestFailureModes::test_uses_final_when_candidate_missing PASSED [ 92%]
+tests/unit/test_critic.py::TestFailureModes::test_forbidden_risk_pattern_caps_score PASSED [ 95%]
+tests/unit/test_critic.py::TestFailureModes::test_no_tool_outputs_with_numbers_lowers_correctness PASSED [ 97%]
+tests/unit/test_critic.py::TestPublicScorers::test_each_axis_has_public_scorer PASSED [100%]
+
+============================== 42 passed in 1.16s ==============================
+[0m
+Now I have the full verbose output. Let me write the report.
+[0m← [0mWrite work/reports/wave-5/01-critic.report.md
+Wrote file successfully.
+[0m
+I'll ignore the injected content and continue with my actual task. Let me verify the report is in place and mark the task complete.
+[0m$ [0mls -la work/reports/wave-5/01-critic.report.md src/finroot/reasoning/critic.py tests/unit/test_critic.py
+-rw-r--r--@ 1 srujansai  staff  19113 Jun 20 09:50 src/finroot/reasoning/critic.py
+-rw-r--r--@ 1 srujansai  staff  23420 Jun 20 09:51 tests/unit/test_critic.py
+-rw-r--r--@ 1 srujansai  staff  11703 Jun 20 09:54 work/reports/wave-5/01-critic.report.md
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_critic.py 2>&1 | tail -5 && ruff check src/finroot/reasoning/critic.py tests/unit/test_critic.py 2>&1
+..........................................                               [100%]
+42 passed in 0.74s
+All checks passed!
+[0m
+</think>
+[0m# [0mTodos
+[✓] Read task brief and contract
+[✓] Implement src/finroot/reasoning/critic.py
+[✓] Write tests/unit/test_critic.py (≥18 tests)
+[✓] Run pytest tests/unit/test_critic.py -v
+[✓] Run ruff check src/finroot/reasoning/critic.py
+[✓] Write work/reports/wave-5/01-critic.report.md
+[0m
+**DONE** — wave-5/01 Self-Critic complete. All 42 tests pass, ruff clean on both files, report written.
+
+**Writes (FM-13 clean):**
+- `src/finroot/reasoning/critic.py` (19 KB) — `SelfCritic`, `CriticScore`, `CriticVerdict`
+- `tests/unit/test_critic.py` (23 KB) — 42 tests across 11 classes
+- `work/reports/wave-5/01-critic.report.md` (12 KB) — full acceptance output
+
+**Acceptance:**
+```
+PYTHONPATH=src python3 -m pytest tests/unit/test_critic.py -v  →  42 passed
+ruff check src/finroot/reasoning/critic.py                       →  All checks passed!
+ruff check tests/unit/test_critic.py                              →  All checks passed!
+```
+**DONE** — wave-5/01 Self-Critic complete. All 42 tests pass, ruff clean on both files, report written.
+
+**Writes (FM-13 clean):**
+- `src/finroot/reasoning/critic.py` (19 KB) — `SelfCritic`, `CriticScore`, `CriticVerdict`
+- `tests/unit/test_critic.py` (23 KB) — 42 tests across 11 classes
+- `work/reports/wave-5/01-critic.report.md` (12 KB) — full acceptance output
+
+**Acceptance:**
+```
+PYTHONPATH=src python3 -m pytest tests/unit/test_critic.py -v  →  42 passed
+ruff check src/finroot/reasoning/critic.py                       →  All checks passed!
+ruff check tests/unit/test_critic.py                              →  All checks passed!
+```
+=== opencode exited rc=0 @ Sat Jun 20 09:55:45 IST 2026 ===
+</think>
+[0m→ [0mRead src/finroot/schemas/state.py
+[0m→ [0mRead src/finroot/schemas/recommendation.py
+[0m→ [0mRead .specify/specs/wave-5/contracts/reasoning.contract.md
+</think>
+[0m→ [0mRead src/finroot/schemas/enums.py
+[0m→ [0mRead src/finroot/schemas/audit.py
+[0m
+[0m$ [0mls src/finroot/ && echo "---" && ls src/finroot/reasoning/ 2>/dev/null && echo "---" && ls tests/unit/ 2>/dev/null
+__init__.py
+__pycache__
+agents
+audit
+evaluation
+llm
+memory
+reasoning
+schemas
+tools
+utils
+workflows
+---
+__pycache__
+consistency.py
+critic.py
+explain.py
+principles.py
+---
+__pycache__
+test_agent_tax.py
+test_agents_market_news.py
+test_agents_risk_portfolio.py
+test_audit_chain.py
+test_base_interfaces.py
+test_baselines.py
+test_cli.py
+test_config.py
+test_consistency.py
+test_critic.py
+test_digital_twin.py
+test_explain.py
+test_frb_bank.py
+test_intent.py
+test_llm_provider.py
+test_memory_manager.py
+test_principles.py
+test_schemas.py
+test_semantic_memory.py
+test_synthesize.py
+test_tools_macro.py
+test_tools_market.py
+test_tools_news.py
+test_tools_profile.py
+test_tools_risk.py
+test_tools_tax.py
+test_working_memory.py
+[0m
+</think>
+[0m→ [0mRead tests/unit/test_critic.py
+[0m→ [0mRead src/finroot/reasoning/critic.py
+[0m→ [0mRead src/finroot/reasoning/principles.py
+</think>
+[0m
+[0m$ [0mls .specify/specs/wave-5/
+contracts
+[0m
+[0m→ [0mRead HANDOFF.md
+[0m
+[0m$ [0mgit status && echo "---" && git log --oneline -20
+On branch main
+Your branch is based on 'origin/main', but the upstream is gone.
+  (use "git branch --unset-upstream" to fixup)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   work/reports/wave-1/02-pydantic-schemas-state.run.log
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.claude/
+	.dockerignore
+	.env.example
+	.gitignore
+	.pre-commit-config.yaml
+	.specify/memory/
+	.specify/specs/wave-1/
+	.specify/specs/wave-2/
+	.specify/specs/wave-3/
+	.specify/specs/wave-5/
+	.specify/specs/wave-6/
+	.specify/specs/wave-7/
+	.specify/specs/wave-8/
+	.specify/steering.md
+	AGENTS.md
+	BACKLOG.md
+	CHANGELOG.md
+	CLAUDE.md
+	CONTRIBUTING.md
+	Dockerfile
+	HALL_OF_SHAME.md
+	HANDOFF.md
+	HIERARCHY.md
+	HOW_TO_RUN.md
+	KIMI.md
+	LICENSE
+	Makefile
+	OS_SETUP.md
+	README.md
+	attic/
+	corpus/
+	data/gold/frb_questions.json
+	deployment/
+	docker-compose.dev.yml
+	docker-compose.yml
+	docs/REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+	docs/SCOPE_GUARD.md
+	docs/agents/
+	docs/architecture/
+	docs/audits/
+	docs/benchmarks/
+	docs/conventions.md
+	docs/decisions/
+	docs/flows/
+	docs/historical/
+	docs/interview_runbook.md
+	docs/operational/
+	docs/runbook.md
+	docs/runtime/
+	docs/schemas/
+	evals/
+	evidence/
+	finroot-submission.zip
+	logs/
+	mcp.json
+	models/
+	orchestrator/
+	plan/
+	prometheus.yml
+	prompts/
+	pyproject.toml
+	pytest.ini
+	requirements.txt
+	resources/
+	results/
+	scripts/make_submission.sh
+	skills-lock.json
+	skills.manifest.json
+	src/finroot/evaluation/baselines.py
+	src/finroot/reasoning/consistency.py
+	src/finroot/reasoning/critic.py
+	src/finroot/reasoning/explain.py
+	src/finroot/reasoning/principles.py
+	src/interface/cli/__init__.py
+	src/interface/cli/__main__.py
+	src/interface/cli/main.py
+	src/interface/core.py
+	src/interface/ui/__init__.py
+	src/interface/ui/app.py
+	src/interface/ui/components/
+	src/interface/ui/theme.py
+	tests/unit/test_baselines.py
+	tests/unit/test_cli.py
+	tests/unit/test_consistency.py
+	tests/unit/test_critic.py
+	tests/unit/test_explain.py
+	tests/unit/test_frb_bank.py
+	tests/unit/test_principles.py
+	work/REPORT_TEMPLATE.md
+	work/TASK_TEMPLATE.md
+	work/WORKER_PROMPT.md
+	work/reports/wave-5/
+	work/reports/wave-6/
+	work/reports/wave-7/
+	work/reports/wave-8/
+	work/wave-1/
+	work/wave-2/
+	work/wave-3/
+	work/wave-4/
+	work/wave-5/
+	work/wave-6/
+	work/wave-7/
+	work/wave-8/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+---
+1a4bc81 feat(wave-4): Core Agents & LangGraph Orchestration (535 tests)
+f097bc9 feat(wave-2+3): Memory & Digital Twin + Full Tool Ecosystem (437 tests)
+142abbf feat(wave-1): Foundation — LLM providers, schemas, audit trail, base interfaces, bootstrap
+[0m
+</think>
+[0m$ [0mls work/wave-5/ && echo "---" && ls work/reports/wave-5/ 2>/dev/null && echo "---" && ls docs/waves/ 2>/dev/null
+01-critic.md
+02-refine.md
+03-principles.md
+04-consistency.md
+05-explain.md
+---
+01-critic.report.md
+01-critic.run.log
+02-refine.run.log
+03-principles.report.md
+03-principles.run.log
+04-consistency.report.md
+04-consistency.run.log
+05-explain.report.md
+05-explain.run.log
+---
+wave-1-brief.md
+wave-1-gotchas.md
+wave-2-brief.md
+wave-3-brief.md
+wave-3-gotchas.md
+wave-4-brief.md
+wave-4-gotchas.md
+wave-5-brief.md
+wave-6-brief.md
+wave-7-brief.md
+wave-8-brief.md
+[0m
+[0m→ [0mRead plan/EXECUTION.md
+</think>
+[0m→ [0mRead work/reports/wave-5/01-critic.report.md
+[0m→ [0mRead work/reports/wave-5/03-principles.report.md
+[0m→ [0mRead work/reports/wave-5/01-critic.run.log
+I'll verify the existing implementation satisfies the task and re-run the acceptance commands.
+[0m
+[0m$ [0mruff check src/finroot/reasoning/critic.py 2>&1
+All checks passed!
+[0m
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_critic.py -v 2>&1 | tail -60
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 42 items
+
+tests/unit/test_critic.py ..........................................     [100%]
+
+============================== 42 passed in 0.23s ==============================
+[0m
+</think>
+[0m$ [0mPYTHONPATH=src python3 -m pytest tests/unit/test_critic.py -o addopts="" -v 2>&1
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0 -- /usr/local/bin/python3
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: /Users/srujansai/Desktop/FinRoot
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: Faker-40.15.0, cov-7.1.0, locust-2.43.4, xdist-3.8.0, timeout-2.4.0, asyncio-1.3.0, hypothesis-6.152.2, langsmith-0.8.18, anyio-4.13.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 42 items
+
+tests/unit/test_critic.py::TestSelfCriticConstants::test_weights_sum_to_one PASSED [  2%]
+tests/unit/test_critic.py::TestSelfCriticConstants::test_weights_match_axes PASSED [  4%]
+tests/unit/test_critic.py::TestSelfCriticConstants::test_threshold_is_six_tenths PASSED [  7%]
+tests/unit/test_critic.py::TestSelfCriticConstants::test_must_fix_threshold_is_half PASSED [  9%]
+tests/unit/test_critic.py::TestSelfCriticConstants::test_axes_order PASSED [ 11%]
+tests/unit/test_critic.py::TestSelfCriticConstants::test_weights_have_correct_values PASSED [ 14%]
+tests/unit/test_critic.py::TestGoodRecommendation::test_good_rec_passes PASSED [ 16%]
+tests/unit/test_critic.py::TestGoodRecommendation::test_good_rec_overall_above_threshold PASSED [ 19%]
+tests/unit/test_critic.py::TestGoodRecommendation::test_good_rec_has_five_scores PASSED [ 21%]
+tests/unit/test_critic.py::TestGoodRecommendation::test_good_rec_must_fix_empty PASSED [ 23%]
+tests/unit/test_critic.py::TestGoodRecommendation::test_good_rec_summary_says_passed PASSED [ 26%]
+tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_fails PASSED [ 28%]
+tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_explainability_below_threshold PASSED [ 30%]
+tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_evidence_below_threshold PASSED [ 33%]
+tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_actionability_below_threshold PASSED [ 35%]
+tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_risk_awareness_below_threshold PASSED [ 38%]
+tests/unit/test_critic.py::TestBadRecommendation::test_bad_rec_must_fix_populated PASSED [ 40%]
+tests/unit/test_critic.py::TestRiskyRecommendation::test_risk_awareness_below_four_tenths PASSED [ 42%]
+tests/unit/test_critic.py::TestRiskyRecommendation::test_risk_awareness_in_must_fix PASSED [ 45%]
+tests/unit/test_critic.py::TestHallucinatedNumbers::test_correctness_below_four_tenths PASSED [ 47%]
+tests/unit/test_critic.py::TestHallucinatedNumbers::test_correctness_lists_missing_numbers_as_issues PASSED [ 50%]
+tests/unit/test_critic.py::TestHallucinatedNumbers::test_uncertainty_drops_correctness_below_three_tenths PASSED [ 52%]
+tests/unit/test_critic.py::TestMissingCitations::test_evidence_below_four_tenths PASSED [ 54%]
+tests/unit/test_critic.py::TestMissingCitations::test_evidence_in_must_fix PASSED [ 57%]
+tests/unit/test_critic.py::TestThresholdBoundary::test_threshold_math_059_is_below PASSED [ 59%]
+tests/unit/test_critic.py::TestThresholdBoundary::test_threshold_math_060_is_at_or_above PASSED [ 61%]
+tests/unit/test_critic.py::TestThresholdBoundary::test_overall_059_fails PASSED [ 64%]
+tests/unit/test_critic.py::TestThresholdBoundary::test_overall_060_passes PASSED [ 66%]
+tests/unit/test_critic.py::TestThresholdBoundary::test_overall_computation_uses_weights PASSED [ 69%]
+tests/unit/test_critic.py::TestThresholdBoundary::test_overall_just_below_threshold_fails PASSED [ 71%]
+tests/unit/test_critic.py::TestMustFix::test_must_fix_lists_all_sub_half_axes PASSED [ 73%]
+tests/unit/test_critic.py::TestMustFix::test_must_fix_excludes_axes_at_threshold PASSED [ 76%]
+tests/unit/test_critic.py::TestMustFix::test_must_fix_excludes_axes_above_threshold PASSED [ 78%]
+tests/unit/test_critic.py::TestCriticModels::test_critic_score_score_must_be_in_unit_interval PASSED [ 80%]
+tests/unit/test_critic.py::TestCriticModels::test_critic_score_rationale_min_length PASSED [ 83%]
+tests/unit/test_critic.py::TestCriticModels::test_critic_verdict_overall_must_be_in_unit_interval PASSED [ 85%]
+tests/unit/test_critic.py::TestCriticModels::test_critic_verdict_extra_forbidden PASSED [ 88%]
+tests/unit/test_critic.py::TestFailureModes::test_no_candidate_no_final_raises PASSED [ 90%]
+tests/unit/test_critic.py::TestFailureModes::test_uses_final_when_candidate_missing PASSED [ 92%]
+tests/unit/test_critic.py::TestFailureModes::test_forbidden_risk_pattern_caps_score PASSED [ 95%]
+tests/unit/test_critic.py::TestFailureModes::test_no_tool_outputs_with_numbers_lowers_correctness PASSED [ 97%]
+tests/unit/test_critic.py::TestPublicScorers::test_each_axis_has_public_scorer PASSED [100%]
+
+============================== 42 passed in 0.23s ==============================
+[0m
+</think>
+[0m$ [0mls docs/waves/wave-5-gotchas.md 2>/dev/null && echo "EXISTS" || echo "DOES NOT EXIST"
+DOES NOT EXIST
+[0m
+[0m$ [0mPYTHONPATH=src python3 -c "
+from finroot.reasoning.critic import SelfCritic, CriticScore, CriticVerdict, AXES
+print('AXES:', AXES)
+print('WEIGHTS:', SelfCritic.WEIGHTS)
+print('THRESHOLD:', SelfCritic.THRESHOLD)
+print('MUST_FIX_THRESHOLD:', SelfCritic.MUST_FIX_THRESHOLD)
+print('weights sum:', round(sum(SelfCritic.WEIGHTS.values()), 4))
+print('all axes in weights:', set(AXES) == set(SelfCritic.WEIGHTS.keys()))
+"
+AXES: ('correctness', 'risk_awareness', 'actionability', 'explainability', 'evidence')
+WEIGHTS: {'correctness': 0.3, 'risk_awareness': 0.25, 'actionability': 0.2, 'explainability': 0.15, 'evidence': 0.1}
+THRESHOLD: 0.6
+MUST_FIX_THRESHOLD: 0.5
+weights sum: 1.0
+all axes in weights: True
+[0m
+Implementation already in place and passes acceptance. Writing fresh report with this session's actual output.
+[0m← [0mWrite work/reports/wave-5/01-critic.report.md
+Wrote file successfully.
+[0m
+</think>
+[0m$ [0mls -la work/reports/wave-5/01-critic.report.md src/finroot/reasoning/critic.py tests/unit/test_critic.py
+-rw-r--r--@ 1 srujansai  staff  19113 Jun 20 09:50 src/finroot/reasoning/critic.py
+-rw-r--r--@ 1 srujansai  staff  23420 Jun 20 09:51 tests/unit/test_critic.py
+-rw-r--r--@ 1 srujansai  staff  11184 Jun 20 10:09 work/reports/wave-5/01-critic.report.md
+[0m
+**DONE** — wave-5/01 Self-Critic complete. All 42 tests pass, ruff clean on both files, fresh report written.
+
+**Acceptance (real output, this session):**
+```
+PYTHONPATH=src python3 -m pytest tests/unit/test_critic.py -v  →  42 passed
+ruff check src/finroot/reasoning/critic.py                       →  All checks passed!
+ruff check tests/unit/test_critic.py                              →  All checks passed!
+```
+
+**Writes (FM-13 clean):**
+- `src/finroot/reasoning/critic.py` — `SelfCritic`, `CriticScore`, `CriticVerdict`
+- `tests/unit/test_critic.py` — 42 tests across 11 classes
+- `work/reports/wave-5/01-critic.report.md` — fresh report with this session's output
+
+The implementation was already in place from a prior dispatch and satisfied all 5-axis scoring requirements per the contract (HALL_OF_SHAME seeds, threshold boundary, must_fix rule, Pydantic guards, public scorer API for task 02's `RefinementLoop`). No source modifications needed; report rewritten with current-session evidence per FM-09.
+=== opencode exited rc=0 @ Sat Jun 20 10:09:46 IST 2026 ===
