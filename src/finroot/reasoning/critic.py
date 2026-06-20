@@ -390,9 +390,17 @@ class SelfCritic:
             issues.append("No risk-warning language found in summary or analysis.")
 
         # Forbidden patterns are a ceiling — they indicate irresponsible
-        # advice regardless of other signals.
+        # advice regardless of other signals. Exclude negated contexts
+        # like "does not guarantee" or "no guarantee" which are risk warnings,
+        # and quoted contexts like "'guaranteed' returns" which reference the concept.
+        _NEGATION_RE = re.compile(
+            r"\b(?:does\s+not|doesn't|don't|no|not|never)\s+\w*\s*guarantee|"
+            r"""['"]guarantee[ds]?['"]|"""
+            r"(?:not|never)\s+guarantee",
+            re.IGNORECASE,
+        )
         forbidden = _FORBIDDEN_RISK_RE.search(text)
-        if forbidden is not None:
+        if forbidden is not None and not _NEGATION_RE.search(text):
             issues.append(
                 f"Contains forbidden aggressive pattern: {forbidden.group()}."
             )

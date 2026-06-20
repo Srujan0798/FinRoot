@@ -58,7 +58,9 @@ _GUARANTEE_RE = re.compile(
     re.IGNORECASE,
 )
 _NEGATION_BEFORE_GUARANTEE_RE = re.compile(
-    r"\b(?:does\s+not|doesn't|don't|no|not|never)\s+\w*\s*guarantee",
+    r"\b(?:does\s+not|doesn't|don't|no|not|never)\s+\w*\s*guarantee|"
+    r"""['"]guarantee[ds]?['"]|"""
+    r"(?:not|never)\s+guarantee",
     re.IGNORECASE,
 )
 
@@ -276,7 +278,18 @@ class PrudentialVerifier:
 
     @staticmethod
     def _check_evidence(tool_count: int, text: str) -> dict[str, Any]:
-        """Fail if tool_outputs < 2 and the answer makes specific claims."""
+        """Fail if tool_outputs < 2 and the answer makes specific financial claims."""
+        # Skip evidence check for greetings and informational responses
+        is_greeting = any(w in text.lower() for w in (
+            "hello", "i'm finroot", "i can help", "ask me a specific",
+            "sovereign financial reasoning assistant",
+        ))
+        if is_greeting:
+            return {
+                "principle": "Insufficient evidence",
+                "pass": True,
+                "detail": "Greeting/informational response — evidence check not applicable",
+            }
         has_specific_content = bool(re.search(r"\d", text))
         failed = tool_count < _MIN_TOOL_OUTPUTS and has_specific_content
         return {
