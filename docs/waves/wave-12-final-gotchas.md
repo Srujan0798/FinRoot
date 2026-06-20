@@ -9,8 +9,8 @@
    consistency, consider creating the dir (even empty) for traceability.
 
 2. **Numbers drift across docs.**
-   The current `results/metrics.json` (as_of_sha `ee438ae`, generated 2026-06-20T15:04) reports
-   **83 tasks, 11 domains, +128% composite lift vs RAG, FinRoot mean 0.778**. The deck uses
+   The current `results/metrics.json` (as_of_sha `8d4d03f`, generated 2026-06-20T21:01) reports
+   **83 tasks, 11 domains, +138% composite lift vs RAG, FinRoot mean 0.795**. The deck uses
    these numbers. But `README.md` and `docs/business/presentation_outline.md` still cite the
    older run (52 tasks, +99.7% lift, FinRoot mean 0.672). Follow-up: rerun `make evals` and
    refresh those files in a wave-13 docs-pass — not in scope for this task (FM-08).

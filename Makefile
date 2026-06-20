@@ -1,6 +1,6 @@
 # FinRoot — developer entry points. Mock mode needs zero keys.
 .DEFAULT_GOAL := help
-PY ?= python
+PY ?= python3
 
 .PHONY: help install smoke lint test cli ui evals validate docker clean
 

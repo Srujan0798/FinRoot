@@ -7,7 +7,7 @@
 - **Project:** FinRoot — Sovereign, Reasoning-First AI Financial Agent
 - **Tier:** T2 (Production) · **Archetype:** hackathon/competition + research-ml emphasis
 - **Phase:** ALL 12 WAVES SHIPPED — submission ready for SCALE ML Club PS-1
-- **Latest commit:** `ee438ae` (1066 tests passing / 9 skipped, ruff clean, FOUNDATION OK)
+- **Latest commit:** `8d4d03f` (1066 tests passing / 9 skipped, ruff clean, FOUNDATION OK)
 - **Orchestrator:** Claude Code / Kimi / Codex (interchangeable)
 - **Workers:** Srujan's agent swarm (OpenCode CLI windows / external agents)
 
@@ -39,7 +39,7 @@
 - `docs/decisions/` — 6 ADRs (MADR format)
 - `docs/business/` — 7-min demo script, presentation outline, executive summary
 - `docs/architecture/architecture.mmd` — Mermaid architecture diagram
-- `results/metrics.json` — THE measured proof (FinRoot 0.778 vs RAG 0.341 = +128.5% composite lift)
+- `results/metrics.json` — THE measured proof (FinRoot 0.795 vs RAG 0.334 = +137.8% composite lift)
 - `src/interface/api/` — FastAPI surface (`/answer`, `/health`) for headless eval/integration
 - `scripts/capture_screenshots.py` — Playwright PNG capture of 4 Streamlit tabs + harness
 - `docs/demo/screenshots/` — 5 PNGs (chat, trace, trap refusal, twin, harness)

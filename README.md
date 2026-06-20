@@ -40,43 +40,31 @@ SCALE ML Club — Problem Statement 1: **Build an AI Agent for Finance**.*
 
 ## 📉 The problem
 
-Most financial "AI" today is a chatbot that calls a price API and asks an LLM to summarize.
-That is not advice — it is a guess with no trace.
+Most financial "AI" is a chatbot calling a price API and asking an LLM to summarize. Not advice — a guess with no trace. FinRoot is engineered against every failure:
 
-| Pain | What individuals face today |
+| Pain | FinRoot's answer |
 |---|---|
-| **No reasoning shown** | A confident sentence, no plan, no tools, no trace. |
-| **No risk flags** | "Buy XYZ" with no drawdown estimate, no downside scenario. |
-| **No citations** | Numbers without sources — fabricated or stale. |
-| **No memory of *you*** | Each question is independent of your goals, taxes, holdings. |
-| **No audit trail** | When advice goes wrong, there is nothing to replay or defend. |
-| **Vendor lock-in** | Closed APIs, opaque data flows, no offline path. |
-
-FinRoot is engineered against every one of those failures.
+| **No reasoning shown** | Step-by-step plan + 5-axis self-critic, visible in trace |
+| **No risk flags** | Rooted Prudence verifier + risk agent + downside scenarios |
+| **No citations** | Every claim grounded to tool output, hash-chained in audit |
+| **No memory of you** | Digital Twin: goals, risk, horizon, holdings, tax bracket |
+| **No audit trail** | Hash-chained JSONL ledger — every step tamper-evident + replayable |
+| **Vendor lock-in** | Sovereign-first: Ollama local, Mock offline, no blind API dependence |
 
 ---
 
 ## ✅ What FinRoot does
 
-A **multi-agent reasoning pipeline** that *decides, defends, and documents*.
+A **multi-agent reasoning pipeline** that decides, defends, and documents.
 
-- 🧠 **6-agent LangGraph orchestration** — Intent · Market · News · Portfolio · Risk · Tax agents
-  coordinated by a Plan-and-Execute supervisor with refine loops.
-- 🛠 **12 tools in 6 groups** — market data, fundamentals, news/sentiment, risk + portfolio_sim,
-  deterministic tax engine, macro/currency, profile/documents/watchlist — all with caching,
-  rate-limiting, loud-fail, and audit hooks (`src/finroot/tools/`).
-- 🧬 **4-tier memory + Digital Twin** — working context · semantic (ChromaDB/JSON) · **Digital
-  Twin** (SQLite, your goals/risk/horizon/holdings/tax-bracket) · audit (`src/finroot/memory/`).
-- 🎯 **5-axis Self-Critic** — correctness · risk-awareness · actionability · explainability ·
-  evidence-grounding. Low-scoring answers are refined before reaching you.
-- 🪷 **Rooted Prudence verifier** — guards timeless wealth principles (long-term thinking,
-  downside-first, no overclaiming). *Artha aligned with dharma.*
-- 🔗 **Hash-chained audit trail** — every reasoning step, tool call, data source and
-  assumption is tamper-evident and replayable.
-- 🏠 **Sovereign-first** — local Ollama by default; offline Mock for zero-friction judging;
-  no blind reliance on closed APIs.
-- 📊 **FRB Reasoning-Quality harness** — a reproducible benchmark that *proves* the lift
-  over a RAG baseline, not just claims it (`evals/`, `results/metrics.json`).
+- **6-agent LangGraph orchestration** — Intent · Market · News · Portfolio · Risk · Tax agents coordinated by Plan-and-Execute supervisor with refine loops
+- **14 tools** — market data, fundamentals, news/sentiment, risk + portfolio_sim, tax engine, macro/currency, profile/documents/watchlist, goal planner, PDF ingestion — all with caching, rate-limiting, audit hooks
+- **4-tier memory + Digital Twin** — working context · semantic (ChromaDB/JSON) · Digital Twin (SQLite: goals/risk/holdings/tax) · audit trail
+- **5-axis Self-Critic** — correctness · risk-awareness · actionability · explainability · evidence. Low scores trigger refinement
+- **Rooted Prudence verifier** — guards timeless wealth principles (long-term, downside-first, no overclaiming)
+- **Hash-chained audit trail** — every reasoning step, tool call, data source tamper-evident and replayable
+- **Sovereign-first** — local Ollama default; offline Mock for zero-friction judging; no closed API dependence
+- **FRB Reasoning-Quality harness** — reproducible benchmark proving lift over RAG baseline (`evals/`, `results/metrics.json`)
 
 ---
 
@@ -84,93 +72,7 @@ A **multi-agent reasoning pipeline** that *decides, defends, and documents*.
 
 ![FinRoot Architecture](docs/architecture/architecture.png)
 
-<details>
-<summary>Full diagram source (mermaid)</summary>
-
-[docs/architecture/architecture.mmd](docs/architecture/architecture.mmd) — re-render with `bash scripts/render_diagram.sh`.
-
-```mermaid
-%% FinRoot Architecture Diagram
-%% Render to PNG: bash scripts/render_diagram.sh
-%%
-%% Legend:
-%%   [User]     — human end-user (investor / family office)
-%%   [UI/CLI]   — Streamlit dark UI + Typer CLI entry points
-%%   [Core]     — FinRootOrchestrator (LangGraph Plan-and-Execute loop)
-%%   [Agent]    — 6 specialized reasoning agents
-%%   [Tool]     — 12 tools in 6 functional groups (cache/rate-limit/loud-fail/audit)
-%%   [Memory]   — 4-tier memory (working / semantic / digital-twin / audit)
-%%   [Critic]   — Self-Critic (5-axis) + Rooted Prudence principles verifier
-%%   [Audit]    — Hash-chained tamper-evident audit trail
-%%   [LLM]      — LLM provider abstraction (Mock / Ollama / Groq / OpenAI)
-%%   Arrows     — data / control flow direction
-
-flowchart TD
-    USER([User]) --> CLI[Typer CLI]
-    USER --> UI[Streamlit dark UI]
-
-    CLI --> ANSWER[answer&#40;&#41; entry]
-    UI --> ANSWER
-
-    subgraph ORCH[FinRootOrchestrator — LangGraph Plan-and-Execute]
-        IC[Intent Classify] --> CA[Context Assemble]
-        CA --> PL[Plan]
-        PL --> EX[Execute Loop]
-        EX --> SY[Synthesize]
-        SY --> SC[Self-Critic 5-axis]
-        SC --> RP[Rooted Prudence]
-        RP --> FIN[Finalize]
-        FIN --> AU[Audit Emit]
-        SC -. refine .-> SY
-    end
-
-    ANSWER --> ORCH
-
-    EX --> IA[Intent Agent]
-    EX --> MA[Market Agent]
-    EX --> NA[News Agent]
-    EX --> PA[Portfolio Agent]
-    EX --> RA[Risk Agent]
-    EX --> TA[Tax Agent]
-
-    subgraph TOOLS[12 Tools — 6 Groups]
-        T1[market / fundamentals]
-        T2[news / sentiment]
-        T3[risk / portfolio_sim]
-        T4[tax]
-        T5[macro / currency]
-        T6[profile / documents / watchlist]
-    end
-
-    IA --> TOOLS
-    MA --> TOOLS
-    NA --> TOOLS
-    PA --> TOOLS
-    RA --> TOOLS
-    TA --> TOOLS
-
-    subgraph MEM[Memory — 4 Tiers]
-        WK[Working — session context]
-        SM[Semantic — ChromaDB / JSON]
-        DT[Digital Twin — SQLite]
-        AD[(Audit — hash-chained)]
-    end
-
-    CA --> MEM
-    AU --> AD
-
-    subgraph LLM[LLM Provider Layer]
-        MK[Mock — offline / judging]
-        OL[Ollama — local sovereign]
-        GQ[Groq — cloud low-latency]
-        OA[OpenAI — cloud full-featured]
-    end
-
-    ORCH --> LLM
-
-    FIN --> EVAL[FRB Eval Harness — pass@k vs baseline]
-```
-</details>
+Diagram source: [docs/architecture/architecture.mmd](docs/architecture/architecture.mmd) — re-render with `bash scripts/render_diagram.sh`.
 
 ---
 
@@ -241,16 +143,15 @@ That is it. Mock mode is the default — no API keys, no network, no friction.
 
 ## 🖼 Screenshots
 
-> All screenshots captured in Mock mode via `scripts/capture_screenshots.py`. Click any
-> thumbnail to enlarge.
+All captured in Mock mode via `scripts/capture_screenshots.py`.
 
 | # | Screenshot | What it shows |
 |---|---|---|
-| 1 | ![Chat — Portfolio query](docs/demo/screenshots/01_chat_portfolio.png) | Chat tab with a portfolio-risk query. Structured finance card: summary, confidence badge, risk profile, analysis, actions, risks, alternatives, citations. |
-| 2 | ![Reasoning Trace](docs/demo/screenshots/02_reasoning_trace.png) | Step-by-step plan, tool calls, 5-axis self-critic scores (pass/fail + must-fix), prudential principles verifier, and citations table. The "show your work" transparency. |
-| 3 | ![Trap Refusal](docs/demo/screenshots/03_trap_refusal.png) | Agent refuses an unsafe advice request ("put emergency fund into hot small-cap stock"). Flags risk, explains why, offers safer alternatives. |
-| 4 | ![Digital Twin](docs/demo/screenshots/04_digital_twin.png) | Digital Twin tab: investor profile, risk tolerance, horizon, tax bracket, goals, constraints, portfolio holdings, allocation chart, total value. |
-| 5 | ![FRB Harness](docs/demo/screenshots/05_harness.png) | FRB benchmark runner: composite lift vs RAG, system comparison table, per-domain bar chart. Numbers sourced from `results/metrics.json`. |
+| 1 | ![Chat](docs/demo/screenshots/01_chat_portfolio.png) | Portfolio-risk query with structured finance card: summary, confidence, risks, actions, citations |
+| 2 | ![Trace](docs/demo/screenshots/02_reasoning_trace.png) | Step-by-step plan, tool calls, 5-axis self-critic scores, prudential verifier, citations |
+| 3 | ![Trap](docs/demo/screenshots/03_trap_refusal.png) | Refuses unsafe advice ("emergency fund into hot small-cap"), flags risk, offers alternatives |
+| 4 | ![Twin](docs/demo/screenshots/04_digital_twin.png) | Digital Twin: profile, risk tolerance, horizon, tax bracket, goals, holdings, allocation chart |
+| 5 | ![Harness](docs/demo/screenshots/05_harness.png) | FRB benchmark: composite lift vs RAG, system comparison, per-domain bar chart |
 
 ---
 
@@ -266,53 +167,28 @@ That is it. Mock mode is the default — no API keys, no network, no friction.
 | Single-agent (no critic) | 0.181 | 0.398 | 0.000 | 0.329 | −1.5% |
 | **FinRoot (full pipeline)** | **0.193** | **0.193** | **0.193** | **0.795** | **+137.8%** |
 
-**Measured at:** `as_of_sha = 8d4d03f` · `n_tasks = 83` · `k = 3` · `mock = True` ·
-regenerate anytime with `make evals`.
+**Measured at:** `as_of_sha = 8d4d03f` · `n_tasks = 83` · `k = 3` · `mock = True` · regenerate with `make evals`.
 
 ### Per-domain mean scores (FinRoot)
 
-| Domain | Score |
-|---|---:|
-| general | 0.921 |
-| tax | 0.873 |
-| portfolio | 0.852 |
-| credit | 0.853 |
-| news_impact | 0.767 |
-| risk | 0.765 |
-| international | 0.750 |
-| behavioral | 0.740 |
-| cashflow | 0.736 |
-| estate_planning | 0.692 |
-| insurance | 0.664 |
+| Domain | Score | | Domain | Score |
+|---|---:|---|---|---:|
+| general | 0.921 | | risk | 0.765 |
+| tax | 0.873 | | international | 0.750 |
+| portfolio | 0.852 | | behavioral | 0.740 |
+| credit | 0.853 | | cashflow | 0.736 |
+| news_impact | 0.767 | | estate_planning | 0.692 |
+| | | | insurance | 0.664 |
 
-**Composite lift vs RAG: +137.8%.** The RAG baseline scores 0.334 mean — it cannot
-satisfy most tasks' must-mention + must-not + citation requirements. **FinRoot scores 0.795
-mean across 83 tasks across 11 financial domains** — see `results/metrics.json` for the full
-breakdown. Pre-captured demo transcripts live in `docs/demo/transcript_*.md` so judges can
-inspect qualitative outputs offline.
-
-**Pass thresholds** (from `evals/README.md`):
-- Capability: pass@5 ≥ 50%
-- Regression: pass@3 ≥ 95%, pass³ ≥ 80%
-- Composite lift over RAG: PRD target ≥ +40%
+**Composite lift vs RAG: +137.8%.** RAG baseline 0.334 mean cannot satisfy must-mention + must-not + citation requirements. **FinRoot 0.795 mean across 83 tasks, 11 domains.** Demo transcripts: `docs/demo/transcript_*.md`.
 
 ---
 
-## 🛡 Sovereignty + audit-trail story
+## 🛡 Sovereignty + audit trail
 
-**Sovereignty.** Default provider is **Mock** (offline, deterministic — safe for CI and judging).
-The real default for production is **Ollama** (local, your machine, your data). Cloud
-providers (Groq, OpenAI) are opt-in via env vars. There is no telemetry, no closed-source
-prompt dependence, and the entire stack runs offline end-to-end.
+**Sovereignty.** Default: **Mock** (offline, deterministic — safe for CI/judging). Production default: **Ollama** (local, your machine, your data). Cloud (Groq, OpenAI) opt-in via env vars. No telemetry, no closed-source prompt dependence, entire stack runs offline.
 
-**Audit trail.** Every step the agent takes — plan, tool call, retrieved doc, model output,
-critic verdict, principle check — is emitted as a structured `AuditEvent` and persisted in a
-**hash-chained ledger** (`src/finroot/audit/`). Each event references the previous event's
-hash, making tampering detectable. The ledger is replayable: feed it back into the agent and
-you reproduce the run bit-for-bit.
-
-That is what "explainable, auditable financial reasoning" means in practice: the answer comes
-with its proof.
+**Audit trail.** Every step — plan, tool call, retrieved doc, model output, critic verdict, principle check — emitted as structured `AuditEvent` in a **hash-chained ledger** (`src/finroot/audit/`). Each event references previous hash → tampering detectable. Ledger is replayable: feed back into agent → reproduce run bit-for-bit. The answer comes with its proof.
 
 ---
 
@@ -320,18 +196,17 @@ with its proof.
 
 ```
 finroot/
-├── README.md              ← you are here
-├── AGENTS.md              ← agent instructions
-├── HANDOFF.md             ← current state for cold sessions
-├── src/finroot/           ← agent code (agents, tools, memory, reasoning, audit, llm, …)
+├── src/finroot/           ← agent code (agents, tools, memory, reasoning, audit, llm)
 ├── src/interface/         ← Streamlit UI · Typer CLI · FastAPI
 ├── config/                ← settings (pydantic-settings) + prompt registry
 ├── evals/                 ← FRB reasoning-quality benchmark + graders
-├── docs/                  ← architecture, ADRs, demo script, business, submissions
-├── data/                  ← FRB question bank, tax rules, sample profiles
+├── data/                  ← FRB question bank (83 questions), tax rules, sample profiles
 ├── tests/                 ← unit / integration / golden / fuzz / perf / security
-├── results/               ← measured metrics (regenerated via `make evals`)
-└── scripts/               ← smoke, run_evals, capture_demo, make_submission
+├── results/metrics.json   ← measured metrics (regenerated via `make evals`)
+├── scripts/               ← smoke, run_evals, capture_demo, make_submission
+├── docs/                  ← architecture, ADRs, demo, business, submission
+├── AGENTS.md · HANDOFF.md ← agent instructions + session state
+└── Dockerfile · docker-compose.yml ← one-command spin-up
 ```
 
 ---

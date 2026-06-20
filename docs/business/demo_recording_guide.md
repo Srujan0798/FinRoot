@@ -184,15 +184,15 @@
 "Here's the measured proof. We run the same financial questions through two pipelines: a standard RAG baseline and FinRoot's full reasoning pipeline. The FRB harness scores both on our 5-axis rubric. Watch the delta — FinRoot's multi-agent reasoning with self-critique consistently outperforms the RAG baseline on reasoning quality, risk awareness, and citation completeness."
 
 **Show on screen:**
-- Composite lift vs RAG metric (e.g., "+23.4% vs RAG")
+- Composite lift vs RAG metric ("+138% vs RAG")
 - Comparison table:
   | System | Pass@1 | Pass@k | Mean Score |
   |--------|--------|--------|------------|
-  | FinRoot | 85.2% | 92.1% | 0.81 |
-  | RAG baseline | 61.8% | 78.5% | 0.63 |
-  | Single-agent | 68.4% | 81.2% | 0.69 |
+  | FinRoot | 19.3% | 19.3% | 0.795 |
+  | RAG baseline | 28.9% | 43.4% | 0.334 |
+  | Single-agent | 18.1% | 39.8% | 0.329 |
 - Per-domain mean-score bar chart (domains: portfolio, tax, insurance, retirement, debt)
-- Key takeaway: "FinRoot lifts RAG baseline by +23.4%" or similar
+- Key takeaway: "FinRoot lifts RAG baseline by +138% on reasoning quality" or similar
 
 **Reliability:**
 - If harness tab shows no data → run `PYTHONPATH=src python3 -m finroot.evaluation.frb_runner` to populate results. If that fails, show `docs/demo/screenshots/05_harness.png` as fallback.

@@ -15,13 +15,13 @@
 | 3 | Tool Ecosystem | **SHIPPED** | 6/6 | `f097bc9` | 12 tools, 305 tests, deterministic tax engine |
 | 4 | Core Agents & Orchestration | **SHIPPED** | 6/6 | `1a4bc81` | 535 tests, LangGraph pipeline, 6 agents |
 | 5 | Self-Critic & Reasoning Layer | **SHIPPED** | 5/5 | `ff69da6` | 125 tests — the 35% weapon (critic/principles/consistency/refine/explain) |
-| 6 | Evaluation Harness (FRB) | **SHIPPED** | 5/5 | `ef1626f` | 83-task FRB (11 domains), measured: FinRoot 0.778 vs RAG 0.341 = +128.5% lift |
+| 6 | Evaluation Harness (FRB) | **SHIPPED** | 5/5 | `8d4d03f` | 83-task FRB (11 domains), measured: FinRoot 0.795 vs RAG 0.334 = +137.8% lift |
 | 7 | Interface & Demo | **SHIPPED** | 5/5 | `ef1626f` | Streamlit UI + CLI + answer() + demo wiring (prudence trap works) |
 | 8 | Deploy, Docs & Submission | **SHIPPED** | 6/6 | `ef1626f` | Docker + ADRs + demo script + deck + submission packager |
 
 ## Final test counts
 - **1002 unit + integration tests passing** (9 skipped), ruff clean, FOUNDATION OK
-- FRB measured lift: **FinRoot 0.778 vs RAG 0.341 = +128.5% composite**, pass@1 0.193 vs 0.289 (mean score is the headline metric)
+- FRB measured lift: **FinRoot 0.795 vs RAG 0.334 = +137.8% composite**, pass@1 0.193 vs 0.289 (mean score is the headline metric)
 
 ## Commit history
 ```

@@ -1,7 +1,7 @@
 # FinRoot — Executive Summary
 
 > Sovereign, Reasoning-First AI Financial Agent
-> Commit: `ee438ae`
+> Commit: `8d4d03f`
 
 ---
 
