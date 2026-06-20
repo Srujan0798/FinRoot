@@ -9,6 +9,7 @@ errors — so a sparse ticker still produces a structured output.
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import math
 import os
@@ -119,11 +120,18 @@ class FundamentalAnalysisTool(BaseTool[FundamentalInput, FundamentalOutput]):
     # -- mock path -------------------------------------------------------
 
     def _run_mock(self, inp: FundamentalInput) -> FundamentalOutput:
+        h = int(hashlib.sha256(inp.symbol.encode()).hexdigest(), 16)
         return FundamentalOutput(
             symbol=inp.symbol,
-            **_MOCK_FUNDAMENTALS,
+            pe_ratio=round(12.0 + (h % 400) / 10.0, 1),         # 12.0 - 52.0
+            pb_ratio=round(1.0 + (h % 100) / 20.0, 1),           # 1.0 - 6.0
+            eps=round(5.0 + (h % 200) / 10.0, 2),                # 5.0 - 25.0
+            dividend_yield=round(0.005 + (h % 50) / 1000.0, 3),  # 0.5% - 5.5%
+            market_cap=round(5e9 + (h % 500) * 1e9, 0),          # 5B - 505B
+            revenue_ttm=round(1e9 + (h % 200) * 1e8, 0),         # 1B - 21B
+            debt_to_equity=round(0.1 + (h % 150) / 100.0, 1),    # 0.1 - 1.6
             source="mock",
-            citation="Mock data (offline judging mode)",
+            citation=f"Mock data for {inp.symbol} (offline judging mode)",
         )
 
     # -- live path -------------------------------------------------------

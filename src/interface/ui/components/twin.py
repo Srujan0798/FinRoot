@@ -39,7 +39,19 @@ def _holdings_value(holdings: list[dict[str, Any]]) -> float:
     return total
 
 
-def render(twin: dict[str, Any] | None = None) -> None:
+def load_twin_by_user_id(user_id: str) -> dict[str, Any]:
+    """Load a twin profile by user_id, falling back to the first profile."""
+    raw = json.loads(_PROFILES_PATH.read_text())
+    if not raw:
+        msg = f"No twin profiles found in {_PROFILES_PATH}"
+        raise FileNotFoundError(msg)
+    for profile in raw:
+        if profile.get("user_id") == user_id or profile.get("name", "").lower() == user_id.lower():
+            return profile
+    return raw[0]
+
+
+def render(twin: dict[str, Any] | None = None, user_id: str | None = None) -> None:
     """Render the Digital Twin viewer panel in Streamlit.
 
     Parameters
@@ -47,13 +59,15 @@ def render(twin: dict[str, Any] | None = None) -> None:
     twin:
         A raw twin dict (as loaded from ``twin_profiles.json``).  When
         ``None``, the first demo profile is loaded via ``load_demo_twin()``.
+    user_id:
+        Optional user ID to load a specific profile. Falls back to first profile.
     """
     if st is None:
         msg = "Streamlit is required to render the twin viewer. Install it with: pip install streamlit"
         raise ImportError(msg)
 
     if twin is None:
-        twin = load_demo_twin()
+        twin = load_twin_by_user_id(user_id) if user_id else load_demo_twin()
 
     name = twin.get("name")
     age = twin.get("age")

@@ -56,6 +56,7 @@ class GraphState(TypedDict, total=False):
     final: Recommendation | None
     audit_events: list[Any]
     created_at: datetime | None
+    retry_count: int
 
 
 def agent_state_to_graph(state: AgentState) -> GraphState:
@@ -72,6 +73,7 @@ def agent_state_to_graph(state: AgentState) -> GraphState:
         "final": state.final,
         "audit_events": list(state.audit_events),
         "created_at": state.created_at,
+        "retry_count": 0,
     }
 
 
@@ -197,10 +199,22 @@ def build_graph(
             "Synthesis complete: confidence=%s",
             recommendation.confidence.value,
         )
-        return {"candidate": recommendation}
+        return {"candidate": recommendation, "final": recommendation}
 
     # ------------------------------------------------------------------
-    # Build the graph
+    # Routing functions for conditional edges
+    # ------------------------------------------------------------------
+
+    def _route_after_classify(state: GraphState) -> str:
+        """Route based on intent: GENERAL goes straight to synthesize."""
+        intent = state.get("intent") or Intent.GENERAL
+        if intent == Intent.GENERAL:
+            logger.info("GENERAL intent — skipping agent execution, synthesizing directly.")
+            return "synthesize"
+        return "assemble_context"
+
+    # ------------------------------------------------------------------
+    # Build the graph with conditional edges
     # ------------------------------------------------------------------
 
     graph = StateGraph(GraphState)
@@ -212,7 +226,17 @@ def build_graph(
     graph.add_node("synthesize", synthesize)
 
     graph.set_entry_point("classify_intent")
-    graph.add_edge("classify_intent", "assemble_context")
+
+    # Conditional: GENERAL intent skips directly to synthesize
+    graph.add_conditional_edges(
+        "classify_intent",
+        _route_after_classify,
+        {
+            "assemble_context": "assemble_context",
+            "synthesize": "synthesize",
+        },
+    )
+
     graph.add_edge("assemble_context", "select_agents")
     graph.add_edge("select_agents", "execute_agents")
     graph.add_edge("execute_agents", "synthesize")

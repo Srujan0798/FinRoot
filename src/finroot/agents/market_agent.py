@@ -57,7 +57,10 @@ class MarketAnalystAgent(BaseAgent):
         for iteration in range(_MAX_REACT_ITERATIONS):
             logger.debug("MarketAnalystAgent ReAct iteration %d/%d", iteration + 1, _MAX_REACT_ITERATIONS)
 
-            # Think: determine what data we still need
+            # Think: use LLM to reason about what data we need
+            llm_reasoning = self._llm_think(state, symbols, iteration)
+
+            # Plan: determine what data we still need
             actions = self._plan_actions(state, symbols)
             if not actions:
                 logger.debug("MarketAnalystAgent: all data collected; stopping early.")
@@ -67,7 +70,50 @@ class MarketAnalystAgent(BaseAgent):
             for action in actions:
                 self._execute_action(state, action)
 
+            # Record LLM reasoning in tool_outputs
+            if llm_reasoning:
+                state.tool_outputs.append({
+                    "agent": self.name,
+                    "type": "llm_reasoning",
+                    "iteration": iteration + 1,
+                    "reasoning": llm_reasoning,
+                })
+
         return state
+
+    def _llm_think(self, state: AgentState, symbols: list[str], iteration: int) -> str | None:
+        """Use LLM to reason about the analysis step (ReAct 'think' phase)."""
+        try:
+            # Build context from existing tool outputs
+            existing_data = []
+            for entry in state.tool_outputs:
+                tool = entry.get("tool", "")
+                if tool in ("market_data", "fundamental_analysis"):
+                    existing_data.append(f"- {tool}: {entry.get('input', '')}")
+
+            context = f"Symbols: {', '.join(symbols)}\n"
+            if existing_data:
+                context += f"Data already fetched:\n{''.join(existing_data)}\n"
+            else:
+                context += "No data fetched yet.\n"
+
+            prompt = (
+                f"You are a market analyst agent. Analyze these stock symbols: {', '.join(symbols)}.\n"
+                f"Context: {context}\n"
+                f"Iteration {iteration + 1} of {_MAX_REACT_ITERATIONS}.\n"
+                "What market data and fundamental analysis should be prioritized? "
+                "Respond in 2-3 sentences about what to look for."
+            )
+            result = self.llm.complete(
+                prompt=prompt,
+                system="You are a financial market analyst. Be concise and focus on actionable insights.",
+                temperature=0.3,
+                max_tokens=200,
+            )
+            return result.text
+        except Exception as exc:
+            logger.debug("MarketAnalystAgent LLM think failed (non-fatal): %s", exc)
+            return None
 
     def _extract_symbols(self, state: AgentState) -> list[str]:
         """Pull symbols from state.tool_outputs (set by intent classifier / context)."""
