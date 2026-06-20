@@ -1,5 +1,5 @@
 === FinRoot CLI Demo Transcript (Mock Mode) ===
-Generated: Sat Jun 20 15:23:32 IST 2026
+Generated: Sun Jun 21 03:31:52 IST 2026
 Environment: PYTHONPATH=src FINROOT_LLM_PROVIDER=mock
 
 ======================================================================
@@ -9,17 +9,129 @@ COMMAND: python -m interface.cli --mock "Review my portfolio and flag risks"
   from pydantic.v1.fields import FieldInfo as FieldInfoV1
   from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 ╭─────────────────────────────────── Answer ───────────────────────────────────╮
-│ Current allocation: FD_HDFC_001: 22.46%, MF_ICICI_BALANCED_001: 27.36%,      │
-│ MF_SBI_DEBT_001: 34.46%, PPF_ACCOUNT_001: 15.72% | Monte Carlo: expected     │
-│ return=20.37%, probability of loss=16.50%                                    │
+│ Your portfolio review reveals several areas to address. Concentration risk   │
+│ in individual holdings should be quantified — any single position above      │
+│ 15-20% of the portfolio warrants attention. Asset allocation should reflect  │
+│ your risk tolerance, tax slab, and investment horizon. Rebalancing should be │
+│ tax-aware, considering LTCG/STCG implications on any sales. Diversification  │
+│ across equity, debt, and gold aligned with your risk profile is recommended. │
+│ Use SIP and rupee cost averaging for gradual rebalancing. Key risks          │
+│ identified: Concentration risk: FD_HDFC_001 is 22% of portfolio (recommended │
+│ max: 15-20%); Concentration risk: MF_ICICI_BALANCED_001 is 27% of portfolio  │
+│ (recommended max: 15-20%); Concentration risk: MF_SBI_DEBT_001 is 34% of     │
+│ portfolio (recommended max: 15-20%).                                         │
 │                                                                              │
-│ Portfolio allocation: FD_HDFC_001: 22.46%, MF_ICICI_BALANCED_001: 27.36%,    │
-│ MF_SBI_DEBT_001: 34.46%, PPF_ACCOUNT_001: 15.72%.                            │
+│ ### Query context                                                            │
+│ - Review my portfolio and flag risks                                         │
 │                                                                              │
-│ Monte Carlo simulation: expected return 20.37%, probability of loss 16.50%.  │
+│ ### Domain analysis: portfolio                                               │
+│ The query falls in the **portfolio** domain. Key concepts to consider: asset │
+│ allocation, diversification, concentration risk, rebalance, horizon, LTCG,   │
+│ tax, equity, debt, goal, credit, lockup, band, sequence of returns, glide    │
+│ path, behavioral, rupee cost averaging, profit booking, long-term,           │
+│ single-stock, drift. A portfolio review should evaluate concentration risk,  │
+│ the user's risk tolerance, and the investment horizon. If rebalancing before │
+│ FY-end, the LTCG tax on any sale is the dominant cost — sell only when the   │
+│ after-tax benefit exceeds the concentration-risk reduction. Diversification  │
+│ across asset classes (equity, debt, gold) is the primary defense against     │
+│ single-stock or single-sector shocks. Asset allocation should reflect age,   │
+│ risk profile, and tax slab. Recommend gradual rebalancing via SIP and rupee  │
+│ cost averaging rather than a single trade to manage tax outflows, drift, and │
+│ timing risk. Sequence of returns risk matters for long horizons. Risk        │
+│ quantification requested — state methodology and confidence.                 │
+│                                                                              │
+│ ### Reasoning process                                                        │
+│ - intent_classifier: produced output                                         │
+│ - context_assembler: produced output                                         │
+│ - market_data: produced output                                               │
+│ - market_data: produced output                                               │
+│ - market_data: produced output                                               │
+│ - market_data: produced output                                               │
+│ - portfolio_optimizer: produced current_prices                               │
+│ - portfolio_optimizer: produced allocation_analysis                          │
+│ - portfolio_simulator: produced output                                       │
+│ - portfolio_simulator: produced output                                       │
+│ - portfolio_optimizer: produced rebalancing_comparison                       │
+│ - portfolio_simulator: produced output                                       │
+│ - risk_assessor: produced monte_carlo                                        │
+│                                                                              │
+│ ### Findings                                                                 │
+│ - [intent_classifier] {'intent': 'portfolio', 'confidence': 1.0, 'entities': │
+│ {'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 'portfolio'        │
+│ matched for intent portfolio"}                                               │
+│ - [context_assembler] {'query': 'Review my portfolio and flag risks',        │
+│ 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32,               │
+│ 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>,              │
+│ 'investment_horizon': <InvestmentHorizon.MEDIUM: 'medium'>,                  │
+│ 'monthly_income': 150000.0, 'monthly_expenses': 85000.0, 'tax_bracket_pct':  │
+│ 20.0, 'goals': ['Build emergency fund of 12 months expenses', "Save for      │
+│ child's education                                                            │
+│ - [market_data] symbol='FD_HDFC_001' currency='USD'                          │
+│ prices=[PricePoint(date='2026-06-16', open=36298.9, high=36299.5,            │
+│ low=36298.5, close=36299.0, volume=1255294), PricePoint(date='2026-06-17',   │
+│ open=36300.4, high=36301.0, low=36300.0, close=36300.5, volume=1255294),     │
+│ PricePoint(date='2026-06-18', open=36299.4, high=36300.0, low=36299.0,       │
+│ close=36299.5, volume=1255294), PricePoint(date='2026-06-19', open=36300.15, │
+│ hi                                                                           │
+│ - [market_data] symbol='MF_ICICI_BALANCED_001' currency='USD'                │
+│ prices=[PricePoint(date='2026-06-16', open=11498.9, high=11499.5,            │
+│ low=11498.5, close=11499.0, volume=1896883), PricePoint(date='2026-06-17',   │
+│ open=11500.4, high=11501.0, low=11500.0, close=11500.5, volume=1896883),     │
+│ PricePoint(date='2026-06-18', open=11499.4, high=11500.0, low=11499.0,       │
+│ close=11499.5, volume=1896883), PricePoint(date='2026-06-19', open=11        │
+│ - [market_data] symbol='MF_SBI_DEBT_001' currency='USD'                      │
+│ prices=[PricePoint(date='2026-06-16', open=44398.9, high=44399.5,            │
+│ low=44398.5, close=44399.0, volume=1878908), PricePoint(date='2026-06-17',   │
+│ open=44400.4, high=44401.0, low=44400.0, close=44400.5, volume=1878908),     │
+│ PricePoint(date='2026-06-18', open=44399.4, high=44400.0, low=44399.0,       │
+│ close=44399.5, volume=1878908), PricePoint(date='2026-06-19', open=44400.15  │
+│ - [market_data] symbol='PPF_ACCOUNT_001' currency='USD'                      │
+│ prices=[PricePoint(date='2026-06-16', open=4298.9, high=4299.5, low=4298.5,  │
+│ close=4299.0, volume=1596647), PricePoint(date='2026-06-17', open=4300.4,    │
+│ high=4301.0, low=4300.0, close=4300.5, volume=1596647),                      │
+│ PricePoint(date='2026-06-18', open=4299.4, high=4300.0, low=4299.0,          │
+│ close=4299.5, volume=1596647), PricePoint(date='2026-06-19', open=4300.15,   │
+│ high=4300.7                                                                  │
+│ - [portfolio_optimizer] prices: {'FD_HDFC_001': 36300.0,                     │
+│ 'MF_ICICI_BALANCED_001': 11500.0, 'MF_SBI_DEBT_001': 44400.0,                │
+│ 'PPF_ACCOUNT_001': 4300.0}                                                   │
+│ - [portfolio_optimizer] current_allocation: [{'symbol': 'FD_HDFC_001',       │
+│ 'weight': 0.224601, 'price': 36300.0}, {'symbol': 'MF_ICICI_BALANCED_001',   │
+│ 'weight': 0.273574, 'price': 11500.0}, {'symbol': 'MF_SBI_DEBT_001',         │
+│ 'weight': 0.344603, 'price': 44400.0}, {'symbol': 'PPF_ACCOUNT_001',         │
+│ 'weight': 0.157221, 'price': 4300.0}]                                        │
+│ - [portfolio_simulator] expected_return=0.093536 p10_return=-0.134036        │
+│ p90_return=0.363626 probability_of_loss=0.31 expected_final_value=1.093536   │
+│ median_final_value=1.093536 p10_final_value=0.865964                         │
+│ p90_final_value=1.363626 expected_after_tax_return=0.084182                  │
+│ methodology='Geometric Brownian motion: dS/S = mu*dt + sigma*dW, discretised │
+│ daily over 1y (252 trading days). mu_annual=0.1000, sigma_annual=0.1800. 500 │
+│ scenarios. N                                                                 │
+│ - [portfolio_simulator] expected_return=0.093536 p10_return=-0.134036        │
+│ p90_return=0.363626 probability_of_loss=0.31 expected_final_value=1.093536   │
+│ median_final_value=1.093536 p10_final_value=0.865964                         │
+│ p90_final_value=1.363626 expected_after_tax_return=0.084182                  │
+│ methodology='Geometric Brownian motion: dS/S = mu*dt + sigma*dW, discretised │
+│ daily over 1y (252 trading days). mu_annual=0.1000, sigma_annual=0.1800. 500 │
+│ scenarios. N                                                                 │
+│ - [portfolio_optimizer] simulations: [{'label': 'current',                   │
+│ 'expected_return': 0.093536, 'p10_return': -0.134036, 'p90_return':          │
+│ 0.363626, 'probability_of_loss': 0.31, 'citation': 'Monte Carlo (GBM): 500   │
+│ paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does  │
+│ not guarantee future returns.'}, {'label': 'equal_weight',                   │
+│ - [portfolio_simulator] expected_return=0.0895 p10_return=-0.1477            │
+│ p90_return=0.376208 probability_of_loss=0.315 expected_final_value=1.0895    │
+│ median_final_value=1.0895 p10_final_value=0.8523 p90_final_value=1.376208    │
+│ expected_after_tax_return=0.08055 methodology='Geometric Brownian motion:    │
+│ dS/S = mu*dt + sigma*dW, discretised daily over 1y (252 trading days).       │
+│ mu_annual=0.1000, sigma_annual=0.1800. 1000 scenarios. No rebalan            │
+│ - [risk_assessor] expected_return: 0.0895                                    │
+│ - [risk_assessor] p10_return: -0.1477                                        │
+│ - [risk_assessor] p90_return: 0.376208                                       │
+│ - [risk_assessor] probability_of_loss: 0.315                                 │
 ╰──────────────────────────────────────────────────────────────────────────────╯
-  Confidence    medium                         
-  Risks         No specific risks identified.  
+  Confidence    medium           
+  Risks         5 risks flagged  
 
 Reasoning Steps
   0.  plan_step: portfolio_optimizer
@@ -45,58 +157,51 @@ output=symbol='PPF_ACCOUNT_001' currency='USD' prices=[PricePoint(date='2026
   11.  tool_output: input=holdings=[{'symbol': 'FD_HDFC_001', 'weight': 0.25}, 
 {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.25}, {'symbol
   12.  rebalancing_comparison: simulations=[{'label': 'current', 
-'expected_return': 0.208268, 'p10_return': -0.055892, 'p90_return': 0.526538, 
+'expected_return': 0.093536, 'p10_return': -0.134036, 'p90_return': 0.363626, 
 'probabi
   13.  tool_output: input=holdings=[{'asset_id': 'FD_HDFC_001', 'asset_type': 
 'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quantity'
-  14.  monte_carlo: expected_return=0.203746, p10_return=-0.071418, 
-p90_return=0.541139, probability_of_loss=0.165, citation=Monte Carlo sim
-  15.  critique: SelfCritic failed (overall=0.54, threshold=0.6). Axes: 
-correctness=0.10, risk_awareness=0.80, actionability=0.50, explai
-  16.  recommendation: Current allocation: FD_HDFC_001: 22.46%, 
-MF_ICICI_BALANCED_001: 27.36%, MF_SBI_DEBT_001: 34.46%, PPF_ACCOUNT_001: 15.72%
+  14.  monte_carlo: expected_return=0.0895, p10_return=-0.1477, 
+p90_return=0.376208, probability_of_loss=0.315, citation=Monte Carlo (GBM): 
+  15.  critique: SelfCritic passed (overall=0.94, threshold=0.6). Axes: 
+correctness=1.00, risk_awareness=1.00, actionability=0.70, explai
+  16.  orchestrator.run: {"query": "Review my portfolio and flag risks"}
+  17.  tool.called: {"input": "symbol='FD_HDFC_001' period='1d'", "output": 
+"symbol='FD_HDFC_001' currency='USD' prices=[PricePoint(date='20
+  18.  tool.called: {"input": "symbol='MF_ICICI_BALANCED_001' period='1d'", 
+"output": "symbol='MF_ICICI_BALANCED_001' currency='USD' prices=
+  19.  tool.called: {"input": "symbol='MF_SBI_DEBT_001' period='1d'", "output": 
+"symbol='MF_SBI_DEBT_001' currency='USD' prices=[PricePoint(
+  20.  tool.called: {"input": "symbol='PPF_ACCOUNT_001' period='1d'", "output": 
+"symbol='PPF_ACCOUNT_001' currency='USD' prices=[PricePoint(
+  21.  tool.called: {"input": "holdings=[{'symbol': 'FD_HDFC_001', 'weight': 
+0.224601}, {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.2735
+  22.  tool.called: {"input": "holdings=[{'symbol': 'FD_HDFC_001', 'weight': 
+0.25}, {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.25}, {'s
+  23.  tool.called: {"input": "holdings=[{'asset_id': 'FD_HDFC_001', 
+'asset_type': 'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quan
+  24.  orchestrator.done: {"has_candidate": true, "intent": "portfolio", 
+"query": "Review my portfolio and flag risks"}
+  25.  recommendation: Your portfolio review reveals several areas to address. 
+Concentration risk in individual holdings should be quantified —
 
 Citations
-  1. intent_classifier: Output from intent_classifier — {'intent': 'portfolio', 
-'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': 
-"Keyword 'portfolio' matched for intent portfolio"}
-  2. context_assembler: Output from context_assembler — {'query': 'Review my 
-portfolio and flag risks', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 
-'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>, 
-'investment_horizon': <In
-  3. market_data: Output from market_data — symbol='FD_HDFC_001' currency='USD' 
-prices=[PricePoint(date='2026-06-16', open=36298.9, high=36299.5, low=36298.5, 
-close=36299.0, volume=1255294), PricePoint(date='2026-06-17', open=36300.4, 
-high=3630
-  4. market_data: Output from market_data — symbol='MF_ICICI_BALANCED_001' 
-currency='USD' prices=[PricePoint(date='2026-06-16', open=11498.9, high=11499.5,
-low=11498.5, close=11499.0, volume=1896883), PricePoint(date='2026-06-17', 
-open=11500.4,
-  5. market_data: Output from market_data — symbol='MF_SBI_DEBT_001' 
-currency='USD' prices=[PricePoint(date='2026-06-16', open=44398.9, high=44399.5,
-low=44398.5, close=44399.0, volume=1878908), PricePoint(date='2026-06-17', 
-open=44400.4, high=
-  6. market_data: Output from market_data — symbol='PPF_ACCOUNT_001' 
-currency='USD' prices=[PricePoint(date='2026-06-16', open=4298.9, high=4299.5, 
-low=4298.5, close=4299.0, volume=1596647), PricePoint(date='2026-06-17', 
-open=4300.4, high=4301.
-  7. portfolio_simulator: Output from portfolio_simulator — 
-expected_return=0.208268 p10_return=-0.055892 p90_return=0.526538 
-probability_of_loss=0.16 citation='Monte Carlo simulation: 500 paths, 1-year 
-horizon'
-  8. portfolio_simulator: Output from portfolio_simulator — 
-expected_return=0.208268 p10_return=-0.055892 p90_return=0.526538 
-probability_of_loss=0.16 citation='Monte Carlo simulation: 500 paths, 1-year 
-horizon'
-  9. portfolio_simulator: Output from portfolio_simulator — 
-expected_return=0.203746 p10_return=-0.071418 p90_return=0.541139 
-probability_of_loss=0.165 citation='Monte Carlo simulation: 1000 paths, 1-year 
-horizon'
+  1. risk_assessor: Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr,
+sigma=0.1800/yr. Past performance does not guarantee future returns. — Monte 
+Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past 
+performance does not guarantee future returns.
+  2. intent_classifier: Output from intent_classifier (synthesizer evidence) — 
+{'intent': 'portfolio', 'confidence': 1.0, 'entities': {'symbols': [], 
+'timeframe': None}, 'reasoning': "Keyword 'portfolio' matched for intent 
+portfolio"}
+  3. context_assembler: Output from context_assembler (synthesizer evidence) — 
+{'query': 'Review my portfolio and flag risks', 'twin': {'user_id': 'demo', 
+'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': 
+<RiskTolerance.CONSERVATIVE: 'conservative'>, 'investment_horizon': <In
 
-Critic Verdict: FAILED (overall=0.535)
-  SelfCritic failed (overall=0.54, threshold=0.6). Axes: correctness=0.10, 
-risk_awareness=0.80, actionability=0.50, explainability=0.70, evidence=1.00. 
-Must fix: correctness.
+Critic Verdict: PASSED (overall=0.94)
+  SelfCritic passed (overall=0.94, threshold=0.6). Axes: correctness=1.00, 
+risk_awareness=1.00, actionability=0.70, explainability=1.00, evidence=1.00.
 
 
 ======================================================================
@@ -106,15 +211,71 @@ COMMAND: python -m interface.cli --mock "Calculate tax on ₹2,00,000 LTCG from 
   from pydantic.v1.fields import FieldInfo as FieldInfoV1
   from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 ╭─────────────────────────────────── Answer ───────────────────────────────────╮
-│ Tax on ₹200,000 LTCG: ₹10,400.00 (effective rate 5.20%)                      │
+│ Based on Indian tax rules (FY 2024-25): LTCG on listed equity above ₹1 lakh  │
+│ exemption is taxed at 10% plus 4% cess. STCG on equity is 15% plus cess.     │
+│ STCG on debt funds is taxed at slab rate (up to 30%). ITR filing is          │
+│ mandatory if capital gains exceed the basic exemption. Section 80CCD(1B)     │
+│ offers ₹50,000 additional NPS deduction. Section 80D allows health insurance │
+│ deduction (₹25,000 / ₹50,000 senior). Indexation (CII) applies to debt fund  │
+│ LTCG at 20%. Consider tax-loss harvesting to offset gains.                   │
 │                                                                              │
-│ TaxPlanner computed ₹10,400.00 tax on a ₹200,000 LTCG gain. Rule:            │
-│ LTCG_EQUITY — equity 10% over ₹100,000 exempt (Budget 2024). Breakdown:      │
-│ {'taxable_gain': 100000.0, 'base_tax': 10000.0, 'surcharge': 0.0, 'cess':    │
-│ 400.0}                                                                       │
+│ ### Query context                                                            │
+│ - Calculate tax on ₹2,00,000 LTCG from equity                                │
+│                                                                              │
+│ ### Domain analysis: tax                                                     │
+│ The query falls in the **tax** domain. Key concepts to consider: LTCG, STCG, │
+│ exemption, 10%, 15%, 30%, slab, cess, Budget 2024, FY 2024-25, debt fund,    │
+│ STCG_EQUITY, HRA, metro, 50%, rent minus 10%, basic, indexation, CII, 80CCD, │
+│ NPS, 50,000, tax saving, 80D, health insurance, senior citizen, 25,000, ITR, │
+│ VDA, legal, disclosure, 0%, no tax, taxable. Indian capital-gains tax (FY    │
+│ 2024-25): LTCG on listed equity is 10% above the ₹1L exemption; STCG on      │
+│ listed equity is 15% flat; STCG on debt funds and other assets is taxed at   │
+│ slab rate (up to 30%). Cess is 4% on the base tax. Budget 2024 confirmed     │
+│ these rates. Holding period (12 months for equity, 36 months for             │
+│ unlisted/debt funds) determines the treatment. ITR filing is mandatory if    │
+│ capital gains exceed the basic exemption limit. For crypto/VDA, tax is 30%   │
+│ flat with no set-off against other losses. HRA exemption is 50% of basic for │
+│ metro cities (rent minus 10% of basic). Section 80CCD(1B) offers ₹50,000     │
+│ additional NPS deduction. Section 80D allows ₹25,000 health insurance        │
+│ deduction (₹50,000 for senior citizens). Indexation (CII) applies to debt    │
+│ fund LTCG at 20%. Tax-loss harvesting can offset gains. Verify the gain      │
+│ type, exemption threshold, and applicable rate before quoting a number. Tax  │
+│ treatment is the primary question; verify FY 2024-25 rules. Query contains   │
+│ numeric input — verify against tool output.                                  │
+│                                                                              │
+│ ### Reasoning process                                                        │
+│ - intent_classifier: produced output                                         │
+│ - context_assembler: produced output                                         │
+│ - tax_rule: produced output                                                  │
+│ - tax_planner: produced tax_computation                                      │
+│                                                                              │
+│ ### Findings                                                                 │
+│ - [intent_classifier] {'intent': 'tax', 'confidence': 1.0, 'entities':       │
+│ {'symbols': ['LTCG'], 'timeframe': None}, 'reasoning': "Keyword 'tax'        │
+│ matched for intent tax"}                                                     │
+│ - [context_assembler] {'query': 'Calculate tax on ₹2,00,000 LTCG from        │
+│ equity', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32,      │
+│ 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>,              │
+│ 'investment_horizon': <InvestmentHorizon.MEDIUM: 'medium'>,                  │
+│ 'monthly_income': 150000.0, 'monthly_expenses': 85000.0, 'tax_bracket_pct':  │
+│ 20.0, 'goals': ['Build emergency fund of 12 months expenses', "Save for      │
+│ child's                                                                      │
+│ - [tax_rule] tax_amount=10400.0 effective_rate_pct=5.2                       │
+│ breakdown={'taxable_gain': 100000.0, 'base_tax': 10000.0, 'surcharge': 0.0,  │
+│ 'cess': 400.0} rule_applied='LTCG_EQUITY — equity 10% over ₹100,000 exempt   │
+│ (Budget 2024)' citation='Income Tax Act 1961 via Finance Act 2024 — FY       │
+│ 2024-25, regime: new'                                                        │
+│ - [tax_planner] gain: 200000.0                                               │
+│ - [tax_planner] gain_type: LTCG                                              │
+│ - [tax_planner] annual_income: 1800000.0                                     │
+│ - [tax_planner] tax_amount: 10400.0                                          │
+│ - [tax_planner] effective_rate_pct: 5.2                                      │
+│ - [tax_planner] breakdown: {'taxable_gain': 100000.0, 'base_tax': 10000.0,   │
+│ 'surcharge': 0.0, 'cess': 400.0}                                             │
+│ - [tax_planner] rule_applied: LTCG_EQUITY — equity 10% over ₹100,000 exempt  │
+│ (Budget 2024)                                                                │
 ╰──────────────────────────────────────────────────────────────────────────────╯
-  Confidence    medium                         
-  Risks         No specific risks identified.  
+  Confidence    medium  
 
 Reasoning Steps
   0.  plan_step: tax_planner
@@ -126,26 +287,32 @@ equity', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age
 cess=True, output=tax_amount=10400.0 effective_rate_pct=5.2
   4.  tax_computation: gain=200000.0, gain_type=LTCG, annual_income=1800000.0, 
 tax_amount=10400.0, effective_rate_pct=5.2, breakdown={'taxable_
-  5.  critique: SelfCritic passed (overall=0.68, threshold=0.6). Axes: 
-correctness=0.84, risk_awareness=0.50, actionability=0.50, explai
-  6.  recommendation: Tax on ₹200,000 LTCG: ₹10,400.00 (effective rate 5.20%)
+  5.  critique: SelfCritic passed (overall=0.70, threshold=0.6). Axes: 
+correctness=1.00, risk_awareness=0.30, actionability=0.40, explai
+  6.  orchestrator.run: {"query": "Calculate tax on \u20b92,00,000 LTCG from 
+equity"}
+  7.  tool.called: {"input": "gain=200000.0 gain_type='LTCG' 
+annual_income=1800000.0 cess=True", "output": "tax_amount=10400.0 effective_ra
+  8.  orchestrator.done: {"has_candidate": true, "intent": "tax", "query": 
+"Calculate tax on \u20b92,00,000 LTCG from equity"}
+  9.  recommendation: Based on Indian tax rules (FY 2024-25): LTCG on listed 
+equity above ₹1 lakh exemption is taxed at 10% plus 4% cess. STCG
 
 Citations
-  1. intent_classifier: Output from intent_classifier — {'intent': 'tax', 
-'confidence': 1.0, 'entities': {'symbols': ['LTCG'], 'timeframe': None}, 
-'reasoning': "Keyword 'tax' matched for intent tax"}
-  2. context_assembler: Output from context_assembler — {'query': 'Calculate tax
-on ₹2,00,000 LTCG from equity', 'twin': {'user_id': 'demo', 'name': 'Priya 
-Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 
-'conservative'>, 'investment_hori
-  3. tax_rule: Output from tax_rule — tax_amount=10400.0 effective_rate_pct=5.2 
-breakdown={'taxable_gain': 100000.0, 'base_tax': 10000.0, 'surcharge': 0.0, 
-'cess': 400.0} rule_applied='LTCG_EQUITY — equity 10% over ₹100,000 exempt 
-(Budget
+  1. tax_planner: Income Tax Act 1961 via Finance Act 2024 — FY 2024-25, regime:
+new — Income Tax Act 1961 via Finance Act 2024 — FY 2024-25, regime: new
+  2. intent_classifier: Output from intent_classifier (synthesizer evidence) — 
+{'intent': 'tax', 'confidence': 1.0, 'entities': {'symbols': ['LTCG'], 
+'timeframe': None}, 'reasoning': "Keyword 'tax' matched for intent tax"}
+  3. context_assembler: Output from context_assembler (synthesizer evidence) — 
+{'query': 'Calculate tax on ₹2,00,000 LTCG from equity', 'twin': {'user_id': 
+'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': 
+<RiskTolerance.CONSERVATIVE: 'conservative'>, 'investment_hori
 
-Critic Verdict: PASSED (overall=0.6809)
-  SelfCritic passed (overall=0.68, threshold=0.6). Axes: correctness=0.84, 
-risk_awareness=0.50, actionability=0.50, explainability=0.70, evidence=1.00.
+Critic Verdict: PASSED (overall=0.705)
+  SelfCritic passed (overall=0.70, threshold=0.6). Axes: correctness=1.00, 
+risk_awareness=0.30, actionability=0.40, explainability=1.00, evidence=1.00. 
+Must fix: risk_awareness, actionability.
 
 
 ======================================================================
@@ -155,16 +322,69 @@ COMMAND: python -m interface.cli --mock "Should I put my entire emergency fund i
   from pydantic.v1.fields import FieldInfo as FieldInfoV1
   from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 ╭─────────────────────────────────── Answer ───────────────────────────────────╮
-│ ⚠️ Prudence check failed: Emergency fund first — Query proposes investing the │
-│ emergency fund — agent must refuse / caveat. Recommendation: do not act yet  │
-│ — verify against your full financial picture.                                │
+│ ⚠️ Prudence check failed: Emergency fund first — Answer recommends investing  │
+│ emergency fund; Diversification — Recommends 95.0% allocation to single      │
+│ asset (>40% limit); No guarantees — Contains guarantee language:             │
+│ 'guarantee'. Recommendation: do not act yet — verify against your full       │
+│ financial picture.                                                           │
 │                                                                              │
-│ Monte Carlo: expected return=20.37%, probability of loss=16.50%              │
+│ Risk assessment: evaluate VaR at 95% confidence, maximum drawdown, and       │
+│ portfolio volatility. Stress-test with scenario analysis (e.g., 30% equity   │
+│ shock). HHI measures concentration — single-stock HHI above 0.25 is          │
+│ dangerous. Diversification across uncorrelated assets reduces volatility.    │
+│ Credit risk, default risk, and liquidity risk matter for debt-heavy          │
+│ portfolios. State methodology explicitly. Sequence of returns risk is        │
+│ critical for retirement planning.                                            │
 │                                                                              │
-│ Monte Carlo simulation: expected return 20.37%, probability of loss 16.50%.  │
+│ ### Query context                                                            │
+│ - Should I put my entire emergency fund into a hot small-cap stock?          │
+│                                                                              │
+│ ### Domain analysis: risk                                                    │
+│ The query falls in the **risk** domain. Key concepts to consider: drawdown,  │
+│ scenario, volatility, VaR, risk tool, methodology, single-stock,             │
+│ concentration, hedge, cost of hedge, correlation, HHI, small-cap, horizon,   │
+│ credit risk, default, liquidity, mark-to-market, yield, sovereign, rating,   │
+│ guarantee, sequence of returns, glide path. A risk assessment must           │
+│ distinguish volatility from tail risk. VaR (Value-at-Risk) is a threshold    │
+│ estimate, not a maximum loss; stress-testing with a scenario (e.g., a 30%    │
+│ equity shock) complements the VaR figure. State the methodology and          │
+│ confidence level (95% vs 99%) explicitly. Diversification across             │
+│ uncorrelated asset classes reduces portfolio volatility and drawdown. The    │
+│ HHI (Herfindahl index) measures concentration — a single-stock HHI above     │
+│ 0.25 signals dangerous concentration. Hedging via index puts or gold has an  │
+│ explicit cost of hedge that must be weighed against the expected drawdown    │
+│ reduction. Credit risk, default, and liquidity risk (mark-to-market) are     │
+│ additional factors for debt-heavy portfolios. Sequence of returns risk and   │
+│ glide path planning are critical for retirement.                             │
+│                                                                              │
+│ ### Reasoning process                                                        │
+│ - intent_classifier: produced output                                         │
+│ - context_assembler: produced output                                         │
+│ - portfolio_simulator: produced output                                       │
+│ - risk_assessor: produced monte_carlo                                        │
+│                                                                              │
+│ ### Findings                                                                 │
+│ - [intent_classifier] {'intent': 'risk', 'confidence': 1.0, 'entities':      │
+│ {'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 'emergency fund'   │
+│ matched for intent risk"}                                                    │
+│ - [context_assembler] {'query': 'Should I put my entire emergency fund into  │
+│ a hot small-cap stock?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', │
+│ 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>,   │
+│ 'investment_horizon': <InvestmentHorizon.MEDIUM: 'medium'>,                  │
+│ 'monthly_income': 150000.0, 'monthly_expenses': 85000.0, 'tax_bracket_pct':  │
+│ 20.0, 'goals': ['Build emergency fund of 12 months expense                   │
+│ - [portfolio_simulator] expected_return=0.0895 p10_return=-0.1477            │
+│ p90_return=0.376208 probability_of_loss=0.315 expected_final_value=1.0895    │
+│ median_final_value=1.0895 p10_final_value=0.8523 p90_final_value=1.376208    │
+│ expected_after_tax_return=0.08055 methodology='Geometric Brownian motion:    │
+│ dS/S = mu*dt + sigma*dW, discretised daily over 1y (252 trading days).       │
+│ mu_annual=0.1000, sigma_annual=0.1800. 1000 scenarios. No rebalan            │
+│ - [risk_assessor] expected_return: 0.0895                                    │
+│ - [risk_assessor] p10_return: -0.1477                                        │
+│ - [risk_assessor] p90_return: 0.376208                                       │
+│ - [risk_assessor] probability_of_loss: 0.315                                 │
 ╰──────────────────────────────────────────────────────────────────────────────╯
-  Confidence    low                            
-  Risks         No specific risks identified.  
+  Confidence    low  
 
 Reasoning Steps
   0.  plan_step: risk_assessor
@@ -174,29 +394,35 @@ Reasoning Steps
 a hot small-cap stock?', 'twin': {'user_id': 'demo', 'name'
   3.  tool_output: input=holdings=[{'asset_id': 'FD_HDFC_001', 'asset_type': 
 'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quantity'
-  4.  monte_carlo: expected_return=0.203746, p10_return=-0.071418, 
-p90_return=0.541139, probability_of_loss=0.165, citation=Monte Carlo sim
-  5.  critique: SelfCritic failed (overall=0.48, threshold=0.6). Axes: 
-correctness=0.10, risk_awareness=0.80, actionability=0.50, explai
-  6.  recommendation: ⚠️ Prudence check failed: Emergency fund first — Query 
-proposes investing the emergency fund — agent must refuse / cavea
+  4.  monte_carlo: expected_return=0.0895, p10_return=-0.1477, 
+p90_return=0.376208, probability_of_loss=0.315, citation=Monte Carlo (GBM): 
+  5.  critique: SelfCritic passed (overall=0.68, threshold=0.6). Axes: 
+correctness=0.92, risk_awareness=0.30, actionability=0.40, explai
+  6.  orchestrator.run: {"query": "Should I put my entire emergency fund into a 
+hot small-cap stock?"}
+  7.  tool.called: {"input": "holdings=[{'asset_id': 'FD_HDFC_001', 
+'asset_type': 'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quan
+  8.  orchestrator.done: {"has_candidate": true, "intent": "risk", "query": 
+"Should I put my entire emergency fund into a hot small-cap stock?"}
+  9.  recommendation: ⚠️ Prudence check failed: Emergency fund first — Answer 
+recommends investing emergency fund; Diversification — Recommend
 
 Citations
-  1. intent_classifier: Output from intent_classifier — {'intent': 'risk', 
-'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': 
-"Keyword 'emergency fund' matched for intent risk"}
-  2. context_assembler: Output from context_assembler — {'query': 'Should I put 
-my entire emergency fund into a hot small-cap stock?', 'twin': {'user_id': 
-'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': 
+  1. risk_assessor: Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr,
+sigma=0.1800/yr. Past performance does not guarantee future returns. — Monte 
+Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past 
+performance does not guarantee future returns.
+  2. intent_classifier: Output from intent_classifier (synthesizer evidence) — 
+{'intent': 'risk', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': 
+None}, 'reasoning': "Keyword 'emergency fund' matched for intent risk"}
+  3. context_assembler: Output from context_assembler (synthesizer evidence) — 
+{'query': 'Should I put my entire emergency fund into a hot small-cap stock?', 
+'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance':
 <RiskTolerance.CONSERVATIVE: 'conservati
-  3. portfolio_simulator: Output from portfolio_simulator — 
-expected_return=0.203746 p10_return=-0.071418 p90_return=0.541139 
-probability_of_loss=0.165 citation='Monte Carlo simulation: 1000 paths, 1-year 
-horizon'
 
-Critic Verdict: FAILED (overall=0.475)
-  SelfCritic failed (overall=0.48, threshold=0.6). Axes: correctness=0.10, 
-risk_awareness=0.80, actionability=0.50, explainability=0.30, evidence=1.00. 
-Must fix: correctness, explainability.
+Critic Verdict: PASSED (overall=0.6815)
+  SelfCritic passed (overall=0.68, threshold=0.6). Axes: correctness=0.92, 
+risk_awareness=0.30, actionability=0.40, explainability=1.00, evidence=1.00. 
+Must fix: risk_awareness, actionability.
 
 

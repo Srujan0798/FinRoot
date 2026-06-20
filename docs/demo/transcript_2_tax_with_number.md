@@ -1,6 +1,6 @@
 # Demo Transcript 2: Tax With Number
 
-> Generated: 2026-06-20 21:04 UTC  
+> Generated: 2026-06-20 22:01 UTC  
 > Mode: Mock (offline, no API keys)
 
 ---
@@ -23,7 +23,7 @@ Your portfolio review reveals several areas to address. Concentration risk in in
 - How much tax will I owe if I sell my equity holdings this year?
 
 ### Domain analysis: portfolio
-The query falls in the **portfolio** domain. Key concepts to consider: asset allocation, diversification, concentration risk, rebalance, horizon, LTCG, tax, equity. A portfolio review should evaluate concentration risk, the user's risk tolerance, and the investment horizon. If rebalancing before FY-end, the LTCG tax on any sale is the dominant cost — sell only when the after-tax benefit exceeds the concentration-risk reduction. Diversification across asset classes (equity, debt, gold) is the primary defense against single-stock or single-sector shocks. Asset allocation should reflect age, risk profile, and tax slab. Recommend gradual rebalancing via SIP and rupee cost averaging rather than a single trade to manage tax outflows, drift, and timing risk. Sequence of returns risk matters for long horizons. Tax treatment is the primary question; verify FY 2024-25 rules. Horizon is a key input — sequence-of-returns risk is non-trivial.
+The query falls in the **portfolio** domain. Key concepts to consider: asset allocation, diversification, concentration risk, rebalance, horizon, LTCG, tax, equity, debt, goal, credit, lockup, band, sequence of returns, glide path, behavioral, rupee cost averaging, profit booking, long-term, single-stock, drift. A portfolio review should evaluate concentration risk, the user's risk tolerance, and the investment horizon. If rebalancing before FY-end, the LTCG tax on any sale is the dominant cost — sell only when the after-tax benefit exceeds the concentration-risk reduction. Diversification across asset classes (equity, debt, gold) is the primary defense against single-stock or single-sector shocks. Asset allocation should reflect age, risk profile, and tax slab. Recommend gradual rebalancing via SIP and rupee cost averaging rather than a single trade to manage tax outflows, drift, and timing risk. Sequence of returns risk matters for long horizons. Tax treatment is the primary question; verify FY 2024-25 rules. Horizon is a key input — sequence-of-returns risk is non-trivial.
 
 ### Reasoning process
 - intent_classifier: produced output
@@ -80,8 +80,9 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 
 | Source | Detail | Value | Retrieved At |
 |--------|--------|-------|--------------|
-| risk_assessor | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | 2026-06-20 21:04:14.754881+00:00 |
-| context_assembler | Output from context_assembler agent | {'query': 'How much tax will I owe if I sell my equity holdings this year?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative | 2026-06-20 21:04:14.754973+00:00 |
+| risk_assessor | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | 2026-06-20 22:01:42.797861+00:00 |
+| intent_classifier | Output from intent_classifier (synthesizer evidence) | {'intent': 'portfolio', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 'holdings' matched for intent portfolio"} | 2026-06-20 22:01:42.797887+00:00 |
+| context_assembler | Output from context_assembler (synthesizer evidence) | {'query': 'How much tax will I owe if I sell my equity holdings this year?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative | 2026-06-20 22:01:42.797916+00:00 |
 
 ---
 

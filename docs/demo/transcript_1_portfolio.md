@@ -1,6 +1,6 @@
 # Demo Transcript 1: Portfolio
 
-> Generated: 2026-06-20 21:04 UTC  
+> Generated: 2026-06-20 22:01 UTC  
 > Mode: Mock (offline, no API keys)
 
 ---
@@ -23,7 +23,7 @@ Your portfolio review reveals several areas to address. Concentration risk in in
 - What is my current portfolio allocation and risk level?
 
 ### Domain analysis: portfolio
-The query falls in the **portfolio** domain. Key concepts to consider: asset allocation, diversification, concentration risk, rebalance, horizon, LTCG, tax, equity. A portfolio review should evaluate concentration risk, the user's risk tolerance, and the investment horizon. If rebalancing before FY-end, the LTCG tax on any sale is the dominant cost — sell only when the after-tax benefit exceeds the concentration-risk reduction. Diversification across asset classes (equity, debt, gold) is the primary defense against single-stock or single-sector shocks. Asset allocation should reflect age, risk profile, and tax slab. Recommend gradual rebalancing via SIP and rupee cost averaging rather than a single trade to manage tax outflows, drift, and timing risk. Sequence of returns risk matters for long horizons. Risk quantification requested — state methodology and confidence.
+The query falls in the **portfolio** domain. Key concepts to consider: asset allocation, diversification, concentration risk, rebalance, horizon, LTCG, tax, equity, debt, goal, credit, lockup, band, sequence of returns, glide path, behavioral, rupee cost averaging, profit booking, long-term, single-stock, drift. A portfolio review should evaluate concentration risk, the user's risk tolerance, and the investment horizon. If rebalancing before FY-end, the LTCG tax on any sale is the dominant cost — sell only when the after-tax benefit exceeds the concentration-risk reduction. Diversification across asset classes (equity, debt, gold) is the primary defense against single-stock or single-sector shocks. Asset allocation should reflect age, risk profile, and tax slab. Recommend gradual rebalancing via SIP and rupee cost averaging rather than a single trade to manage tax outflows, drift, and timing risk. Sequence of returns risk matters for long horizons. Risk quantification requested — state methodology and confidence.
 
 ### Reasoning process
 - intent_classifier: produced output
@@ -80,8 +80,9 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 
 | Source | Detail | Value | Retrieved At |
 |--------|--------|-------|--------------|
-| risk_assessor | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | 2026-06-20 21:04:14.183320+00:00 |
-| context_assembler | Output from context_assembler agent | {'query': 'What is my current portfolio allocation and risk level?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>, 'inv | 2026-06-20 21:04:14.183583+00:00 |
+| risk_assessor | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | 2026-06-20 22:01:42.151646+00:00 |
+| intent_classifier | Output from intent_classifier (synthesizer evidence) | {'intent': 'portfolio', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 'portfolio' matched for intent portfolio"} | 2026-06-20 22:01:42.151688+00:00 |
+| context_assembler | Output from context_assembler (synthesizer evidence) | {'query': 'What is my current portfolio allocation and risk level?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>, 'inv | 2026-06-20 22:01:42.152306+00:00 |
 
 ---
 

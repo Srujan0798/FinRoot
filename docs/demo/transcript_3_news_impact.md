@@ -1,6 +1,6 @@
 # Demo Transcript 3: News Impact
 
-> Generated: 2026-06-20 21:04 UTC  
+> Generated: 2026-06-20 22:01 UTC  
 > Mode: Mock (offline, no API keys)
 
 ---
@@ -13,17 +13,19 @@
 
 ## Answer Card
 
-**Confidence:** `ConfidenceLevel.MEDIUM`
+**Confidence:** `ConfidenceLevel.LOW`
 
 ### Summary
-Your portfolio review reveals several areas to address. Concentration risk in individual holdings should be quantified — any single position above 15-20% of the portfolio warrants attention. Asset allocation should reflect your risk tolerance, tax slab, and investment horizon. Rebalancing should be tax-aware, considering LTCG/STCG implications on any sales. Diversification across equity, debt, and gold aligned with your risk profile is recommended. Use SIP and rupee cost averaging for gradual rebalancing. Key risks identified: Concentration risk: FD_HDFC_001 is 22% of portfolio (recommended max: 15-20%); Concentration risk: MF_ICICI_BALANCED_001 is 27% of portfolio (recommended max: 15-20%); Concentration risk: MF_SBI_DEBT_001 is 34% of portfolio (recommended max: 15-20%).
+⚠️ Prudence check failed: Risk match — Conservative investor (risk_tolerance='conservative') received aggressive advice. Recommendation: do not act yet — verify against your full financial picture.
+
+Market news impact: distinguish confirmed policy from rumor. RBI repo rate decisions affect debt fund NAV via duration. SEBI F&O regulations impact speculative positions. Currency moves (USD/INR, Fed) create return drag on international holdings. Volatility is an opportunity for SIP discipline. Key risks identified: Concentration risk: FD_HDFC_001 is 22% of portfolio (recommended max: 15-20%); Concentration risk: MF_ICICI_BALANCED_001 is 27% of portfolio (recommended max: 15-20%); Concentration risk: MF_SBI_DEBT_001 is 34% of portfolio (recommended max: 15-20%).
 
 ### Analysis
 ### Query context
 - What is the impact of recent RBI policy changes on my debt fund holdings?
 
-### Domain analysis: portfolio
-The query falls in the **portfolio** domain. Key concepts to consider: asset allocation, diversification, concentration risk, rebalance, horizon, LTCG, tax, equity. A portfolio review should evaluate concentration risk, the user's risk tolerance, and the investment horizon. If rebalancing before FY-end, the LTCG tax on any sale is the dominant cost — sell only when the after-tax benefit exceeds the concentration-risk reduction. Diversification across asset classes (equity, debt, gold) is the primary defense against single-stock or single-sector shocks. Asset allocation should reflect age, risk profile, and tax slab. Recommend gradual rebalancing via SIP and rupee cost averaging rather than a single trade to manage tax outflows, drift, and timing risk. Sequence of returns risk matters for long horizons.
+### Domain analysis: news_impact
+The query falls in the **news_impact** domain. Key concepts to consider: duration, yield, rate, NAV, impact, rumor, confirmation, SEBI, F&O, liquidity, long position, Fed, USD/INR, currency, international ETF, horizon, regulation, valuation, long-term, exit, timing, SIP, discipline, transaction cost, tax harvesting, rate cut, volatility, repo rate, floating rate, EMI, reset date, spread. A news-impact analysis must distinguish rumor from confirmed policy, and translate the headline into a portfolio NAV or yield impact via duration, sensitivity, or correlation assumptions. RBI repo rate moves affect debt-fund NAV inversely to duration; floating rate loans reset on the next reset date. SEBI F&O bans affect speculative leverage, not long-only equity positions directly. Currency moves (USD/INR, Fed decisions) create a return drag or boost on international ETFs. Volatility spikes are opportunities for SIP discipline, not exit signals. LTCG exemption and tax harvesting should be considered before year-end transactions. Decide hold/reduce based on the user's horizon, not the headline. Transaction costs and regulation changes (SEBI circulars) must be factored in.
 
 ### Reasoning process
 - intent_classifier: produced output
@@ -66,13 +68,14 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 - High loss probability (31%) in equal_weight allocation scenario
 
 ### Recommended Actions
-- Quantify the concentration risk in the current holdings (largest single-stock weight).
-- Run a tax-aware rebalance simulation that accounts for LTCG/STCG on any sale.
-- Diversify into a target asset allocation aligned with risk profile and horizon.
+- Verify the news source before acting — distinguish rumor from confirmed announcement.
+- Estimate the impact on portfolio NAV via duration/sensitivity analysis.
+- Decide hold/reduce only after weighing horizon, transaction cost, and tax.
 
 ### Invalidation Conditions
 - If you diversify your portfolio, the concentration risk warning would no longer apply.
-- If your goals and constraints were more clearly defined, the recommendation could be more specific and actionable.
+- If more information were available about your complete financial picture, confidence in this recommendation could increase.
+- If the analysis had access to real-time market data instead of estimates, the recommendation would be more precise.
 
 ---
 
@@ -80,8 +83,9 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 
 | Source | Detail | Value | Retrieved At |
 |--------|--------|-------|--------------|
-| risk_assessor | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | 2026-06-20 21:04:15.401112+00:00 |
-| context_assembler | Output from context_assembler agent | {'query': 'What is the impact of recent RBI policy changes on my debt fund holdings?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'co | 2026-06-20 21:04:15.402712+00:00 |
+| risk_assessor | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | 2026-06-20 22:01:43.301951+00:00 |
+| intent_classifier | Output from intent_classifier (synthesizer evidence) | {'intent': 'portfolio', 'confidence': 1.0, 'entities': {'symbols': ['RBI'], 'timeframe': None}, 'reasoning': "Keyword 'holdings' matched for intent portfolio"} | 2026-06-20 22:01:43.301969+00:00 |
+| context_assembler | Output from context_assembler (synthesizer evidence) | {'query': 'What is the impact of recent RBI policy changes on my debt fund holdings?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'co | 2026-06-20 22:01:43.301993+00:00 |
 
 ---
 
@@ -114,7 +118,7 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 | 22 | tool | tool.called | {"input": "holdings=[{'symbol': 'FD_HDFC_001', 'weight': 0.25}, {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.25}, {'s |
 | 23 | tool | tool.called | {"input": "holdings=[{'asset_id': 'FD_HDFC_001', 'asset_type': 'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quan |
 | 24 | orchestrator | orchestrator.done | {"has_candidate": true, "intent": "portfolio", "query": "What is the impact of recent RBI policy changes on my debt fund |
-| 25 | synthesizer | recommendation | Your portfolio review reveals several areas to address. Concentration risk in individual holdings should be quantified — |
+| 25 | synthesizer | recommendation | ⚠️ Prudence check failed: Risk match — Conservative investor (risk_tolerance='conservative') received aggressive advice. |
 
 ---
 
@@ -134,13 +138,14 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 
 ## Prudence Verifier
 
-**Compliant:** `True`
+**Compliant:** `False`
+**Warning:** This advice may not be suitable for your profile
 
 | Principle | Pass | Detail |
 |-----------|------|--------|
 | Emergency fund first | True | No emergency-fund violation detected |
 | Diversification | True | No concentration violation detected |
-| Risk match | True | Advice risk level is compatible with user profile |
+| Risk match | False | Conservative investor (risk_tolerance='conservative') received aggressive advice |
 | No guarantees | True | No guarantee language detected |
 | Tax awareness | True | Tax considerations present or no sell recommended |
 | Horizon match | True | Advice horizon is compatible with user profile |
