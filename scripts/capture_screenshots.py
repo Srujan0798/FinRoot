@@ -90,6 +90,13 @@ def main() -> None:
             "true",
             "--server.port",
             str(port),
+            # Bind to loopback only — this is a transient capture server; the
+            # Playwright client connects via 127.0.0.1, so there is no reason to
+            # expose it on the LAN (security review: avoid 0.0.0.0 bind).
+            "--server.address",
+            "127.0.0.1",
+            "--browser.gatherUsageStats",
+            "false",
         ],
         env=env,
         stdout=subprocess.DEVNULL,
