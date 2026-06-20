@@ -17,6 +17,16 @@ SCALE ML Club — Problem Statement 1: **Build an AI Agent for Finance**.*
 
 </div>
 
+<div align="center">
+
+## ⚡ See it in action
+
+[![FinRoot CLI Demo — Portfolio, Tax, Refusal](docs/demo/screenshots/03_trap_refusal.png)](docs/demo/hero.md)
+
+*Click the image for the full CLI demo — portfolio review, tax calculation, and prudence refusal.*
+
+</div>
+
 ---
 
 ## The one-line pitch

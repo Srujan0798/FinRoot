@@ -2,3 +2,262 @@
 [0m
 > build · MiniMax-M3
 [0m
+[0m→ [0mRead work/WORKER_PROMPT.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead work/wave-11/05-weak-domains.md
+</think>
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-11/contracts/ 2>/dev/null && echo "---" && ls /Users/srujansai/Desktop/FinRoot/src/finroot/tools/
+(no output)
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/tests/unit/ 2>/dev/null && echo "---" && ls /Users/srujansai/Desktop/FinRoot/work/reports/wave-11/ 2>/dev/null
+__pycache__
+test_agent_tax.py
+test_agents_market_news.py
+test_agents_risk_portfolio.py
+test_api.py
+test_audit_chain.py
+test_base_interfaces.py
+test_baselines.py
+test_capture_screenshots.py
+test_charts.py
+test_cli.py
+test_components.py
+test_config.py
+test_consistency.py
+test_critic.py
+test_digital_twin.py
+test_eval_report.py
+test_explain.py
+test_frb_bank.py
+test_graders.py
+test_harness.py
+test_intent.py
+test_llm_provider.py
+test_memory_manager.py
+test_principles.py
+test_refine.py
+test_schemas.py
+test_semantic_memory.py
+test_synthesize.py
+test_tools_macro.py
+test_tools_market.py
+test_tools_news.py
+test_tools_profile.py
+test_tools_risk.py
+test_tools_tax.py
+test_working_memory.py
+---
+01-tune-grader.report.md
+01-tune-grader.run.log
+02-cicd.report.md
+02-cicd.run.log
+03-benchmarks.run.log
+04-security-tests.report.md
+04-security-tests.run.log
+05-weak-domains.run.log
+06-more-golden-tests.report.md
+06-more-golden-tests.run.log
+[0m
+</think>
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-11/ 2>/dev/null && echo "---" && ls -la /Users/srujansai/Desktop/FinRoot/src/finroot/tools/
+(no output)
+[0m
+[0m→ [0mRead work/reports/wave-11/05-weak-domains.run.log
+</think>
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/.specify/specs/ 2>/dev/null; echo "---"; ls -la /Users/srujansai/Desktop/FinRoot/src/finroot/ 2>/dev/null
+total 0
+drwxr-xr-x@ 10 srujansai  staff  320 Jun 20 09:47 .
+drwxr-xr-x@  5 srujansai  staff  160 Jun 19 08:43 ..
+drwxr-xr-x@  6 srujansai  staff  192 Jun 19 08:44 wave-1
+drwxr-xr-x@  3 srujansai  staff   96 Jun 19 18:58 wave-2
+drwxr-xr-x@  3 srujansai  staff   96 Jun 19 18:58 wave-3
+drwxr-xr-x@  3 srujansai  staff   96 Jun 19 20:48 wave-4
+drwxr-xr-x@  3 srujansai  staff   96 Jun 19 21:43 wave-5
+drwxr-xr-x@  3 srujansai  staff   96 Jun 20 09:47 wave-6
+drwxr-xr-x@  3 srujansai  staff   96 Jun 20 09:47 wave-7
+drwxr-xr-x@  3 srujansai  staff   96 Jun 20 09:47 wave-8
+---
+total 8
+drwxr-xr-x@ 14 srujansai  staff  448 Jun 19 18:52 .
+drwxr-xr-x@  6 srujansai  staff  192 Jun 19 18:47 ..
+-rw-r--r--@  1 srujansai  staff  743 Jun 20 15:51 __init__.py
+drwxr-xr-x@  3 srujansai  staff   96 Jun 20 15:52 __pycache__
+drwxr-xr-x@ 13 srujansai  staff  416 Jun 20 10:17 agents
+drwxr-xr-x@  7 srujansai  staff  224 Jun 19 18:41 audit
+drwxr-xr-x@  7 srujansai  staff  224 Jun 20 16:27 evaluation
+drwxr-xr-x@ 10 srujansai  staff  320 Jun 20 16:27 llm
+drwxr-xr-x@  9 srujansai  staff  288 Jun 19 20:35 memory
+drwxr-xr-x@  9 srujansai  staff  288 Jun 20 10:22 reasoning
+drwxr-xr-x@ 10 srujansai  staff  320 Jun 19 18:39 schemas
+drwxr-xr-x@ 18 srujansai  staff  576 Jun 19 20:34 tools
+drwxr-xr-x@  5 srujansai  staff  160 Jun 19 18:55 utils
+drwxr-xr-x@  7 srujansai  staff  224 Jun 20 19:50 workflows
+[0m
+</think>
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/src/finroot/tools/
+__init__.py
+__pycache__
+base.py
+currency.py
+documents.py
+fundamentals.py
+macro.py
+market.py
+news.py
+portfolio_sim.py
+profile.py
+risk.py
+sentiment.py
+tax.py
+watchlist.py
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-11/ 2>/dev/null
+(no output)
+[0m
+</think>
+[0m→ [0mRead src/finroot/tools/portfolio_sim.py
+[0m→ [0mRead src/finroot/tools/risk.py
+</think>
+[0m→ [0mRead src/finroot/tools/news.py
+[0m→ [0mRead src/finroot/tools/macro.py
+Now let me look at existing tests and base tool:
+[0m→ [0mRead tests/unit/test_tools_risk.py
+[0m→ [0mRead src/finroot/tools/base.py
+</think>
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/evals/ 2>/dev/null; echo "---"; ls /Users/srujansai/Desktop/FinRoot/docs/ 2>/dev/null
+README.md
+graders
+outcomes
+reports
+tasks
+transcripts
+trials
+---
+JUDGE_QUICKSTART.md
+RELEASE_NOTES.md
+REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+SCOPE_GUARD.md
+SUBMISSION.md
+SUBMISSION_MESSAGE.md
+agents
+architecture
+audits
+benchmarks
+business
+conventions.md
+decisions
+demo
+flows
+historical
+interview_runbook.md
+operational
+runbook.md
+runtime
+schemas
+waves
+[0m
+[0m✱ [0mGrep "portfolio|risk|international|news_impact"[90m in data · 100 matches[0m
+Now I have a clear understanding. Let me set up todos and check a few more existing patterns:
+[0m
+[0m# [0mTodos
+[•] Read FRB questions for portfolio/risk/international/news_impact domains
+[ ] Improve portfolio_sim.py with rebalancing, tax-aware, methodology citations
+[ ] Improve risk.py with VaR, CVaR, Sharpe, max drawdown, stress testing
+[ ] Improve news.py with more sources, sentiment analysis, impact scoring
+[ ] Improve macro.py with international indicators, currency conversion, cross-country
+[ ] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-11/05-weak-domains.report.md
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/data/gold/
+frb_questions.json
+[0m
+[0m→ [0mRead data/gold/frb_questions.json[90m [offset=96, limit=200][0m
+</think>
+[0m→ [0mRead data/gold/frb_questions.json[90m [offset=295, limit=200][0m
+[0m→ [0mRead tests/unit/test_tools_market.py[90m [limit=100][0m
+Now I have enough understanding. Let me check the currency tool and FRB international questions briefly:
+[0m→ [0mRead data/gold/frb_questions.json[90m [offset=644, limit=80][0m
+[0m→ [0mRead src/finroot/tools/currency.py
+</think>
+[0m✱ [0mGrep "from finroot.tools.risk|from finroot.tools.portfolio_sim|from finroot.tools.macro|from finroot.tools.news"[90m in src/finroot · 8 matches[0m
+[0m→ [0mRead src/finroot/agents/risk_agent.py
+[0m→ [0mRead src/finroot/agents/portfolio_agent.py
+</think>
+[0m→ [0mRead src/finroot/agents/news_agent.py
+[0m→ [0mRead tests/unit/test_tools_news.py[90m [limit=60][0m
+Now let me check what tests are in tools_market and tools_macro briefly:
+[0m
+[0m$ [0mgrep -n "tools_macro\|tools_market" /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_market.py 2>/dev/null | head -20; echo "---"; ls /Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
+---
+/Users/srujansai/Desktop/FinRoot/tests/unit/test_tools_macro.py
+[0m
+[0m✱ [0mGrep "from finroot.tools.macro|from finroot.tools.news|from finroot.tools.currency"[90m in src/finroot · 2 matches[0m
+Now let me start the implementation. First, the improved portfolio_sim.py:
+[0m
+[0m# [0mTodos
+[✓] Read FRB questions for portfolio/risk/international/news_impact domains
+[•] Improve portfolio_sim.py with rebalancing, tax-aware, methodology citations
+[ ] Improve risk.py with VaR, CVaR, Sharpe, max drawdown, stress testing
+[ ] Improve news.py with more sources, sentiment analysis, impact scoring
+[ ] Improve macro.py with international indicators, currency conversion, cross-country
+[ ] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-11/05-weak-domains.report.md
+[0m
+[0m← [0mWrite src/finroot/tools/portfolio_sim.py
+Wrote file successfully.
+[0m
+Now let me improve risk.py:
+[0m← [0mWrite src/finroot/tools/risk.py
+Wrote file successfully.
+[0m
+I need to check the existing risk output schema fields and verify backward compatibility:
+[0m✱ [0mGrep "var_95|cvar_95|sharpe_ratio|max_drawdown|volatility_annual"[90m in src/finroot · 17 matches[0m
+</think>
+[0m✱ [0mGrep "var_95|cvar_95|volatility_annual|max_drawdown|sharpe_ratio"[90m in tests/unit/test_tools_risk.py · 25 matches[0m
+I need to keep `var_95` and `cvar_95` fields for backward compatibility. Let me fix that:
+[0m
+[0m← [0mEdit src/finroot/tools/risk.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/tools/risk.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/tools/risk.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/tools/risk.py
+@@ -118,10 +118,12 @@
+ 
+ class RiskOutput(BaseModel):
+     n_observations: int
+     confidence: float
+-    # Core metrics
++    # Core metrics (back-compat field names kept: var_95, cvar_95)
+     volatility_annual: float
++    var_95: float
++    cvar_95: float
+     var_historical: float
+     cvar_historical: float
+     var_parametric: float
+     cvar_parametric: float
+
+[0m
+[0m← [0mEdit src/finroot/tools/risk.py
+Index: /Users/srujansai/Desktop/FinRoot/src/finroot/tools/risk.py
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/src/finroot/tools/risk.py
++++ /Users/srujansai/Desktop/FinRoot/src/finroot/tools/risk.py
+@@ -212,8 +212,10 @@
+ return RiskOutput(
+     n_observations=n,
+     confidence=inp.confidence,
+     volatility_annual=core["vol_annual"],
++    var_95=core["var_historical"],
++    cvar_95=core["cvar_historical"],
+     var_historical=core["var_historical"],
+     cvar_historical=core["cvar_historical"],
+     var_parametric=core["var_parametric"],
+     cvar_parametric=core["cvar_parametric"],
+
+[0m
+Let me re-read the original code carefully:
+[0m→ [0mRead src/finroot/tools/risk.py[90m [offset=90, limit=50][0m
+[0m✱ [0mGrep "var_historical|var_parametric|cvar_historical|cvar_parametric"[90m in src/finroot/tools/risk.py · 22 matches[0m

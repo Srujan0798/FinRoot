@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-from unittest.mock import patch
 
 import pytest
 from pydantic import ValidationError
@@ -13,10 +12,7 @@ from finroot.tools.news import NewsArticle, NewsInput, NewsOutput, NewsSearchToo
 from finroot.tools.sentiment import (
     SentimentAnalysisTool,
     SentimentInput,
-    SentimentOutput,
-    SentimentResult,
 )
-
 
 # =========================================================================
 # NewsSearchTool tests

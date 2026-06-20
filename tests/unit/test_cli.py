@@ -17,8 +17,8 @@ import pytest
 from typer.testing import CliRunner
 
 from finroot.schemas.state import AgentState
-from interface.core import answer, build_trace
 from interface.cli.main import app
+from interface.core import answer, build_trace
 
 runner = CliRunner()
 

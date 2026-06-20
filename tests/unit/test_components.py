@@ -135,8 +135,9 @@ class TestTraceInternals:
 
     def test_render_streaming_signature(self) -> None:
         """render_streaming accepts state parameter."""
-        from interface.ui.components.trace import render_streaming
         import inspect
+
+        from interface.ui.components.trace import render_streaming
 
         sig = inspect.signature(render_streaming)
         params = list(sig.parameters.keys())

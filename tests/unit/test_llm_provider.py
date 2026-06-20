@@ -9,7 +9,6 @@ from finroot.llm.base import LLMProvider
 from finroot.llm.mock import MockProvider
 from finroot.schemas.enums import Provider
 
-
 # ---------------------------------------------------------------------------
 # parse_reasoning_confidence
 # ---------------------------------------------------------------------------
@@ -91,8 +90,6 @@ class TestFactory:
     def test_resolve_ollama_by_string(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setenv("GROQ_API_KEY", "test-key")
         monkeypatch.setenv("OPENAI_API_KEY", "test-key")
-        from finroot.llm.groq import GroqProvider
-        from finroot.llm.openai import OpenAIProvider
 
         # Ollama doesn't require a key to instantiate
         p = get_provider("ollama")
@@ -154,7 +151,7 @@ class TestProtocolConformance:
         assert isinstance(p, LLMProvider)
 
     def test_llm_result_forbids_extra(self) -> None:
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             LLMResult(
                 text="x",
                 provider="mock",

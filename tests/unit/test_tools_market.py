@@ -15,7 +15,6 @@ Covers the contract in ``.specify/specs/wave-3/contracts/tools.contract.md``:
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from tempfile import mkdtemp
 
@@ -36,7 +35,6 @@ from finroot.tools.market import (
     PricePoint,
     ToolError,
 )
-
 
 # ---------------------------------------------------------------------------
 # Counter subclasses (test seams — verify the base-class cache layer)
@@ -403,7 +401,7 @@ class TestFundamentalAnalysisToolLive:
 
         def _fake_yf(self):  # noqa: ANN001 - monkeypatch seam
             class _Mod:
-                Ticker = lambda _symbol: _SparseTicker()
+                def Ticker(_symbol): return _SparseTicker()
             return _Mod
 
         monkeypatch.setattr(
@@ -434,7 +432,7 @@ class TestFundamentalAnalysisToolLive:
 
         def _fake_yf(self):  # noqa: ANN001 - monkeypatch seam
             class _Mod:
-                Ticker = lambda _symbol: _SentinelTicker()
+                def Ticker(_symbol): return _SentinelTicker()
             return _Mod
 
         monkeypatch.setattr(

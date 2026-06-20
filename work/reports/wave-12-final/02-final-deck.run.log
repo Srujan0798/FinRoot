@@ -1,0 +1,160 @@
+=== dispatch opencode minimax-coding-plan/MiniMax-M3 -> work/wave-12-final/02-final-deck.md @ Sat Jun 20 20:24:16 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 20:37:05 IST 2026 ===
+_PROMPT.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead work/wave-12-final/02-final-deck.md
+</think>
+[0m→ [0mRead results/metrics.json
+[0m→ [0mRead docs/business/presentation_outline.md
+[0m
+[0m$ [0mls -la /Users/srujansai/Desktop/FinRoot/docs/demo/screenshots/ 2>&1; ls -la /Users/srujansai/Desktop/FinRoot/docs/architecture/architecture.png 2>&1; ls /Users/srujansai/Desktop/FinRoot/docs/business/
+total 944
+drwxr-xr-x@  8 srujansai  staff     256 Jun 20 15:24 .
+drwxr-xr-x@ 11 srujansai  staff     352 Jun 20 20:26 ..
+-rw-r--r--@  1 srujansai  staff  111140 Jun 20 17:14 01_chat_portfolio.png
+-rw-r--r--@  1 srujansai  staff  101062 Jun 20 17:14 02_reasoning_trace.png
+-rw-r--r--@  1 srujansai  staff  109554 Jun 20 17:14 03_trap_refusal.png
+-rw-r--r--@  1 srujansai  staff   53605 Jun 20 17:14 04_digital_twin.png
+-rw-r--r--@  1 srujansai  staff   90694 Jun 20 17:14 05_harness.png
+-rw-r--r--@  1 srujansai  staff    2521 Jun 20 17:38 README.md
+-rw-r--r--@ 1 srujansai  staff  127906 Jun 20 16:07 /Users/srujansai/Desktop/FinRoot/docs/architecture/architecture.png
+7_minute_demo_script.md
+demo_recording_guide.md
+executive_summary.md
+highlight_reel_script.md
+presentation_outline.md
+[0m
+[0m→ [0mRead README.md
+</think>
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-12-final/ 2>&1; ls /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-12-final/contracts/ 2>&1
+ls: /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-12-final/: No such file or directory
+ls: /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-12-final/contracts/: No such file or directory
+[0m
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/work/reports/wave-12-final/ 2>&1; ls /Users/srujansai/Desktop/FinRoot/docs/waves/ 2>&1
+01-submission-message.report.md
+01-submission-message.run.log
+02-final-deck.run.log
+03-readme-hero-cast.report.md
+03-readme-hero-cast.run.log
+04-demo-video-shotlist.run.log
+wave-1-brief.md
+wave-1-gotchas.md
+wave-2-brief.md
+wave-3-brief.md
+wave-3-gotchas.md
+wave-4-brief.md
+wave-4-gotchas.md
+wave-5-brief.md
+wave-6-brief.md
+wave-6-gotchas.md
+wave-7-brief.md
+wave-8-brief.md
+wave-9-polish-gotchas.md
+[0m
+</think>
+[0m$ [0mls /Users/srujansai/Desktop/FinRoot/docs/business/ /Users/srujansai/Desktop/FinRoot/docs/ 2>&1
+/Users/srujansai/Desktop/FinRoot/docs/:
+JUDGE_QUICKSTART.md
+RELEASE_NOTES.md
+REPOSITORY_STRUCTURE_AND_CLEANUP_PLAN.md
+SCOPE_GUARD.md
+SUBMISSION.md
+SUBMISSION_MESSAGE.md
+agents
+architecture
+audits
+benchmarks
+business
+conventions.md
+decisions
+demo
+flows
+historical
+interview_runbook.md
+operational
+runbook.md
+runtime
+schemas
+waves
+
+/Users/srujansai/Desktop/FinRoot/docs/business/:
+7_minute_demo_script.md
+demo_recording_guide.md
+executive_summary.md
+highlight_reel_script.md
+presentation_outline.md
+[0m
+I have the context. No contracts exist for wave-12-final (task is standalone docs). Let me write the deck using real numbers from `results/metrics.json`.
+[0m← [0mWrite docs/business/slides.md
+Wrote file successfully.
+[0m
+</think>
+[0m$ [0mtest -f docs/business/slides.md && echo "deck present"; echo "---"; grep -cE "^## Slide" docs/business/slides.md; echo "---"; grep -qiE "35%|reasoning" docs/business/slides.md && echo "reasoning slide present"; echo "---"; ls -la docs/business/slides.md
+deck present
+---
+6
+---
+reasoning slide present
+---
+-rw-r--r--@ 1 srujansai  staff  8472 Jun 20 20:36 docs/business/slides.md
+[0m
+All acceptance commands pass. Writing the report.
+[0m← [0mWrite work/reports/wave-12-final/02-final-deck.report.md
+Wrote file successfully.
+[0m
+[0m→ [0mRead docs/waves/wave-9-polish-gotchas.md
+</think>
+[0m
+[0m← [0mWrite docs/waves/wave-12-final-gotchas.md
+Wrote file successfully.
+[0m
+[0m$ [0mecho "=== Re-running acceptance ==="; test -f docs/business/slides.md && echo "deck present"; grep -cE "^## Slide" docs/business/slides.md; grep -qiE "35%|reasoning" docs/business/slides.md && echo "reasoning slide present"; echo "=== Writes only? ==="; git status --short; echo "=== Report file ==="; ls -la work/reports/wave-12-final/02-final-deck.report.md; echo "=== Gotchas ==="; ls -la docs/waves/wave-12-final-gotchas.md
+=== Re-running acceptance ===
+deck present
+6
+reasoning slide present
+=== Writes only? ===
+ M README.md
+ M results/metrics.json
+ M tests/unit/test_agents_market_news.py
+ M tests/unit/test_charts.py
+ M tests/unit/test_cli.py
+ M tests/unit/test_components.py
+ M tests/unit/test_llm_provider.py
+ M tests/unit/test_tools_market.py
+ M tests/unit/test_tools_news.py
+ M tests/unit/test_tools_profile.py
+ M tests/unit/test_tools_risk.py
+ M tests/unit/test_tools_tax.py
+ M work/reports/wave-11/05-weak-domains.run.log
+?? "agents session"
+?? docs/JUDGE_QUICKSTART.md
+?? docs/SUBMISSION_MESSAGE.md
+?? docs/business/slides.md
+?? docs/demo/hero.md
+?? docs/demo/hero.txt
+?? docs/waves/wave-12-final-gotchas.md
+?? scripts/record_hero_cast.sh
+?? work/reports/wave-12-final/
+?? work/wave-12-final/
+=== Report file ===
+-rw-r--r--@ 1 srujansai  staff  4474 Jun 20 20:36 work/reports/wave-12-final/02-final-deck.report.md
+=== Gotchas ===
+-rw-r--r--@ 1 srujansai  staff  1785 Jun 20 20:36 docs/waves/wave-12-final-gotchas.md
+[0m
+All done. Acceptance green, report written, gotchas logged.
+
+**Acceptance (real output, this session):**
+```
+deck present
+6
+reasoning slide present
+```
+
+**Writes (only these changed for this task):**
+- `docs/business/slides.md` — 6-slide deck, On-screen/Say/Show per slide, numbers from `results/metrics.json` (as_of_sha `8547468`, 83 tasks, +128% composite lift, 11 domains)
+- `docs/waves/wave-12-final-gotchas.md` — per workflow step 5 (documents the no-contracts-dir surprise + numbers drift in README/outline)
+
+**Report:** `work/reports/wave-12-final/02-final-deck.report.md` → Result: **DONE**.
+=== opencode exited rc=0 @ Sat Jun 20 20:37:05 IST 2026 ===

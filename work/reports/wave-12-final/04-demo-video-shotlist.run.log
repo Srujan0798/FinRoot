@@ -1,0 +1,84 @@
+=== dispatch opencode xiaomi-token-plan-sgp/mimo-v2.5-pro -> work/wave-12-final/04-demo-video-shotlist.md @ Sat Jun 20 20:37:56 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 20:39:39 IST 2026 ===
+KER_PROMPT.md
+[0m→ [0mRead work/wave-12-final/04-demo-video-shotlist.md
+[0m→ [0mRead docs/business/7_minute_demo_script.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m✱ [0mGlob "docs/demo/screenshots/*.png"[90m 5 matches[0m
+[0m✱ [0mGlob ".specify/specs/wave-12-final/contracts/*"[90m 0 matches[0m
+Now I'll create the shot list document and run acceptance.
+[0m
+[0m← [0mWrite docs/business/demo_video_shotlist.md
+Wrote file successfully.
+[0m
+[0m$ [0mtest -f docs/business/demo_video_shotlist.md && echo "shotlist present"
+shotlist present
+[0m
+[0m$ [0mgrep -ciE "say|narrat|scene|duration" docs/business/demo_video_shotlist.md
+25
+[0m
+[0m$ [0mgrep -qiE "emergency fund|trap" docs/business/demo_video_shotlist.md && echo "trap scene present"
+trap scene present
+[0m
+All acceptance checks pass. Now writing the report.
+[0m$ [0mmkdir -p work/reports/wave-12-final
+(no output)
+[0m
+[0m← [0mWrite work/reports/wave-12-final/04-demo-video-shotlist.report.md
+Wrote file successfully.
+[0m
+[0m$ [0mgit diff --name-only
+README.md
+results/metrics.json
+src/finroot/tools/portfolio_sim.py
+src/finroot/tools/risk.py
+tests/unit/test_agents_market_news.py
+tests/unit/test_charts.py
+tests/unit/test_cli.py
+tests/unit/test_components.py
+tests/unit/test_llm_provider.py
+tests/unit/test_tools_market.py
+tests/unit/test_tools_news.py
+tests/unit/test_tools_profile.py
+tests/unit/test_tools_risk.py
+tests/unit/test_tools_tax.py
+work/reports/wave-11/05-weak-domains.run.log
+[0m
+[0m$ [0mgit status --short
+M README.md
+ M results/metrics.json
+ M src/finroot/tools/portfolio_sim.py
+ M src/finroot/tools/risk.py
+ M tests/unit/test_agents_market_news.py
+ M tests/unit/test_charts.py
+ M tests/unit/test_cli.py
+ M tests/unit/test_components.py
+ M tests/unit/test_llm_provider.py
+ M tests/unit/test_tools_market.py
+ M tests/unit/test_tools_news.py
+ M tests/unit/test_tools_profile.py
+ M tests/unit/test_tools_risk.py
+ M tests/unit/test_tools_tax.py
+ M work/reports/wave-11/05-weak-domains.run.log
+?? "agents session"
+?? docs/JUDGE_QUICKSTART.md
+?? docs/SUBMISSION_MESSAGE.md
+?? docs/business/demo_video_shotlist.md
+?? docs/business/slides.md
+?? docs/demo/hero.md
+?? docs/demo/hero.txt
+?? docs/waves/wave-12-final-gotchas.md
+?? scripts/record_hero_cast.sh
+?? work/reports/wave-12-final/
+?? work/wave-12-final/
+[0m
+Done. All 3 acceptance checks pass:
+
+- **shotlist present** ✓
+- **25 keyword hits** (say/narrat/scene/duration) ✓
+- **trap scene present** ✓
+
+**Files created:**
+- `docs/business/demo_video_shotlist.md` — 10 scenes, ~4:05 total, pre-record checklist, verbatim narration, 5 screenshot refs
+- `work/reports/wave-12-final/04-demo-video-shotlist.report.md` — full report with acceptance output
+=== opencode exited rc=0 @ Sat Jun 20 20:39:39 IST 2026 ===

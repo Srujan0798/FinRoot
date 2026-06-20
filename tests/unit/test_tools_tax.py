@@ -26,7 +26,6 @@ from finroot.tools.tax import (
     ToolError,
 )
 
-
 # ---------------------------------------------------------------------------
 # Hand-computed expected values (FY 2024-25 rules)
 #

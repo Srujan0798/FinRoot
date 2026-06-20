@@ -1,0 +1,76 @@
+=== dispatch opencode xiaomi-token-plan-sgp/mimo-v2.5-pro -> work/wave-12-final/01-submission-message.md @ Sat Jun 20 20:24:16 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 20:26:34 IST 2026 ===
+KER_PROMPT.md
+[0m→ [0mRead work/wave-12-final/01-submission-message.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m→ [0mRead results/metrics.json
+[0m→ [0mRead README.md
+[0m
+[0m# [0mTodos
+[ ] Create docs/SUBMISSION_MESSAGE.md
+[ ] Create docs/JUDGE_QUICKSTART.md
+[ ] Run acceptance commands
+[ ] Write report to work/reports/wave-12-final/01-submission-message.report.md
+[0m
+[0m✱ [0mGlob ".specify/specs/wave-12-final/contracts/*"[90m 0 matches[0m
+[0m→ [0mRead docs
+[0m
+[0m# [0mTodos
+[•] Create docs/SUBMISSION_MESSAGE.md
+[ ] Create docs/JUDGE_QUICKSTART.md
+[ ] Run acceptance commands
+[ ] Write report to work/reports/wave-12-final/01-submission-message.report.md
+[0m
+[0m← [0mWrite docs/SUBMISSION_MESSAGE.md
+Wrote file successfully.
+[0m
+[0m← [0mWrite docs/JUDGE_QUICKSTART.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create docs/SUBMISSION_MESSAGE.md
+[✓] Create docs/JUDGE_QUICKSTART.md
+[•] Run acceptance commands
+[ ] Write report to work/reports/wave-12-final/01-submission-message.report.md
+[0m
+[0m$ [0mtest -f docs/SUBMISSION_MESSAGE.md && test -f docs/JUDGE_QUICKSTART.md && echo "files present"
+files present
+[0m
+[0m$ [0mgrep -qi "github.com/Srujan0798/FinRoot" docs/SUBMISSION_MESSAGE.md && echo "repo link present"
+repo link present
+[0m
+[0m$ [0mgrep -qiE "docker|streamlit|interface.cli" docs/JUDGE_QUICKSTART.md && echo "run steps present"
+run steps present
+[0m
+[0m# [0mTodos
+[✓] Create docs/SUBMISSION_MESSAGE.md
+[✓] Create docs/JUDGE_QUICKSTART.md
+[✓] Run acceptance commands
+[•] Write report to work/reports/wave-12-final/01-submission-message.report.md
+[0m
+[0m$ [0mls -la work/reports/wave-12-final/ 2>/dev/null || mkdir -p work/reports/wave-12-final/
+total 80
+drwxr-xr-x@  6 srujansai  staff    192 Jun 20 20:24 .
+drwxr-xr-x@ 14 srujansai  staff    448 Jun 20 20:22 ..
+-rw-r--r--@  1 srujansai  staff   1846 Jun 20 20:25 01-submission-message.run.log
+-rw-r--r--@  1 srujansai  staff    159 Jun 20 20:24 02-final-deck.run.log
+-rw-r--r--@  1 srujansai  staff  25879 Jun 20 20:26 03-readme-hero-cast.run.log
+-rw-r--r--@  1 srujansai  staff    280 Jun 20 20:25 04-demo-video-shotlist.run.log
+[0m
+[0m← [0mWrite work/reports/wave-12-final/01-submission-message.report.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create docs/SUBMISSION_MESSAGE.md
+[✓] Create docs/JUDGE_QUICKSTART.md
+[✓] Run acceptance commands
+[✓] Write report to work/reports/wave-12-final/01-submission-message.report.md
+[0m
+**Task wave-12/01 complete.** All 3 acceptance checks pass.
+
+**Files created:**
+- `docs/SUBMISSION_MESSAGE.md` — ready-to-paste organizer message with repo link, 30s run steps, 4-axis scorecard, FRB headline (mean 0.778, +128.5% lift vs RAG, 83 tasks, sha a335c45)
+- `docs/JUDGE_QUICKSTART.md` — one-page quickstart with Docker/CLI/Streamlit blocks, 3 showcase queries (portfolio, tax ₹, emergency-fund trap refusal), proof locations
+
+**Report:** `work/reports/wave-12-final/01-submission-message.report.md`
+=== opencode exited rc=0 @ Sat Jun 20 20:26:34 IST 2026 ===

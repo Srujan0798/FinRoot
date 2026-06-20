@@ -14,8 +14,6 @@ from __future__ import annotations
 from pathlib import Path
 from tempfile import mkdtemp
 
-import pytest
-
 from finroot.agents.market_agent import MarketAnalystAgent
 from finroot.agents.news_agent import NewsInterpreterAgent
 from finroot.audit.trail import AuditTrail
@@ -23,11 +21,10 @@ from finroot.llm.mock import MockProvider
 from finroot.schemas.enums import Intent
 from finroot.schemas.state import AgentState
 from finroot.tools.base import BaseTool
-from finroot.tools.fundamentals import FundamentalAnalysisTool, FundamentalInput, FundamentalOutput
-from finroot.tools.market import MarketDataInput, MarketDataOutput, MarketDataTool
-from finroot.tools.news import NewsInput, NewsOutput, NewsSearchTool
-from finroot.tools.sentiment import SentimentAnalysisTool, SentimentInput, SentimentOutput
-
+from finroot.tools.fundamentals import FundamentalAnalysisTool
+from finroot.tools.market import MarketDataTool
+from finroot.tools.news import NewsSearchTool
+from finroot.tools.sentiment import SentimentAnalysisTool
 
 # ---------------------------------------------------------------------------
 # Helpers

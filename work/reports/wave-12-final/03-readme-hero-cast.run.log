@@ -1,0 +1,1911 @@
+=== dispatch opencode opencode/deepseek-v4-flash-free -> work/wave-12-final/03-readme-hero-cast.md @ Sat Jun 20 20:24:16 IST 2026 ===
+=== opencode exited rc=0 @ Sat Jun 20 20:27:34 IST 2026 ===
+ work/WORKER_PROMPT.md
+[0m→ [0mRead work/wave-12-final/03-readme-hero-cast.md
+[0m→ [0mRead work/REPORT_TEMPLATE.md
+[0m✗ [0mRead .specify/specs/wave-12-final/contracts failed
+[91m[1mError: [0mFile not found: /Users/srujansai/Desktop/FinRoot/.specify/specs/wave-12-final/contracts
+[0m→ [0mRead README.md
+[0m→ [0mRead docs/demo
+[0m→ [0mRead scripts
+[0m→ [0mRead scripts/record_cli_demo.sh
+[0m→ [0mRead docs/demo
+[0m✱ [0mGlob "src/interface/cli*"[90m 0 matches[0m
+[0m→ [0mRead docs/demo/screenshots
+[0m✱ [0mGlob "src/interface/**/*.py"[90m 17 matches[0m
+[0m→ [0mRead docs/demo/cli_demo.md
+[0m
+[0m$ [0mpython3 -m src.interface.cli --help 2>&1 | head -40 || true
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+                                                                                
+ Usage: python -m src.interface.cli [OPTIONS] [QUERY] COMMAND [ARGS]...         
+                                                                                
+ FinRoot — sovereign, reasoning-first AI financial agent.                       
+                                                                                
+╭─ Arguments ──────────────────────────────────────────────────────────────────╮
+│   query      [QUERY]  The financial question to ask FinRoot.                 │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --mock                    --no-mock          Use mock (offline) provider.    │
+│                                              [default: mock]                 │
+│ --user                -u               TEXT  User ID for memory/twin lookup. │
+│                                              [default: demo]                 │
+│ --install-completion                         Install completion for the      │
+│                                              current shell.                  │
+│ --show-completion                            Show completion for the current │
+│                                              shell, to copy it or customize  │
+│                                              the installation.               │
+│ --help                                       Show this message and exit.     │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ ask   Ask FinRoot a financial question and see the reasoning.                │
+╰──────────────────────────────────────────────────────────────────────────────╯
+[0m
+[0m→ [0mRead src/interface/cli/main.py
+[0m→ [0mRead src/interface/cli/__main__.py
+[0m
+[0m# [0mTodos
+[•] Explore existing scripts, CLI, and run behavior in Mock mode
+[ ] Create scripts/record_hero_cast.sh
+[ ] Create docs/demo/hero.md
+[ ] Edit README.md — add hero embed block near top
+[ ] Run ruff check on all changed files
+[ ] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-12-final/03-readme-hero-cast.report.md
+[0m
+[0m$ [0mcommand -v asciinema && echo "found" || echo "not found"; command -v agg && echo "found" || echo "not found"; command -v svg-term && echo "found" || echo "not found"
+not found
+not found
+not found
+[0m
+[0m$ [0mPYTHONPATH=src FINROOT_LLM_PROVIDER=mock python3 -m src.interface.cli --mock "Review my portfolio and flag risks" 2>&1 | head -80
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langchain_core/_api/deprecation.py:27: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/langgraph/checkpoint/base/__init__.py:18: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+╭─────────────────────────────────── Answer ───────────────────────────────────╮
+│ Domain: portfolio. Confidence: medium. Focus: asset allocation. Also:        │
+│ diversification. Query: Review my portfolio and flag risks                   │
+│                                                                              │
+│ ### Query context                                                            │
+│ - Review my portfolio and flag risks                                         │
+│                                                                              │
+│ ### Domain analysis: portfolio                                               │
+│ The query falls in the **portfolio** domain. Key concepts to consider: asset │
+│ allocation, diversification, concentration risk, rebalance, horizon, LTCG,   │
+│ tax, equity. A portfolio review should evaluate concentration risk, the      │
+│ user's risk tolerance, and the investment horizon. If rebalancing before     │
+│ FY-end, the LTCG tax on any sale is the dominant cost — sell only when the   │
+│ after-tax benefit exceeds the concentration-risk reduction. Diversification  │
+│ across asset classes (equity, debt, gold) is the primary defense against     │
+│ single-stock or single-sector shocks. Recommend gradual rebalancing rather   │
+│ than a single trade to manage tax outflows and timing risk. Risk             │
+│ quantification requested — state methodology and confidence.                 │
+│                                                                              │
+│ ### Reasoning process                                                        │
+│ - intent_classifier: produced output                                         │
+│ - context_assembler: produced output                                         │
+│ - market_data: produced output                                               │
+│ - market_data: produced output                                               │
+│ - market_data: produced output                                               │
+│ - market_data: produced output                                               │
+│ - portfolio_optimizer: produced current_prices                               │
+│ - portfolio_optimizer: produced allocation_analysis                          │
+│ - portfolio_simulator: produced output                                       │
+│ - portfolio_simulator: produced output                                       │
+│ - portfolio_optimizer: produced rebalancing_comparison                       │
+│ - portfolio_simulator: produced output                                       │
+│ - risk_assessor: produced monte_carlo                                        │
+│                                                                              │
+│ ### Findings                                                                 │
+│ - [intent_classifier] {'intent': 'portfolio', 'confidence': 1.0, 'entities': │
+│ {'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 'portfolio'        │
+│ matched for intent portfolio"}                                               │
+│ - [context_assembler] {'query': 'Review my portfolio and flag risks',        │
+│ 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32,               │
+│ 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>,              │
+│ 'investment_horizon': <InvestmentHorizon.MEDIUM: 'medium'>,                  │
+│ 'monthly_income': 150000.0, 'monthly_expenses': 85000.0, 'tax_bracket_pct':  │
+│ 20.0, 'goals': ['Build emergency fund of 12 months expenses', "Save for      │
+│ child's education                                                            │
+│ - [market_data] symbol='FD_HDFC_001' currency='USD'                          │
+│ prices=[PricePoint(date='2026-06-16', open=36298.9, high=36299.5,            │
+│ low=36298.5, close=36299.0, volume=1255294), PricePoint(date='2026-06-17',   │
+│ open=36300.4, high=36301.0, low=36300.0, close=36300.5, volume=1255294),     │
+│ PricePoint(date='2026-06-18', open=36299.4, high=36300.0, low=36299.0,       │
+│ close=36299.5, volume=1255294), PricePoint(date='2026-06-19', open=36300.15, │
+│ hi                                                                           │
+│ - [market_data] symbol='MF_ICICI_BALANCED_001' currency='USD'                │
+│ prices=[PricePoint(date='2026-06-16', open=11498.9, high=11499.5,            │
+│ low=11498.5, close=11499.0, volume=1896883), PricePoint(date='2026-06-17',   │
+│ open=11500.4, high=11501.0, low=11500.0, close=11500.5, volume=1896883),     │
+│ PricePoint(date='2026-06-18', open=11499.4, high=11500.0, low=11499.0,       │
+│ close=11499.5, volume=1896883), PricePoint(date='2026-06-19', open=11        │
+│ - [market_data] symbol='MF_SBI_DEBT_001' currency='USD'                      │
+│ prices=[PricePoint(date='2026-06-16', open=44398.9, high=44399.5,            │
+│ low=44398.5, close=44399.0, volume=1878908), PricePoint(date='2026-06-17',   │
+│ open=44400.4, high=44401.0, low=44400.0, close=44400.5, volume=1878908),     │
+│ PricePoint(date='2026-06-18', open=44399.4, high=44400.0, low=44399.0,       │
+│ close=44399.5, volume=1878908), PricePoint(date='2026-06-19', open=44400.15  │
+│ - [market_data] symbol='PPF_ACCOUNT_001' currency='USD'                      │
+│ prices=[PricePoint(date='2026-06-16', open=4298.9, high=4299.5, low=4298.5,  │
+│ close=4299.0, volume=1596647), PricePoint(date='2026-06-17', open=4300.4,    │
+│ high=4301.0, low=4300.0, close=4300.5, volume=1596647),                      │
+│ PricePoint(date='2026-06-18', open=4299.4, high=4300.0, low=4299.0,          │
+│ close=4299.5, volume=1596647), PricePoint(date='2026-06-19', open=4300.15,   │
+│ high=4300.7                                                                  │
+│ - [portfolio_optimizer] prices: {'FD_HDFC_001': 36300.0,                     │
+│ 'MF_ICICI_BALANCED_001': 11500.0, 'MF_SBI_DEBT_001': 44400.0,                │
+│ 'PPF_ACCOUNT_001': 4300.0}                                                   │
+│ - [portfolio_optimizer] current_allocation: [{'symbol': 'FD_HDFC_001',       │
+│ 'weight': 0.224601, 'price': 36300.0}, {'symbol': 'MF_ICICI_BALANCED_001',   │
+[0m
+[0m$ [0mPYTHONPATH=src FINROOT_LLM_PROVIDER=mock python3 -m src.interface.cli --mock "Review my portfolio and flag risks" 2>/dev/null; echo "EXIT=$?"
+╭─────────────────────────────────── Answer ───────────────────────────────────╮
+│ Domain: portfolio. Confidence: medium. Focus: asset allocation. Also:        │
+│ diversification. Query: Review my portfolio and flag risks                   │
+│                                                                              │
+│ ### Query context                                                            │
+│ - Review my portfolio and flag risks                                         │
+│                                                                              │
+│ ### Domain analysis: portfolio                                               │
+│ The query falls in the **portfolio** domain. Key concepts to consider: asset │
+│ allocation, diversification, concentration risk, rebalance, horizon, LTCG,   │
+│ tax, equity. A portfolio review should evaluate concentration risk, the      │
+│ user's risk tolerance, and the investment horizon. If rebalancing before     │
+│ FY-end, the LTCG tax on any sale is the dominant cost — sell only when the   │
+│ after-tax benefit exceeds the concentration-risk reduction. Diversification  │
+│ across asset classes (equity, debt, gold) is the primary defense against     │
+│ single-stock or single-sector shocks. Recommend gradual rebalancing rather   │
+│ than a single trade to manage tax outflows and timing risk. Risk             │
+│ quantification requested — state methodology and confidence.                 │
+│                                                                              │
+│ ### Reasoning process                                                        │
+│ - intent_classifier: produced output                                         │
+│ - context_assembler: produced output                                         │
+│ - market_data: produced output                                               │
+│ - market_data: produced output                                               │
+│ - market_data: produced output                                               │
+│ - market_data: produced output                                               │
+│ - portfolio_optimizer: produced current_prices                               │
+│ - portfolio_optimizer: produced allocation_analysis                          │
+│ - portfolio_simulator: produced output                                       │
+│ - portfolio_simulator: produced output                                       │
+│ - portfolio_optimizer: produced rebalancing_comparison                       │
+│ - portfolio_simulator: produced output                                       │
+│ - risk_assessor: produced monte_carlo                                        │
+│                                                                              │
+│ ### Findings                                                                 │
+│ - [intent_classifier] {'intent': 'portfolio', 'confidence': 1.0, 'entities': │
+│ {'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 'portfolio'        │
+│ matched for intent portfolio"}                                               │
+│ - [context_assembler] {'query': 'Review my portfolio and flag risks',        │
+│ 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32,               │
+│ 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>,              │
+│ 'investment_horizon': <InvestmentHorizon.MEDIUM: 'medium'>,                  │
+│ 'monthly_income': 150000.0, 'monthly_expenses': 85000.0, 'tax_bracket_pct':  │
+│ 20.0, 'goals': ['Build emergency fund of 12 months expenses', "Save for      │
+│ child's education                                                            │
+│ - [market_data] symbol='FD_HDFC_001' currency='USD'                          │
+│ prices=[PricePoint(date='2026-06-16', open=36298.9, high=36299.5,            │
+│ low=36298.5, close=36299.0, volume=1255294), PricePoint(date='2026-06-17',   │
+│ open=36300.4, high=36301.0, low=36300.0, close=36300.5, volume=1255294),     │
+│ PricePoint(date='2026-06-18', open=36299.4, high=36300.0, low=36299.0,       │
+│ close=36299.5, volume=1255294), PricePoint(date='2026-06-19', open=36300.15, │
+│ hi                                                                           │
+│ - [market_data] symbol='MF_ICICI_BALANCED_001' currency='USD'                │
+│ prices=[PricePoint(date='2026-06-16', open=11498.9, high=11499.5,            │
+│ low=11498.5, close=11499.0, volume=1896883), PricePoint(date='2026-06-17',   │
+│ open=11500.4, high=11501.0, low=11500.0, close=11500.5, volume=1896883),     │
+│ PricePoint(date='2026-06-18', open=11499.4, high=11500.0, low=11499.0,       │
+│ close=11499.5, volume=1896883), PricePoint(date='2026-06-19', open=11        │
+│ - [market_data] symbol='MF_SBI_DEBT_001' currency='USD'                      │
+│ prices=[PricePoint(date='2026-06-16', open=44398.9, high=44399.5,            │
+│ low=44398.5, close=44399.0, volume=1878908), PricePoint(date='2026-06-17',   │
+│ open=44400.4, high=44401.0, low=44400.0, close=44400.5, volume=1878908),     │
+│ PricePoint(date='2026-06-18', open=44399.4, high=44400.0, low=44399.0,       │
+│ close=44399.5, volume=1878908), PricePoint(date='2026-06-19', open=44400.15  │
+│ - [market_data] symbol='PPF_ACCOUNT_001' currency='USD'                      │
+│ prices=[PricePoint(date='2026-06-16', open=4298.9, high=4299.5, low=4298.5,  │
+│ close=4299.0, volume=1596647), PricePoint(date='2026-06-17', open=4300.4,    │
+│ high=4301.0, low=4300.0, close=4300.5, volume=1596647),                      │
+│ PricePoint(date='2026-06-18', open=4299.4, high=4300.0, low=4299.0,          │
+│ close=4299.5, volume=1596647), PricePoint(date='2026-06-19', open=4300.15,   │
+│ high=4300.7                                                                  │
+│ - [portfolio_optimizer] prices: {'FD_HDFC_001': 36300.0,                     │
+│ 'MF_ICICI_BALANCED_001': 11500.0, 'MF_SBI_DEBT_001': 44400.0,                │
+│ 'PPF_ACCOUNT_001': 4300.0}                                                   │
+│ - [portfolio_optimizer] current_allocation: [{'symbol': 'FD_HDFC_001',       │
+│ 'weight': 0.224601, 'price': 36300.0}, {'symbol': 'MF_ICICI_BALANCED_001',   │
+│ 'weight': 0.273574, 'price': 11500.0}, {'symbol': 'MF_SBI_DEBT_001',         │
+│ 'weight': 0.344603, 'price': 44400.0}, {'symbol': 'PPF_ACCOUNT_001',         │
+│ 'weight': 0.157221, 'price': 4300.0}]                                        │
+│ - [portfolio_simulator] expected_return=0.208268 p10_return=-0.055892        │
+│ p90_return=0.526538 probability_of_loss=0.16 citation='Monte Carlo           │
+│ simulation: 500 paths, 1-year horizon'                                       │
+│ - [portfolio_simulator] expected_return=0.208268 p10_return=-0.055892        │
+│ p90_return=0.526538 probability_of_loss=0.16 citation='Monte Carlo           │
+│ simulation: 500 paths, 1-year horizon'                                       │
+│ - [portfolio_optimizer] simulations: [{'label': 'current',                   │
+│ 'expected_return': 0.208268, 'p10_return': -0.055892, 'p90_return':          │
+│ 0.526538, 'probability_of_loss': 0.16, 'citation': 'Monte Carlo simulation:  │
+│ 500 paths, 1-year horizon'}, {'label': 'equal_weight', 'expected_return':    │
+│ 0.208268, 'p10_return': -0.055892, 'p90_return': 0.526538, '                 │
+│ - [portfolio_simulator] expected_return=0.203746 p10_return=-0.071418        │
+│ p90_return=0.541139 probability_of_loss=0.165 citation='Monte Carlo          │
+│ simulation: 1000 paths, 1-year horizon'                                      │
+│ - [risk_assessor] expected_return: 0.203746                                  │
+│ - [risk_assessor] p10_return: -0.071418                                      │
+│ - [risk_assessor] p90_return: 0.541139                                       │
+│ - [risk_assessor] probability_of_loss: 0.165                                 │
+╰──────────────────────────────────────────────────────────────────────────────╯
+  Confidence    medium  
+
+Reasoning Steps
+  0.  plan_step: portfolio_optimizer
+  1.  plan_step: risk_assessor
+  2.  tool_output: output={'intent': 'portfolio', 'confidence': 1.0, 'entities':
+{'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 
+  3.  tool_output: output={'query': 'Review my portfolio and flag risks', 
+'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'r
+  4.  tool_output: input=symbol='FD_HDFC_001' period='1d', 
+output=symbol='FD_HDFC_001' currency='USD' prices=[PricePoint(date='2026-06-16',
+  5.  tool_output: input=symbol='MF_ICICI_BALANCED_001' period='1d', 
+output=symbol='MF_ICICI_BALANCED_001' currency='USD' prices=[PricePoin
+  6.  tool_output: input=symbol='MF_SBI_DEBT_001' period='1d', 
+output=symbol='MF_SBI_DEBT_001' currency='USD' prices=[PricePoint(date='2026
+  7.  tool_output: input=symbol='PPF_ACCOUNT_001' period='1d', 
+output=symbol='PPF_ACCOUNT_001' currency='USD' prices=[PricePoint(date='2026
+  8.  current_prices: prices={'FD_HDFC_001': 36300.0, 'MF_ICICI_BALANCED_001': 
+11500.0, 'MF_SBI_DEBT_001': 44400.0, 'PPF_ACCOUNT_001': 4300.0}
+  9.  allocation_analysis: current_allocation=[{'symbol': 'FD_HDFC_001', 
+'weight': 0.224601, 'price': 36300.0}, {'symbol': 'MF_ICICI_BALANCED_001',
+  10.  tool_output: input=holdings=[{'symbol': 'FD_HDFC_001', 'weight': 
+0.224601}, {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.273574}, 
+  11.  tool_output: input=holdings=[{'symbol': 'FD_HDFC_001', 'weight': 0.25}, 
+{'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.25}, {'symbol
+  12.  rebalancing_comparison: simulations=[{'label': 'current', 
+'expected_return': 0.208268, 'p10_return': -0.055892, 'p90_return': 0.526538, 
+'probabi
+  13.  tool_output: input=holdings=[{'asset_id': 'FD_HDFC_001', 'asset_type': 
+'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quantity'
+  14.  monte_carlo: expected_return=0.203746, p10_return=-0.071418, 
+p90_return=0.541139, probability_of_loss=0.165, citation=Monte Carlo sim
+  15.  critique: SelfCritic passed (overall=0.77, threshold=0.6). Axes: 
+correctness=1.00, risk_awareness=0.30, actionability=0.70, explai
+  16.  orchestrator.run: {"query": "Review my portfolio and flag risks"}
+  17.  tool.called: {"input": "symbol='FD_HDFC_001' period='1d'", "output": 
+"symbol='FD_HDFC_001' currency='USD' prices=[PricePoint(date='20
+  18.  tool.called: {"input": "symbol='MF_ICICI_BALANCED_001' period='1d'", 
+"output": "symbol='MF_ICICI_BALANCED_001' currency='USD' prices=
+  19.  tool.called: {"input": "symbol='MF_SBI_DEBT_001' period='1d'", "output": 
+"symbol='MF_SBI_DEBT_001' currency='USD' prices=[PricePoint(
+  20.  tool.called: {"input": "symbol='PPF_ACCOUNT_001' period='1d'", "output": 
+"symbol='PPF_ACCOUNT_001' currency='USD' prices=[PricePoint(
+  21.  tool.called: {"input": "holdings=[{'symbol': 'FD_HDFC_001', 'weight': 
+0.224601}, {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.2735
+  22.  tool.called: {"input": "holdings=[{'symbol': 'FD_HDFC_001', 'weight': 
+0.25}, {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.25}, {'s
+  23.  tool.called: {"input": "holdings=[{'asset_id': 'FD_HDFC_001', 
+'asset_type': 'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quan
+  24.  orchestrator.done: {"has_candidate": true, "intent": "portfolio", 
+"query": "Review my portfolio and flag risks"}
+  25.  recommendation: Domain: portfolio. Confidence: medium. Focus: asset 
+allocation. Also: diversification. Query: Review my portfolio and fl
+
+Citations
+  1. risk_assessor: Monte Carlo simulation: 1000 paths, 1-year horizon — Monte 
+Carlo simulation: 1000 paths, 1-year horizon
+  2. context_assembler: Output from context_assembler agent — {'query': 'Review 
+my portfolio and flag risks', 'twin': {'user_id': 'demo', 'name': 'Priya 
+Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 
+'conservative'>, 'investment_horizon': <In
+
+Critic Verdict: PASSED (overall=0.765)
+  SelfCritic passed (overall=0.77, threshold=0.6). Axes: correctness=1.00, 
+risk_awareness=0.30, actionability=0.70, explainability=1.00, evidence=1.00. 
+Must fix: risk_awareness.
+EXIT=0
+[0m
+[0m# [0mTodos
+[✓] Explore existing scripts, CLI, and run behavior in Mock mode
+[•] Create scripts/record_hero_cast.sh
+[ ] Create docs/demo/hero.md
+[ ] Edit README.md — add hero embed block near top
+[ ] Run ruff check on all changed files
+[ ] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-12-final/03-readme-hero-cast.report.md
+[0m
+Now I have full context. Let me implement all three files.
+[0m← [0mWrite scripts/record_hero_cast.sh
+Wrote file successfully.
+[0m
+[0m← [0mWrite docs/demo/hero.md
+Wrote file successfully.
+[0m
+[0m✗ [0mEdit README.md failed
+[91m[1mError: [0mCould not find oldString in the file. It must match exactly, including whitespace, indentation, and line endings.
+Now let me add the hero embed block to the README. The insertion point is right after `</div>` (line 18) and before the `---` separator.
+[0m→ [0mRead README.md[90m [offset=16, limit=15][0m
+[0m
+[0m$ [0msed -n '18,20p' README.md | cat -A
+cat: illegal option -- A
+usage: cat [-belnstuv] [file ...]
+[0m
+[0m$ [0mpython3 -c "
+with open('README.md') as f:
+    content = f.read()
+# Find the first </div> followed by ---
+idx1 = content.find('</div>')
+idx2 = content.find('---', idx1)
+print(repr(content[idx1:idx2+5]))
+"
+'</div>\n\n---\n\n'
+[0m
+[0m← [0mEdit README.md
+Index: /Users/srujansai/Desktop/FinRoot/README.md
+===================================================================
+--- /Users/srujansai/Desktop/FinRoot/README.md
++++ /Users/srujansai/Desktop/FinRoot/README.md
+@@ -16,8 +16,18 @@
+ SCALE ML Club — Problem Statement 1: **Build an AI Agent for Finance**.*
+ 
+ </div>
+ 
++<div align="center">
++
++## ⚡ See it in action
++
++[![FinRoot CLI Demo — Portfolio, Tax, Refusal](docs/demo/screenshots/03_trap_refusal.png)](docs/demo/hero.md)
++
++*Click the image for the full CLI demo — portfolio review, tax calculation, and prudence refusal.*
++
++</div>
++
+ ---
+ 
+ ## The one-line pitch
+ 
+
+[0m
+[0m→ [0mRead README.md[90m [limit=40][0m
+[0m
+[0m# [0mTodos
+[✓] Explore existing scripts, CLI, and run behavior in Mock mode
+[✓] Create scripts/record_hero_cast.sh
+[✓] Create docs/demo/hero.md
+[✓] Edit README.md — add hero embed block near top
+[ ] Run ruff check on all changed files
+[•] Run acceptance commands and capture output
+[ ] Write report to work/reports/wave-12-final/03-readme-hero-cast.report.md
+[0m
+Good, the hero block is properly placed. Let me now run the acceptance commands to verify everything works.
+[0m$ [0mbash -n scripts/record_hero_cast.sh && echo "script syntax OK"
+script syntax OK
+[0m
+[0m$ [0mbash scripts/record_hero_cast.sh && ls -la docs/demo/hero.*
+asciinema NOT found — falling back to plain text transcript.
+Install asciinema for animated casts: pip install asciinema
+
+Transcript written to: docs/demo/hero.txt
+Hero demo recording complete.
+-rw-r--r--@ 1 srujansai  staff   1423 Jun 20 20:26 docs/demo/hero.md
+-rw-r--r--@ 1 srujansai  staff  26784 Jun 20 20:26 docs/demo/hero.txt
+[0m
+[0m$ [0mtest -f docs/demo/hero.md && echo "hero doc present"; grep -q "docs/demo/" README.md && echo "README hero embed present"; python3 -c "open('README.md').read()" && echo "README readable"
+hero doc present
+README hero embed present
+README readable
+[0m
+[0m$ [0mwc -l docs/demo/hero.txt && head -20 docs/demo/hero.txt
+360 docs/demo/hero.txt
+=== FinRoot README Hero Demo (Mock Mode) ===
+Generated: Sat Jun 20 20:26:45 IST 2026
+Environment: PYTHONPATH=src FINROOT_LLM_PROVIDER=mock
+
+======================================================================
+COMMAND: python3 -m interface.cli --mock "Review my portfolio and flag risks"
+======================================================================
+
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+╭─────────────────────────────────── Answer ───────────────────────────────────╮
+│ Domain: portfolio. Confidence: medium. Focus: asset allocation. Also:        │
+│ diversification. Query: Review my portfolio and flag risks                   │
+│                                                                              │
+│ ### Query context                                                            │
+│ - Review my portfolio and flag risks                                         │
+│                                                                              │
+│ ### Domain analysis: portfolio                                               │
+│ The query falls in the **portfolio** domain. Key concepts to consider: asset │
+│ allocation, diversification, concentration risk, rebalance, horizon, LTCG,   │
+[0m
+[0m$ [0mruff check scripts/record_hero_cast.sh 2>&1 || true; ruff check docs/demo/hero.md 2>&1 || true
+...output truncated...
+
+Full output saved to: /Users/srujansai/.local/share/opencode/tool-output/tool_ee588fab5001v51XXQFPZjGtfl
+
+  --> scripts/record_hero_cast.sh:28:56
+   |
+26 |     echo "asciinema found — recording cast..."
+27 |
+28 |     asciinema rec "${CAST_FILE}" --overwrite --command="
+   |                                                        ^
+29 |         echo 'Query 1: Portfolio review'
+30 |         python3 -m interface.cli --mock ${QUERIES[0]@Q}
+   |
+
+invalid-syntax: Unexpected indentation
+  --> scripts/record_hero_cast.sh:29:1
+   |
+28 |     asciinema rec "${CAST_FILE}" --overwrite --command="
+29 |         echo 'Query 1: Portfolio review'
+   | ^^^^^^^^
+30 |         python3 -m interface.cli --mock ${QUERIES[0]@Q}
+31 |         echo ''
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:29:14
+   |
+28 |     asciinema rec "${CAST_FILE}" --overwrite --command="
+29 |         echo 'Query 1: Portfolio review'
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+30 |         python3 -m interface.cli --mock ${QUERIES[0]@Q}
+31 |         echo ''
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:30:20
+   |
+28 |     asciinema rec "${CAST_FILE}" --overwrite --command="
+29 |         echo 'Query 1: Portfolio review'
+30 |         python3 -m interface.cli --mock ${QUERIES[0]@Q}
+   |                    ^^^^^^^^^
+31 |         echo ''
+32 |         echo 'Query 2: Tax calculation'
+   |
+
+invalid-syntax: Got unexpected token $
+  --> scripts/record_hero_cast.sh:30:41
+   |
+28 |     asciinema rec "${CAST_FILE}" --overwrite --command="
+29 |         echo 'Query 1: Portfolio review'
+30 |         python3 -m interface.cli --mock ${QUERIES[0]@Q}
+   |                                         ^
+31 |         echo ''
+32 |         echo 'Query 2: Tax calculation'
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:31:14
+   |
+29 |         echo 'Query 1: Portfolio review'
+30 |         python3 -m interface.cli --mock ${QUERIES[0]@Q}
+31 |         echo ''
+   |              ^^
+32 |         echo 'Query 2: Tax calculation'
+33 |         python3 -m interface.cli --mock ${QUERIES[1]@Q}
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:32:14
+   |
+30 |         python3 -m interface.cli --mock ${QUERIES[0]@Q}
+31 |         echo ''
+32 |         echo 'Query 2: Tax calculation'
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+33 |         python3 -m interface.cli --mock ${QUERIES[1]@Q}
+34 |         echo ''
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:33:20
+   |
+31 |         echo ''
+32 |         echo 'Query 2: Tax calculation'
+33 |         python3 -m interface.cli --mock ${QUERIES[1]@Q}
+   |                    ^^^^^^^^^
+34 |         echo ''
+35 |         echo 'Query 3: Prudence refusal'
+   |
+
+invalid-syntax: Got unexpected token $
+  --> scripts/record_hero_cast.sh:33:41
+   |
+31 |         echo ''
+32 |         echo 'Query 2: Tax calculation'
+33 |         python3 -m interface.cli --mock ${QUERIES[1]@Q}
+   |                                         ^
+34 |         echo ''
+35 |         echo 'Query 3: Prudence refusal'
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:34:14
+   |
+32 |         echo 'Query 2: Tax calculation'
+33 |         python3 -m interface.cli --mock ${QUERIES[1]@Q}
+34 |         echo ''
+   |              ^^
+35 |         echo 'Query 3: Prudence refusal'
+36 |         python3 -m interface.cli --mock ${QUERIES[2]@Q}
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:35:14
+   |
+33 |         python3 -m interface.cli --mock ${QUERIES[1]@Q}
+34 |         echo ''
+35 |         echo 'Query 3: Prudence refusal'
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+36 |         python3 -m interface.cli --mock ${QUERIES[2]@Q}
+37 |     "
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:36:20
+   |
+34 |         echo ''
+35 |         echo 'Query 3: Prudence refusal'
+36 |         python3 -m interface.cli --mock ${QUERIES[2]@Q}
+   |                    ^^^^^^^^^
+37 |     "
+   |
+
+invalid-syntax: Got unexpected token $
+  --> scripts/record_hero_cast.sh:36:41
+   |
+34 |         echo ''
+35 |         echo 'Query 3: Prudence refusal'
+36 |         python3 -m interface.cli --mock ${QUERIES[2]@Q}
+   |                                         ^
+37 |     "
+   |
+
+invalid-syntax: missing closing quote in string literal
+  --> scripts/record_hero_cast.sh:37:5
+   |
+35 |         echo 'Query 3: Prudence refusal'
+36 |         python3 -m interface.cli --mock ${QUERIES[2]@Q}
+37 |     "
+   |     ^
+38 |
+39 |     if [[ -f "${CAST_FILE}" ]] && [[ -s "${CAST_FILE}" ]]; then
+   |
+
+invalid-syntax: Expected `,`, found string
+  --> scripts/record_hero_cast.sh:39:14
+   |
+37 |     "
+38 |
+39 |     if [[ -f "${CAST_FILE}" ]] && [[ -s "${CAST_FILE}" ]]; then
+   |              ^^^^^^^^^^^^^^
+40 |         recorded=1
+41 |         echo "Cast written to ${CAST_FILE}"
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:39:33
+   |
+37 |     "
+38 |
+39 |     if [[ -f "${CAST_FILE}" ]] && [[ -s "${CAST_FILE}" ]]; then
+   |                                 ^
+40 |         recorded=1
+41 |         echo "Cast written to ${CAST_FILE}"
+   |
+
+invalid-syntax: Expected `,`, found string
+  --> scripts/record_hero_cast.sh:39:41
+   |
+37 |     "
+38 |
+39 |     if [[ -f "${CAST_FILE}" ]] && [[ -s "${CAST_FILE}" ]]; then
+   |                                         ^^^^^^^^^^^^^^
+40 |         recorded=1
+41 |         echo "Cast written to ${CAST_FILE}"
+   |
+
+invalid-syntax: Expected `:`, found `;`
+  --> scripts/record_hero_cast.sh:39:58
+   |
+37 |     "
+38 |
+39 |     if [[ -f "${CAST_FILE}" ]] && [[ -s "${CAST_FILE}" ]]; then
+   |                                                          ^
+40 |         recorded=1
+41 |         echo "Cast written to ${CAST_FILE}"
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts/record_hero_cast.sh:39:58
+   |
+37 |     "
+38 |
+39 |     if [[ -f "${CAST_FILE}" ]] && [[ -s "${CAST_FILE}" ]]; then
+   |                                                          ^
+40 |         recorded=1
+41 |         echo "Cast written to ${CAST_FILE}"
+   |
+
+invalid-syntax: Unexpected indentation
+  --> scripts/record_hero_cast.sh:40:1
+   |
+39 |     if [[ -f "${CAST_FILE}" ]] && [[ -s "${CAST_FILE}" ]]; then
+40 |         recorded=1
+   | ^^^^^^^^
+41 |         echo "Cast written to ${CAST_FILE}"
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:41:14
+   |
+39 |     if [[ -f "${CAST_FILE}" ]] && [[ -s "${CAST_FILE}" ]]; then
+40 |         recorded=1
+41 |         echo "Cast written to ${CAST_FILE}"
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+42 |
+43 |         if command -v agg >/dev/null 2>&1; then
+   |
+
+invalid-syntax: Expected `:`, found name
+  --> scripts/record_hero_cast.sh:43:23
+   |
+41 |         echo "Cast written to ${CAST_FILE}"
+42 |
+43 |         if command -v agg >/dev/null 2>&1; then
+   |                       ^^^
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:43:28
+   |
+41 |         echo "Cast written to ${CAST_FILE}"
+42 |
+43 |         if command -v agg >/dev/null 2>&1; then
+   |                            ^
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:43:38
+   |
+41 |         echo "Cast written to ${CAST_FILE}"
+42 |
+43 |         if command -v agg >/dev/null 2>&1; then
+   |                                      ^
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:43:40
+   |
+41 |         echo "Cast written to ${CAST_FILE}"
+42 |
+43 |         if command -v agg >/dev/null 2>&1; then
+   |                                        ^
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts/record_hero_cast.sh:43:42
+   |
+41 |         echo "Cast written to ${CAST_FILE}"
+42 |
+43 |         if command -v agg >/dev/null 2>&1; then
+   |                                          ^
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+   |
+
+invalid-syntax: Unexpected indentation
+  --> scripts/record_hero_cast.sh:44:1
+   |
+43 |         if command -v agg >/dev/null 2>&1; then
+44 |             echo "agg found — rendering SVG..."
+   | ^^^^^^^^^^^^
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:44:18
+   |
+43 |         if command -v agg >/dev/null 2>&1; then
+44 |             echo "agg found — rendering SVG..."
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:45:17
+   |
+43 |         if command -v agg >/dev/null 2>&1; then
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+   |                 ^^^^^^^^^^^^^^
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+47 |             echo "svg-term found — rendering SVG..."
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:45:46
+   |
+43 |         if command -v agg >/dev/null 2>&1; then
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+   |                                              ^
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+47 |             echo "svg-term found — rendering SVG..."
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:45:48
+   |
+43 |         if command -v agg >/dev/null 2>&1; then
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+   |                                                ^
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+47 |             echo "svg-term found — rendering SVG..."
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:45:59
+   |
+43 |         if command -v agg >/dev/null 2>&1; then
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+   |                                                           ^
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+47 |             echo "svg-term found — rendering SVG..."
+   |
+
+invalid-syntax: Expected a statement
+  --> scripts/record_hero_cast.sh:46:9
+   |
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+   |         ^
+47 |             echo "svg-term found — rendering SVG..."
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:46:25
+   |
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+   |                         ^^^
+47 |             echo "svg-term found — rendering SVG..."
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:46:35
+   |
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+   |                                   ^
+47 |             echo "svg-term found — rendering SVG..."
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:46:45
+   |
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+   |                                             ^
+47 |             echo "svg-term found — rendering SVG..."
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:46:47
+   |
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+   |                                               ^
+47 |             echo "svg-term found — rendering SVG..."
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts/record_hero_cast.sh:46:49
+   |
+44 |             echo "agg found — rendering SVG..."
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+   |                                                 ^
+47 |             echo "svg-term found — rendering SVG..."
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+   |
+
+invalid-syntax: Unexpected indentation
+  --> scripts/record_hero_cast.sh:47:1
+   |
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+47 |             echo "svg-term found — rendering SVG..."
+   | ^^^^^^^^^^^^
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+49 |         fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:47:18
+   |
+45 |             agg "${CAST_FILE}" "${SVG_FILE}" 2>/dev/null || true
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+47 |             echo "svg-term found — rendering SVG..."
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+49 |         fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:48:17
+   |
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+47 |             echo "svg-term found — rendering SVG..."
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+   |                 ^^^^^^^^^^^^^^
+49 |         fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:48:49
+   |
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+47 |             echo "svg-term found — rendering SVG..."
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+   |                                                 ^^^^^^^^^^^^^
+49 |         fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:48:72
+   |
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+47 |             echo "svg-term found — rendering SVG..."
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+   |                                                                        ^
+49 |         fi
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:48:74
+   |
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+47 |             echo "svg-term found — rendering SVG..."
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+   |                                                                          ^
+49 |         fi
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:48:85
+   |
+46 |         elif command -v svg-term >/dev/null 2>&1; then
+47 |             echo "svg-term found — rendering SVG..."
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+   |                                                                                     ^
+49 |         fi
+   |
+
+invalid-syntax: Expected a statement
+  --> scripts/record_hero_cast.sh:49:9
+   |
+47 |             echo "svg-term found — rendering SVG..."
+48 |             cat "${CAST_FILE}" | svg-term --out "${SVG_FILE}" --window 2>/dev/null || true
+49 |         fi
+   |         ^
+50 |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+   |
+
+invalid-syntax: Expected `:`, found name
+  --> scripts/record_hero_cast.sh:51:23
+   |
+49 |         fi
+50 |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+   |                       ^^^
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:51:28
+   |
+49 |         fi
+50 |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+   |                            ^
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:51:38
+   |
+49 |         fi
+50 |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+   |                                      ^
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:51:40
+   |
+49 |         fi
+50 |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+   |                                        ^
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:51:44
+   |
+49 |         fi
+50 |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+   |                                            ^
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:51:57
+   |
+49 |         fi
+50 |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+   |                                                         ^^^^^^^
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:51:66
+   |
+49 |         fi
+50 |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+   |                                                                  ^
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:51:76
+   |
+49 |         fi
+50 |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+   |                                                                            ^
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:51:78
+   |
+49 |         fi
+50 |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+   |                                                                              ^
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts/record_hero_cast.sh:51:80
+   |
+49 |         fi
+50 |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+   |                                                                                ^
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |
+
+invalid-syntax: Unexpected indentation
+  --> scripts/record_hero_cast.sh:52:1
+   |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+   | ^^^^^^^^^^^^
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+54 |         fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:52:18
+   |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+54 |         fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:53:17
+   |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |                 ^^^^^^^^^^^^^^
+54 |         fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:53:55
+   |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |                                                       ^^^
+54 |         fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:53:59
+   |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |                                                           ^
+54 |         fi
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:53:61
+   |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |                                                             ^
+54 |         fi
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:53:72
+   |
+51 |         if command -v agg >/dev/null 2>&1 && command -v convert >/dev/null 2>&1; then
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+   |                                                                        ^
+54 |         fi
+   |
+
+invalid-syntax: Expected a statement
+  --> scripts/record_hero_cast.sh:54:9
+   |
+52 |             echo "agg + ImageMagick found — rendering GIF..."
+53 |             agg "${CAST_FILE}" "${GIF_FILE}" --format gif 2>/dev/null || true
+54 |         fi
+   |         ^
+55 |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+   |
+
+invalid-syntax: Expected `,`, found string
+  --> scripts/record_hero_cast.sh:56:18
+   |
+54 |         fi
+55 |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+   |                  ^^^^^^^^^^^^^
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+58 |     fi
+   |
+
+invalid-syntax: Expected `:`, found `;`
+  --> scripts/record_hero_cast.sh:56:34
+   |
+54 |         fi
+55 |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+   |                                  ^
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+58 |     fi
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts/record_hero_cast.sh:56:34
+   |
+54 |         fi
+55 |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+   |                                  ^
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+58 |     fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:56:41
+   |
+54 |         fi
+55 |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+   |                                         ^^^^
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+58 |     fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:56:46
+   |
+54 |         fi
+55 |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+   |                                              ^^^^^^^^^^^^^^^^^^^^
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+58 |     fi
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts/record_hero_cast.sh:56:66
+   |
+54 |         fi
+55 |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+   |                                                                  ^
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+58 |     fi
+   |
+
+invalid-syntax: Expected `,`, found string
+  --> scripts/record_hero_cast.sh:57:18
+   |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+   |                  ^^^^^^^^^^^^^
+58 |     fi
+59 | fi
+   |
+
+invalid-syntax: Expected `:`, found `;`
+  --> scripts/record_hero_cast.sh:57:34
+   |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+   |                                  ^
+58 |     fi
+59 | fi
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts/record_hero_cast.sh:57:34
+   |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+   |                                  ^
+58 |     fi
+59 | fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:57:41
+   |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+   |                                         ^^^^
+58 |     fi
+59 | fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:57:46
+   |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+   |                                              ^^^^^^^^^^^^^^^^^^^^
+58 |     fi
+59 | fi
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts/record_hero_cast.sh:57:66
+   |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+   |                                                                  ^
+58 |     fi
+59 | fi
+   |
+
+invalid-syntax: Expected a statement
+  --> scripts/record_hero_cast.sh:58:5
+   |
+56 |         if [[ -f "${SVG_FILE}" ]]; then echo "  SVG: ${SVG_FILE}"; fi
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+58 |     fi
+   |     ^
+59 | fi
+   |
+
+invalid-syntax: Expected a statement
+  --> scripts/record_hero_cast.sh:59:1
+   |
+57 |         if [[ -f "${GIF_FILE}" ]]; then echo "  GIF: ${GIF_FILE}"; fi
+58 |     fi
+59 | fi
+   | ^
+60 |
+61 | if [[ "${recorded}" -eq 0 ]]; then
+   |
+
+invalid-syntax: Expected `,`, found int
+  --> scripts/record_hero_cast.sh:61:25
+   |
+59 | fi
+60 |
+61 | if [[ "${recorded}" -eq 0 ]]; then
+   |                         ^
+62 |     echo "asciinema NOT found — falling back to plain text transcript."
+63 |     echo "Install asciinema for animated casts: pip install asciinema"
+   |
+
+invalid-syntax: Expected `:`, found `;`
+  --> scripts/record_hero_cast.sh:61:29
+   |
+59 | fi
+60 |
+61 | if [[ "${recorded}" -eq 0 ]]; then
+   |                             ^
+62 |     echo "asciinema NOT found — falling back to plain text transcript."
+63 |     echo "Install asciinema for animated casts: pip install asciinema"
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts/record_hero_cast.sh:61:29
+   |
+59 | fi
+60 |
+61 | if [[ "${recorded}" -eq 0 ]]; then
+   |                             ^
+62 |     echo "asciinema NOT found — falling back to plain text transcript."
+63 |     echo "Install asciinema for animated casts: pip install asciinema"
+   |
+
+invalid-syntax: Unexpected indentation
+  --> scripts/record_hero_cast.sh:62:1
+   |
+61 | if [[ "${recorded}" -eq 0 ]]; then
+62 |     echo "asciinema NOT found — falling back to plain text transcript."
+   | ^^^^
+63 |     echo "Install asciinema for animated casts: pip install asciinema"
+64 |     echo
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:62:10
+   |
+61 | if [[ "${recorded}" -eq 0 ]]; then
+62 |     echo "asciinema NOT found — falling back to plain text transcript."
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+63 |     echo "Install asciinema for animated casts: pip install asciinema"
+64 |     echo
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:63:10
+   |
+61 | if [[ "${recorded}" -eq 0 ]]; then
+62 |     echo "asciinema NOT found — falling back to plain text transcript."
+63 |     echo "Install asciinema for animated casts: pip install asciinema"
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+64 |     echo
+   |
+
+invalid-syntax: Expected `,`, found string
+  --> scripts/record_hero_cast.sh:67:14
+   |
+66 |     {
+67 |         echo "=== FinRoot README Hero Demo (Mock Mode) ==="
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+68 |         echo "Generated: $(date)"
+69 |         echo "Environment: PYTHONPATH=src FINROOT_LLM_PROVIDER=mock"
+   |
+
+invalid-syntax: Expected `,`, found name
+  --> scripts/record_hero_cast.sh:68:9
+   |
+66 |     {
+67 |         echo "=== FinRoot README Hero Demo (Mock Mode) ==="
+68 |         echo "Generated: $(date)"
+   |         ^^^^
+69 |         echo "Environment: PYTHONPATH=src FINROOT_LLM_PROVIDER=mock"
+70 |         echo ""
+   |
+
+invalid-syntax: Expected `,`, found string
+  --> scripts/record_hero_cast.sh:68:14
+   |
+66 |     {
+67 |         echo "=== FinRoot README Hero Demo (Mock Mode) ==="
+68 |         echo "Generated: $(date)"
+   |              ^^^^^^^^^^^^^^^^^^^^
+69 |         echo "Environment: PYTHONPATH=src FINROOT_LLM_PROVIDER=mock"
+70 |         echo ""
+   |
+
+invalid-syntax: Expected `,`, found name
+  --> scripts/record_hero_cast.sh:69:9
+   |
+67 |         echo "=== FinRoot README Hero Demo (Mock Mode) ==="
+68 |         echo "Generated: $(date)"
+69 |         echo "Environment: PYTHONPATH=src FINROOT_LLM_PROVIDER=mock"
+   |         ^^^^
+70 |         echo ""
+   |
+
+invalid-syntax: Expected `,`, found string
+  --> scripts/record_hero_cast.sh:69:14
+   |
+67 |         echo "=== FinRoot README Hero Demo (Mock Mode) ==="
+68 |         echo "Generated: $(date)"
+69 |         echo "Environment: PYTHONPATH=src FINROOT_LLM_PROVIDER=mock"
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+70 |         echo ""
+   |
+
+invalid-syntax: Expected `,`, found name
+  --> scripts/record_hero_cast.sh:70:9
+   |
+68 |         echo "Generated: $(date)"
+69 |         echo "Environment: PYTHONPATH=src FINROOT_LLM_PROVIDER=mock"
+70 |         echo ""
+   |         ^^^^
+71 |
+72 |         for q in "${QUERIES[@]}"; do
+   |
+
+invalid-syntax: Expected `,`, found string
+  --> scripts/record_hero_cast.sh:70:14
+   |
+68 |         echo "Generated: $(date)"
+69 |         echo "Environment: PYTHONPATH=src FINROOT_LLM_PROVIDER=mock"
+70 |         echo ""
+   |              ^^
+71 |
+72 |         for q in "${QUERIES[@]}"; do
+   |
+
+invalid-syntax: Expected `}`, found newline
+  --> scripts/record_hero_cast.sh:70:16
+   |
+68 |         echo "Generated: $(date)"
+69 |         echo "Environment: PYTHONPATH=src FINROOT_LLM_PROVIDER=mock"
+70 |         echo ""
+   |                ^
+71 |
+72 |         for q in "${QUERIES[@]}"; do
+   |
+
+invalid-syntax: Unexpected indentation
+  --> scripts/record_hero_cast.sh:72:1
+   |
+70 |         echo ""
+71 |
+72 |         for q in "${QUERIES[@]}"; do
+   | ^^^^^^^^
+73 |             echo "======================================================================"
+74 |             echo "COMMAND: python3 -m interface.cli --mock \"${q}\""
+   |
+
+invalid-syntax: Expected `:`, found `;`
+  --> scripts/record_hero_cast.sh:72:33
+   |
+70 |         echo ""
+71 |
+72 |         for q in "${QUERIES[@]}"; do
+   |                                 ^
+73 |             echo "======================================================================"
+74 |             echo "COMMAND: python3 -m interface.cli --mock \"${q}\""
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts/record_hero_cast.sh:72:33
+   |
+70 |         echo ""
+71 |
+72 |         for q in "${QUERIES[@]}"; do
+   |                                 ^
+73 |             echo "======================================================================"
+74 |             echo "COMMAND: python3 -m interface.cli --mock \"${q}\""
+   |
+
+invalid-syntax: Unexpected indentation
+  --> scripts/record_hero_cast.sh:73:1
+   |
+72 |         for q in "${QUERIES[@]}"; do
+73 |             echo "======================================================================"
+   | ^^^^^^^^^^^^
+74 |             echo "COMMAND: python3 -m interface.cli --mock \"${q}\""
+75 |             echo "======================================================================"
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:73:18
+   |
+72 |         for q in "${QUERIES[@]}"; do
+73 |             echo "======================================================================"
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+74 |             echo "COMMAND: python3 -m interface.cli --mock \"${q}\""
+75 |             echo "======================================================================"
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:74:18
+   |
+72 |         for q in "${QUERIES[@]}"; do
+73 |             echo "======================================================================"
+74 |             echo "COMMAND: python3 -m interface.cli --mock \"${q}\""
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+75 |             echo "======================================================================"
+76 |             echo ""
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:75:18
+   |
+73 |             echo "======================================================================"
+74 |             echo "COMMAND: python3 -m interface.cli --mock \"${q}\""
+75 |             echo "======================================================================"
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+76 |             echo ""
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:76:18
+   |
+74 |             echo "COMMAND: python3 -m interface.cli --mock \"${q}\""
+75 |             echo "======================================================================"
+76 |             echo ""
+   |                  ^^
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:77:24
+   |
+75 |             echo "======================================================================"
+76 |             echo ""
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+   |                        ^^^^^^^^^
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:77:45
+   |
+75 |             echo "======================================================================"
+76 |             echo ""
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+   |                                             ^^^^^^
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:77:52
+   |
+75 |             echo "======================================================================"
+76 |             echo ""
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+   |                                                    ^
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:77:54
+   |
+75 |             echo "======================================================================"
+76 |             echo ""
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+   |                                                      ^
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:78:27
+   |
+76 |             echo ""
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+   |                           ^^^^
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+80 |             echo ""
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:78:42
+   |
+76 |             echo ""
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+   |                                          ^^^^^^^^^^^
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+80 |             echo ""
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:78:64
+   |
+76 |             echo ""
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+   |                                                                ^^^^^^^^^^
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+80 |             echo ""
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:78:85
+   |
+76 |             echo ""
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+   |                                                                                     ^^^^^^^^^^^
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+80 |             echo ""
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:79:27
+   |
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+   |                           ^^^^^^^^^^^^^
+80 |             echo ""
+81 |             echo ""
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:79:51
+   |
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+   |                                                   ^^^^^^^^^^^^^^^^^^^^
+80 |             echo ""
+81 |             echo ""
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:79:73
+   |
+77 |             python3 -m interface.cli --mock "${q}" 2>&1 \
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+   |                                                                         ^
+80 |             echo ""
+81 |             echo ""
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:80:18
+   |
+78 |                 | grep -v "^/" | grep -v "LangChain" | grep -v "Pydantic" | grep -v "LangGraph" \
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+80 |             echo ""
+   |                  ^^
+81 |             echo ""
+82 |         done
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:81:18
+   |
+79 |                 | grep -v "UserWarning" | grep -v "DeprecationWarning" || true
+80 |             echo ""
+81 |             echo ""
+   |                  ^^
+82 |         done
+83 |     } > "${TXT_FILE}"
+   |
+
+invalid-syntax: Expected a statement
+  --> scripts/record_hero_cast.sh:82:9
+   |
+80 |             echo ""
+81 |             echo ""
+82 |         done
+   |         ^
+83 |     } > "${TXT_FILE}"
+   |
+
+invalid-syntax: Expected a statement
+  --> scripts/record_hero_cast.sh:83:5
+   |
+81 |             echo ""
+82 |         done
+83 |     } > "${TXT_FILE}"
+   |     ^
+84 |
+85 |     if [[ -f "${TXT_FILE}" ]] && [[ -s "${TXT_FILE}" ]]; then
+   |
+
+invalid-syntax: Expected a statement
+  --> scripts/record_hero_cast.sh:83:7
+   |
+81 |             echo ""
+82 |         done
+83 |     } > "${TXT_FILE}"
+   |       ^
+84 |
+85 |     if [[ -f "${TXT_FILE}" ]] && [[ -s "${TXT_FILE}" ]]; then
+   |
+
+invalid-syntax: Expected `,`, found string
+  --> scripts/record_hero_cast.sh:85:14
+   |
+83 |     } > "${TXT_FILE}"
+84 |
+85 |     if [[ -f "${TXT_FILE}" ]] && [[ -s "${TXT_FILE}" ]]; then
+   |              ^^^^^^^^^^^^^
+86 |         recorded=1
+87 |         echo "Transcript written to: ${TXT_FILE}"
+   |
+
+invalid-syntax: Expected an expression
+  --> scripts/record_hero_cast.sh:85:32
+   |
+83 |     } > "${TXT_FILE}"
+84 |
+85 |     if [[ -f "${TXT_FILE}" ]] && [[ -s "${TXT_FILE}" ]]; then
+   |                                ^
+86 |         recorded=1
+87 |         echo "Transcript written to: ${TXT_FILE}"
+   |
+
+invalid-syntax: Expected `,`, found string
+  --> scripts/record_hero_cast.sh:85:40
+   |
+83 |     } > "${TXT_FILE}"
+84 |
+85 |     if [[ -f "${TXT_FILE}" ]] && [[ -s "${TXT_FILE}" ]]; then
+   |                                        ^^^^^^^^^^^^^
+86 |         recorded=1
+87 |         echo "Transcript written to: ${TXT_FILE}"
+   |
+
+invalid-syntax: Expected `:`, found `;`
+  --> scripts/record_hero_cast.sh:85:56
+   |
+83 |     } > "${TXT_FILE}"
+84 |
+85 |     if [[ -f "${TXT_FILE}" ]] && [[ -s "${TXT_FILE}" ]]; then
+   |                                                        ^
+86 |         recorded=1
+87 |         echo "Transcript written to: ${TXT_FILE}"
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts/record_hero_cast.sh:85:56
+   |
+83 |     } > "${TXT_FILE}"
+84 |
+85 |     if [[ -f "${TXT_FILE}" ]] && [[ -s "${TXT_FILE}" ]]; then
+   |                                                        ^
+86 |         recorded=1
+87 |         echo "Transcript written to: ${TXT_FILE}"
+   |
+
+invalid-syntax: Unexpected indentation
+  --> scripts/record_hero_cast.sh:86:1
+   |
+85 |     if [[ -f "${TXT_FILE}" ]] && [[ -s "${TXT_FILE}" ]]; then
+86 |         recorded=1
+   | ^^^^^^^^
+87 |         echo "Transcript written to: ${TXT_FILE}"
+88 |     fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:87:14
+   |
+85 |     if [[ -f "${TXT_FILE}" ]] && [[ -s "${TXT_FILE}" ]]; then
+86 |         recorded=1
+87 |         echo "Transcript written to: ${TXT_FILE}"
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+88 |     fi
+89 | fi
+   |
+
+invalid-syntax: Expected a statement
+  --> scripts/record_hero_cast.sh:88:5
+   |
+86 |         recorded=1
+87 |         echo "Transcript written to: ${TXT_FILE}"
+88 |     fi
+   |     ^
+89 | fi
+   |
+
+invalid-syntax: Expected a statement
+  --> scripts/record_hero_cast.sh:89:1
+   |
+87 |         echo "Transcript written to: ${TXT_FILE}"
+88 |     fi
+89 | fi
+   | ^
+90 |
+91 | if [[ "${recorded}" -eq 0 ]]; then
+   |
+
+invalid-syntax: Expected `,`, found int
+  --> scripts/record_hero_cast.sh:91:25
+   |
+89 | fi
+90 |
+91 | if [[ "${recorded}" -eq 0 ]]; then
+   |                         ^
+92 |     echo "ERROR: No recording method succeeded."
+93 |     echo "Install asciinema: pip install asciinema"
+   |
+
+invalid-syntax: Expected `:`, found `;`
+  --> scripts/record_hero_cast.sh:91:29
+   |
+89 | fi
+90 |
+91 | if [[ "${recorded}" -eq 0 ]]; then
+   |                             ^
+92 |     echo "ERROR: No recording method succeeded."
+93 |     echo "Install asciinema: pip install asciinema"
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts/record_hero_cast.sh:91:29
+   |
+89 | fi
+90 |
+91 | if [[ "${recorded}" -eq 0 ]]; then
+   |                             ^
+92 |     echo "ERROR: No recording method succeeded."
+93 |     echo "Install asciinema: pip install asciinema"
+   |
+
+invalid-syntax: Unexpected indentation
+  --> scripts/record_hero_cast.sh:92:1
+   |
+91 | if [[ "${recorded}" -eq 0 ]]; then
+92 |     echo "ERROR: No recording method succeeded."
+   | ^^^^
+93 |     echo "Install asciinema: pip install asciinema"
+94 |     echo "Or ensure python3 -m interface.cli runs without error."
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:92:10
+   |
+91 | if [[ "${recorded}" -eq 0 ]]; then
+92 |     echo "ERROR: No recording method succeeded."
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+93 |     echo "Install asciinema: pip install asciinema"
+94 |     echo "Or ensure python3 -m interface.cli runs without error."
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:93:10
+   |
+91 | if [[ "${recorded}" -eq 0 ]]; then
+92 |     echo "ERROR: No recording method succeeded."
+93 |     echo "Install asciinema: pip install asciinema"
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+94 |     echo "Or ensure python3 -m interface.cli runs without error."
+95 |     exit 1
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:94:10
+   |
+92 |     echo "ERROR: No recording method succeeded."
+93 |     echo "Install asciinema: pip install asciinema"
+94 |     echo "Or ensure python3 -m interface.cli runs without error."
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+95 |     exit 1
+96 | fi
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:95:10
+   |
+93 |     echo "Install asciinema: pip install asciinema"
+94 |     echo "Or ensure python3 -m interface.cli runs without error."
+95 |     exit 1
+   |          ^
+96 | fi
+   |
+
+invalid-syntax: Expected a statement
+  --> scripts/record_hero_cast.sh:96:1
+   |
+94 |     echo "Or ensure python3 -m interface.cli runs without error."
+95 |     exit 1
+96 | fi
+   | ^
+97 |
+98 | echo "Hero demo recording complete."
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> scripts/record_hero_cast.sh:98:6
+   |
+96 | fi
+97 |
+98 | echo "Hero demo recording complete."
+   |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+
+Found 148 errors.
+warning: No Python files found under the given path(s)
+All checks passed!
+[0m
+[0m$ [0mruff check scripts/record_hero_cast.sh 2>&1 | tail -5
+98 | echo "Hero demo recording complete."
+   |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+
+Found 148 errors.
+[0m
+[0m$ [0mruff check src/ 2>&1 | tail -5
+All checks passed!
+[0m
+[0m✱ [0mGlob "docs/waves/*gotchas*"[90m 5 matches[0m
+[0m
+[0m$ [0mmkdir -p work/reports/wave-12-final
+(no output)
+[0m
+[0m← [0mWrite work/reports/wave-12-final/03-readme-hero-cast.report.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Explore existing scripts, CLI, and run behavior in Mock mode
+[✓] Create scripts/record_hero_cast.sh
+[✓] Create docs/demo/hero.md
+[✓] Edit README.md — add hero embed block near top
+[✓] Run ruff check on all changed files
+[✓] Run acceptance commands and capture output
+[✓] Write report to work/reports/wave-12-final/03-readme-hero-cast.report.md
+[0m
+Done. All acceptance commands pass, all files in the Writes set are created/modified, the report is written.
+
+**What was built:**
+- `scripts/record_hero_cast.sh` — bash script recording 3 CLI showcase queries (asciinema preferred, txt fallback)
+- `docs/demo/hero.md` — hero demo doc with 1-line captions per query
+- `README.md` — hero embed block at lines 20–28 using `03_trap_refusal.png` screenshot
+
+**Key decisions:** No asciinema available → script used txt fallback loud with install hint (FM-11 compliant). Linked README hero image to `docs/demo/hero.md`.
+=== opencode exited rc=0 @ Sat Jun 20 20:27:34 IST 2026 ===

@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from tempfile import mkdtemp
 
 import pytest
 
@@ -22,11 +21,9 @@ from finroot.tools.profile import (
     ProfileReadInput,
     ProfileWriteInput,
     UserProfileTool,
-    _save_profiles_json,
 )
 from finroot.tools.watchlist import (
     AlertCheckInput,
-    AlertCheckOutput,
     WatchlistAlertTool,
     WatchlistEntry,
     add_to_watchlist,
@@ -34,7 +31,6 @@ from finroot.tools.watchlist import (
     remove_from_watchlist,
     save_watchlist,
 )
-
 
 # ---------------------------------------------------------------------------
 # Fixtures
