@@ -1,0 +1,36 @@
+# Recipe: new-wave — the standard wave lifecycle, parameterized.
+name: new-wave
+description: Plan → dispatch → review → merge → ship one wave end-to-end.
+params:
+  wave: "wave-N"            # e.g. wave-2
+steps:
+  - id: plan
+    command: /plan
+    args: "${wave}"
+    output: .specify/specs/${wave}/{spec,plan,tasks}.md
+  - id: dispatch
+    command: /dispatch
+    args: "${wave}"
+    depends_on: [plan]
+    gate: "disjoint write-sets verified (FM-13)"
+    output: work/${wave}/0X-*.md
+  - id: workers
+    actor: tier-2-agents
+    note: "human opens parallel windows; pastes each task + WORKER_PROMPT.md"
+    output: work/reports/${wave}/0X-*.report.md
+  - id: review
+    command: /review
+    args: "${wave}"
+    depends_on: [workers]
+    gate: "orchestrator re-ran acceptance, output captured (FM-09)"
+    self_heal: { on_acceptance_fail: revise_brief, on_flaky: quarantine_and_fix }
+  - id: merge
+    command: /merge
+    depends_on: [review]
+    gate: "ruff + pytest green"
+  - id: ship
+    command: /ship
+    args: "${wave}"
+    depends_on: [merge]
+    gate: "spec acceptance passes; EXECUTION updated with commit hash; HANDOFF rewritten"
+state_file: orchestrator/memory/states/${wave}-state.json

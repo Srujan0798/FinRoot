@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agentskills.io/schemas/manifest.v1.json",
+  "_comment": "Desired skill versions workers may pull from agentskills.io / their own skill stores. These are WORKER skills (Tier-2), separate from orchestrator/skills/*. Pin for reproducibility.",
+  "skills": {
+    "tdd": "^1.2.0",
+    "systematic-debugging": "^1.0.0",
+    "code-review": "^2.0.0",
+    "langchain-patterns": "^1.0.0",
+    "langgraph-agents": "^1.0.0",
+    "pydantic-v2": "^2.0.0",
+    "pytest-fixtures": "^1.0.0",
+    "streamlit-ui": "^1.0.0"
+  }
+}

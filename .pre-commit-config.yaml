@@ -1,0 +1,36 @@
+# Pre-commit hooks — quality + safety gates before every commit.
+# Install: pip install pre-commit && pre-commit install
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.5.7
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: [--maxkb=2000]
+      - id: detect-private-key
+
+  # FinRoot custom gates (FM-07 secrets, conventional commits guidance)
+  - repo: local
+    hooks:
+      - id: block-secrets
+        name: block-secrets (FM-07)
+        entry: bash orchestrator/hooks/block-secrets.sh
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: execution-no-drift
+        name: EXECUTION.md no-drift (FM-01)
+        entry: bash orchestrator/scripts/validate_execution.sh
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]

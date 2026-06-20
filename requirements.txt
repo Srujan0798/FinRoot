@@ -1,0 +1,40 @@
+# FinRoot dependencies. Core is light; heavy/optional providers are extras (lazy-imported).
+# Install: pip install -r requirements.txt   (Mock + offline run need only the core block)
+
+# --- core (always) ---
+langchain>=0.3,<0.4
+langgraph>=0.2,<0.3
+langchain-core>=0.3,<0.4
+pydantic>=2.7,<3
+pydantic-settings>=2.3,<3
+typer>=0.12,<1
+rich>=13
+numpy>=1.26
+scipy>=1.13
+python-dateutil>=2.9
+
+# --- UI ---
+streamlit>=1.36
+
+# --- memory / data (graceful-degrade if absent) ---
+chromadb>=0.5            # semantic memory; JSON fallback if unavailable
+# sqlite3 is stdlib
+
+# --- market / finance data (keyless defaults) ---
+yfinance>=0.2.40
+requests>=2.32
+
+# --- optional LLM providers (lazy-imported; not needed for Mock/Ollama-only) ---
+langchain-community>=0.3
+# groq>=0.9              # uncomment for Groq
+# openai>=1.40           # uncomment for OpenAI
+# ollama>=0.3            # local sovereign default (or use the HTTP API directly)
+
+# --- optional NLP (sentiment) ---
+# transformers>=4.42     # FinBERT sentiment (heavy; optional)
+# torch>=2.3
+
+# --- dev / test / quality ---
+pytest>=8.2
+pytest-cov>=5
+ruff>=0.5

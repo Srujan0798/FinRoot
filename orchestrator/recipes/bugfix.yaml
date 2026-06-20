@@ -1,0 +1,29 @@
+# Recipe: bugfix — reproduce → failing test → fix → verify → merge, with learning capture.
+name: bugfix
+description: Disciplined bug resolution that also strengthens the guardrail library.
+params:
+  bug: "$INPUT"
+steps:
+  - id: reproduce
+    skill: diagnose
+    input: { bug_report: "${bug}" }
+    output: reproduction + exact failing command/output (Mock mode, seeded)
+  - id: write_failing_test
+    skill: test-driven-development
+    depends_on: [reproduce]
+    note: "worker writes a test that fails for the right reason"
+  - id: fix
+    actor: tier-2-agent
+    depends_on: [write_failing_test]
+    gate: "only the bug's files in the writes set (FM-13)"
+  - id: verify
+    agent: verifier
+    depends_on: [fix]
+    gate: "test now passes; suite still green; numbers cited; no silent failure (FM-11)"
+  - id: capture
+    depends_on: [verify]
+    note: "if recurring class → HALL_OF_SHAME entry + prevention rule + eval task (§6.7)"
+  - id: merge
+    command: /merge
+    depends_on: [capture]
+state_file: orchestrator/memory/states/bugfix-state.json

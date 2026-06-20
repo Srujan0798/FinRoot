@@ -1,0 +1,48 @@
+# --- secrets & env (FM-07) ---
+.env
+.env.*
+!.env.example
+*.key
+secrets/
+
+# --- python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.python-version
+
+# --- test / lint caches ---
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# --- runtime data (generated) ---
+logs/*.jsonl
+logs/*.log
+data/chroma/
+data/chroma_*/
+models/*.bin
+models/*.safetensors
+results/*.json
+!results/.gitkeep
+
+# --- eval artifacts (regenerated) ---
+evals/trials/*
+evals/transcripts/*
+evals/outcomes/*
+evals/reports/*
+!evals/**/.gitkeep
+
+# --- os / ide ---
+.DS_Store
+.idea/
+.vscode/
+*.swp
+data/*.db

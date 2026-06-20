@@ -1,0 +1,10 @@
+# Prometheus scrape config (T2). Active only if the optional FastAPI /metrics surface is enabled.
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'finroot-api'
+    static_configs:
+      - targets: ['finroot:8000']
+    metrics_path: '/metrics'

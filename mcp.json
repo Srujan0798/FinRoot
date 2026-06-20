@@ -1,0 +1,22 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
+  "_comment": "MCP server whitelist for FinRoot. mcp-security-gate.sh allows only servers listed here. All are optional; the build runs without any MCP server (sovereign/offline).",
+  "mcpServers": {
+    "context7": {
+      "_use": "fetch current LangChain/LangGraph/Pydantic docs during planning",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "tavily": {
+      "_use": "optional web/news research for the News Interpreter (key-gated; Mock works without it)",
+      "command": "npx",
+      "args": ["-y", "tavily-mcp"],
+      "env": { "TAVILY_API_KEY": "${TAVILY_API_KEY}" }
+    },
+    "fetch": {
+      "_use": "optional URL fetch for document/news ingestion",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"]
+    }
+  }
+}

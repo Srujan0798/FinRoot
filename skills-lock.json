@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agentskills.io/schemas/lock.v1.json",
+  "_comment": "Lockfile — resolved skill versions + checksums for reproducible worker setups. Regenerate when skills.manifest.json changes. Placeholders below are filled by the skill resolver on first lock.",
+  "generated": "2026-06-19",
+  "skills": [
+    { "name": "tdd", "version": "1.2.4", "source": "agentskills.io/skills/tdd", "sha256": "PENDING_RESOLVE", "files": ["SKILL.md"] },
+    { "name": "systematic-debugging", "version": "1.0.0", "source": "agentskills.io/skills/systematic-debugging", "sha256": "PENDING_RESOLVE", "files": ["SKILL.md"] },
+    { "name": "code-review", "version": "2.0.1", "source": "agentskills.io/skills/code-review", "sha256": "PENDING_RESOLVE", "files": ["SKILL.md"] },
+    { "name": "langchain-patterns", "version": "1.0.0", "source": "agentskills.io/skills/langchain-patterns", "sha256": "PENDING_RESOLVE", "files": ["SKILL.md"] },
+    { "name": "langgraph-agents", "version": "1.0.0", "source": "agentskills.io/skills/langgraph-agents", "sha256": "PENDING_RESOLVE", "files": ["SKILL.md"] },
+    { "name": "pydantic-v2", "version": "2.0.0", "source": "agentskills.io/skills/pydantic-v2", "sha256": "PENDING_RESOLVE", "files": ["SKILL.md"] },
+    { "name": "pytest-fixtures", "version": "1.0.0", "source": "agentskills.io/skills/pytest-fixtures", "sha256": "PENDING_RESOLVE", "files": ["SKILL.md"] },
+    { "name": "streamlit-ui", "version": "1.0.0", "source": "agentskills.io/skills/streamlit-ui", "sha256": "PENDING_RESOLVE", "files": ["SKILL.md"] }
+  ]
+}

@@ -1,0 +1,14 @@
+# Dev overrides — hot reload + source mounted. Run:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+services:
+  finroot:
+    environment:
+      FINROOT_DEBUG: "true"
+    volumes:
+      - ./src:/app/src          # hot reload
+      - ./config:/app/config
+      - ./scripts:/app/scripts
+      - ./evals:/app/evals
+      - ./tests:/app/tests
+    command: ["streamlit", "run", "src/interface/ui/app.py",
+              "--server.port=8501", "--server.address=0.0.0.0", "--server.runOnSave=true"]
