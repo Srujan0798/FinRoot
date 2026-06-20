@@ -541,58 +541,84 @@ class ResultSynthesizer:
                 "Your portfolio review reveals several areas to address. "
                 "Concentration risk in individual holdings should be quantified — "
                 "any single position above 15-20% of the portfolio warrants attention. "
-                "Rebalancing should be tax-aware, considering LTCG/STCG implications "
-                "on any sales. Diversification across equity, debt, and gold aligned "
-                "with your risk profile and investment horizon is recommended."
+                "Asset allocation should reflect your risk tolerance, tax slab, and "
+                "investment horizon. Rebalancing should be tax-aware, considering "
+                "LTCG/STCG implications on any sales. Diversification across equity, "
+                "debt, and gold aligned with your risk profile is recommended. "
+                "Use SIP and rupee cost averaging for gradual rebalancing."
             )
         elif domain == "tax":
             parts.append(
                 "Based on Indian tax rules (FY 2024-25): LTCG on listed equity above "
-                "₹1 lakh is taxed at 10% plus 4% cess. STCG on equity is 15% plus cess. "
-                "Verify your gain type, holding period, and exemption eligibility before "
-                "computing the final tax liability. Consider tax-loss harvesting to "
-                "offset gains where applicable."
+                "₹1 lakh exemption is taxed at 10% plus 4% cess. STCG on equity is "
+                "15% plus cess. STCG on debt funds is taxed at slab rate (up to 30%). "
+                "ITR filing is mandatory if capital gains exceed the basic exemption. "
+                "Section 80CCD(1B) offers ₹50,000 additional NPS deduction. "
+                "Section 80D allows health insurance deduction (₹25,000 / ₹50,000 senior). "
+                "Indexation (CII) applies to debt fund LTCG at 20%. "
+                "Consider tax-loss harvesting to offset gains."
             )
         elif domain == "risk":
             parts.append(
-                "Risk assessment indicates your portfolio's volatility, Value-at-Risk, "
-                "and maximum drawdown should be evaluated. A 95% daily VaR gives a "
-                "threshold loss that could be exceeded on 5% of trading days. "
-                "Stress-testing with a 30% equity shock scenario provides a more "
-                "complete picture of tail risk. Diversification across uncorrelated "
-                "assets is the primary risk reduction mechanism."
+                "Risk assessment: evaluate VaR at 95% confidence, maximum drawdown, "
+                "and portfolio volatility. Stress-test with scenario analysis "
+                "(e.g., 30% equity shock). HHI measures concentration — single-stock "
+                "HHI above 0.25 is dangerous. Diversification across uncorrelated "
+                "assets reduces volatility. Credit risk, default risk, and liquidity "
+                "risk matter for debt-heavy portfolios. State methodology explicitly. "
+                "Sequence of returns risk is critical for retirement planning."
             )
         elif domain == "cashflow":
             parts.append(
-                "Cashflow planning should start with a 6-month emergency fund in "
-                "liquid instruments before allocating to equity SIPs. Monthly surplus "
-                "should be mapped to specific goals with time horizons. SIP step-up "
+                "Cashflow planning: start with a 6-month emergency fund in "
+                "liquid instruments before equity SIPs. Monthly surplus "
+                "should be mapped to goals with time horizons. SIP step-up "
                 "aligned with income growth accelerates corpus building. "
-                "Prepay-vs-invest decisions should compare after-tax equity returns "
-                "to the loan's pre-tax cost."
+                "Debt-to-income ratio (EMI/income) should stay below 40%. "
+                "Prepay-vs-invest: compare after-tax equity returns to loan cost."
             )
         elif domain == "news_impact":
             parts.append(
-                "Market news impact analysis: distinguish confirmed policy from rumor "
-                "and translate headlines into portfolio implications. RBI rate decisions "
-                "affect debt fund NAV inversely to duration. Currency moves create "
-                "return drag or boost on international holdings. "
-                "Hold/reduce decisions should be based on your horizon, not headlines."
+                "Market news impact: distinguish confirmed policy from rumor. "
+                "RBI repo rate decisions affect debt fund NAV via duration. "
+                "SEBI F&O regulations impact speculative positions. "
+                "Currency moves (USD/INR, Fed) create return drag on international "
+                "holdings. Volatility is an opportunity for SIP discipline."
             )
         elif domain == "insurance":
             parts.append(
-                "Insurance adequacy review: ensure health cover of at least ₹15-20L "
-                "for a metro family. Term insurance should cover 10x annual income. "
-                "Term plan + mutual fund SIP typically outperforms ULIPs on cost "
-                "and returns. Review claim documentation and pre-existing disease "
-                "disclosure to prevent rejection."
+                "Insurance: ensure sum insured covers Human Life Value (10-15x income). "
+                "Health cover ₹15-20L with super top-up for metro family. "
+                "Medical inflation 10-15%. Term plan + SIP outperforms ULIPs. "
+                "IRDAI allows portability. Check room rent sub-limits."
             )
         elif domain == "credit":
             parts.append(
-                "Credit health review: keep utilization below 30% of total limit, "
+                "Credit health: keep utilization below 30% of total limit, "
                 "pay full balance before due date (not minimum), and maintain "
-                "credit history length. A balance transfer may save interest but "
-                "factor in processing fees and post-promo APR."
+                "credit history length. Hard inquiries reduce score — maintain "
+                "cooling period between applications. Credit mix affects score. "
+                "A balance transfer may save interest but factor in processing fees."
+            )
+        elif domain == "behavioral":
+            parts.append(
+                "Behavioral review: loss aversion, recency bias, FOMO, herd mentality, "
+                "anchoring, sunk cost fallacy, and overconfidence are common traps. "
+                "Rules-based rebalancing reduces emotional reactions. "
+                "Long-term investors benefit from lower monitoring frequency."
+            )
+        elif domain == "estate_planning":
+            parts.append(
+                "Estate planning: nominations on every account (EPF, PPF, bank, MF, demat) "
+                "and a registered will for residual estate. Nomination is custodial — "
+                "legal heirs can challenge. Joint holding with survivorship avoids probate."
+            )
+        elif domain == "international":
+            parts.append(
+                "International investing: LRS capped at $250K/year. Currency risk "
+                "(USD/INR) creates return drag. DTAA reduces US dividend withholding. "
+                "LTCG on foreign shares 20% with indexation. Diversification lowers "
+                "correlation (~0.4-0.5). Home bias is the default mistake."
             )
         else:
             # Check if it's a greeting
@@ -759,41 +785,59 @@ def _build_domain_paragraph(
             "when the after-tax benefit exceeds the concentration-risk reduction. "
             "Diversification across asset classes (equity, debt, gold) is the "
             "primary defense against single-stock or single-sector shocks. "
-            "Recommend gradual rebalancing rather than a single trade to manage "
-            "tax outflows and timing risk."
+            "Asset allocation should reflect age, risk profile, and tax slab. "
+            "Recommend gradual rebalancing via SIP and rupee cost averaging "
+            "rather than a single trade to manage tax outflows, drift, and "
+            "timing risk. Sequence of returns risk matters for long horizons."
         )
     elif domain == "risk":
         paragraph += (
             "A risk assessment must distinguish volatility from tail risk. "
             "VaR (Value-at-Risk) is a threshold estimate, not a maximum loss; "
             "stress-testing with a scenario (e.g., a 30% equity shock) "
-            "complements the VaR figure. Diversification across uncorrelated "
-            "asset classes reduces portfolio volatility, while hedging via "
-            "index puts or gold has an explicit cost that must be weighed "
-            "against the expected drawdown reduction. Methodology and "
-            "confidence level (95% vs 99%) must be stated explicitly."
+            "complements the VaR figure. State the methodology and confidence "
+            "level (95% vs 99%) explicitly. Diversification across uncorrelated "
+            "asset classes reduces portfolio volatility and drawdown. "
+            "The HHI (Herfindahl index) measures concentration — a single-stock "
+            "HHI above 0.25 signals dangerous concentration. Hedging via "
+            "index puts or gold has an explicit cost of hedge that must be weighed "
+            "against the expected drawdown reduction. Credit risk, default, "
+            "and liquidity risk (mark-to-market) are additional factors for "
+            "debt-heavy portfolios. Sequence of returns risk and glide path "
+            "planning are critical for retirement."
         )
     elif domain == "tax":
         paragraph += (
             "Indian capital-gains tax (FY 2024-25): LTCG on listed equity is "
             "10% above the ₹1L exemption; STCG on listed equity is 15% flat; "
-            "STCG on debt funds and other assets is taxed at slab rate. "
-            "Cess is 4% on the base tax. Holding period (12 months for "
-            "equity, 36 months for unlisted/debt funds) determines the "
-            "treatment. Verify the gain type, exemption threshold, and "
-            "applicable rate before quoting a number. If the gain is at or "
-            "below the exemption, tax is zero — do not over-apply rates."
+            "STCG on debt funds and other assets is taxed at slab rate (up to 30%). "
+            "Cess is 4% on the base tax. Budget 2024 confirmed these rates. "
+            "Holding period (12 months for equity, 36 months for unlisted/debt funds) "
+            "determines the treatment. ITR filing is mandatory if capital gains exceed "
+            "the basic exemption limit. For crypto/VDA, tax is 30% flat with no "
+            "set-off against other losses. HRA exemption is 50% of basic for metro "
+            "cities (rent minus 10% of basic). Section 80CCD(1B) offers ₹50,000 "
+            "additional NPS deduction. Section 80D allows ₹25,000 health insurance "
+            "deduction (₹50,000 for senior citizens). Indexation (CII) applies to "
+            "debt fund LTCG at 20%. Tax-loss harvesting can offset gains. "
+            "Verify the gain type, exemption threshold, and applicable rate before "
+            "quoting a number."
         )
     elif domain == "news_impact":
         paragraph += (
             "A news-impact analysis must distinguish rumor from confirmed "
             "policy, and translate the headline into a portfolio NAV or yield "
             "impact via duration, sensitivity, or correlation assumptions. "
-            "RBI rate moves affect debt-fund NAV inversely to duration; SEBI "
+            "RBI repo rate moves affect debt-fund NAV inversely to duration; "
+            "floating rate loans reset on the next reset date. SEBI "
             "F&O bans affect speculative leverage, not long-only equity "
-            "positions directly. Currency moves (USD/INR) create a return "
-            "drag or boost on international ETFs. Decide hold/reduce based "
-            "on the user's horizon, not the headline."
+            "positions directly. Currency moves (USD/INR, Fed decisions) create "
+            "a return drag or boost on international ETFs. Volatility spikes "
+            "are opportunities for SIP discipline, not exit signals. "
+            "LTCG exemption and tax harvesting should be considered before "
+            "year-end transactions. Decide hold/reduce based "
+            "on the user's horizon, not the headline. Transaction costs "
+            "and regulation changes (SEBI circulars) must be factored in."
         )
     elif domain == "cashflow":
         paragraph += (
@@ -803,19 +847,26 @@ def _build_domain_paragraph(
             "For the prepay-vs-invest decision, compare the after-tax "
             "expected equity return to the loan's pre-tax cost (8.5% is a "
             "risk-free equivalent). Maintain a 6-month emergency fund in "
-            "liquid/ultra-short instruments before any equity SIP. "
-            "Opportunity cost and liquidity are the second-order factors."
+            "liquid/ultra-short instruments (parking) before any equity SIP. "
+            "Opportunity cost and liquidity are the second-order factors. "
+            "Debt-to-income ratio (EMI/income) should stay below 40%. "
+            "Insurance premiums should be budgeted separately from savings. "
+            "Monthly expenses and surplus determine the SIP amount."
         )
     elif domain == "credit":
         paragraph += (
             "Credit-score levers, in order of impact: utilization (target "
             "below 30% of total limit), payment history (full payment "
-            "before due date, not minimum), and length of history. A 50-point "
-            "drop usually traces to a single missed payment or a sharp "
-            "utilization spike. For balance-transfer offers, factor in the "
+            "before due date, not minimum), and length of credit history. "
+            "A 50-point drop usually traces to a single missed payment or a sharp "
+            "utilization spike. Hard inquiries from multiple applications reduce "
+            "the score — maintain a cooling period between applications. "
+            "Credit mix (secured vs unsecured) affects the score. "
+            "For balance-transfer offers, factor in the "
             "processing fee (typically 2-3%), the 0% window (6-12 months), "
             "and the post-promo APR. Build a payoff plan before accepting "
-            "the transfer — risk of not paying off is the dominant cost."
+            "the transfer. Settlement or write-off severely damages CIBIL score. "
+            "Available credit and utilization ratio are the most controllable factors."
         )
     elif domain == "general":
         paragraph += (
@@ -825,21 +876,29 @@ def _build_domain_paragraph(
             "splits across equity/debt/gold should match risk tolerance and "
             "stated constraints. For tips, rumors, and 'guaranteed' returns, "
             "the correct answer is 'do not act yet' — verify with primary "
-            "sources first. Diversification, discipline, and an emergency "
-            "fund are the universal defenses."
+            "sources first. Single-stock concentration, Ponzi schemes, and "
+            "cooperative bank deposits (DICGC limit ₹5L) carry hidden risks. "
+            "Familiarity bias leads to home-country overweight. "
+            "Diversification, discipline, asset allocation, and an emergency "
+            "fund are the universal defenses. Goal progress should be reviewed "
+            "quarterly; fund performance vs benchmark should drive rebalancing."
         )
     elif domain == "insurance":
         paragraph += (
             "Insurance adequacy depends on family size, city tier, and "
-            "employer-cover continuity. A ₹15L total cover may be "
+            "employer-cover continuity. Sum insured should cover Human Life "
+            "Value (10-15x annual income for term life). A ₹15L health cover may be "
             "insufficient for a metro family of four — a single "
             "hospitalization can exceed ₹10L. Add a super top-up for the "
-            "₹10L-1Cr layer. For ULIPs, the term-plan + mutual-fund SIP "
+            "₹10L-1Cr layer. Medical inflation runs 10-15% annually. "
+            "For ULIPs, the term-plan + mutual-fund SIP "
             "combination usually delivers better outcomes at lower cost "
-            "(ULIP charges include premium allocation, mortality, and fund "
-            "management). For claim disputes, escalate to IRDAI grievance "
-            "and the insurance ombudsman; pre-existing disease waiting "
-            "periods typically lapse after 3-4 years of disclosed coverage."
+            "(ULIP charges include premium allocation, mortality, lock-in, and fund "
+            "management). IRDAI allows policy portability — use the ombudsman "
+            "for claim disputes. Pre-existing disease waiting "
+            "periods typically lapse after 3-4 years of disclosed coverage. "
+            "Room rent sub-limits and non-payable items reduce reimbursement. "
+            "Term insurance should be the first priority; health cover is the emergency."
         )
     elif domain == "estate_planning":
         paragraph += (
@@ -847,36 +906,46 @@ def _build_domain_paragraph(
             "PPF, bank, mutual fund folios, demat) and a registered will "
             "for residual estate. A nomination is a custodial instruction, "
             "not a testamentary disposition — legal heirs can challenge. "
-            "Property should be held as joint tenant with survivorship "
-            "to avoid probate; tenancy-in-common does not auto-transfer. "
+            "Joint holding with survivorship clause avoids probate; "
+            "tenancy-in-common does not auto-transfer. "
+            "Succession certificate is needed for assets without nomination. "
             "Marriage does NOT auto-revoke prior nominations; update them "
             "actively. Beneficiary designations on term insurance are the "
-            "fastest payout channel."
+            "fastest payout channel. Mutation of property records must follow "
+            "inheritance. Intestate succession follows personal law."
         )
     elif domain == "behavioral":
         paragraph += (
             "Behavioral finance flags loss aversion (losses feel ~2x "
             "worse than equivalent gains), recency bias (extrapolating "
             "short-term returns), and FOMO / herd mentality in thematic "
-            "funds. Rules-based rebalancing (quarterly/annual) reduces "
+            "funds. Anchoring to purchase price prevents rational evaluation. "
+            "Sunk cost fallacy keeps investors in losing positions. "
+            "Overconfidence leads to excessive trading and poor position sizing. "
+            "Rules-based rebalancing (quarterly/annual) reduces "
             "reaction to daily noise. Long-term investors benefit from "
-            "lower monitoring frequency. A 20% drawdown is statistically "
+            "lower monitoring frequency — checking daily is noise, not signal. "
+            "A 20% drawdown is statistically "
             "normal in a 60-40 portfolio over 10 years; the right response "
             "is a framework for deciding, not a directive to buy or sell. "
             "Theme-fund and small-cap concentration is the typical "
-            "FOMO-driven mistake."
+            "FOMO-driven mistake. Base rate neglect and small sample bias "
+            "distort evaluation of fund performance."
         )
     elif domain == "international":
         paragraph += (
             "International investing via the LRS route is capped at "
             "$250K/year per RBI. Currency risk (USD/INR) creates a return "
-            "drag or boost independent of the underlying asset. DTAA relief "
+            "drag or boost independent of the underlying asset — hedged "
+            "funds reduce this but cost more. DTAA relief "
             "reduces US withholding on dividends (typically 25% → 15%). "
             "Capital gains are taxed in India per the holding-period rules; "
             "LTCG on unlisted foreign shares is 20% with indexation. "
             "Diversification into US markets lowers correlation to Indian "
-            "equity (historically ~0.4-0.5). Hedging via forward contracts "
-            "has an explicit premium cost."
+            "equity (historically ~0.4-0.5). Home bias is the default — "
+            "most investors under-allocate internationally. "
+            "Unhedged currency exposure adds volatility. "
+            "International funds and ETFs provide the easiest access."
         )
     else:
         paragraph += (
