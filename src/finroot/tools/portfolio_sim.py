@@ -282,7 +282,7 @@ class PortfolioSimulatorTool(BaseTool[SimInput, SimOutput]):
         the prior version's behaviour and is conservative for diversification
         since it over-states volatility).
         """
-        sub_values = [w for w in weights]
+        sub_values = list(weights)
         value = sum(sub_values)
         days_per_month = 21  # ~21 trading days per month
         for day in range(1, n_days + 1):

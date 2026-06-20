@@ -6,12 +6,12 @@
 ## Snapshot
 - **Project:** FinRoot — Sovereign, Reasoning-First AI Financial Agent
 - **Tier:** T2 (Production) · **Archetype:** hackathon/competition + research-ml emphasis
-- **Phase:** ALL 8 WAVES SHIPPED — submission ready
-- **Latest commit:** `ef1626f` (785 tests, ruff clean, FOUNDATION OK)
-- **Orchestrator:** Claude Code / Kimi (interchangeable)
+- **Phase:** ALL 12 WAVES SHIPPED — submission ready for SCALE ML Club PS-1
+- **Latest commit:** `ee438ae` (1002 tests passing / 9 skipped, ruff clean, FOUNDATION OK)
+- **Orchestrator:** Claude Code / Kimi / Codex (interchangeable)
 - **Workers:** Srujan's agent swarm (OpenCode CLI windows / external agents)
 
-## What exists now — all 8 waves shipped and verified
+## What exists now — all 12 waves shipped and verified
 - `src/finroot/llm/` — Mock/Ollama/Groq/OpenAI provider abstraction (20 tests)
 - `src/finroot/schemas/` — Pydantic v2: enums, finance, recommendation, audit, AgentState (50 tests)
 - `src/finroot/audit/` — Hash-chained JSONL audit trail: append/verify_chain/replay (24 tests)
@@ -26,7 +26,7 @@
 - `src/finroot/evaluation/` — FRB harness, baselines (RAG + SingleAgent), report generator
 - `src/interface/` — answer() entry, Typer CLI, Streamlit dark UI (4 tabs: Chat, Trace, Twin, Harness)
 - `evals/graders/` — deterministic code-based + LLM-judge graders + human review template
-- `data/gold/frb_questions.json` — 32-question FRB bank (7 domains, class-balanced, adversarial traps)
+- `data/gold/frb_questions.json` — 83-question FRB bank (11 domains, class-balanced, adversarial traps)
 - `data/tax_rules.json` — Indian FY 2024-25 tax rules (deterministic)
 - `data/samples/` — 3 DigitalTwin profiles + conversation fixture
 - `scripts/smoke_test.py` — End-to-end smoke test → `FOUNDATION OK`
@@ -37,18 +37,29 @@
 - `docs/decisions/` — 6 ADRs (MADR format)
 - `docs/business/` — 7-min demo script, presentation outline, executive summary
 - `docs/architecture/architecture.mmd` — Mermaid architecture diagram
-- `results/metrics.json` — THE measured proof (FinRoot 0.686 vs RAG 0.090 = 7.6× lift)
+- `results/metrics.json` — THE measured proof (FinRoot 0.778 vs RAG 0.341 = +128.5% composite lift)
+- `src/interface/api/` — FastAPI surface (`/answer`, `/health`) for headless eval/integration
+- `scripts/capture_screenshots.py` — Playwright PNG capture of 4 Streamlit tabs + harness
+- `docs/demo/screenshots/` — 5 PNGs (chat, trace, trap refusal, twin, harness)
+- `docs/architecture/architecture.png` — Rasterized architecture diagram
+- `docs/business/slides.md` — 6-slide speaker-ready deck
+- `docs/business/demo_video_shotlist.md` — Scene-by-scene recording guide
+- `docs/SUBMISSION_MESSAGE.md` — ≤250-word paste-ready message for organizers
+- `docs/JUDGE_QUICKSTART.md` — 30-second zero-key judge run
 - `.github/workflows/` — CI (6 workflows)
-- **785 unit tests passing, ruff clean across all src/**
+- **1002 unit + integration tests passing** (9 skipped), ruff clean across all src/
 
-## FRB Results (measured at `as_of_sha = ef1626f`)
-| System | pass@1 | mean score | Lift vs RAG |
+## FRB Results (measured at `as_of_sha = ee438ae`)
+| System | pass@1 | mean score | Lift vs RAG (mean) |
 |---|---:|---:|---:|
-| Baseline RAG | 0.000 | 0.090 | — |
-| Single-agent | 0.031 | 0.209 | +2.3× |
-| **FinRoot (full)** | **0.344** | **0.686** | **+7.6× (+662%)** |
+| Baseline RAG | 0.289 | 0.341 | — |
+| Single-agent | 0.181 | 0.327 | −4.1% |
+| **FinRoot (full)** | **0.193** | **0.778** | **+128.5% (composite)** |
 
-Per-domain: portfolio 0.73, tax 0.71, general 0.76, risk 0.67, cashflow 0.63, credit 0.63, news_impact 0.54.
+Per-domain (FinRoot mean score): portfolio 0.83, tax 0.85, general 0.90, behavioral 0.74,
+international 0.75, news_impact 0.73, risk 0.78, credit 0.78, cashflow 0.71, insurance 0.67,
+estate_planning 0.69. The headline metric is the **mean reasoning-quality score** (0–1),
+which weighs must-mention + must-not + citation completeness across 83 graded tasks.
 
 ## Demo path (works fully offline, no API keys)
 ```bash
@@ -77,5 +88,7 @@ PYTHONPATH=src python3 -m scripts.run_evals --mock --k 2
 - Final demo narrative owner (wave-8) — script written, capture_demo.py generates transcripts.
 
 ## Last session note
-2026-06-20: All 8 waves shipped. 785 tests, ruff clean, FOUNDATION OK. Submission ready.
-Measured FRB lift: FinRoot 0.686 vs RAG 0.090 = 7.6× (+662%). Demo works fully offline.
+2026-06-20: All 12 waves shipped. 1002 tests passing (9 skipped), ruff clean, FOUNDATION OK.
+Measured FRB lift at HEAD `ee438ae`: FinRoot 0.778 vs RAG 0.341 = +128.5% composite lift.
+83 graded tasks across 11 financial domains. Demo works fully offline (Mock mode).
+Submission zip: `finroot-submission.zip` (1.05 MB, 327 files, no secrets).

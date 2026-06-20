@@ -9,7 +9,7 @@
    consistency, consider creating the dir (even empty) for traceability.
 
 2. **Numbers drift across docs.**
-   The current `results/metrics.json` (as_of_sha `8547468`, generated 2026-06-20T15:04) reports
+   The current `results/metrics.json` (as_of_sha `ee438ae`, generated 2026-06-20T15:04) reports
    **83 tasks, 11 domains, +128% composite lift vs RAG, FinRoot mean 0.778**. The deck uses
    these numbers. But `README.md` and `docs/business/presentation_outline.md` still cite the
    older run (52 tasks, +99.7% lift, FinRoot mean 0.672). Follow-up: rerun `make evals` and

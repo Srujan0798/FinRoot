@@ -260,32 +260,32 @@ That is it. Mock mode is the default — no API keys, no network, no friction.
 
 | System | pass@1 | pass@k | pass^k | Mean score (0–1) | Lift vs RAG |
 |---|---:|---:|---:|---:|---:|
-| Baseline RAG (retrieve + single LLM) | 0.038 | 0.038 | 0.038 | 0.337 | — |
-| Single-agent (no critic) | 0.000 | 0.000 | 0.000 | 0.318 | −5.4% |
-| **FinRoot (full pipeline)** | **0.346** | **0.346** | **0.346** | **0.672** | **+99.7%** |
+| Baseline RAG (retrieve + single LLM) | 0.289 | 0.289 | 0.289 | 0.341 | — |
+| Single-agent (no critic) | 0.181 | 0.181 | 0.181 | 0.327 | −4.1% |
+| **FinRoot (full pipeline)** | **0.193** | **0.193** | **0.193** | **0.778** | **+128.5%** |
 
-**Measured at:** `as_of_sha = 2b4f879` · `n_tasks = 52` · `k = 1` · `mock = True` ·
+**Measured at:** `as_of_sha = ee438ae` · `n_tasks = 83` · `k = 1` · `mock = True` ·
 regenerate anytime with `python -m scripts.run_evals --mock --k 1`.
 
 ### Per-domain mean scores (FinRoot)
 
 | Domain | Score |
 |---|---:|
-| portfolio | 0.701 |
-| tax | 0.710 |
-| general | 0.737 |
-| behavioral | 0.703 |
-| international | 0.700 |
-| news_impact | 0.552 |
-| risk | 0.663 |
-| credit | 0.653 |
-| cashflow | 0.620 |
-| insurance | 0.638 |
-| estate_planning | 0.600 |
+| portfolio | 0.829 |
+| tax | 0.846 |
+| general | 0.899 |
+| behavioral | 0.740 |
+| international | 0.750 |
+| news_impact | 0.734 |
+| risk | 0.784 |
+| credit | 0.780 |
+| cashflow | 0.706 |
+| insurance | 0.671 |
+| estate_planning | 0.692 |
 
-**Composite lift vs RAG: +99.7%.** The RAG baseline scores 0.038 on pass@1 — it cannot
-satisfy most tasks' must-mention + must-not + citation requirements. **FinRoot scores 0.672
-mean across 52 tasks across 11 financial domains** — see `results/metrics.json` for the full
+**Composite lift vs RAG: +128.5%.** The RAG baseline scores 0.341 mean — it cannot
+satisfy most tasks' must-mention + must-not + citation requirements. **FinRoot scores 0.778
+mean across 83 tasks across 11 financial domains** — see `results/metrics.json` for the full
 breakdown. Pre-captured demo transcripts live in `docs/demo/transcript_*.md` so judges can
 inspect qualitative outputs offline.
 

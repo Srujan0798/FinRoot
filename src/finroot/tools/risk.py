@@ -286,8 +286,12 @@ class RiskCalculationTool(BaseTool[RiskInput, RiskOutput]):
             mu_annual / max_dd if max_dd > 0 else None
         )
 
-        skewness = float(_skewness(arr, np_=np_))
-        kurtosis = float(_excess_kurtosis(arr, np_=np_))
+        # skewness/kurtosis are None for small samples (n<3 / n<4) — guard the
+        # float() conversion so identical/short return series don't crash.
+        _skew = _skewness(arr, np_=np_)
+        _kurt = _excess_kurtosis(arr, np_=np_)
+        skewness = float(_skew) if _skew is not None else None
+        kurtosis = float(_kurt) if _kurt is not None else None
 
         return {
             "vol_annual": vol_annual,

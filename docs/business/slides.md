@@ -2,7 +2,7 @@
 
 > **Judging weights:** Reasoning Quality 35% · Agent Architecture 30% · Code Implementation 20% · Solution Idea 15%.
 > Every slide maps to at least one axis. Numbers below are sourced from `results/metrics.json`
-> (as_of_sha `8547468`, n_tasks 83, 11 financial domains). Regenerate anytime with `make evals`.
+> (as_of_sha `ee438ae`, n_tasks 83, 11 financial domains). Regenerate anytime with `make evals`.
 > Judge reads each slide in **<20 seconds** — keep it crisp.
 
 ---
@@ -159,6 +159,6 @@ The 4-axis table above, on screen. Close on `results/metrics.json` regenerate li
 | 5 | `docs/demo/screenshots/03_trap_refusal.png` (primary) + `02_reasoning_trace.png`, `04_digital_twin.png` (backup) |
 | 6 | on-screen table only |
 
-Numbers source: `results/metrics.json` (as_of_sha `8547468`, n_tasks 83, 11 domains).
+Numbers source: `results/metrics.json` (as_of_sha `ee438ae`, n_tasks 83, 11 domains).
 Regenerate: `make evals` → updates `results/metrics.json` → re-quote any slide that
 cites a metric. Do **not** hand-edit numbers in this file (FM-05/FM-12).

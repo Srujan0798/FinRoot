@@ -163,15 +163,19 @@ class TestPortfolioSimulatorTool:
         assert r1.probability_of_loss == r2.probability_of_loss
 
     def test_zero_loss_on_always_positive_returns(self):
-        """Not applicable to Monte Carlo directly, but we verify with a
-        degenerate simulation that if μ is very high and σ is 0, loss is 0."""
+        """Degenerate simulation: positive drift with zero volatility must never
+        produce a loss. mu/sigma are explicit SimInput fields (annual_mu /
+        annual_sigma) in the current design."""
         holdings = [{"symbol": "TEST", "weight": 1.0}]
-        inp = SimInput(holdings=holdings, horizon_years=1, scenarios=100)
+        inp = SimInput(
+            holdings=holdings,
+            horizon_years=1,
+            scenarios=100,
+            annual_mu=0.10,
+            annual_sigma=0.0,  # no randomness → strictly positive drift
+        )
 
-        # Monkey-patch to use zero sigma
         tool = PortfolioSimulatorTool(mock=True)
-        tool._DEFAULT_MU = 0.01
-        tool._DEFAULT_SIGMA = 0.0  # no randomness
         result = tool(inp)
         assert result.probability_of_loss == 0.0
 

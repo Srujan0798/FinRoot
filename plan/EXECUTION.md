@@ -15,18 +15,22 @@
 | 3 | Tool Ecosystem | **SHIPPED** | 6/6 | `f097bc9` | 12 tools, 305 tests, deterministic tax engine |
 | 4 | Core Agents & Orchestration | **SHIPPED** | 6/6 | `1a4bc81` | 535 tests, LangGraph pipeline, 6 agents |
 | 5 | Self-Critic & Reasoning Layer | **SHIPPED** | 5/5 | `ff69da6` | 125 tests — the 35% weapon (critic/principles/consistency/refine/explain) |
-| 6 | Evaluation Harness (FRB) | **SHIPPED** | 5/5 | `ef1626f` | 32-task FRB, measured: FinRoot 0.686 vs RAG 0.090 = 7.6× lift |
+| 6 | Evaluation Harness (FRB) | **SHIPPED** | 5/5 | `ef1626f` | 83-task FRB (11 domains), measured: FinRoot 0.778 vs RAG 0.341 = +128.5% lift |
 | 7 | Interface & Demo | **SHIPPED** | 5/5 | `ef1626f` | Streamlit UI + CLI + answer() + demo wiring (prudence trap works) |
 | 8 | Deploy, Docs & Submission | **SHIPPED** | 6/6 | `ef1626f` | Docker + ADRs + demo script + deck + submission packager |
 
 ## Final test counts
-- **785 unit + integration tests passing**, ruff clean, FOUNDATION OK
-- FRB measured lift: **FinRoot 0.686 vs RAG 0.090 = 7.6× (+662%)**, pass@1 0.344 vs 0.000
+- **1002 unit + integration tests passing** (9 skipped), ruff clean, FOUNDATION OK
+- FRB measured lift: **FinRoot 0.778 vs RAG 0.341 = +128.5% composite**, pass@1 0.193 vs 0.289 (mean score is the headline metric)
 
 ## Commit history
 ```
+ee438ae  feat(wave-11): ultra upgrades — grader tuning, security tests, golden tests, benchmarks
+da2940f  docs(wave-12): submission message, judge quickstart, final deck, demo video shotlist, README hero
+8547468  feat(wave-11)+fix: hardening pass — golden tests, security tests, grader tuning, CI/CD
+0fbdf27  feat(wave-10): ultra upgrades — FRB 83 questions, golden tests, improved synthesis, demo scripts
+a1e2c95  feat: ultra upgrades — FRB 52 questions, Plotly charts, FastAPI API, streaming trace, architecture PNG
 ef1626f  feat(wave-6/7/8): Full eval harness, Streamlit UI, submission package (785 tests)
-8b13085  feat(wave-6/7/8 partial): interface, eval graders/bank/baselines, demo assets, Docker, ADRs
 ff69da6  feat(wave-5): Self-Critic & Reasoning Layer — the 35% weapon (125 tests)
 1a4bc81  feat(wave-4): Core Agents & LangGraph Orchestration (535 tests)
 f097bc9  feat(wave-2+3): Memory & Digital Twin + Full Tool Ecosystem (437 tests)
@@ -73,3 +77,7 @@ docs updated · CHANGELOG bumped · this table updated with the commit hash · H
 - 2026-06-20 — Wave-5 SHIPPED. 5/5 tasks, 125 tests (critic/principles/consistency/refine/explain). commit ff69da6.
 - 2026-06-20 — Wave-6+7+8 SHIPPED. 16/16 tasks, 785 total tests, ruff clean, FOUNDATION OK. commit ef1626f.
   FRB measured: FinRoot 0.686 vs RAG 0.090 = 7.6× lift (+662%). Demo fully offline. Submission ready.
+- 2026-06-20 — Wave-9..12 hardening & ultra-upgrades: FRB 83 tasks (11 domains), golden tests, security tests,
+  grader tuning, FastAPI surface, Plotly charts, architecture PNG, hero demo cast, judge quickstart, deck,
+  submission message. Commit chain: a1e2c95 → 0fbdf27 → 8547468 → da2940f → ee438ae (current HEAD).
+  Total tests: 1002 passed / 9 skipped. FRB now: FinRoot mean 0.778 vs RAG 0.341 = +128.5% composite lift.

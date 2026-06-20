@@ -1,24 +1,24 @@
 {
-  "as_of_sha": "8547468",
-  "generated_at": "2026-06-20T15:04:45.180756+00:00",
+  "as_of_sha": "ee438ae",
+  "generated_at": "2026-06-20T16:56:28.321028+00:00",
   "systems": {
     "finroot": {
       "system": "finroot",
-      "pass_at_1": 0.2048,
-      "pass_at_k": 0.2048,
-      "pass_hat_k": 0.2048,
-      "mean_score": 0.7779,
+      "pass_at_1": 0.1928,
+      "pass_at_k": 0.1928,
+      "pass_hat_k": 0.1928,
+      "mean_score": 0.7776,
       "per_domain": {
         "behavioral": 0.7397,
         "cashflow": 0.706,
         "credit": 0.78,
         "estate_planning": 0.692,
-        "general": 0.911,
+        "general": 0.8985,
         "insurance": 0.6707,
         "international": 0.75,
         "news_impact": 0.7344,
         "portfolio": 0.8288,
-        "risk": 0.7745,
+        "risk": 0.7837,
         "tax": 0.8464
       },
       "n_tasks": 83
@@ -66,7 +66,7 @@
       "n_tasks": 83
     }
   },
-  "composite_lift_vs_rag_pct": 128.4581,
+  "composite_lift_vs_rag_pct": 128.37,
   "n_tasks": 83,
   "k": 1
 }

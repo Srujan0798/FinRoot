@@ -38,7 +38,7 @@ PYTHONPATH=src python -m interface.cli --mock "Should I rebalance my 70/30 portf
 ### FRB headline
 
 **FinRoot mean score: 0.778 across 83 tasks across 11 financial domains — +128.5% composite lift vs RAG baseline.**
-*(as_of_sha: a335c45 · `results/metrics.json`)*
+*(as_of_sha: ee438ae · `results/metrics.json`)*
 
 ### Links
 

@@ -48,3 +48,7 @@ evals/reports/*
 *.swp
 data/*.db
 finroot-submission.zip
+
+# --- chat session logs (developer scratch, NOT shipped) ---
+/agents session
+/claude session
