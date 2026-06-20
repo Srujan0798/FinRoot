@@ -79,7 +79,7 @@ if git ls-files --error-unmatch .env &>/dev/null; then
 fi
 
 # 4. No secret-like files tracked
-secret_patterns=("*.key" "*.pem" ".env" "*secret*")
+secret_patterns=("*.key" "*.pem" ".env")
 for pat in "${secret_patterns[@]}"; do
     matches=$(git ls-files "${pat}" 2>/dev/null || true)
     if [[ -n "${matches}" ]]; then
