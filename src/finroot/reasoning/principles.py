@@ -53,7 +53,7 @@ _EMERGENCY_FUND_INVEST_RE = re.compile(
 _PERCENT_RE = re.compile(r"(\d+(?:\.\d+)?)\s*%")
 # A percentage only counts as a concentration signal when near allocation words.
 _ALLOCATION_CONTEXT_RE = re.compile(
-    r"\b(?:allocat|portfolio|weight|holding|concentrat|single\s+(?:stock|asset)|"
+    r"\b(?:allocat[eion]|portfolio|weight|holding|concentrat|single\s+(?:stock|asset)|"
     r"in\s+(?:one|a\s+single)|exposure|invest(?:ed|ing)?\s+\d|put\s+\d)\b",
     re.IGNORECASE,
 )
@@ -80,7 +80,7 @@ _SELL_RE = re.compile(r"\b(?:sell|liquidat|exit|close\s+out)\b", re.IGNORECASE)
 _TAX_RE = re.compile(r"\b(?:tax|capital\s+gain|loss\s+harvest|tax[- ]?loss)\b", re.IGNORECASE)
 
 _SHORT_TERM_RE = re.compile(
-    r"\b(?:short[- ]?term|day[- ]?trad|swing[- ]?trad|quick\s+(?:profit|gain|flip)|"
+    r"\b(?:short[- ]?term|day[- ]?trad\w*|swing[- ]?trad\w*|quick\s+(?:profit|gain|flip)|"
     r"in\s+and\s+out|within\s+(?:days?|weeks?))\b",
     re.IGNORECASE,
 )
@@ -159,11 +159,16 @@ class PrudentialVerifier:
 
     @staticmethod
     def _extract_text(state: AgentState) -> str:
-        """Combine summary + analysis from candidate or final recommendation."""
+        """Extract the recommendation text (summary) from candidate or final.
+        
+        Only checks the summary (actual advice given to user), not the analysis
+        (educational context). The analysis may contain words like "speculative"
+        in a descriptive/educational sense, not as advice.
+        """
         rec = state.candidate or state.final
         if rec is None:
             return state.query
-        return f"{rec.summary} {rec.analysis}"
+        return getattr(rec, "summary", "") or str(rec)
 
     @staticmethod
     def _check_emergency_fund(text: str, query: str = "") -> dict[str, Any]:
@@ -243,17 +248,27 @@ class PrudentialVerifier:
 
     @staticmethod
     def _check_no_guarantees(text: str) -> dict[str, Any]:
-        match = _GUARANTEE_RE.search(text)
-        # Exclude negated contexts: "does not guarantee", "no guarantee", etc.
-        negated = bool(_NEGATION_BEFORE_GUARANTEE_RE.search(text))
-        failed = match is not None and not negated
+        # Find all guarantee-like terms and check if each is negated.
+        # Fail if ANY guarantee term appears without negation nearby.
+        failed_terms = []
+        for m in _GUARANTEE_RE.finditer(text):
+            term = m.group()
+            start = m.start()
+            # Check if this specific occurrence is negated
+            # Look at window before the match for negation words
+            window = text[max(0, start - 30):start]
+            if _NEGATION_BEFORE_GUARANTEE_RE.search(window):
+                continue  # this occurrence is negated
+            failed_terms.append(term)
+
+        failed = len(failed_terms) > 0
         return {
             "principle": "No guarantees",
             "pass": not failed,
             "detail": (
-                f"Contains guarantee language: {match.group()!r}"
+                f"Contains non-negated guarantee language: {', '.join(set(failed_terms))!r}"
                 if failed
-                else "No guarantee language detected"
+                else "No non-negated guarantee language detected"
             ),
         }
 

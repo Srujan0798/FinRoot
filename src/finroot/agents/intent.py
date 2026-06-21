@@ -36,13 +36,30 @@ _KEYWORD_MAP: list[tuple[list[str], Intent]] = [
         ],
         Intent.RISK,
     ),
-    (["portfolio", "allocation", "holdings", "rebalance", "diversif"], Intent.PORTFOLIO),
+    # Guarantees — must be caught by prudence verifier
+    (["guarantee", "guaranteed", "guarantees"], Intent.GENERAL),
+    # NEWS_IMPACT — specific financial news/policy/impact keywords FIRST
+    # before generic portfolio/market keywords
+    (["rbi policy", "policy change", "policy changes", "regulatory", "regulation",
+      "announcement", "rate decision", "monetary policy", "fiscal policy"],
+     Intent.NEWS_IMPACT),
+    (["news", "sentiment", "headline", "breaking", "report", "earnings call"],
+     Intent.NEWS_IMPACT),
+    (["impact", "effect", "implication", "consequence", "fallout", "reaction"],
+     Intent.NEWS_IMPACT),
+    # PORTFOLIO — generic portfolio management
+    (["portfolio", "allocation", "rebalance", "diversif"], Intent.PORTFOLIO),
+    # RISK — risk-specific terms (after NEWS_IMPACT so "risk" in news context works)
     (["risk", "var", "volatility", "drawdown", "beta", "sharpe"], Intent.RISK),
+    # TAX — tax-specific
     (["tax", "capital gains", "ltcg", "stcg", "tax-loss", "tax loss", "harvest"], Intent.TAX),
+    # NEWS_IMPACT — market/stock/price terms (lower priority than specific news keywords)
     (["price", "market", "stock", "fundamental", "pe ratio", "earnings", "sector"], Intent.NEWS_IMPACT),
-    (["news", "sentiment", "impact", "headline"], Intent.NEWS_IMPACT),
+    # CASHFLOW
     (["cashflow", "cash flow", "income", "expense", "budget"], Intent.CASHFLOW),
+    # CREDIT
     (["credit", "loan", "emi", "debt"], Intent.CREDIT),
+    # GENERAL greetings
     (["hello", "help", "hey", "greet"], Intent.GENERAL),
 ]
 

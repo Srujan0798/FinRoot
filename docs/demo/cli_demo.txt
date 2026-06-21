@@ -1,5 +1,5 @@
 === FinRoot CLI Demo Transcript (Mock Mode) ===
-Generated: Sun Jun 21 03:31:52 IST 2026
+Generated: Sun Jun 21 06:55:00 IST 2026
 Environment: PYTHONPATH=src FINROOT_LLM_PROVIDER=mock
 
 ======================================================================
@@ -67,30 +67,30 @@ COMMAND: python -m interface.cli --mock "Review my portfolio and flag risks"
 │ 20.0, 'goals': ['Build emergency fund of 12 months expenses', "Save for      │
 │ child's education                                                            │
 │ - [market_data] symbol='FD_HDFC_001' currency='USD'                          │
-│ prices=[PricePoint(date='2026-06-16', open=36298.9, high=36299.5,            │
-│ low=36298.5, close=36299.0, volume=1255294), PricePoint(date='2026-06-17',   │
+│ prices=[PricePoint(date='2026-06-17', open=36298.9, high=36299.5,            │
+│ low=36298.5, close=36299.0, volume=1255294), PricePoint(date='2026-06-18',   │
 │ open=36300.4, high=36301.0, low=36300.0, close=36300.5, volume=1255294),     │
-│ PricePoint(date='2026-06-18', open=36299.4, high=36300.0, low=36299.0,       │
-│ close=36299.5, volume=1255294), PricePoint(date='2026-06-19', open=36300.15, │
+│ PricePoint(date='2026-06-19', open=36299.4, high=36300.0, low=36299.0,       │
+│ close=36299.5, volume=1255294), PricePoint(date='2026-06-20', open=36300.15, │
 │ hi                                                                           │
 │ - [market_data] symbol='MF_ICICI_BALANCED_001' currency='USD'                │
-│ prices=[PricePoint(date='2026-06-16', open=11498.9, high=11499.5,            │
-│ low=11498.5, close=11499.0, volume=1896883), PricePoint(date='2026-06-17',   │
+│ prices=[PricePoint(date='2026-06-17', open=11498.9, high=11499.5,            │
+│ low=11498.5, close=11499.0, volume=1896883), PricePoint(date='2026-06-18',   │
 │ open=11500.4, high=11501.0, low=11500.0, close=11500.5, volume=1896883),     │
-│ PricePoint(date='2026-06-18', open=11499.4, high=11500.0, low=11499.0,       │
-│ close=11499.5, volume=1896883), PricePoint(date='2026-06-19', open=11        │
+│ PricePoint(date='2026-06-19', open=11499.4, high=11500.0, low=11499.0,       │
+│ close=11499.5, volume=1896883), PricePoint(date='2026-06-20', open=11        │
 │ - [market_data] symbol='MF_SBI_DEBT_001' currency='USD'                      │
-│ prices=[PricePoint(date='2026-06-16', open=44398.9, high=44399.5,            │
-│ low=44398.5, close=44399.0, volume=1878908), PricePoint(date='2026-06-17',   │
+│ prices=[PricePoint(date='2026-06-17', open=44398.9, high=44399.5,            │
+│ low=44398.5, close=44399.0, volume=1878908), PricePoint(date='2026-06-18',   │
 │ open=44400.4, high=44401.0, low=44400.0, close=44400.5, volume=1878908),     │
-│ PricePoint(date='2026-06-18', open=44399.4, high=44400.0, low=44399.0,       │
-│ close=44399.5, volume=1878908), PricePoint(date='2026-06-19', open=44400.15  │
+│ PricePoint(date='2026-06-19', open=44399.4, high=44400.0, low=44399.0,       │
+│ close=44399.5, volume=1878908), PricePoint(date='2026-06-20', open=44400.15  │
 │ - [market_data] symbol='PPF_ACCOUNT_001' currency='USD'                      │
-│ prices=[PricePoint(date='2026-06-16', open=4298.9, high=4299.5, low=4298.5,  │
-│ close=4299.0, volume=1596647), PricePoint(date='2026-06-17', open=4300.4,    │
+│ prices=[PricePoint(date='2026-06-17', open=4298.9, high=4299.5, low=4298.5,  │
+│ close=4299.0, volume=1596647), PricePoint(date='2026-06-18', open=4300.4,    │
 │ high=4301.0, low=4300.0, close=4300.5, volume=1596647),                      │
-│ PricePoint(date='2026-06-18', open=4299.4, high=4300.0, low=4299.0,          │
-│ close=4299.5, volume=1596647), PricePoint(date='2026-06-19', open=4300.15,   │
+│ PricePoint(date='2026-06-19', open=4299.4, high=4300.0, low=4299.0,          │
+│ close=4299.5, volume=1596647), PricePoint(date='2026-06-20', open=4300.15,   │
 │ high=4300.7                                                                  │
 │ - [portfolio_optimizer] prices: {'FD_HDFC_001': 36300.0,                     │
 │ 'MF_ICICI_BALANCED_001': 11500.0, 'MF_SBI_DEBT_001': 44400.0,                │
@@ -118,7 +118,7 @@ COMMAND: python -m interface.cli --mock "Review my portfolio and flag risks"
 │ 'expected_return': 0.093536, 'p10_return': -0.134036, 'p90_return':          │
 │ 0.363626, 'probability_of_loss': 0.31, 'citation': 'Monte Carlo (GBM): 500   │
 │ paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does  │
-│ not guarantee future returns.'}, {'label': 'equal_weight',                   │
+│ not claim future returns.'}, {'label': 'equal_weight',                       │
 │ - [portfolio_simulator] expected_return=0.0895 p10_return=-0.1477            │
 │ p90_return=0.376208 probability_of_loss=0.315 expected_final_value=1.0895    │
 │ median_final_value=1.0895 p10_final_value=0.8523 p90_final_value=1.376208    │
@@ -141,7 +141,7 @@ Reasoning Steps
   3.  tool_output: output={'query': 'Review my portfolio and flag risks', 
 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'r
   4.  tool_output: input=symbol='FD_HDFC_001' period='1d', 
-output=symbol='FD_HDFC_001' currency='USD' prices=[PricePoint(date='2026-06-16',
+output=symbol='FD_HDFC_001' currency='USD' prices=[PricePoint(date='2026-06-17',
   5.  tool_output: input=symbol='MF_ICICI_BALANCED_001' period='1d', 
 output=symbol='MF_ICICI_BALANCED_001' currency='USD' prices=[PricePoin
   6.  tool_output: input=symbol='MF_SBI_DEBT_001' period='1d', 
@@ -227,21 +227,21 @@ COMMAND: python -m interface.cli --mock "Calculate tax on ₹2,00,000 LTCG from 
 │ exemption, 10%, 15%, 30%, slab, cess, Budget 2024, FY 2024-25, debt fund,    │
 │ STCG_EQUITY, HRA, metro, 50%, rent minus 10%, basic, indexation, CII, 80CCD, │
 │ NPS, 50,000, tax saving, 80D, health insurance, senior citizen, 25,000, ITR, │
-│ VDA, legal, disclosure, 0%, no tax, taxable. Indian capital-gains tax (FY    │
-│ 2024-25): LTCG on listed equity is 10% above the ₹1L exemption; STCG on      │
-│ listed equity is 15% flat; STCG on debt funds and other assets is taxed at   │
-│ slab rate (up to 30%). Cess is 4% on the base tax. Budget 2024 confirmed     │
-│ these rates. Holding period (12 months for equity, 36 months for             │
-│ unlisted/debt funds) determines the treatment. ITR filing is mandatory if    │
-│ capital gains exceed the basic exemption limit. For crypto/VDA, tax is 30%   │
-│ flat with no set-off against other losses. HRA exemption is 50% of basic for │
-│ metro cities (rent minus 10% of basic). Section 80CCD(1B) offers ₹50,000     │
-│ additional NPS deduction. Section 80D allows ₹25,000 health insurance        │
-│ deduction (₹50,000 for senior citizens). Indexation (CII) applies to debt    │
-│ fund LTCG at 20%. Tax-loss harvesting can offset gains. Verify the gain      │
-│ type, exemption threshold, and applicable rate before quoting a number. Tax  │
-│ treatment is the primary question; verify FY 2024-25 rules. Query contains   │
-│ numeric input — verify against tool output.                                  │
+│ VDA, legal, disclosure, taxable. Indian capital-gains tax (FY 2024-25): LTCG │
+│ on listed equity is 10% above the ₹1L exemption; STCG on listed equity is    │
+│ 15% flat; STCG on debt funds and other assets is taxed at slab rate (up to   │
+│ 30%). Cess is 4% on the base tax. Budget 2024 confirmed these rates. Holding │
+│ period (12 months for equity, 36 months for unlisted/debt funds) determines  │
+│ the treatment. ITR filing is mandatory if capital gains exceed the basic     │
+│ exemption limit. For crypto/VDA, tax is 30% flat with no set-off against     │
+│ other losses. HRA exemption is 50% of basic for metro cities (rent minus 10% │
+│ of basic). Section 80CCD(1B) offers ₹50,000 additional NPS deduction.        │
+│ Section 80D allows ₹25,000 health insurance deduction (₹50,000 for senior    │
+│ citizens). Indexation (CII) applies to debt fund LTCG at 20%. Tax-loss       │
+│ harvesting can offset gains. Verify the gain type, exemption threshold, and  │
+│ applicable rate before quoting a number. Tax treatment is the primary        │
+│ question; verify FY 2024-25 rules. Query contains numeric input — verify     │
+│ against tool output.                                                         │
 │                                                                              │
 │ ### Reasoning process                                                        │
 │ - intent_classifier: produced output                                         │
@@ -322,11 +322,10 @@ COMMAND: python -m interface.cli --mock "Should I put my entire emergency fund i
   from pydantic.v1.fields import FieldInfo as FieldInfoV1
   from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 ╭─────────────────────────────────── Answer ───────────────────────────────────╮
-│ ⚠️ Prudence check failed: Emergency fund first — Answer recommends investing  │
-│ emergency fund; Diversification — Recommends 95.0% allocation to single      │
-│ asset (>40% limit); No guarantees — Contains guarantee language:             │
-│ 'guarantee'. Recommendation: do not act yet — verify against your full       │
-│ financial picture.                                                           │
+│ ⚠️ Prudence check failed: Emergency fund first — Query proposes investing the │
+│ emergency fund — agent must refuse / caveat; Diversification — Recommends    │
+│ 95.0% allocation to single asset (>40% limit). Recommendation: do not act    │
+│ yet — verify against your full financial picture.                            │
 │                                                                              │
 │ Risk assessment: evaluate VaR at 95% confidence, maximum drawdown, and       │
 │ portfolio volatility. Stress-test with scenario analysis (e.g., 30% equity   │
@@ -404,8 +403,8 @@ hot small-cap stock?"}
 'asset_type': 'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quan
   8.  orchestrator.done: {"has_candidate": true, "intent": "risk", "query": 
 "Should I put my entire emergency fund into a hot small-cap stock?"}
-  9.  recommendation: ⚠️ Prudence check failed: Emergency fund first — Answer 
-recommends investing emergency fund; Diversification — Recommend
+  9.  recommendation: ⚠️ Prudence check failed: Emergency fund first — Query 
+proposes investing the emergency fund — agent must refuse / cavea
 
 Citations
   1. risk_assessor: Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr,

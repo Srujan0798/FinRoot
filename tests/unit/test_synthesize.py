@@ -170,6 +170,16 @@ class TestConfidenceLow:
         )
         assert SYNTH.synthesize(state).confidence is ConfidenceLevel.LOW
 
+        # Outputs with empty-string output (whitespace only) ⇒ still LOW.
+        state = AgentState(
+            query="simple",
+            tool_outputs=[
+                _tool_output(tool="a", output="", type_="empty"),
+                _tool_output(tool="b", output="   ", type_="empty"),
+            ],
+        )
+        assert SYNTH.synthesize(state).confidence is ConfidenceLevel.LOW
+
 
 # ---------------------------------------------------------------------------
 # Features
