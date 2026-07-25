@@ -36,4 +36,107 @@
   Prevention: held-out paraphrase set; transcript review weekly (§6.10).
 
 ## Numbered patterns (added as real failures occur)
-*(none yet — fill during the build)*
+
+## Pattern 1: Prudence-trap regex too brittle for paraphrase
+- Date 2026-07-25 · `src/finroot/workflows/synthesize.py` (GP-3 confidence gate + risk-domain
+  refusal content) · Severity **Critical**
+- Root cause: emergency-fund all-in detection required the literal phrase "emergency
+  fund/savings" (not "emergency"/"emergencies" alone) plus "all/entire/put it all" within a
+  narrow window. A natural rewording ("saved 2 lakh for emergencies... putting the whole
+  amount into a small-cap stock") slipped past both the confidence-scoring regex and the
+  content-refusal regex.
+- Impact: the single most safety-critical golden path (prudence refusal on emergency-fund
+  gambling) gave a confident, non-refusing answer on paraphrase — exactly the failure mode a
+  hostile judge would test for first.
+- Fix: broadened both regexes to accept "emergenc(?:y|ies)" with optional fund/savings/
+  reserve/cash/money/corpus, and added "whole/entire amount", "everything" as all-in signals.
+  Commit `45b88e6`.
+- Prevention: paraphrase-test golden paths, not just exact scripted phrasing, before any
+  "GREEN" claim on a safety-critical path.
+
+## Pattern 2: `getattr(x, k, x.get(k))` crashes on non-dict objects
+- Date 2026-07-25 · `src/interface/ui/components/chat.py::_render_citations` · Severity High
+- Root cause: Python evaluates a `getattr` default argument eagerly, even when the attribute
+  exists — so `cit.get("source", ...)` ran on every citation, crashing when `cit` was a
+  Pydantic `Citation` object with no `.get()` method.
+- Impact: the UI showed a raw `AttributeError` to end users instead of citations — undermining
+  the project's core "cited evidence" reasoning-quality pitch, and only caught by live browser
+  testing, not by any existing test (no test rendered the Streamlit UI).
+- Fix: replaced with plain `getattr(cit, "source", None) or "—"`. Commit `45b88e6`.
+- Prevention: any code path with `getattr(x, k, <expr>)` where `<expr>` isn't a guaranteed-safe
+  constant is suspect — grep for this pattern periodically.
+
+## Pattern 3: Unconditional demo-data seeding silently overwrote real data
+- Date 2026-07-25 · `src/interface/core.py::_build_memory` · Severity Medium (data-integrity)
+- Root cause: every `answer()` call unconditionally seeded a demo/fixture twin profile and
+  saved it via `INSERT OR REPLACE`, with no check for whether a real twin already existed for
+  that `user_id`.
+- Impact: any real saved digital-twin record would be silently clobbered by fixture data on
+  the very next query — an FM-11 "no silent data substitution" violation, low real-world
+  exploitability given the single-user/local threat model but a genuine correctness bug.
+- Fix: only seed when `twin_store.load(user_id)` raises `KeyError` (no real twin exists).
+  Commit `45b88e6`.
+- Prevention: any `save()`/`INSERT OR REPLACE` on user-keyed state needs a load-check first
+  unless overwrite is explicitly the intended semantic.
+
+## Pattern 4: Structurally-impossible test invariants ("self-referential SHA", wall-clock cliff)
+- Date 2026-07-25 · `tests/unit/test_metrics_freshness.py` · Severity Critical (CI/judge-facing)
+- Root cause: one test required `results/metrics.json`'s `as_of_sha` to literally equal the
+  current git HEAD — impossible once committed, since a tracked file's content (including any
+  hash it embeds) is hashed *into* its own commit, so it can never equal that commit's hash.
+  Another test required regeneration within a 3-hour wall-clock window — guaranteed to fail
+  for any judge or CI run more than 3h after generation, regardless of correctness.
+- Impact: these looked like normal, reasonable-sounding checks but were mathematically
+  guaranteed to eventually fail for *any* real user of the repo — a ticking time bomb baked
+  into both CI and the "judge dry run" script. Reproduced via 3 independent full-suite runs
+  and 2 independent CI-style shallow-clone simulations.
+- Fix: replaced both with a single git-ancestry check — no commit touching
+  `src/`, `data/gold/`, or `evals/` may have landed after `as_of_sha`. This captures the real
+  invariant (metrics reflect current logic) without the impossible/time-bomb constraints.
+  Commit `45b88e6`.
+- Prevention: any assertion of the form "X (a tracked artifact) must equal the state that will
+  exist *after* committing X" is a logical impossibility — watch for it in freshness/staleness
+  checks. Any assertion gated on wall-clock time relative to a fixed generation timestamp will
+  eventually fail purely from time passing — prefer state-based (git ancestry, hash) checks.
+
+## Pattern 5: CI default shallow clone breaks any git-ancestry check
+- Date 2026-07-25 · `.github/workflows/ci.yml`, `test.yml` · Severity High
+- Root cause: `actions/checkout@v4` defaults to `fetch-depth: 1`. The Pattern-4 fix's
+  `git rev-list as_of_sha..HEAD` needs `as_of_sha` to be a reachable commit object, which a
+  depth-1 clone doesn't have once HEAD has moved a few commits past it.
+- Impact: the very fix for Pattern 4 would have silently broken CI the first time `as_of_sha`
+  fell outside the shallow window — reproduced with a real `git clone --depth 1` and the exact
+  failing `git rev-list` command (`fatal: bad revision`).
+- Fix: added `fetch-depth: 0` to both workflows' checkout step. Commit `e861de4`.
+- Prevention: any CI step relying on git history beyond the tip commit needs an explicit
+  `fetch-depth: 0` (or a bounded depth larger than the expected history window) — shallow
+  clone is the GitHub Actions default and easy to forget.
+
+## Pattern 6: Dependency assumed present because it happened to be installed globally
+- Date 2026-07-25 · `pyproject.toml`, `requirements.txt` (missing `fastapi`/`uvicorn`) ·
+  Severity Critical (judge-facing)
+- Root cause: `src/interface/api/app.py` imports `fastapi`/`uvicorn`, but neither dependency
+  manifest declared them. This was invisible on any dev machine that already had them
+  installed globally (e.g., from an unrelated project) — the bug only surfaces on a genuinely
+  fresh install.
+- Impact: `bash scripts/judge_dry_run.sh` (the documented judge path) crashed at the API-smoke
+  step on a true fresh `git clone` + fresh venv, reproduced independently.
+- Fix: added `fastapi>=0.111`/`uvicorn>=0.30` to both files' core dependency lists.
+  Commit `d637514`.
+- Prevention: **any "it works on my machine" claim about install/dependencies must be verified
+  in a genuinely fresh venv, not the dev's existing environment** — this is the single highest-
+  leverage verification habit this session surfaced.
+
+## Pattern 7: Docker healthcheck used a binary not installed in the image
+- Date 2026-07-25 · `docker-compose.yml` healthcheck · Severity Medium
+- Root cause: the compose file's `healthcheck.test` called `curl`, overriding the Dockerfile's
+  own working `HEALTHCHECK` (which correctly used python-urllib) — but the `python:3.11-slim`
+  base image never installs `curl`.
+- Impact: `docker-compose ps` permanently showed the container `unhealthy` despite it serving
+  200s correctly the entire time — anything gating on Docker health status (CI, `up --wait`,
+  a judge script) would report failure on a genuinely working app.
+- Fix: switched the compose healthcheck to the same python-urllib probe. Verified
+  `docker-compose up --build` → `(healthy)`, torn down cleanly. Commit `45b88e6`.
+- Prevention: a compose-level `healthcheck:` silently *overrides* the image's own
+  `HEALTHCHECK` — if the Dockerfile already has a working one, don't redefine it in compose
+  with a different (and possibly image-incompatible) command.
