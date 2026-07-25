@@ -49,8 +49,36 @@ target-version = "py311"
 src = ["src", "tests", "scripts"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "UP", "B", "SIM", "C4"]
-ignore = ["E501"]   # line length handled by formatter
+select = ["E", "F", "I", "UP", "B", "SIM", "C4", "R", "S", "ASYNC"]
+ignore = [
+  "E501",   # line length handled by formatter
+  "S101",   # allow `assert` in tests (pytest convention)
+  "S301",   # allow pickle (used in some test fixtures)
+  "RUF012", # allow mutable class attributes (pydantic config uses these)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+  "S",      # security rules don't apply to test code (we want subprocess, /tmp, etc.)
+  "RUF012", # pydantic class attrs in test fixtures
+]
+"scripts/**/*.py" = [
+  "S603",   # scripts intentionally call subprocess
+  "S607",   # scripts intentionally use system PATH
+  "S310",   # scripts may open URLs
+]
+"src/finroot/evaluation/**" = [
+  "S607",   # harness needs git/python in PATH
+  "S603",   # harness needs subprocess
+]
+"src/finroot/tools/**" = [
+  "S310",   # currency tool opens URLs
+  "S603",   # tools may need subprocess
+]
+"src/finroot/agents/**" = [
+  "S603",
+  "S607",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -62,4 +90,5 @@ markers = [
   "e2e: end-to-end tests",
   "golden: hand-graded reasoning quality tests",
   "security: input-validation and injection-prevention tests",
+  "slow: tests that take >30s (subprocess, full eval, etc.); skip with -m 'not slow'",
 ]

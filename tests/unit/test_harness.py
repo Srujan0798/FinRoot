@@ -333,6 +333,7 @@ class TestSingleTaskMode:
         for r in results:
             assert "portfolio" in r.per_domain
 
+    @pytest.mark.slow
     def test_cli_single_task_runs(self) -> None:
         """The CLI's --task mode must produce a transcript + metrics.json."""
         env = os.environ.copy()
@@ -364,6 +365,7 @@ class TestSingleTaskMode:
         assert data["n_tasks"] == 1
         assert "finroot" in data["systems"]
 
+    @pytest.mark.slow
     def test_cli_full_runs(self) -> None:
         """The CLI's full-bank mode produces the canonical metrics.json."""
         env = os.environ.copy()

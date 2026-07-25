@@ -217,10 +217,9 @@ class FxAwareAnalyzer:
 
         if currency in major:
             return "low"
-        elif currency in emerging:
+        if currency in emerging:
             return "moderate"
-        else:
-            return "high"
+        return "high"
 
     def _calculate_fx_risk(self, exposures: list[CurrencyExposure], total: float) -> float:
         """Calculate overall FX risk score (0-1)."""

@@ -210,7 +210,7 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
                 import subprocess
 
                 result = subprocess.run(
-                    ["pdftotext", str(pdf_path), "-"],
+                    ["pdftotext", str(pdf_path), "-"],  # noqa: S607 — pdftotext is in PATH by design
                     capture_output=True,
                     text=True,
                     timeout=30,
@@ -234,14 +234,13 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
 
         if "cdsl" in text_lower or "central depository" in text_lower:
             return "cas_cdsl"
-        elif "nsdl" in text_lower or "national securities depository" in text_lower:
+        if "nsdl" in text_lower or "national securities depository" in text_lower:
             return "cas_nsdl"
-        elif any(amc in text_lower for amc in ["hdfc mutual fund", "sbi mutual fund", "icici prudential"]):
+        if any(amc in text_lower for amc in ["hdfc mutual fund", "sbi mutual fund", "icici prudential"]):
             return "amc"
-        elif any(bank in text_lower for bank in ["savings account", "current account", "bank statement"]):
+        if any(bank in text_lower for bank in ["savings account", "current account", "bank statement"]):
             return "bank"
-        else:
-            return "generic"
+        return "generic"
 
     def _parse_cdsl_cas(self, text: str) -> tuple[list[Holding], dict[str, Any]]:
         """Parse CDSL Consolidated Account Statement."""
@@ -385,16 +384,15 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
 
         if any(kw in name_lower for kw in ["equity", "share", "stock", "inf", "ine"]):
             return "equity"
-        elif any(kw in name_lower for kw in ["bond", "debenture", "gsec", "t-bill", "govt"]):
+        if any(kw in name_lower for kw in ["bond", "debenture", "gsec", "t-bill", "govt"]):
             return "debt"
-        elif any(kw in name_lower for kw in ["gold", "silver", "commodity"]):
+        if any(kw in name_lower for kw in ["gold", "silver", "commodity"]):
             return "commodity"
-        elif any(kw in name_lower for kw in ["mutual", "fund", "etf", "index"]):
+        if any(kw in name_lower for kw in ["mutual", "fund", "etf", "index"]):
             return "mutual_fund"
-        elif isin.startswith("IN"):
+        if isin.startswith("IN"):
             return "equity"  # Indian ISINs are typically equity
-        else:
-            return "unknown"
+        return "unknown"
 
     def _parse_number(self, s: str) -> float:
         """Parse Indian number format (1,23,456.78)."""

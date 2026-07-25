@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 PY ?= python3
 
-.PHONY: help install smoke lint test cli ui evals validate docker clean
+.PHONY: help install smoke lint test test-fast test-slow test-cold test-zip cli ui evals validate validate-docs docker clean
 
 help:  ## show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -16,8 +16,17 @@ smoke:  ## run the foundation smoke test
 lint:  ## ruff check
 	ruff check src/ tests/ scripts/
 
-test:  ## run pytest
+test:  ## run all pytest tests (including @pytest.mark.slow)
 	pytest
+
+test-fast:  ## run pytest skipping @pytest.mark.slow tests
+	pytest -m 'not slow'
+
+test-slow:  ## run only @pytest.mark.slow tests
+	pytest -m slow
+
+test-cold:  ## 3x cold suite, fails on any non-zero rc or any data/ leakage
+	@bash scripts/cold_check.sh
 
 cli:  ## run the CLI (ARGS="--mock 'your question'")
 	$(PY) -m interface.cli $(ARGS)
@@ -28,8 +37,11 @@ ui:  ## run the Streamlit UI
 evals:  ## run the FRB reasoning benchmark -> results/metrics.json
 	$(PY) scripts/run_evals.py --all
 
-validate:  ## structural + execution-drift checks
-	bash orchestrator/scripts/validate.sh && bash orchestrator/scripts/validate_execution.sh
+validate:  ## structural + execution-drift + doc-drift checks
+	bash orchestrator/scripts/validate.sh && bash orchestrator/scripts/validate_execution.sh && bash orchestrator/scripts/validate_docs.sh
+
+validate-docs:  ## scan .md files for stale SHA / metric references
+	bash orchestrator/scripts/validate_docs.sh
 
 docker:  ## build + run the full stack
 	docker compose up --build

@@ -50,8 +50,8 @@ def _check_health(port: int, *, retries: int = 30, delay: float = 0.5) -> bool:
             with urllib.request.urlopen(url, timeout=2) as resp:
                 if resp.status == 200:
                     return True
-        except Exception:
-            pass
+        except Exception as exc:
+            print(f"  Streamlit health check failed ({exc}); retrying...")
         time.sleep(delay)
     return False
 

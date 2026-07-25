@@ -2,9 +2,9 @@
 
 ## 01 — Env-Var Hermeticity + Metrics Contamination Fix
 
-### 1. `test_tools_profile.py::profiles_path` fixture creates `data/digital_twin.db` regardless of conftest monkeypatch
+### 1. `test_tools_profile.py::profiles_path` fixture creates `data/digital_twin.db` regardless of conftest monkeypatch. *(resolved by wave-15/iter1)*
 
-The `profiles_path` fixture (in `tests/unit/test_tools_profile.py`) does:
+The `profiles_path` fixture (in `tests/unit/test_tools_profile.py`) used to do:
 
 ```python
 saved = sys.modules.pop("finroot.memory.digital_twin", None)
@@ -13,14 +13,9 @@ if saved is not None:
     sys.modules["finroot.memory.digital_twin"] = saved
 ```
 
-This pops the module from `sys.modules` to force `UserProfileTool._load_profile` to take the JSON-fallback path. But the side effect is that the re-imported `finroot.memory.digital_twin` is a **fresh module** with the original (unpatched) `DigitalTwinStore.__init__` — the conftest's `monkeypatch.setattr` on the class `__init__` is lost. When `UserProfileTool._load_profile` does `from finroot.memory.digital_twin import DigitalTwinStore; store = DigitalTwinStore()`, the `DigitalTwinStore()` call uses the default `db_path="data/digital_twin.db"` and creates the file in the repo root.
+This popped the module from `sys.modules` to force `UserProfileTool._load_profile` to take the JSON-fallback path. But the side effect was that the re-imported `finroot.memory.digital_twin` is a **fresh module** with the original (unpatched) `DigitalTwinStore.__init__` — the conftest's `monkeypatch.setattr` on the class `__init__` was lost. When `UserProfileTool._load_profile` did `from finroot.memory.digital_twin import DigitalTwinStore; store = DigitalTwinStore()`, the `DigitalTwinStore()` call used the default `db_path="data/digital_twin.db"` and created the file in the repo root.
 
-**Pre-existing** (verified by `git stash` test before the wave-14/01 diff). The brief's "NO data/ files created" acceptance criterion was already violated before this task. The test is **not** in the wave-14/01 Writes set.
-
-Fix options (for the orchestrator to triage):
-- (a) Change the `profiles_path` fixture to `monkeypatch.setattr("finroot.tools.profile.UserProfileTool._load_profile", lambda self, uid: None)` and stub the JSON path directly.
-- (b) Refactor `UserProfileTool` to accept an injected `store` parameter.
-- (c) Have the conftest re-apply the class `__init__` monkeypatch on re-import (complex; would need a `sys.meta_path` import hook).
+**Resolved 2026-07-25 (wave-15/iter1):** replaced `sys.modules.pop` with `monkeypatch.setattr(finroot.memory.digital_twin, "DigitalTwinStore", _raise)` and `monkeypatch.setattr(..., "DigitalTwin", _raise)`. The function-local imports inside `_load_profile` and `_save_profile` bind to our raising class, the `except (ImportError, Exception)` clause catches it, and the JSON fallback runs. The class `__init__` monkeypatch is preserved (no module re-import). Verified: `rm -rf data/digital_twin.db && pytest --timeout=120` produces no `data/digital_twin.db` (full suite, 1069 passed / 9 skipped / 0 failed).
 
 ### 2. Setting `FINROOT_CHROMA_DIR` in the conftest breaks `test_config.py::test_default_paths`
 

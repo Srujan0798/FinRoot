@@ -40,9 +40,13 @@ class TestSettingsDefaults:
         assert s.groq_api_key is None
         assert s.openai_api_key is None
 
-    def test_default_paths(self) -> None:
+    def test_default_paths(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        # The autouse conftest fixture sets FINROOT_DIGITAL_TWIN_DB to a tmp
+        # path; clear it for this test to verify the actual default.
+        monkeypatch.delenv("FINROOT_DIGITAL_TWIN_DB", raising=False)
         s = Settings()
         assert s.chroma_dir == "data/chroma"
+        assert s.digital_twin_db == "data/digital_twin.db"
         assert s.audit_path == "logs/audit.jsonl"
 
 
@@ -71,6 +75,35 @@ class TestSettingsEnvOverride:
         monkeypatch.setenv("FINROOT_GROQ_API_KEY", "gsk_test_key")
         s = get_settings()
         assert s.groq_api_key == "gsk_test_key"
+
+    def test_digital_twin_db_via_env(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setenv("FINROOT_DIGITAL_TWIN_DB", "/tmp/twin.db")
+        s = get_settings()
+        assert s.digital_twin_db == "/tmp/twin.db"
+
+    def test_chroma_dir_via_env(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setenv("FINROOT_CHROMA_DIR", "/tmp/chroma")
+        s = get_settings()
+        assert s.chroma_dir == "/tmp/chroma"
+
+    def test_digital_twin_db_default_matches_src_literal(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The Settings default for digital_twin_db must match the literal
+        that the source code uses. If someone changes one, they must change
+        the other (or env-var override is needed)."""
+        import inspect
+
+        from config.settings import Settings as _S
+        from src.finroot.memory.digital_twin import DigitalTwinStore
+
+        sig = inspect.signature(DigitalTwinStore.__init__)
+        default = sig.parameters["db_path"].default
+        assert default == _S.model_fields["digital_twin_db"].default, (
+            f"DigitalTwinStore.__init__ default {default!r} does not match "
+            f"Settings.digital_twin_db default "
+            f"{_S.model_fields['digital_twin_db'].default!r}"
+        )
 
 
 # ---------------------------------------------------------------------------

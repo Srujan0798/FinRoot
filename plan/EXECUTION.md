@@ -15,12 +15,12 @@
 | 3 | Tool Ecosystem | **SHIPPED** | 6/6 | `f097bc9` | 12 tools, 305 tests, deterministic tax engine |
 | 4 | Core Agents & Orchestration | **SHIPPED** | 6/6 | `1a4bc81` | 535 tests, LangGraph pipeline, 6 agents |
 | 5 | Self-Critic & Reasoning Layer | **SHIPPED** | 5/5 | `ff69da6` | 125 tests — the 35% weapon (critic/principles/consistency/refine/explain) |
-| 6 | Evaluation Harness (FRB) | **SHIPPED** | 5/5 | `b2664c5` | 83-task FRB (11 domains), measured: FinRoot 0.8741 vs RAG 0.3384 = +158.30% lift |
+| 6 | Evaluation Harness (FRB) | **SHIPPED** | 5/5 | `f10e566` | 83-task FRB (11 domains), measured: FinRoot 0.8741 vs RAG 0.3384 = +158.30% lift |
 | 7 | Interface & Demo | **SHIPPED** | 5/5 | `ef1626f` | Streamlit UI + CLI + answer() + demo wiring (prudence trap works) |
 | 8 | Deploy, Docs & Submission | **SHIPPED** | 6/6 | `ef1626f` | Docker + ADRs + demo script + deck + submission packager |
 
 ## Final test counts
-- **1066 unit + integration tests passing** (9 skipped), 3x cold green without deselect, ruff clean, FOUNDATION OK
+- **1087 unit + integration tests passing** (9 skipped), 3x cold green without deselect, ruff clean, FOUNDATION OK
 - FRB measured lift: **FinRoot 0.8741 vs RAG 0.3384 = +158.30% composite**, pass@1 0.4578 vs 0.2892 (mean score is the headline metric)
 
 ## Commit history
@@ -91,6 +91,6 @@ docs updated · CHANGELOG bumped · this table updated with the commit hash · H
   write to `data/chroma`. 3x cold green without deselect. `test_tools_profile.py` still creates
   `data/digital_twin.db` (uses `sys.modules.pop` to re-import DigitalTwinStore with unpatched
   defaults) — wave-15 follow-up.
-  `results/metrics.json` regenerated at HEAD `b2664c5`; `finroot-submission.zip` (963,743 bytes,
+  `results/metrics.json` regenerated at HEAD `f10e566`; `finroot-submission.zip` (963,743 bytes,
   339 files, secret-scan clean) rebuilt; docs reconciled.
   Total tests: 1066 passed / 9 skipped. FRB: FinRoot 0.8741 vs RAG 0.3384 = +158.30% lift.

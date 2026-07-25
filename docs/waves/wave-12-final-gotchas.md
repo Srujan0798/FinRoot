@@ -9,10 +9,10 @@
    consistency, consider creating the dir (even empty) for traceability.
 
 2. **Numbers drift across docs.**
-   The current `results/metrics.json` (as_of_sha `b2664c5`, regenerated 2026-07-24) reports
+   The current `results/metrics.json` (as_of_sha `f10e566`, regenerated 2026-07-24) reports
    **83 tasks, 11 domains, +158.30% composite lift vs RAG, FinRoot mean 0.8741**. The deck uses
    these numbers. Earlier waves had `as_of_sha = 8d4d03f` (FinRoot 0.795, RAG 0.334, +137.8%);
-   wave-13 reconciled all `*.md` files to the current `b2664c5` numbers. If a future wave
+   wave-13 reconciled all `*.md` files to the current `f10e566` numbers. If a future wave
    re-runs evals, the docs must be re-reconciled against the new `as_of_sha`.
 
 3. **Slide 5 trap screenshot choice.**

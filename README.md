@@ -82,7 +82,7 @@ Diagram source: [docs/architecture/architecture.mmd](docs/architecture/architect
 |---:|---|---|
 | **35%** | **Reasoning Quality** | 5-axis Self-Critic + Rooted Prudence + Digital-Twin synthesis + FRB harness vs RAG baseline |
 | **30%** | **Agent Architecture** | LangGraph Plan-and-Execute + 6 agents + 14 tools + 4-tier memory + refine loops + audit + LLM abstraction |
-| **20%** | **Code Implementation** | Modular `src/finroot/` · Pydantic v2 · 1066 tests · ruff-clean · CI · Docker · honest exit codes |
+| **20%** | **Code Implementation** | Modular `src/finroot/` · Pydantic v2 · 1087 tests · ruff-clean · CI · Docker · honest exit codes |
 | **15%** | **Solution Idea** | Sovereign, auditable reasoning over your Digital Twin — downside-aware, locally runnable, with proof harness |
 
 ---
@@ -140,7 +140,7 @@ All captured in Mock mode via `scripts/capture_screenshots.py`.
 | Single-agent (no critic) | 0.1807 | 0.3012 | 0.0482 | 0.3298 | −2.5% |
 | **FinRoot (full pipeline)** | **0.4578** | **0.4578** | **0.4578** | **0.8741** | **+158.30%** |
 
-**Measured at:** `as_of_sha = b2664c5` · `n_tasks = 83` · `k = 2` · `mock = True` · regenerate with `make evals`.
+**Measured at:** `as_of_sha = f10e566` · `n_tasks = 83` · `k = 2` · `mock = True` · regenerate with `make evals`.
 
 ### Per-domain mean scores (FinRoot)
 

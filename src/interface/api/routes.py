@@ -63,8 +63,7 @@ def handle_metrics() -> dict:
         logger.warning("Metrics file not found at %s", _METRICS_PATH)
         return {"error": "metrics not available", "path": str(_METRICS_PATH)}
     try:
-        data = json.loads(_METRICS_PATH.read_text(encoding="utf-8"))
-        return data
+        return json.loads(_METRICS_PATH.read_text(encoding="utf-8"))
     except Exception as exc:
         logger.error("Failed to read metrics: %s", exc)
         return {"error": f"failed to read metrics: {exc}"}

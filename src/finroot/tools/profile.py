@@ -144,8 +144,8 @@ class UserProfileTool(BaseTool[ProfileReadInput | ProfileWriteInput, ProfileOutp
             store = DigitalTwinStore()
             twin = store.load(user_id)
             return twin.model_dump() if twin is not None else None
-        except (ImportError, Exception):
-            pass
+        except (ImportError, Exception) as exc:
+            logger.debug("DigitalTwinStore load failed (%s); falling back to JSON", exc)
         # JSON fallback
         profiles = _load_profiles_json()
         return _find_profile(profiles, user_id)
@@ -162,8 +162,8 @@ class UserProfileTool(BaseTool[ProfileReadInput | ProfileWriteInput, ProfileOutp
             twin = DigitalTwin(**profile)
             store.save(twin)
             return
-        except (ImportError, Exception):
-            pass
+        except (ImportError, Exception) as exc:
+            logger.debug("DigitalTwinStore save failed (%s); falling back to JSON", exc)
         # JSON fallback
         profiles = _load_profiles_json()
         existing = _find_profile(profiles, user_id)

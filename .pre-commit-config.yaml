@@ -34,3 +34,9 @@ repos:
         language: system
         pass_filenames: false
         stages: [pre-commit]
+      - id: docs-no-drift
+        name: docs no-drift (HEAD/SHA/metric must match metrics.json)
+        entry: bash orchestrator/scripts/validate_docs.sh
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]

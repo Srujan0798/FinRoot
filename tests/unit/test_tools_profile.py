@@ -39,7 +39,13 @@ from finroot.tools.watchlist import (
 
 @pytest.fixture()
 def profiles_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
-    """Redirect profiles JSON to a temp directory and force JSON fallback."""
+    """Redirect profiles JSON to a temp directory and force JSON fallback.
+
+    Forces the JSON fallback path in UserProfileTool by stubbing DigitalTwinStore
+    (and DigitalTwin) at the canonical module to raise on instantiation. This
+    avoids `sys.modules.pop` (which re-imports a fresh DigitalTwinStore with
+    unpatched defaults and creates `data/digital_twin.db` on disk).
+    """
     p = tmp_path / "twin_profiles.json"
     profiles = [
         {
@@ -59,13 +65,20 @@ def profiles_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     ]
     p.write_text(json.dumps(profiles))
     monkeypatch.setattr("finroot.tools.profile._PROFILES_PATH", p)
-    # Force JSON fallback by temporarily removing DigitalTwinStore
-    import sys
 
-    saved = sys.modules.pop("finroot.memory.digital_twin", None)
+    class _TwinUnavailable(RuntimeError):
+        pass
+
+    def _raise(*_args, **_kwargs):
+        raise _TwinUnavailable("DigitalTwinStore stubbed out for tests")
+
+    # Patch the canonical module so the function-local imports inside
+    # UserProfileTool._load_profile / _save_profile bind to our raising class.
+    import finroot.memory.digital_twin as _twin_mod
+
+    monkeypatch.setattr(_twin_mod, "DigitalTwinStore", _raise, raising=True)
+    monkeypatch.setattr(_twin_mod, "DigitalTwin", _raise, raising=True)
     yield p
-    if saved is not None:
-        sys.modules["finroot.memory.digital_twin"] = saved
 
 
 @pytest.fixture()
