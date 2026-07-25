@@ -12,13 +12,16 @@ echo "=== [1/5] Foundation smoke ==="
 python3 scripts/smoke_test.py | tail -5
 
 echo "=== [2/5] Sacred golden + FR domain locks ==="
+# NOTE: test_zip_consistency.py is deliberately excluded here. It checks
+# finroot-submission.zip, which is gitignored and will not exist on a
+# fresh `git clone` — that's a submission-packaging gate (see
+# scripts/make_submission.sh), not part of the stranger/judge golden path.
 python3 -m pytest \
   tests/golden/test_golden_paths_ps1.py \
   tests/golden/test_fr_domains.py \
   tests/unit/test_intent.py \
   tests/unit/test_principles.py \
   tests/unit/test_metrics_freshness.py \
-  tests/unit/test_zip_consistency.py \
   -q --tb=line
 echo "pytest locks OK"
 

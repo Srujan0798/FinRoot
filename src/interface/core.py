@@ -105,15 +105,24 @@ def _build_memory(user_id: str) -> MemoryManager:
     semantic = SemanticMemory(persist_dir=get_settings().chroma_dir)
     twin_store = DigitalTwinStore(db_path=get_settings().digital_twin_db)
 
-    # Try to seed the twin store with a demo profile
-    demo = _load_demo_twin(user_id)
-    if demo is not None:
-        try:
-            if demo.holdings:
-                demo.holdings = _normalize_holdings(demo.holdings)
-            twin_store.save(demo)
-        except Exception as exc:
-            logger.warning("Could not seed demo twin for %s: %s", user_id, exc)
+    # Seed a demo profile only if this user_id has no real twin yet — never
+    # clobber an existing saved twin with fixture data (FM-11: no silent
+    # data substitution).
+    try:
+        twin_store.load(user_id)
+        has_real_twin = True
+    except KeyError:
+        has_real_twin = False
+
+    if not has_real_twin:
+        demo = _load_demo_twin(user_id)
+        if demo is not None:
+            try:
+                if demo.holdings:
+                    demo.holdings = _normalize_holdings(demo.holdings)
+                twin_store.save(demo)
+            except Exception as exc:
+                logger.warning("Could not seed demo twin for %s: %s", user_id, exc)
 
     return MemoryManager(
         working=working,

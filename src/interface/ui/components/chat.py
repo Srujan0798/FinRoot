@@ -29,9 +29,9 @@ def _render_citations(citations: list[Any]) -> None:
         return
     st.markdown("#### Citations")
     for cit in citations:
-        src = getattr(cit, "source", cit.get("source", "—"))
-        detail = getattr(cit, "detail", cit.get("detail", ""))
-        val = getattr(cit, "value", cit.get("value"))
+        src = getattr(cit, "source", None) or "—"
+        detail = getattr(cit, "detail", None) or ""
+        val = getattr(cit, "value", None)
         parts = [f"**{src}**"]
         if detail:
             parts.append(detail)

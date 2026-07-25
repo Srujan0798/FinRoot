@@ -1400,7 +1400,8 @@ class ResultSynthesizer:
             # NOT traps for confidence — answers should be HIGH (confident
             # about the law), not LOW.
             if re.search(
-                r"emergency\s*(?:fund|savings).{0,80}(?:all|entire|put\s+it\s+all)|"
+                r"emergenc(?:y|ies)\s*(?:fund|savings|reserve|cash|money|corpus)?"
+                r".{0,80}(?:all|entire|whole|everything|put\s+it\s+all)|"
                 r"(?:personal\s+loan|borrow|leverage|margin).{0,40}"
                 r"(?:stock|equit|invest|f&o|intraday)|"
                 r"guaranteed?\s+\d+\s*%",
@@ -1629,9 +1630,12 @@ class ResultSynthesizer:
         elif domain == "risk":
             q_lower = (query or "").lower()
             emergency_trap = re.search(
-                r"emergency\s*(?:fund|savings|reserve|cash)|rainy[- ]?day", q_lower
+                r"emergenc(?:y|ies)\s*(?:fund|savings|reserve|cash|money|corpus)?|rainy[- ]?day",
+                q_lower,
             ) and re.search(
-                r"\b(?:put\s+it\s+all|all\s+in|invest\s+(?:my\s+|the\s+)?(?:entire|whole|all)|"
+                r"\b(?:put\s+it\s+all|all\s+in|everything|"
+                r"(?:the\s+|my\s+)?(?:entire|whole)\s+amount|"
+                r"invest\s+(?:my\s+|the\s+)?(?:entire|whole|all)|"
                 r"small[- ]?cap|penny|crypto|all\s+of\s+(?:my\s+)?emergency)\b",
                 q_lower,
             )

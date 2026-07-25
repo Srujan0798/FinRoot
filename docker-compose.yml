@@ -12,7 +12,11 @@ services:
     #   - ./.env:/app/.env:ro
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      # curl is not installed in the python:3.11-slim base image; this
+      # overrides the Dockerfile's HEALTHCHECK, so it must use the same
+      # python-urllib probe (curl here silently makes the container
+      # permanently "unhealthy" even though the app is serving fine).
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health')"]
       interval: 30s
       timeout: 10s
       retries: 3
