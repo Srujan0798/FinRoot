@@ -29,7 +29,7 @@
 - Not a chatbot. A multi-agent reasoning pipeline that *shows its work*, flags risk, cites evidence, self-critiques, and keeps a tamper-evident audit trail.
 - **Sovereign-first:** runs locally via Ollama by default — your financial data never leaves your machine. Cloud providers (OpenAI, Groq) available but optional.
 - **The Digital Twin moat:** a persistent financial profile that learns your risk tolerance, goals, tax situation, and portfolio over time — not stateless Q&A.
-- Built on LangChain + LangGraph: real agent orchestration, not prompt chaining.
+- Built on LangGraph: a real StateGraph multi-agent orchestration, not prompt chaining.
 
 **Visual:** Architecture thumbnail (full diagram on Slide 3) with the "user → reasoning pipeline → cited, risk-flagged answer" flow highlighted.
 

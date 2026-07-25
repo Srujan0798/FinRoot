@@ -14,6 +14,12 @@ jobs:
       FINROOT_LLM_PROVIDER: mock
     steps:
       - uses: actions/checkout@v4
+        with:
+          # tests/unit/test_metrics_freshness.py does `git rev-list as_of_sha..HEAD`
+          # to check ancestry; the default shallow (depth-1) checkout doesn't have
+          # as_of_sha as a reachable object, so that command errors with "bad
+          # revision" on every run. Full history avoids that.
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}

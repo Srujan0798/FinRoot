@@ -7,7 +7,7 @@
 
 ## What It Is
 
-FinRoot is a multi-agent AI financial reasoning system built on LangChain + LangGraph. It is not a chatbot wrapper — it is a reasoning pipeline that decomposes financial queries, dispatches them to specialist agents (Portfolio, Risk, Market, News, Tax), self-critiques the output on five quality axes, and returns cited, risk-aware, confidence-labeled answers with a tamper-evident audit trail.
+FinRoot is a multi-agent AI financial reasoning system built on LangGraph (StateGraph orchestration) with a custom tool/agent base-class layer. It is not a chatbot wrapper — it is a reasoning pipeline that decomposes financial queries, dispatches them to specialist agents (Portfolio, Risk, Market, News, Tax), self-critiques the output on five quality axes, and returns cited, risk-aware, confidence-labeled answers with a tamper-evident audit trail.
 
 The system runs sovereign-first: local inference via Ollama by default, with cloud providers (OpenAI, Groq) as optional fallbacks. User financial data never leaves the machine unless explicitly configured otherwise.
 

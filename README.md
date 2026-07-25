@@ -14,7 +14,7 @@
 [![Sovereign: local-first](https://img.shields.io/badge/sovereign-local--first-orange)](#-sovereignty--audit)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-*Built with **LangChain + LangGraph · Pydantic v2 · ChromaDB · SQLite · Streamlit**. Submitted to
+*Built with **LangGraph (custom tool/agent layer) · Pydantic v2 · ChromaDB · SQLite · Streamlit**. Submitted to
 SCALE ML Club — Problem Statement 1: **Build an AI Agent for Finance**.*
 
 </div>

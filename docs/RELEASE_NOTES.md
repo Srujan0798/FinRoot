@@ -2,7 +2,7 @@
 
 ## What is FinRoot?
 
-FinRoot is a sovereign, reasoning-first AI financial agent built with LangChain, LangGraph, Pydantic v2,
+FinRoot is a sovereign, reasoning-first AI financial agent built with LangGraph (StateGraph multi-agent orchestration, custom tool/agent layer), Pydantic v2,
 ChromaDB, and SQLite. It delivers institutional-grade financial reasoning to individual investors and small
 family offices — locally, explainably, and with a tamper-evident audit trail. Unlike chatbot wrappers that
 summarize price feeds, FinRoot plans multi-step tool calls, shows its reasoning, flags risk, cites evidence,

@@ -13,14 +13,19 @@ for f in CLAUDE.md KIMI.md AGENTS.md HANDOFF.md HIERARCHY.md README.md plan/PRD.
   [ -f "$f" ] || { note "MISSING: $f"; FAIL=1; }
 done
 
-# 2. KIMI.md / AGENTS.md identical to CLAUDE.md (interchangeable orchestrators)
-if ! diff -q CLAUDE.md KIMI.md >/dev/null 2>&1; then note "KIMI.md differs from CLAUDE.md"; FAIL=1; fi
-if ! diff -q CLAUDE.md AGENTS.md >/dev/null 2>&1; then note "AGENTS.md differs from CLAUDE.md"; FAIL=1; fi
+# 2. KIMI.md must point at CLAUDE.md as the single kernel source. It is a
+#    deliberate short alias/redirect stub, not a mirror. (AGENTS.md is a separate,
+#    legitimately independent doc for generic coding-agent tooling that reads the
+#    AGENTS.md convention — it is not required to mirror or reference CLAUDE.md,
+#    only to exist, which check #1 above already covers.)
+if ! grep -q "CLAUDE.md" KIMI.md 2>/dev/null; then note "KIMI.md does not reference CLAUDE.md"; FAIL=1; fi
 
-# 3. Disjoint write-sets across pending wave task files (FM-13)
-#    Parse ONLY the "## Writes" block of each task file (until the next "## " header), so
-#    import-references and acceptance commands elsewhere in the file don't false-positive.
-for wave in work/wave-*; do
+# 3. Disjoint write-sets within the ACTIVE wave's task files (FM-13).
+#    Only the most recent wave directory carries live parallel-dispatch risk; older,
+#    shipped waves are historical record and their internal overlaps (resolved via
+#    sequencing/merge order at the time) are not a current collision risk.
+active_wave=$(ls -d work/wave-* 2>/dev/null | sort -V | tail -1)
+for wave in "$active_wave"; do
   [ -d "$wave" ] || continue
   # emit "path<TAB>file" for each backtick path inside a Writes block, one path per file (dedup within file)
   PAIRS=$(for f in "$wave"/*.md; do

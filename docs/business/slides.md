@@ -35,7 +35,7 @@ chatbot returning a buy/sell line; right = FinRoot's chat screenshot
 - **Not a chatbot.** A multi-agent reasoning pipeline that *decides, defends, documents.*
 - **Sovereign-first** — local Ollama by default; your data never leaves your machine. Cloud is opt-in.
 - **The Digital Twin moat** — persistent profile of your goals, risk, horizon, taxes, holdings.
-- **Built on LangChain + LangGraph** — real agent orchestration, not prompt chaining.
+- **Built on LangGraph** — a real StateGraph multi-agent orchestration, not prompt chaining.
 
 **Say**
 FinRoot is what happens when you treat a financial agent as a *reasoning system*, not a search box.
