@@ -5,7 +5,7 @@
 ## Snapshot
 - **Project:** FinRoot — SCALE ML Club PS-1 financial agent
 - **Honest blended score (PS-1 weighted):** **~86%** — **not 100%, not freeze-ready**
-- **FRB (regenerated):** mean **0.8677** · pass@1 **0.5060** · lift **+154.98%** · `as_of_sha=22acede`
+- **FRB (regenerated):** mean **0.8677** · pass@1 **0.5060** · lift **+154.98%** · `as_of_sha=bc8cc5b`
 - **Plan:** `work/ETERNAL_FINAL_PLAN.md`
 - **Scoreboard:** `docs/SCOREBOARD.md`
 - **Phase 1 evidence:** `work/reports/wave-ultra/PHASE1_GATE.md`
@@ -22,7 +22,7 @@
 | Market | INR for India demo symbols |
 | UI | NFA disclaimer + mock badge |
 | Golden | `tests/golden/test_golden_paths_ps1.py` green |
-| FRB | `make evals` k=1 → metrics @ HEAD 22acede |
+| FRB | `make evals` k=1 → metrics @ HEAD bc8cc5b |
 | Zip | `finroot-submission.zip` rebuilt; metrics/zip tests green |
 | CI | Hard-fail secrets; install no longer `\|\| true`; fast test path |
 
