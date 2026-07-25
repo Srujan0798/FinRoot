@@ -7,7 +7,7 @@
 - **Project:** FinRoot — Sovereign, Reasoning-First AI Financial Agent
 - **Tier:** T2 (Production) · **Archetype:** hackathon/competition + research-ml emphasis
 - **Phase:** ALL 12 WAVES SHIPPED — submission ready for SCALE ML Club PS-1
-- **Latest commit:** `7d695fc` (1087 tests passing / 9 skipped, 3x cold green without deselect, ruff clean, FOUNDATION OK)
+- **Latest commit:** `80698c2` (1087 tests passing / 9 skipped, 3x cold green without deselect, ruff clean, FOUNDATION OK)
 - **Orchestrator:** Claude Code / Kimi / Codex (interchangeable)
 - **Workers:** Srujan's agent swarm (OpenCode CLI windows / external agents)
 
@@ -61,7 +61,7 @@
 - **FinBERT Agreement Study** — `evals/graders/agreement_study.py` calculates Cohen's kappa for grader calibration
 - **Adversarial Eval Set** — 20 red-team prompts testing refusal of unsafe advice, hallucination, manipulation, bias
 
-## FRB Results (measured at `as_of_sha = 7d695fc`)
+## FRB Results (measured at `as_of_sha = 80698c2`)
 | System | pass@1 | mean score | Lift vs RAG (mean) |
 |---|---:|---:|---:|
 | Baseline RAG | 0.289 | 0.3384 | — |
@@ -102,6 +102,6 @@ PYTHONPATH=src python3 -m scripts.run_evals --mock --k 2
 
 ## Last session note
 2026-07-24: Wave 13 + Wave 14 — test-infra honesty + metrics single-source + env-var hermeticity + submission package. 1087 tests passing (9 skipped), 3x cold green without deselect, ruff clean, FOUNDATION OK. Masking bug fixed (`os._exit(0)` atexit removed). `pytest.ini` deleted (was overriding `pyproject.toml`'s config and silencing `--timeout=60` and the `security` marker). `digital_twin_db` added to `config/settings.py` and routed through 3 call sites; conftest now wraps `subprocess.run`/`Popen` to inject `FINROOT_DIGITAL_TWIN_DB` + `FINROOT_CHROMA_DIR` + `FINROOT_METRICS_PATH` into the subprocess env, so the harness subprocess tests no longer clobber the canonical `results/metrics.json` or write to `data/chroma`. `test_tools_profile.py::profiles_path` still creates `data/digital_twin.db` (uses `sys.modules.pop` to re-import a fresh DigitalTwinStore with unpatched defaults) — wave-15 follow-up.
-Measured FRB lift at HEAD `7d695fc`: FinRoot 0.8741 vs RAG 0.3384 = +158.30% composite lift.
+Measured FRB lift at HEAD `80698c2`: FinRoot 0.8741 vs RAG 0.3384 = +158.30% composite lift.
 83 graded tasks across 11 financial domains. Demo works fully offline (Mock mode).
 Submission zip: `finroot-submission.zip` (958,587 bytes, 338 files, no secrets).

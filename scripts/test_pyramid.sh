@@ -56,6 +56,26 @@ for marker in slow stress security integration e2e golden; do
 done
 echo
 
+# Test-file count delta vs previous commit (cheap heuristic)
+if git rev-parse HEAD~1 > /dev/null 2>&1; then
+  echo "Test files vs HEAD~1:"
+  for cat in unit integration e2e golden fuzz performance security stress; do
+    cur=$(find "tests/$cat" -name "test_*.py" 2>/dev/null | wc -l | tr -d ' ')
+    prev=$(git ls-tree -r --name-only HEAD~1 "tests/$cat/" 2>/dev/null \
+      | grep -c "test_.*\.py$" || true)
+    prev="${prev:-0}"
+    if [ "$cur" -gt "$prev" ]; then
+      delta="+$(($cur - $prev))"
+    elif [ "$cur" -lt "$prev" ]; then
+      delta="$(($cur - $prev))"
+    else
+      delta="="
+    fi
+    printf "  %-13s %3s  (delta: %s)\n" "$cat" "$cur" "$delta"
+  done
+fi
+echo
+
 # Time budget estimate
 total_int=${total:-0}
 fast_min=$(python3 -c "print(f'{max(0, $total_int - 5) * 0.3 / 60:.1f}')")
