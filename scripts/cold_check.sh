@@ -12,7 +12,7 @@
 # Exit 0 on success, 1 on any failure.
 
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit
 export PYTHONPATH=src
 
 # Defaults
@@ -33,13 +33,13 @@ FAIL=0
 for i in $(seq 1 "$RUNS"); do
   rm -rf data/chroma data/digital_twin.db
   echo "=== cold run $i / $RUNS ==="
-  if python3 -m pytest --timeout=120 "${SKIP_SLOW_FLAG[@]}" > /tmp/cold_check_$i.log 2>&1; then
-    SUMMARY=$(grep -E "^[0-9]+ (passed|failed|skipped|deselected)" /tmp/cold_check_$i.log | tail -1)
+  if python3 -m pytest --timeout=120 "${SKIP_SLOW_FLAG[@]}" > /tmp/cold_check_"$i".log 2>&1; then
+    SUMMARY=$(grep -E "^[0-9]+ (passed|failed|skipped|deselected)" /tmp/cold_check_"$i".log | tail -1)
     echo "  rc=0  $SUMMARY"
     PASS=$((PASS+1))
   else
     RC=$?
-    SUMMARY=$(grep -E "^[0-9]+ (passed|failed)" /tmp/cold_check_$i.log | tail -1)
+    SUMMARY=$(grep -E "^[0-9]+ (passed|failed)" /tmp/cold_check_"$i".log | tail -1)
     echo "  rc=$RC  $SUMMARY"
     FAIL=$((FAIL+1))
   fi

@@ -8,7 +8,7 @@
 #   bash scripts/dep_audit.sh --strict       # exit 1 if any package is outdated
 #   bash scripts/dep_audit.sh --cve-only    # only show CVE findings
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit
 
 STRICT=0
 CVE_ONLY=0

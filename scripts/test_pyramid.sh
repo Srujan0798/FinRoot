@@ -3,7 +3,7 @@
 # Shows unit, integration, e2e, security, slow, stress counts.
 # Fast (<3s). Bash 3.2 compatible (no associative arrays).
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit
 
 # One collect pass; parse the listing (no -q so markers are visible)
 COLLECT=$(PYTHONPATH=src python3 -m pytest --collect-only --no-header 2>/dev/null || true)
@@ -24,13 +24,7 @@ performance=$(count_in "tests/performance")
 security=$(count_in "tests/security")
 stress=$(count_in "tests/stress")
 
-# Per-marker (overlaps with per-folder; the same collect output)
-slow=$(echo "$COLLECT" | grep -cE "::.*slow" || true)
-stress_mark=$(echo "$COLLECT" | grep -cE "::.*stress" || true)
-security_mark=$(echo "$COLLECT" | grep -cE "::.*security" || true)
-integration_mark=$(echo "$COLLECT" | grep -cE "::.*integration" || true)
-e2e_mark=$(echo "$COLLECT" | grep -cE "::.*e2e" || true)
-golden_mark=$(echo "$COLLECT" | grep -cE "::.*golden" || true)
+# Per-marker counts are collected via the per-folder loop below
 
 echo "=== Test pyramid ==="
 echo
@@ -65,9 +59,9 @@ if git rev-parse HEAD~1 > /dev/null 2>&1; then
       | grep -c "test_.*\.py$" || true)
     prev="${prev:-0}"
     if [ "$cur" -gt "$prev" ]; then
-      delta="+$(($cur - $prev))"
+      delta="+$((cur - prev))"
     elif [ "$cur" -lt "$prev" ]; then
-      delta="$(($cur - $prev))"
+      delta="$((cur - prev))"
     else
       delta="="
     fi

@@ -3,7 +3,7 @@
 # Tightened 2026-07-25 (wave-15/iter2) to reduce false positives on doc text
 # ("no secrets", "secret-scan clean", etc.) while still blocking real key shapes.
 set -uo pipefail
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../.." || exit
 # Get the diff, but exclude this hook's own file (it self-references the words
 # "secret", "password", etc. as part of its filtering rules).
 DIFF=$(git diff --cached -U0 -- . ':!orchestrator/hooks/block-secrets.sh' 2>/dev/null || true)

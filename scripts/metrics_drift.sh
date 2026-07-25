@@ -9,7 +9,7 @@
 # Improvements are always OK (exit 0, log a note).
 
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit
 
 if [ -z "${1:-}" ] || [ -z "${2:-}" ]; then
   echo "usage: $0 <baseline_metrics.json> <new_metrics.json>" >&2

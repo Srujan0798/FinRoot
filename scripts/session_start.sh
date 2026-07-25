@@ -2,7 +2,7 @@
 # session_start: print a one-page context summary for the start of a session.
 # Use at the start of any new chat / agent context. Fast (<1s).
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit
 
 HEAD=$(git rev-parse --short HEAD)
 HEAD_MSG=$(git log -1 --format=%s)
@@ -56,6 +56,10 @@ fi
 
 # Sub-artifacts
 [ -f finroot-submission.zip ] && echo "Zip:     finroot-submission.zip ($(stat -f%z finroot-submission.zip) bytes)"
+echo
+
+# Disk usage
+echo "Disk:    $(du -sh . | awk '{print $1}')"
 echo
 
 # Quick health checks

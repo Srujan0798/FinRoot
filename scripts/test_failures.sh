@@ -8,7 +8,7 @@
 #   bash scripts/test_failures.sh /tmp/full.log  # use a specific log
 #   bash scripts/test_failures.sh --rerun         # re-run pytest fast path, then summarize
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit
 export PYTHONPATH=src
 
 LOG="${1:-/tmp/last_pytest.log}"

@@ -211,7 +211,7 @@ class TaxPlannerAgent(BaseAgent):
                 ProfileReadInput(user_id=user_id),
             )
             return _annual_income_from_profile(result.data)
-        except (ToolCallError, Exception) as exc:
+        except ToolCallError as exc:
             logger.warning("UserProfileTool call failed: %s", exc)
             return None
 

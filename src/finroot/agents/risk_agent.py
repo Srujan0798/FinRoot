@@ -158,7 +158,7 @@ class RiskAssessorAgent(BaseAgent):
                 "citation": result.citation,
             })
         except Exception as exc:
-            logger.error("RiskAssessorAgent Monte Carlo simulation failed: %s", exc)
+            logger.error("RiskAssessorAgent Monte Carlo simulation failed: %s", exc, exc_info=True)
             state.tool_outputs.append({
                 "agent": self.name,
                 "type": "error",

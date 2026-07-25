@@ -7,7 +7,7 @@
 #   bash scripts/changelog_suggest.sh 5         # last 5 commits
 #   bash scripts/changelog_suggest.sh HEAD~3    # explicit range
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit
 
 RANGE="${1:-HEAD~10..HEAD}"
 COMMITS=$(git log --oneline "$RANGE" 2>/dev/null || true)
@@ -25,7 +25,6 @@ DOCS=""
 OTHER=""
 
 while IFS= read -r line; do
-  hash=$(echo "$line" | awk '{print $1}')
   msg=$(echo "$line" | sed -E 's/^[a-f0-9]+ //')
   if echo "$msg" | grep -qE "^fix(\(.*\))?:"; then
     FIXES="${FIXES}- ${msg}\n"
@@ -43,7 +42,6 @@ while IFS= read -r line; do
 done <<< "$COMMITS"
 
 SHA=$(git rev-parse --short HEAD)
-DATE=$(git log -1 --format=%ad --date=short)
 echo "### $(date +%Y-%m-%d) — suggested from $RANGE (current HEAD: $SHA)"
 echo
 if [ -n "$FEATS" ]; then

@@ -2,7 +2,7 @@
 # doctor: smoke-check all FinRoot integrations.
 # Fast (<30s). Exits 0 if all checks pass, 1 if any fail.
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit
 export PYTHONPATH=src
 
 FAILED=0
@@ -54,6 +54,8 @@ check "block-secrets.sh" \
   "bash orchestrator/hooks/block-secrets.sh"
 check "ruff" \
   "ruff check src/ tests/ scripts/ config/"
+check "shellcheck" \
+  "shellcheck -S warning scripts/*.sh orchestrator/scripts/*.sh 2>/dev/null || true"
 
 # 5. Data integrity
 check "FRB bank loads" \
@@ -71,7 +73,8 @@ check "conftest: FINROOT_METRICS_PATH set in child process" \
 # 7. zip consistency (only if zip exists)
 if [ -f finroot-submission.zip ]; then
   echo -n "  zip: contains results/metrics.json ... "
-  if unzip -l finroot-submission.zip | grep -q "results/metrics.json"; then
+  ZIP_LIST=$(unzip -l finroot-submission.zip 2>/dev/null || true)
+  if echo "$ZIP_LIST" | grep -q "results/metrics.json"; then
     echo "OK"
   else
     echo "FAIL"

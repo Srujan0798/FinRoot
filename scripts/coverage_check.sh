@@ -10,7 +10,7 @@
 # The check is fast (~9 min) and runs the full suite minus @pytest.mark.slow
 # to keep the iteration loop quick.
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit
 
 THRESHOLD_FILE=".coverage-threshold"
 DEFAULT_THRESHOLD=80

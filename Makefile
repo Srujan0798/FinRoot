@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 PY ?= python3
 
-.PHONY: help install smoke lint test test-fast test-slow test-cold test-zip cli ui evals validate validate-docs validate-links changelog-suggest session-start coverage metrics-drift test-pyramid dep-audit ship-prep doctor docker clean
+.PHONY: help install smoke lint test test-fast test-slow test-cold test-zip cli ui evals validate validate-docs validate-links changelog-suggest session-start coverage metrics-drift test-pyramid dep-audit ship-prep doctor docker clean shellcheck test-unit test-integration test-stress bench audit zip-rebuild
 
 help:  ## show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -95,6 +95,35 @@ dep-audit:  ## check for outdated / vulnerable dependencies
 
 docker:  ## build + run the full stack
 	docker compose up --build
+
+##@ Development
+
+shellcheck: ## Run shellcheck on all shell scripts
+	shellcheck -S warning scripts/*.sh orchestrator/scripts/*.sh 2>/dev/null || true
+
+test-unit: ## Run only unit tests
+	python3 -m pytest tests/unit/ -v
+
+test-integration: ## Run only integration tests
+	python3 -m pytest tests/integration/ -v
+
+test-stress: ## Run only stress tests
+	python3 -m pytest tests/stress/ -v -m stress
+
+bench: ## Run evaluation benchmark and print summary
+	PYTHONPATH=src python3 -m scripts.run_evals --mock --k 3
+	@echo "---"
+	@python3 -c "import json; m=json.load(open('results/metrics.json')); print(f\"FinRoot: {m['systems']['finroot']['mean_score']:.4f} | RAG: {m['systems']['rag']['mean_score']:.4f} | Lift: {m['composite_lift_vs_rag_pct']:.2f}%\")"
+
+audit: ## Run full audit: lint + test + coverage + doctor + validate
+	$(MAKE) lint
+	$(MAKE) test-fast
+	$(MAKE) coverage
+	$(MAKE) doctor
+	$(MAKE) validate
+
+zip-rebuild: ## Rebuild submission zip
+	bash scripts/make_submission.sh
 
 clean:  ## remove caches + generated artifacts (keeps source)
 	find . -type d -name __pycache__ -prune -exec rm -rf {} + ; rm -rf .pytest_cache .ruff_cache

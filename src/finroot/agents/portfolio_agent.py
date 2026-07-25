@@ -257,7 +257,7 @@ class PortfolioOptimizerAgent(BaseAgent):
             except Exception as exc:
                 logger.error(
                     "PortfolioOptimizerAgent simulation for %s failed: %s",
-                    label, exc,
+                    label, exc, exc_info=True,
                 )
                 state.tool_outputs.append({
                     "agent": self.name,
