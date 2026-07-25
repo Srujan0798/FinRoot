@@ -1,11 +1,11 @@
 # HANDOFF — Current State
 
-> Replaced 2026-07-25T19:28Z — hostile stranger-verification loop (this session).
+> Replaced 2026-07-25T20:04Z — hostile stranger-verification loop, round 2 (this session).
 
 ## Snapshot
 - **Honest blended score:** **~97-98%** — **not 100%, not frozen**
-- **FRB @ `e861de4`:** mean **0.9117** · pass@1 **1.0000** · lift **+168.94%** vs RAG
-- **Evidence:** `docs/SCOREBOARD.md` §E (full list of 12 bugs found + fixed this session)
+- **FRB @ `635ebd5`:** mean **0.9117** · pass@1 **1.0000** · lift **+168.94%** vs RAG
+- **Evidence:** `docs/SCOREBOARD.md` §E-F (full list of 15 bugs found + fixed this session)
 - **Plan:** `work/ETERNAL_FINAL_PLAN.md` · **Scoreboard:** `docs/SCOREBOARD.md`
 
 ## Trajectory
@@ -17,34 +17,34 @@
 | Conf soft + tax HIGH | ~94.5 | 0.87 |
 | Tax residual | ~95.5 | 1.00 |
 | Mean + judge dry-run | ~96 | 1.00 |
-| **Now (hostile stranger-verify)** | **~97-98** | **1.00** |
+| Hostile stranger-verify round 1 | ~97-98 | 1.00 |
+| **Now (round 2 — remaining GP paraphrase + deps)** | **~97-98** | **1.00** |
 
 ## This loop — genuine hostile/cold verification, not trusting prior reports
-Ran real `git clone` + fresh venv (3 independent times) and followed the documented judge
-path verbatim, rather than trusting any prior "100%"/"96% done" self-report. Found and fixed
-12 real bugs a stranger/judge would have hit — full list in `docs/SCOREBOARD.md` §E. Highlights:
-1. **GP-3 (prudence trap) broke on paraphrase** — regex required exact "emergency fund...
-   all/entire" phrasing; a natural rewording slipped through with no refusal at all on the
-   single most safety-critical golden path. Broadened + re-verified (original, paraphrase,
-   and a false-positive check).
-2. **Citations UI crashed** — raw `AttributeError` shown to end users instead of citations
-   (Python eagerly evaluates `getattr(x, k, x.get(k))`'s default arg even when unneeded).
-3. **Silent data clobber** — every query overwrote any existing real digital-twin record
-   with demo/fixture data; now only seeds if none exists.
-4. **`fastapi`/`uvicorn` missing from all dependency manifests** — API smoke crashed on
-   a genuinely fresh install; invisible on any machine that already had them globally.
-5. **Two structurally-broken tests** (`test_metrics_freshness.py`) — one required a tracked
-   file to embed its own future commit hash (impossible), one had a 3-hour wall-clock cliff
-   that fails for any judge running tests later. Replaced with a git-ancestry check.
-6. **CI shallow-clone bug** — the new ancestry check needs `fetch-depth: 0`, not GitHub
-   Actions' default depth-1 checkout. Fixed in `ci.yml`/`test.yml`.
-7. **Docker healthcheck used `curl`**, not installed in the image — container permanently
-   "unhealthy" despite serving correctly. Fixed; verified `(healthy)` twice.
-8. **`validate.sh` had two stale checks** failing the `docs_sync` CI workflow on every push
-   (forced KIMI.md/AGENTS.md byte-identical to CLAUDE.md; scanned all historical waves for
-   FM-13 collisions). Fixed to match how the project legitimately evolved.
-9. **README overstated LangChain** — code only uses LangGraph's StateGraph; corrected
-   wording (verified via `grep -rn "from langchain\." src/` → zero hits).
+Ran real `git clone` + fresh venv (**4 independent times across 2 rounds**) and followed the
+documented judge path verbatim, rather than trusting any prior "100%"/"96% done" self-report.
+Found and fixed **15 real bugs** a stranger/judge would have hit — full list in
+`docs/SCOREBOARD.md` §E-F. Round 2 additions on top of round 1's 12:
+1. **GP-1 (portfolio) misrouted to news_impact on paraphrase** — a rewording without
+   "portfolio"/"rebalance"/"allocation" scored 0 for PORTFOLIO while bare "stock" alone won
+   NEWS_IMPACT outright. Broadened keyword triggers; verified original + paraphrase.
+2. **GP-2 (tax) three compounding word-form gaps** — "a lakh" (no digit), "two years" (word
+   not digit), "equities" (plural not matching substring "equity") all fell through to a
+   non-answer instead of computing tax. Fixed all three; verified original + broken paraphrase
+   + a second already-working paraphrase (no regression).
+3. **Disclosed 14 real PYSEC-backed dependency CVEs** (RCE-class in `langgraph-checkpoint`,
+   SSRF/path-traversal in `langchain-core`) found via a live `pip-audit` pass. **Not fixed** —
+   the only fixes ship in major version bumps this repo's own version ceilings block, and an
+   untested major upgrade of the core orchestration framework under time pressure is a worse
+   risk than a disclosed, scoped known-issue. Checked real exploitability directly: no
+   checkpointer is compiled into the StateGraph, chromadb runs embedded-only — both most
+   severe advisory classes are present-but-unreachable in actual usage, not silently ignored.
+   Full detail + recommendation for a future dedicated upgrade wave: `docs/SCOREBOARD.md` §F.
+
+Round 1's 9 fixes (still in effect): GP-3 paraphrase brittleness, citations UI crash, silent
+digital-twin data clobber, missing fastapi/uvicorn deps, structurally-broken freshness tests,
+CI shallow-clone bug, docker healthcheck curl bug, stale validate.sh checks, LangChain
+overstatement — see prior HANDOFF revisions in git history or `docs/SCOREBOARD.md` §E for detail.
 
 ## Prove green
 ```bash
@@ -55,15 +55,19 @@ PYTHONPATH=src python3 scripts/run_evals.py --mock --k 1
 docker-compose up -d && sleep 30 && docker-compose ps   # expect (healthy)
 docker-compose down
 ```
-All of the above were re-verified on **independent fresh `git clone`s**, not just the local
-working tree, after every fix landed.
+All of the above were re-verified on **4 independent fresh `git clone`s**, not just the local
+working tree, after every fix landed — most recently confirmed at HEAD `75f23e2` before the
+final housekeeping regen to `635ebd5`.
 
 ## Still open for freeze
 1. **Human freeze bet** — the one thing this session cannot self-certify. Everything
-   mechanical (clean commit, true cold-clone, docker, security review, CI) is done.
-2. Continued hostile-audit surface may still exist — 3 more parallel audit passes
-   (stability soak, LangChain wording, CI workflow audit) ran this session and each found
-   something real; there is no guarantee the surface is now exhausted, only that everything
-   found so far is fixed and verified.
+   mechanical (clean commit, true cold-clone ×4, docker, security review + honest CVE
+   disclosure, CI) is done.
+2. **Dependency version-ceiling upgrade** (see docs/SCOREBOARD.md §F) — real, disclosed,
+   deliberately deferred rather than rushed. Needs a dedicated wave with full regression.
+3. Continued hostile-audit surface may still exist — every audit pass dispatched this session
+   found something real (2 rounds, ~9 subagents); there is no guarantee the surface is now
+   exhausted, only that everything found so far is fixed, disclosed, or explicitly deferred
+   with reasoning.
 
 **Do not claim submission 100% — that requires the human freeze bet.**
