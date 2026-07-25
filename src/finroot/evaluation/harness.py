@@ -29,6 +29,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from config.settings import get_settings
 from pydantic import BaseModel, ConfigDict, Field
 
 from finroot.schemas.state import AgentState
@@ -41,7 +42,7 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_FRB_PATH: Path = Path("data/gold/frb_questions.json")
 DEFAULT_TWIN_PROFILES_PATH: Path = Path("data/samples/twin_profiles.json")
-DEFAULT_METRICS_PATH: Path = Path("results/metrics.json")
+DEFAULT_METRICS_PATH: Path = Path(os.environ.get("FINROOT_METRICS_PATH", "results/metrics.json"))
 
 # Repo root: needed so ``evals.graders`` (PEP-420 namespace package under
 # ``evals/`` at the repo root) is importable when the harness is launched with
@@ -267,8 +268,8 @@ def _run_finroot(query: str, twin_id: str | None) -> AgentState:
     llm = MockProvider()
     memory = MemoryManager(
         working=WorkingMemory(max_turns=10),
-        semantic=SemanticMemory(persist_dir="data/chroma"),
-        twin_store=DigitalTwinStore(db_path="data/digital_twin.db"),
+        semantic=SemanticMemory(persist_dir=get_settings().chroma_dir),
+        twin_store=DigitalTwinStore(db_path=get_settings().digital_twin_db),
         user_id=user_id,
     )
     audit = AuditTrail(Path(tempfile.mkdtemp()) / "audit.jsonl")

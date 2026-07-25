@@ -21,6 +21,8 @@ from collections.abc import Generator
 from pathlib import Path
 from typing import Any
 
+from config.settings import get_settings
+
 from finroot.agents.orchestrator import FinRootOrchestrator
 from finroot.audit.trail import AuditTrail
 from finroot.llm.base import LLMProvider
@@ -102,8 +104,8 @@ def _normalize_holdings(holdings: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def _build_memory(user_id: str) -> MemoryManager:
     """Build a ``MemoryManager`` bound to *user_id* with a demo twin if found."""
     working = WorkingMemory(max_turns=10)
-    semantic = SemanticMemory(persist_dir="data/chroma")
-    twin_store = DigitalTwinStore(db_path="data/digital_twin.db")
+    semantic = SemanticMemory(persist_dir=get_settings().chroma_dir)
+    twin_store = DigitalTwinStore(db_path=get_settings().digital_twin_db)
 
     # Try to seed the twin store with a demo profile
     demo = _load_demo_twin(user_id)

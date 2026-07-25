@@ -2,7 +2,7 @@
 
 > **Judging weights:** Reasoning Quality 35% · Agent Architecture 30% · Code Implementation 20% · Solution Idea 15%.
 > Every slide maps to at least one axis. Numbers below are sourced from `results/metrics.json`
-> (as_of_sha `8d4d03f`, n_tasks 83, 11 financial domains). Regenerate anytime with `make evals`.
+> (as_of_sha `b2664c5`, n_tasks 83, 11 financial domains). Regenerate anytime with `make evals`.
 > Judge reads each slide in **<20 seconds** — keep it crisp.
 
 ---
@@ -78,18 +78,18 @@ memory + critic + audit + LLM provider layer).
 - **5-axis Self-Critic:** Accuracy · Completeness · Risk Awareness · Evidence Quality · Actionability.
 - **Principles verifier (Rooted Prudence):** no unsupported claims, no unhedged recommendations, confidence labels required.
 - **Financial Reasoning Benchmark (FRB):** 83 tasks across 11 financial domains, deterministic graders.
-- **Composite lift vs RAG: +138% (2.4×)** — FinRoot mean **0.795** vs RAG **0.334** (results/metrics.json).
+- **Composite lift vs RAG: +158% (2.6×)** — FinRoot mean **0.8741** vs RAG **0.3384** (results/metrics.json).
 - **Per-domain mean scores (FinRoot vs RAG):**
-  - portfolio **0.85 vs 0.17** (+389%)
-  - tax **0.87 vs 0.27** (+228%)
-  - news_impact **0.77 vs 0.30** (+159%)
-  - risk **0.76 vs 0.26** (+192%)
+  - portfolio **0.8621 vs 0.1765** (+389%)
+  - tax **0.8677 vs 0.2740** (+217%)
+  - news_impact **0.9578 vs 0.2922** (+228%)
+  - risk **0.8734 vs 0.2544** (+243%)
 
 **Say**
 35% of the score is reasoning quality. We built the measurement tool (FRB), the quality gate
 (Self-Critic + Rooted Prudence), and the proof (benchmark lift vs a naive RAG baseline) — not
 just the agent. On 83 graded queries across 11 domains, FinRoot's mean reasoning-quality score
-is 0.795 versus 0.334 for a retrieve-and-summarize baseline — a composite +138% lift. The gain
+is 0.8741 versus 0.3384 for a retrieve-and-summarize baseline — a composite +158% lift. The gain
 is largest on the domains that demand synthesis (portfolio, tax, risk) where RAG cannot connect
 the dots.
 
@@ -159,6 +159,6 @@ The 4-axis table above, on screen. Close on `results/metrics.json` regenerate li
 | 5 | `docs/demo/screenshots/03_trap_refusal.png` (primary) + `02_reasoning_trace.png`, `04_digital_twin.png` (backup) |
 | 6 | on-screen table only |
 
-Numbers source: `results/metrics.json` (as_of_sha `8d4d03f`, n_tasks 83, 11 domains).
+Numbers source: `results/metrics.json` (as_of_sha `b2664c5`, n_tasks 83, 11 domains).
 Regenerate: `make evals` → updates `results/metrics.json` → re-quote any slide that
 cites a metric. Do **not** hand-edit numbers in this file (FM-05/FM-12).

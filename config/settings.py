@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     groq_api_key: str | None = None
     openai_api_key: str | None = None
     chroma_dir: str = "data/chroma"
+    digital_twin_db: str = "data/digital_twin.db"
     audit_path: str = "logs/audit.jsonl"
 
     model_config = SettingsConfigDict(env_prefix="FINROOT_")

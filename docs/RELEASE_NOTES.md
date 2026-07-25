@@ -20,13 +20,13 @@ against OpenAI/Groq, and ships with a dark-mode Streamlit UI, a Typer CLI, and D
 
 ## FRB (FinRoot Reasoning Benchmark) headline
 
-> **FinRoot achieves 2.38x lift over a RAG baseline on 83 financial reasoning tasks.**
+> **FinRoot achieves 2.58x lift over a RAG baseline on 83 financial reasoning tasks.**
 >
-> - FinRoot mean score: **0.795** (79.5 %)
-> - RAG baseline mean score: **0.334** (33.4 %)
-> - Lift: **137.8 %** (2.38x)
+> - FinRoot mean score: **0.8741** (87.4 %)
+> - RAG baseline mean score: **0.3384** (33.8 %)
+> - Lift: **158.3 %** (2.58x)
 >
-> _Metrics stamped as of sha `8d4d03f`._
+> _Metrics stamped as of sha `b2664c5`._
 
 To refresh the numbers after re-running evals:
 

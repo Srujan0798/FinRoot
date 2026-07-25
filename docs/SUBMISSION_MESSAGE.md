@@ -4,44 +4,26 @@
 
 ---
 
-**FinRoot — Sovereign, Reasoning-First AI Financial Agent**
+**FinRoot — Sovereign, Reasoning-First AI Financial Agent.**
 
-FinRoot gives individual investors institutional-grade, explainable, auditable financial reasoning — locally and on their own terms. It is not a chatbot wrapper; it is a 6-agent LangGraph reasoning pipeline that shows its work, flags risk, cites evidence, self-critiques, and keeps a tamper-evident audit trail.
+FinRoot gives individual investors institutional-grade, explainable, auditable financial reasoning — locally, on their own terms. Not a chatbot wrapper: a 6-agent LangGraph reasoning pipeline that shows its work, flags risk, cites evidence, self-critiques, and keeps a tamper-evident, hash-chained audit trail.
 
 **Repo:** https://github.com/Srujan0798/FinRoot
 
-### Run it in 30 seconds
+**One-line idea:** reasoning-first, audit-evident financial agent that refuses unsafe advice and proves every claim — runs fully offline, no API keys.
 
-**Docker (recommended):**
+**Architecture:** LangGraph Plan-and-Execute, 6 agents, 12 deterministic tools, 4-tier memory + Digital Twin, 5-axis Self-Critic, Rooted Prudence verifier, hash-chained audit. Pydantic v2, ruff-clean, pytest 1000+, Dockerized.
 
+**Run it in 30 seconds (offline, zero keys):**
 ```bash
+git clone https://github.com/Srujan0798/FinRoot.git && cd FinRoot
 docker compose up --build
 # open http://localhost:8501
 ```
+CLI: `pip install -e .[ui] && PYTHONPATH=src python -m interface.cli --mock "Should I rebalance my 70/30 portfolio before FY-end?"`
 
-**CLI (no Docker):**
+**The one headline metric (FRB, 83 tasks, 11 domains):** **FinRoot 0.8741 vs RAG 0.3384 = +158.30% composite lift at HEAD b2664c5** — `results/metrics.json`.
 
-```bash
-pip install -e .[ui]
-PYTHONPATH=src python -m interface.cli --mock "Should I rebalance my 70/30 portfolio before FY-end?"
-```
+**Scorecard:** 35% Reasoning — 5-axis Self-Critic + Rooted Prudence + FRB +158% lift. 30% Architecture — LangGraph, 6 agents, 12 tools, Digital Twin, audit chain. 20% Code — modular `src/finroot/`, Pydantic v2, pytest 1000+, ruff-clean. 15% Idea — sovereign, auditable reasoning over your financial twin.
 
-### Judging-criteria scorecard
-
-| Weight | Criterion | Where FinRoot delivers |
-|---:|---|---|
-| 35% | Reasoning Quality | 5-axis Self-Critic + Rooted Prudence verifier + FRB harness proving +138% lift over RAG baseline (`evals/`, `results/metrics.json`) |
-| 30% | Agent Architecture | LangGraph Plan-and-Execute · 6 specialized agents · 12 tools · 4-tier memory + Digital Twin · hash-chained audit trail |
-| 20% | Code Implementation | Modular `src/finroot/` · Pydantic v2 · pytest taxonomy · ruff-clean · Dockerized |
-| 15% | Solution Idea | Sovereign, auditable reasoning over your financial Digital Twin — long-term-thinking-first, downside-aware, locally runnable |
-
-### FRB headline
-
-**FinRoot mean score: 0.795 across 83 tasks across 11 financial domains — +137.8% composite lift vs RAG baseline.**
-*(as_of_sha: 8d4d03f · `results/metrics.json`)*
-
-### Links
-
-- **Demo video:** See `docs/demo/finroot_demo.mp4` in the repository
-- **Screenshots:** [`docs/demo/screenshots/`](demo/screenshots/)
-- **Architecture diagram:** [`docs/architecture/architecture.png`](architecture/architecture.png)
+**Links:** demo video `docs/demo/finroot_demo.mp4` · screenshots `docs/demo/screenshots/` · architecture `docs/architecture/architecture.png`.

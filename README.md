@@ -82,7 +82,7 @@ Diagram source: [docs/architecture/architecture.mmd](docs/architecture/architect
 |---:|---|---|
 | **35%** | **Reasoning Quality** | 5-axis Self-Critic + Rooted Prudence + Digital-Twin synthesis + FRB harness vs RAG baseline |
 | **30%** | **Agent Architecture** | LangGraph Plan-and-Execute + 6 agents + 14 tools + 4-tier memory + refine loops + audit + LLM abstraction |
-| **20%** | **Code Implementation** | Modular `src/finroot/` · Pydantic v2 · 1066 tests · ruff-clean · CI · Docker |
+| **20%** | **Code Implementation** | Modular `src/finroot/` · Pydantic v2 · 1066 tests · ruff-clean · CI · Docker · honest exit codes |
 | **15%** | **Solution Idea** | Sovereign, auditable reasoning over your Digital Twin — downside-aware, locally runnable, with proof harness |
 
 ---
@@ -136,24 +136,24 @@ All captured in Mock mode via `scripts/capture_screenshots.py`.
 
 | System | pass@1 | pass@k | pass^k | Mean score (0–1) | Lift vs RAG |
 |---|---:|---:|---:|---:|---:|
-| Baseline RAG (retrieve + single LLM) | 0.289 | 0.434 | 0.036 | 0.334 | — |
-| Single-agent (no critic) | 0.181 | 0.398 | 0.000 | 0.329 | −1.5% |
-| **FinRoot (full pipeline)** | **0.193** | **0.193** | **0.193** | **0.795** | **+137.8%** |
+| Baseline RAG (retrieve + single LLM) | 0.2892 | 0.3976 | 0.1446 | 0.3384 | — |
+| Single-agent (no critic) | 0.1807 | 0.3012 | 0.0482 | 0.3298 | −2.5% |
+| **FinRoot (full pipeline)** | **0.4578** | **0.4578** | **0.4578** | **0.8741** | **+158.30%** |
 
-**Measured at:** `as_of_sha = 8d4d03f` · `n_tasks = 83` · `k = 3` · `mock = True` · regenerate with `make evals`.
+**Measured at:** `as_of_sha = b2664c5` · `n_tasks = 83` · `k = 2` · `mock = True` · regenerate with `make evals`.
 
 ### Per-domain mean scores (FinRoot)
 
 | Domain | Score | | Domain | Score |
 |---|---:|---|---|---:|
-| general | 0.921 | | risk | 0.765 |
-| tax | 0.873 | | international | 0.750 |
-| portfolio | 0.852 | | behavioral | 0.740 |
-| credit | 0.853 | | cashflow | 0.736 |
-| news_impact | 0.767 | | estate_planning | 0.692 |
-| | | | insurance | 0.664 |
+| general | 0.9655 | | risk | 0.8734 |
+| tax | 0.8677 | | international | 0.8137 |
+| portfolio | 0.8621 | | behavioral | 0.7920 |
+| credit | 0.9667 | | cashflow | 0.8163 |
+| news_impact | 0.9578 | | estate_planning | 0.8080 |
+| | | | insurance | 0.8250 |
 
-**Composite lift vs RAG: +137.8%.** RAG baseline 0.334 mean cannot satisfy must-mention + must-not + citation requirements. **FinRoot 0.795 mean across 83 tasks, 11 domains.** Demo transcripts: `docs/demo/transcript_*.md`.
+**Composite lift vs RAG: +158.30%.** RAG baseline 0.3384 mean cannot satisfy must-mention + must-not + citation requirements. **FinRoot 0.8741 mean across 83 tasks, 11 domains.** Demo transcripts: `docs/demo/transcript_*.md`.
 
 ---
 

@@ -188,8 +188,8 @@
 - Comparison table:
   | System | Pass@1 | Pass@k | Mean Score |
   |--------|--------|--------|------------|
-  | FinRoot | 19.3% | 19.3% | 0.795 |
-  | RAG baseline | 28.9% | 43.4% | 0.334 |
+  | FinRoot | 45.78% | 45.78% | 0.8741 |
+  | RAG baseline | 28.92% | 39.76% | 0.3384 |
   | Single-agent | 18.1% | 39.8% | 0.329 |
 - Per-domain mean-score bar chart (domains: portfolio, tax, insurance, retirement, debt)
 - Key takeaway: "FinRoot lifts RAG baseline by +138% on reasoning quality" or similar

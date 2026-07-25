@@ -38,6 +38,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from config.settings import get_settings
+
 from finroot.memory.digital_twin import DigitalTwin, DigitalTwinStore
 from finroot.memory.semantic import SemanticMemory
 from finroot.memory.working import WorkingMemory
@@ -338,8 +340,8 @@ class MemoryManager:
     def create(
         cls,
         user_id: str,
-        chroma_dir: str = "data/chroma",
-        db_path: str = "data/digital_twin.db",
+        chroma_dir: str | None = None,
+        db_path: str | None = None,
         max_turns: int = 10,
     ) -> MemoryManager:
         """Convenience factory: build all three stores and the facade in one call.
@@ -368,8 +370,8 @@ class MemoryManager:
             A facade bound to ``user_id`` with fresh, independent stores.
         """
         working = WorkingMemory(max_turns=max_turns)
-        semantic = SemanticMemory(persist_dir=chroma_dir)
-        twin_store = DigitalTwinStore(db_path=db_path)
+        semantic = SemanticMemory(persist_dir=chroma_dir or get_settings().chroma_dir)
+        twin_store = DigitalTwinStore(db_path=db_path or get_settings().digital_twin_db)
         return cls(
             working=working,
             semantic=semantic,

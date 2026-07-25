@@ -52,10 +52,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · [Semantic Ve
   with trap-refusal screenshot, hero CLI demo cast.
 
 ### Measured (this release)
-- FRB at HEAD `8d4d03f`: **FinRoot 0.795 mean** vs **RAG 0.334 mean** = **+137.8% composite lift**
+- FRB at HEAD `b2664c5`: **FinRoot 0.8741 mean** vs **RAG 0.3384 mean** = **+158.30% composite lift**
   across 83 graded tasks across 11 financial domains.
-- Domain highlights: portfolio 0.83, tax 0.85, general 0.90, news_impact 0.73, risk 0.78.
-- The RAG baseline mean of 0.341 cannot satisfy most tasks' must-mention + must-not + citation
+- Domain highlights: portfolio 0.8621, tax 0.8677, general 0.9655, news_impact 0.9578, risk 0.8734.
+- The RAG baseline mean of 0.3384 cannot satisfy most tasks' must-mention + must-not + citation
   requirements — FinRoot's structured 6-agent pipeline closes that gap measurably.
 
 ### Security / privacy

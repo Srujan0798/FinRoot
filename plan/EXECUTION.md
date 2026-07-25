@@ -15,13 +15,13 @@
 | 3 | Tool Ecosystem | **SHIPPED** | 6/6 | `f097bc9` | 12 tools, 305 tests, deterministic tax engine |
 | 4 | Core Agents & Orchestration | **SHIPPED** | 6/6 | `1a4bc81` | 535 tests, LangGraph pipeline, 6 agents |
 | 5 | Self-Critic & Reasoning Layer | **SHIPPED** | 5/5 | `ff69da6` | 125 tests — the 35% weapon (critic/principles/consistency/refine/explain) |
-| 6 | Evaluation Harness (FRB) | **SHIPPED** | 5/5 | `8d4d03f` | 83-task FRB (11 domains), measured: FinRoot 0.795 vs RAG 0.334 = +137.8% lift |
+| 6 | Evaluation Harness (FRB) | **SHIPPED** | 5/5 | `b2664c5` | 83-task FRB (11 domains), measured: FinRoot 0.8741 vs RAG 0.3384 = +158.30% lift |
 | 7 | Interface & Demo | **SHIPPED** | 5/5 | `ef1626f` | Streamlit UI + CLI + answer() + demo wiring (prudence trap works) |
 | 8 | Deploy, Docs & Submission | **SHIPPED** | 6/6 | `ef1626f` | Docker + ADRs + demo script + deck + submission packager |
 
 ## Final test counts
-- **1002 unit + integration tests passing** (9 skipped), ruff clean, FOUNDATION OK
-- FRB measured lift: **FinRoot 0.795 vs RAG 0.334 = +137.8% composite**, pass@1 0.193 vs 0.289 (mean score is the headline metric)
+- **1066 unit + integration tests passing** (9 skipped), 3x cold green without deselect, ruff clean, FOUNDATION OK
+- FRB measured lift: **FinRoot 0.8741 vs RAG 0.3384 = +158.30% composite**, pass@1 0.4578 vs 0.2892 (mean score is the headline metric)
 
 ## Commit history
 ```
@@ -79,5 +79,18 @@ docs updated · CHANGELOG bumped · this table updated with the commit hash · H
   FRB measured: FinRoot 0.686 vs RAG 0.090 = 7.6× lift (+662%). Demo fully offline. Submission ready.
 - 2026-06-20 — Wave-9..12 hardening & ultra-upgrades: FRB 83 tasks (11 domains), golden tests, security tests,
   grader tuning, FastAPI surface, Plotly charts, architecture PNG, hero demo cast, judge quickstart, deck,
-  submission message. Commit chain: a1e2c95 → 0fbdf27 → 8547468 → da2940f → ee438ae (current HEAD).
+  submission message. Commit chain: a1e2c95 → 0fbdf27 → 8547468 → da2940f → ee438ae.
   Total tests: 1002 passed / 9 skipped. FRB now: FinRoot mean 0.778 vs RAG 0.341 = +128.5% composite lift.
+- 2026-07-24 — Wave-13: test-infra honesty + metrics single-source + submission package. Masking fix
+  (`os._exit(0)` atexit removed from conftest); suite returns honest exit codes.
+- 2026-07-25 — Wave-14: env-var hermeticity. Added `digital_twin_db` to `config/settings.py`,
+  routed through 3 call sites in src/; deleted `pytest.ini` (was overriding pyproject's
+  `--timeout=60` and `security` marker); conftest now wraps `subprocess.run`/`Popen` to inject
+  `FINROOT_DIGITAL_TWIN_DB` + `FINROOT_CHROMA_DIR` + `FINROOT_METRICS_PATH` into subprocess env,
+  so the harness subprocess tests no longer clobber the canonical `results/metrics.json` or
+  write to `data/chroma`. 3x cold green without deselect. `test_tools_profile.py` still creates
+  `data/digital_twin.db` (uses `sys.modules.pop` to re-import DigitalTwinStore with unpatched
+  defaults) — wave-15 follow-up.
+  `results/metrics.json` regenerated at HEAD `b2664c5`; `finroot-submission.zip` (963,743 bytes,
+  339 files, secret-scan clean) rebuilt; docs reconciled.
+  Total tests: 1066 passed / 9 skipped. FRB: FinRoot 0.8741 vs RAG 0.3384 = +158.30% lift.

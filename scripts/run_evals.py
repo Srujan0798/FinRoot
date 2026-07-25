@@ -27,6 +27,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sys
 import time
 from pathlib import Path
@@ -309,7 +310,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--out",
         type=Path,
-        default=DEFAULT_METRICS_PATH,
+        default=Path(os.environ.get("FINROOT_METRICS_PATH", str(DEFAULT_METRICS_PATH))),
         help="metrics.json output path (default: results/metrics.json).",
     )
     parser.add_argument(

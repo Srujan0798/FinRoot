@@ -9,11 +9,11 @@
    consistency, consider creating the dir (even empty) for traceability.
 
 2. **Numbers drift across docs.**
-   The current `results/metrics.json` (as_of_sha `8d4d03f`, generated 2026-06-20T21:01) reports
-   **83 tasks, 11 domains, +138% composite lift vs RAG, FinRoot mean 0.795**. The deck uses
-   these numbers. But `README.md` and `docs/business/presentation_outline.md` still cite the
-   older run (52 tasks, +99.7% lift, FinRoot mean 0.672). Follow-up: rerun `make evals` and
-   refresh those files in a wave-13 docs-pass — not in scope for this task (FM-08).
+   The current `results/metrics.json` (as_of_sha `b2664c5`, regenerated 2026-07-24) reports
+   **83 tasks, 11 domains, +158.30% composite lift vs RAG, FinRoot mean 0.8741**. The deck uses
+   these numbers. Earlier waves had `as_of_sha = 8d4d03f` (FinRoot 0.795, RAG 0.334, +137.8%);
+   wave-13 reconciled all `*.md` files to the current `b2664c5` numbers. If a future wave
+   re-runs evals, the docs must be re-reconciled against the new `as_of_sha`.
 
 3. **Slide 5 trap screenshot choice.**
    `docs/demo/screenshots/03_trap_refusal.png` shows the agent refusing to recommend putting
