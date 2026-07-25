@@ -238,9 +238,8 @@ def _parse_gain_from_query(query: str) -> dict[str, Any]:
     # brittle under paraphrase stress-test (HALL_OF_SHAME Pattern 9).
     holding_months = _extract_holding_months(lower)
     if "gain_type" not in result and is_equity:
-        if (
-            any(t in lower for t in ("ltcg", "long term"))
-            or (holding_months is not None and holding_months >= 12)
+        if any(t in lower for t in ("ltcg", "long term")) or (
+            holding_months is not None and holding_months >= 12
         ):
             result["gain_type"] = "LTCG"
         elif any(t in lower for t in ("stcg", "short term")):
