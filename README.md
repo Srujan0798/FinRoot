@@ -171,24 +171,24 @@ All captured in Mock mode via `scripts/capture_screenshots.py`.
 
 | System | pass@1 | pass@k | pass^k | Mean score (0–1) | Lift vs RAG |
 |---|---:|---:|---:|---:|---:|
-| Baseline RAG (retrieve + single LLM) | 0.2892 | 0.3976 | 0.1446 | 0.3384 | — |
-| Single-agent (no critic) | 0.1807 | 0.3012 | 0.0482 | 0.3298 | −2.5% |
-| **FinRoot (full pipeline)** | **0.6265** | **0.6265** | **0.6265** | **0.9007** | **+164.68%** |
+| Baseline RAG (retrieve + single LLM) | 0.2048 | 0.3253 | 0.0843 | 0.3422 | — |
+| Single-agent (no critic) | 0.2530 | 0.3373 | 0.1084 | 0.3397 | −0.73% |
+| **FinRoot (full pipeline)** | **1.0000** | **1.0000** | **1.0000** | **0.9117** | **+166.42%** |
 
-**Measured at:** `as_of_sha = fe0ffb6` · `n_tasks = 83` · `k = 2` · `mock = True` · regenerate with `make evals`.
+**Measured at:** `as_of_sha = 8ddcb8e` · `n_tasks = 83` · `k = 2` · `mock = True` · regenerate with `make evals`.
 
 ### Per-domain mean scores (FinRoot)
 
 | Domain | Score | | Domain | Score |
 |---|---:|---|---|---:|
-| general | 0.9106 | | risk | 0.9271 |
-| tax | 0.8956 | | international | 0.7950 |
-| portfolio | 0.8892 | | behavioral | 0.8083 |
-| credit | 0.9667 | | cashflow | 0.8797 |
-| news_impact | 0.9261 | | estate_planning | 0.8680 |
+| general | 0.8856 | | risk | 0.8604 |
+| tax | 1.0000 | | international | 0.9250 |
+| portfolio | 0.8992 | | behavioral | 0.8949 |
+| credit | 0.9667 | | cashflow | 0.8740 |
+| news_impact | 0.8443 | | estate_planning | 0.8680 |
 | | | | insurance | 0.9857 |
 
-**Composite lift vs RAG: +164.68%.** RAG baseline 0.3403 mean. **FinRoot 0.9007 mean · pass@1 0.6265 across 83 tasks, 11 domains (as_of_sha fe0ffb6).** Demo transcripts: `docs/demo/transcript_*.md`.
+**Composite lift vs RAG: +166.42%.** RAG baseline 0.3422 mean. **FinRoot 0.9117 mean · pass@1 1.0 across 83 tasks, 11 domains (as_of_sha 8ddcb8e).** Demo transcripts: `docs/demo/transcript_*.md`.
 
 ---
 

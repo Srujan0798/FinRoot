@@ -62,8 +62,8 @@
 - **5-axis critic:** every answer is scored on Accuracy, Completeness, Risk Awareness, Evidence Quality, and Actionability — with pass/fail thresholds.
 - **Principles verifier:** checks answers against financial reasoning principles (no unsupported claims, no unhedged recommendations, confidence labels required).
 - **Financial Reasoning Benchmark (FRB):** 83 graded tasks across 11 financial domains scored by deterministic graders — measures reasoning quality, not just answer correctness.
-- **Measured lift:** FinRoot **0.8741** mean score vs naive RAG **0.3384** — **2.6× lift (+158%)**, pass@1 **0.4578 vs 0.2892**, across 11 financial domains (general 0.9655, tax 0.8677, portfolio 0.8621, credit 0.9667).
-- **FRB results:** FinRoot's reasoning pipeline scores significantly higher than a naive RAG baseline on reasoning quality. *(Numbers from `results/metrics.json` at `as_of_sha = e955fb9`. Regenerate via `make evals`.)*
+- **Measured lift:** FinRoot **0.9117** mean score vs naive RAG **0.3422** — **2.66× lift (+166.42%)**, pass@1 **1.0 vs 0.2048**, across 11 financial domains (general 0.8856, tax 1.0, portfolio 0.8992, credit 0.9667).
+- **FRB results:** FinRoot's reasoning pipeline scores significantly higher than a naive RAG baseline on reasoning quality. *(Numbers from `results/metrics.json` at `as_of_sha = 8ddcb8e`. Regenerate via `make evals`.)*
 - The critic *catches bad answers before they reach the user* — not after-the-fact logging.
 
 **Visual:** Bar chart comparing FinRoot vs RAG baseline on the 5 axes; table showing critic pass/fail rates on FRB queries.

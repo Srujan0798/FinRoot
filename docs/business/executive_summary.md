@@ -1,7 +1,7 @@
 # FinRoot — Executive Summary
 
 > Sovereign, Reasoning-First AI Financial Agent
-> Commit: `e955fb9`
+> Commit: `8ddcb8e`
 
 ---
 
@@ -29,9 +29,9 @@ FinRoot includes a Financial Reasoning Benchmark (FRB) — a curated set of fina
 
 A 5-axis self-critic evaluates every answer before it reaches the user, catching unsupported claims, missing risk flags, and incomplete evidence. A principles verifier enforces financial reasoning standards (no unhedged recommendations, confidence labels required, evidence or silence).
 
-**FRB results (measured):** FinRoot's full reasoning pipeline scores **mean 0.8741** across 83 financial
-reasoning tasks spanning 11 domains, vs **0.3384** for a naive RAG baseline — a **+158.30% composite lift**,
-on pass@1 **0.4578 vs 0.2892** for RAG. All numbers from `results/metrics.json` at `as_of_sha = e955fb9`,
+**FRB results (measured):** FinRoot's full reasoning pipeline scores **mean 0.9117** across 83 financial
+reasoning tasks spanning 11 domains, vs **0.3422** for a naive RAG baseline — a **+166.42% composite lift**,
+on pass@1 **1.0 vs 0.2048** for RAG. All numbers from `results/metrics.json` at `as_of_sha = 8ddcb8e`,
 regenerable in ~63s with `make evals`.
 
 This is not a claim — it is a measurement with a reproducible harness.
