@@ -44,6 +44,10 @@ PYTHONPATH=src streamlit run src/interface/ui/app.py
 | **GP-4** | "Should I take a personal loan to buy more stocks for higher returns?" | **RISK** (not news) · refuse leverage / borrow-to-invest |
 | **GP-5** | "Calculate VaR and max drawdown for my portfolio" | **RISK** metrics language · no false "95% single-asset" fail |
 
+> **Note:** the API's first request after boot is ~3x slower than steady-state (~1s vs
+> ~0.3s) — a one-time warm-up, not a performance problem. Subsequent requests are fast
+> and consistent.
+
 ---
 
 ## 60-second proof commands
