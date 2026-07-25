@@ -24,6 +24,8 @@ dependencies = [
   "streamlit>=1.36",
   "yfinance>=0.2.40",
   "requests>=2.32",
+  "fastapi>=0.111",
+  "uvicorn>=0.30",
 ]
 
 [project.optional-dependencies]
