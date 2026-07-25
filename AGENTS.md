@@ -14,6 +14,26 @@ make evals            # FRB benchmark → results/metrics.json
 make docker           # full stack (mock default)
 ```
 
+## Developer workflow (added in wave-15)
+
+```bash
+make session-start    # one-page context summary (HEAD, metric, dirty tree, zip)
+make test-fast        # run pytest skipping @pytest.mark.slow
+make test-cold        # 3x cold suite verifier (with data/ hermeticity check)
+make coverage         # pytest with coverage, fail if below threshold
+make validate         # structural + execution + doc-drift checks
+make validate-docs    # scan .md files for stale SHA / metric references
+make validate-links   # check that internal .md cross-references resolve
+make metrics-drift    # compare two metrics.json files; exit 1 if regression
+make test-pyramid     # print test counts by category + time budget
+make dep-audit        # check for outdated / vulnerable dependencies
+make doctor           # smoke-check all integrations
+make ship-prep        # regenerate metric + rebuild zip + verify
+make ci               # full quality gate (lint + test-fast + coverage + validate + doctor)
+```
+
+`make help` prints all available targets with one-line descriptions.
+
 All commands work offline with zero API keys (mock provider is the default).
 
 ## PYTHONPATH gotcha
