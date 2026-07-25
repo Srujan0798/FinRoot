@@ -62,6 +62,19 @@ ship-prep:  ## regenerate metric + rebuild zip + check consistency
 doctor:  ## smoke-check all integrations (Python, CLI, validators, zip, data)
 	bash scripts/doctor.sh
 
+test-failures:  ## show a summary of the most recent test failures
+	bash scripts/test_failures.sh
+
+# "CI" — full quality gate, what you'd run before a release. Includes
+# everything: lint, fast tests, coverage, validators, doctor. Excludes
+# slow + stress tests (those are run separately on a longer schedule).
+ci:  ## full quality gate (lint + test-fast + coverage + validate + doctor)
+	ruff check src/ tests/ scripts/ config/
+	$(MAKE) test-fast
+	$(MAKE) coverage
+	$(MAKE) validate
+	$(MAKE) doctor
+
 changelog-suggest:  ## print a draft CHANGELOG entry from the last 10 commits
 	bash scripts/changelog_suggest.sh
 
