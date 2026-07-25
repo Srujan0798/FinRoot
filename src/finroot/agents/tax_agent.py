@@ -33,27 +33,91 @@ _GAIN_TYPE_KEYWORDS: dict[str, str] = {
 }
 
 
+def _parse_indian_amount(text: str) -> float | None:
+    """Parse Indian informal money amounts to a float in INR.
+
+    Supports: ``₹1,00,000``, ``Rs 100000``, ``1L``, ``1.5L``, ``2Cr``,
+    ``50k``, ``2 lakh``, ``1.5 lakhs``, ``1 crore``, plain ``100000``.
+    """
+    if not text:
+        return None
+    q = text.strip()
+
+    # ₹ / Rs / INR prefix with Indian grouping
+    m = re.search(
+        r"(?:₹|rs\.?|inr)\s*([\d,]+(?:\.\d+)?)",
+        q,
+        re.IGNORECASE,
+    )
+    if m:
+        raw = m.group(1).replace(",", "")
+        with contextlib.suppress(ValueError):
+            return float(raw)
+
+    # 1L / 1.5L / 2lakh / 2 lakhs / 3 Cr / 50k / 50K
+    m = re.search(
+        r"(?<![A-Za-z])(\d+(?:\.\d+)?)\s*(lakh|lakhs|lacs|lac|crore|crores|cr|l|k)\b",
+        q,
+        re.IGNORECASE,
+    )
+    if m:
+        num = float(m.group(1))
+        unit = m.group(2).lower()
+        mult = {
+            "l": 100_000.0,
+            "lakh": 100_000.0,
+            "lakhs": 100_000.0,
+            "lac": 100_000.0,
+            "lacs": 100_000.0,
+            "cr": 10_000_000.0,
+            "crore": 10_000_000.0,
+            "crores": 10_000_000.0,
+            "k": 1_000.0,
+        }.get(unit)
+        if mult is not None:
+            return num * mult
+
+    # Compact form without space: 1L, 2.5Cr, 50k (already covered) —
+    # also "on 1L gains" style via the regex above.
+
+    # Bare large integer (likely rupees): 100000 or 1,00,000
+    m = re.search(r"(?<![A-Za-z.])([\d]{1,3}(?:,\d{2})+|[\d]{5,})(?:\.\d+)?", q)
+    if m:
+        raw = m.group(1).replace(",", "")
+        with contextlib.suppress(ValueError):
+            val = float(raw)
+            if val >= 1000:  # ignore tiny bare numbers (years, etc.)
+                return val
+
+    return None
+
+
 def _parse_gain_from_query(query: str) -> dict[str, Any]:
     """Extract gain amount and type from query text.
 
     Returns partial dict (may lack ``gain`` or ``gain_type``).
     """
     result: dict[str, Any] = {}
+    lower = query.lower()
 
-    amount_match = re.search(
-        r"(?:₹|rs\.?|inr)\s*([\d,]+(?:\.\d+)?)",
-        query,
-        re.IGNORECASE,
-    )
-    if amount_match:
-        raw = amount_match.group(1).replace(",", "")
-        with contextlib.suppress(ValueError):
-            result["gain"] = float(raw)
+    amount = _parse_indian_amount(query)
+    if amount is not None:
+        result["gain"] = amount
 
     for keyword, gain_type in _GAIN_TYPE_KEYWORDS.items():
-        if keyword in query.lower():
+        if keyword in lower:
             result["gain_type"] = gain_type
             break
+
+    # Equity holding period heuristic: held > 12 months → LTCG if type missing
+    if "gain_type" not in result and any(
+        t in lower for t in ("equity", "share", "stock", "listed")
+    ):
+        if any(t in lower for t in ("ltcg", "long term", "long-term", "held 2", "held for 2",
+                                     "18 month", "24 month", "2 year", "2 years", "12 month")):
+            result["gain_type"] = "LTCG"
+        elif any(t in lower for t in ("stcg", "short term", "short-term")):
+            result["gain_type"] = "STCG_EQUITY"
 
     return result
 

@@ -132,6 +132,14 @@ def _infer_currency(symbol: str) -> str:
         return "CAD"
     if sym.endswith(".T"):
         return "JPY"
+    # India-first demo instruments (FD/MF/PPF IDs, common bank prefixes)
+    india_tokens = (
+        "FD_", "MF_", "PPF", "EPF", "NPS", "HDFC", "ICICI", "SBI", "AXIS",
+        "KOTAK", "NIFTY", "SENSEX", "INR", "NSE", "BSE", "RELIANCE", "TCS",
+        "INFY", "WIPRO", "ITC",
+    )
+    if any(tok in sym for tok in india_tokens):
+        return "INR"
     return "USD"
 
 

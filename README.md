@@ -19,6 +19,41 @@ SCALE ML Club — Problem Statement 1: **Build an AI Agent for Finance**.*
 
 </div>
 
+---
+
+## Quick Start
+
+### Prerequisites
+
+- Python 3.11+
+- pip
+
+### Installation
+
+```bash
+make install          # pip install -r requirements.txt && pip install -e .
+```
+
+### First Run
+
+```bash
+make cli ARGS="--mock 'What is compound interest?'"
+```
+
+### Running Tests
+
+```bash
+make test-fast        # fast path, skips @pytest.mark.slow
+```
+
+### Full Quality Gate
+
+```bash
+make ci               # lint + test-fast + coverage + validate + doctor
+```
+
+---
+
 <div align="center">
 
 ## See it in action
@@ -140,7 +175,7 @@ All captured in Mock mode via `scripts/capture_screenshots.py`.
 | Single-agent (no critic) | 0.1807 | 0.3012 | 0.0482 | 0.3298 | −2.5% |
 | **FinRoot (full pipeline)** | **0.4578** | **0.4578** | **0.4578** | **0.8741** | **+158.30%** |
 
-**Measured at:** `as_of_sha = 456e3c0` · `n_tasks = 83` · `k = 2` · `mock = True` · regenerate with `make evals`.
+**Measured at:** `as_of_sha = 22acede` · `n_tasks = 83` · `k = 2` · `mock = True` · regenerate with `make evals`.
 
 ### Per-domain mean scores (FinRoot)
 

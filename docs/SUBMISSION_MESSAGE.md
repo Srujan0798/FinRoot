@@ -22,8 +22,8 @@ docker compose up --build
 ```
 CLI: `pip install -e .[ui] && PYTHONPATH=src python -m interface.cli --mock "Should I rebalance my 70/30 portfolio before FY-end?"`
 
-**The one headline metric (FRB, 83 tasks, 11 domains):** **FinRoot 0.8741 vs RAG 0.3384 = +158.30% composite lift at HEAD 456e3c0** — `results/metrics.json`.
+**The one headline metric (FRB, 83 tasks, 11 domains, mock k=1):** **FinRoot mean 0.8677 · pass@1 0.5060 vs RAG mean 0.3403 = +154.98% composite lift at HEAD 22acede** — `results/metrics.json` (regenerated, not hand-typed).
 
-**Scorecard:** 35% Reasoning — 5-axis Self-Critic + Rooted Prudence + FRB +158% lift. 30% Architecture — LangGraph, 6 agents, 12 tools, Digital Twin, audit chain. 20% Code — modular `src/finroot/`, Pydantic v2, pytest 1000+, ruff-clean. 15% Idea — sovereign, auditable reasoning over your financial twin.
+**Scorecard:** 35% Reasoning — 5-axis Self-Critic + Rooted Prudence + FRB lift + golden GP tax/risk paths. 30% Architecture — LangGraph, 6 agents, 14 tools, Digital Twin, audit chain. 20% Code — modular `src/finroot/`, Pydantic v2, golden path locks, ruff. 15% Idea — sovereign, auditable reasoning over your financial twin.
 
 **Links:** demo video `docs/demo/finroot_demo.mp4` · screenshots `docs/demo/screenshots/` · architecture `docs/architecture/architecture.png`.

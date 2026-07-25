@@ -1,9 +1,12 @@
-"""IntentClassifier — deterministic keyword/pattern-based intent classification.
+"""IntentClassifier — priority-scored keyword/pattern intent classification.
 
 Classifies user queries into the :class:`~finroot.schemas.enums.Intent` enum
 and extracts financial entities (tickers, timeframes).
 
 Contract: `.specify/specs/wave-4/contracts/graph.contract.md` § 1.
+
+Wave-ultra: multi-keyword scoring + tie-break priority so RISK/TAX beat
+generic stock/market/news first-match footguns (GP-4, GP-5).
 """
 
 from __future__ import annotations
@@ -23,44 +26,121 @@ _TIMEFRAME_RE: re.Pattern[str] = re.compile(
     re.IGNORECASE,
 )
 
-_KEYWORD_MAP: list[tuple[list[str], Intent]] = [
-    # High-priority risk/prudence signals — these phrases denote risk-laden
-    # decisions (concentration, leverage, touching the safety net) and must
-    # route to RISK so the risk assessor + prudence verifier engage, ahead of
-    # the generic "stock"/"market" keywords below.
+# Finance jargon / tax codes that look like tickers but are not.
+_SYMBOL_DENYLIST: frozenset[str] = frozenset({
+    "LTCG", "STCG", "ETF", "SIP", "STP", "SWP", "NAV", "VAR", "HHI",
+    "ROI", "EMI", "GDP", "RBI", "SEBI", "NPS", "PPF", "EPF", "ELSS",
+    "HRA", "TDS", "GST", "INR", "USD", "API", "LLM", "FY", "ITR",
+    "VDA", "ULIP", "REIT", "LRS", "DTAA", "CII", "FNO", "NFO",
+    "THE", "AND", "FOR", "MY", "OR", "TO", "OF", "IN", "ON", "IS",
+    "WHAT", "HOW", "SHOULD", "CAN", "WILL", "FROM", "WITH", "THIS",
+    "THAT", "HAVE", "HAS", "ARE", "WAS", "BE", "ALL", "NOT", "DO",
+})
+
+# Higher = wins ties. RISK_PRUDENCE > TAX > PORTFOLIO > RISK_METRICS >
+# CREDIT > NEWS > CASHFLOW > GENERAL
+_TIE_PRIORITY: dict[Intent, int] = {
+    Intent.RISK: 100,
+    Intent.TAX: 90,
+    Intent.PORTFOLIO: 80,
+    Intent.CREDIT: 70,
+    Intent.NEWS_IMPACT: 60,
+    Intent.CASHFLOW: 50,
+    Intent.GENERAL: 10,
+}
+
+# (keywords, intent, weight for exact word-boundary match)
+# Partial (substring) match scores weight * 0.7
+_KEYWORD_RULES: list[tuple[list[str], Intent, float]] = [
+    # --- RISK prudence / leverage (highest semantic weight) ---
     (
         [
             "emergency fund", "small-cap", "small cap", "penny stock", "all in",
             "entire savings", "life savings", "all my savings", "borrow to invest",
-            "loan to invest", "leverage", "margin trade", "f&o", "futures and options",
+            "loan to invest", "loan to buy", "leverage", "margin trade", "f&o",
+            "futures and options", "10x", "all-in", "yolo",
         ],
         Intent.RISK,
+        12.0,
     ),
-    # Guarantees — must be caught by prudence verifier
-    (["guarantee", "guaranteed", "guarantees"], Intent.GENERAL),
-    # NEWS_IMPACT — specific financial news/policy/impact keywords FIRST
-    # before generic portfolio/market keywords
-    (["rbi policy", "policy change", "policy changes", "regulatory", "regulation",
-      "announcement", "rate decision", "monetary policy", "fiscal policy"],
-     Intent.NEWS_IMPACT),
-    (["news", "sentiment", "headline", "breaking", "report", "earnings call"],
-     Intent.NEWS_IMPACT),
-    (["impact", "effect", "implication", "consequence", "fallout", "reaction"],
-     Intent.NEWS_IMPACT),
-    # PORTFOLIO — generic portfolio management
-    (["portfolio", "allocation", "rebalance", "diversif"], Intent.PORTFOLIO),
-    # RISK — risk-specific terms (after NEWS_IMPACT so "risk" in news context works)
-    (["risk", "var", "volatility", "drawdown", "beta", "sharpe"], Intent.RISK),
-    # TAX — tax-specific
-    (["tax", "capital gains", "ltcg", "stcg", "tax-loss", "tax loss", "harvest"], Intent.TAX),
-    # NEWS_IMPACT — market/stock/price terms (lower priority than specific news keywords)
-    (["price", "market", "stock", "fundamental", "pe ratio", "earnings", "sector"], Intent.NEWS_IMPACT),
-    # CASHFLOW
-    (["cashflow", "cash flow", "income", "expense", "budget"], Intent.CASHFLOW),
-    # CREDIT
-    (["credit", "loan", "emi", "debt"], Intent.CREDIT),
-    # GENERAL greetings
-    (["hello", "help", "hey", "greet"], Intent.GENERAL),
+    # Compound: debt used to buy risk assets
+    (
+        [
+            "loan to buy stock", "loan to buy stocks", "personal loan to buy",
+            "borrow money to invest", "borrow to buy", "margin to buy",
+        ],
+        Intent.RISK,
+        15.0,
+    ),
+    # --- RISK metrics ---
+    (
+        ["var", "value-at-risk", "value at risk", "drawdown", "max drawdown",
+         "volatility", "sharpe", "beta", "hhi", "stress test", "stress-test"],
+        Intent.RISK,
+        11.0,
+    ),
+    (["risk", "risky", "downside"], Intent.RISK, 6.0),
+    # --- TAX ---
+    (
+        ["tax", "capital gains", "ltcg", "stcg", "tax-loss", "tax loss",
+         "harvest", "80c", "80ccd", "80d", "indexation", "cess"],
+        Intent.TAX,
+        10.0,
+    ),
+    # --- PORTFOLIO ---
+    (
+        ["portfolio", "allocation", "rebalance", "rebalancing", "diversif",
+         "asset allocation", "holdings"],
+        Intent.PORTFOLIO,
+        8.0,
+    ),
+    # --- NEWS / policy (specific before generic market words) ---
+    (
+        ["rbi policy", "policy change", "policy changes", "regulatory",
+         "regulation", "announcement", "rate decision", "monetary policy",
+         "fiscal policy", "repo rate", "rate cut", "rate hike"],
+        Intent.NEWS_IMPACT,
+        9.0,
+    ),
+    (
+        ["news", "sentiment", "headline", "breaking", "earnings call"],
+        Intent.NEWS_IMPACT,
+        7.0,
+    ),
+    (
+        ["impact", "effect", "implication", "consequence", "fallout", "reaction"],
+        Intent.NEWS_IMPACT,
+        4.0,
+    ),
+    (
+        ["price", "market", "stock", "stocks", "fundamental", "pe ratio",
+         "earnings", "sector"],
+        Intent.NEWS_IMPACT,
+        3.0,
+    ),
+    # --- CASHFLOW ---
+    (
+        ["cashflow", "cash flow", "income", "expense", "budget", "sip"],
+        Intent.CASHFLOW,
+        7.0,
+    ),
+    # --- CREDIT (plain loan without invest/stock → credit) ---
+    (
+        ["credit", "loan", "emi", "debt", "cibil", "credit card"],
+        Intent.CREDIT,
+        7.0,
+    ),
+    # --- GENERAL ---
+    (
+        ["guarantee", "guaranteed", "guarantees"],
+        Intent.GENERAL,
+        5.0,
+    ),
+    (
+        ["hello", "help", "hey", "greet", "hi "],
+        Intent.GENERAL,
+        4.0,
+    ),
 ]
 
 
@@ -78,58 +158,103 @@ class IntentResult(BaseModel):
 class IntentClassifier:
     """Classify user query into Intent enum + extract entities.
 
-    Uses deterministic keyword/pattern matching — no LLM needed in mock mode.
-    Confidence: 1.0 for exact keyword match, 0.7 for partial, 0.5 for default.
+    Multi-keyword score: every matching rule adds weight; highest score wins.
+    Ties broken by :data:`_TIE_PRIORITY` (RISK/TAX beat NEWS/PORTFOLIO).
+    Confidence: 1.0 if best exact match, 0.7 if only partial, 0.5 default.
     """
 
     def classify(self, query: str) -> IntentResult:
-        """Classify *query* and return an :class:`IntentResult`.
-
-        Parameters
-        ----------
-        query:
-            The raw user query string.
-
-        Returns
-        -------
-        IntentResult
-            With intent, confidence, extracted entities, and reasoning.
-
-        Raises
-        ------
-        TypeError
-            If *query* is not a ``str``.
-        """
+        """Classify *query* and return an :class:`IntentResult`."""
         if not isinstance(query, str):
             raise TypeError(f"query must be str, got {type(query).__name__}")
 
         lower = query.lower()
         entities = self._extract_entities(query)
 
-        for keywords, intent in _KEYWORD_MAP:
+        # Compound risk: loan/borrow + stock/invest/equity
+        if self._is_leverage_invest_query(lower):
+            return IntentResult(
+                intent=Intent.RISK,
+                confidence=1.0,
+                entities=entities,
+                reasoning=(
+                    "Leverage/borrow-to-invest pattern matched — routed to RISK "
+                    "for prudence engagement"
+                ),
+            )
+
+        scores: dict[Intent, float] = {}
+        best_kw: dict[Intent, str] = {}
+        exact_hit: dict[Intent, bool] = {}
+
+        for keywords, intent, weight in _KEYWORD_RULES:
             for kw in keywords:
                 pattern = re.compile(r"\b" + re.escape(kw) + r"\b", re.IGNORECASE)
                 if pattern.search(lower):
-                    return IntentResult(
-                        intent=intent,
-                        confidence=1.0,
-                        entities=entities,
-                        reasoning=f"Keyword '{kw}' matched for intent {intent.value}",
-                    )
-                if kw in lower:
-                    return IntentResult(
-                        intent=intent,
-                        confidence=0.7,
-                        entities=entities,
-                        reasoning=f"Partial keyword '{kw}' matched for intent {intent.value}",
-                    )
+                    add = weight
+                    is_exact = True
+                elif kw in lower:
+                    add = weight * 0.7
+                    is_exact = False
+                else:
+                    continue
+                prev = scores.get(intent, 0.0)
+                scores[intent] = prev + add
+                if intent not in best_kw or add >= weight * 0.99:
+                    best_kw[intent] = kw
+                    exact_hit[intent] = is_exact
 
+        if not scores:
+            return IntentResult(
+                intent=Intent.GENERAL,
+                confidence=0.5,
+                entities=entities,
+                reasoning="No keyword match; defaulting to GENERAL",
+            )
+
+        # Winner: max score, then tie-break priority
+        def sort_key(item: tuple[Intent, float]) -> tuple[float, int]:
+            intent, score = item
+            return (score, _TIE_PRIORITY.get(intent, 0))
+
+        winner, win_score = max(scores.items(), key=sort_key)
+        conf = 1.0 if exact_hit.get(winner, False) else 0.7
+        # Cap partial multi-hits still as high confidence when score strong
+        if win_score >= 10.0:
+            conf = 1.0
+
+        kw = best_kw.get(winner, "?")
         return IntentResult(
-            intent=Intent.GENERAL,
-            confidence=0.5,
+            intent=winner,
+            confidence=conf,
             entities=entities,
-            reasoning="No keyword match; defaulting to GENERAL",
+            reasoning=(
+                f"Scored intent {winner.value}={win_score:.1f} "
+                f"(top keyword '{kw}'); scores={{{self._fmt_scores(scores)}}}"
+            ),
         )
+
+    @staticmethod
+    def _fmt_scores(scores: dict[Intent, float]) -> str:
+        parts = [f"{k.value}:{v:.1f}" for k, v in sorted(scores.items(), key=lambda x: -x[1])]
+        return ", ".join(parts[:6])
+
+    @staticmethod
+    def _is_leverage_invest_query(lower: str) -> bool:
+        debt = any(
+            t in lower
+            for t in (
+                "loan", "borrow", "leverage", "margin", "credit card debt",
+            )
+        )
+        invest = any(
+            t in lower
+            for t in (
+                "stock", "stocks", "equity", "invest", "crypto", "share",
+                "shares", "mutual fund", "sip",
+            )
+        )
+        return debt and invest
 
     # ------------------------------------------------------------------
     # Entity extraction
@@ -140,9 +265,10 @@ class IntentClassifier:
         """Extract financial entities from *query*.
 
         Returns a dict with ``symbols`` (list[str]) and ``timeframe``
-        (str | None).
+        (str | None). Filters denylisted finance jargon mistaken for tickers.
         """
-        symbols = _SYMBOL_RE.findall(query)
+        raw_symbols = _SYMBOL_RE.findall(query)
+        symbols = [s for s in raw_symbols if s.upper() not in _SYMBOL_DENYLIST]
         tf_match = _TIMEFRAME_RE.search(query)
         timeframe: str | None = None
         if tf_match:

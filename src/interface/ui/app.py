@@ -33,10 +33,18 @@ def main() -> None:
     with st.sidebar:
         st.markdown("## \U0001f331 FinRoot")
         mock_mode = st.toggle("Mock Mode (offline)", value=True)
+        if mock_mode:
+            st.warning("**MOCK MODE** — offline deterministic LLM. Not live market intelligence.")
+        else:
+            st.info("Live provider mode — data may leave this machine.")
         user_id = st.text_input("User ID", value="demo")
         st.markdown(
             "_Sovereign, reasoning-first AI financial reasoning_ \u2014 "
             "shows its work, flags risk, cites evidence."
+        )
+        st.caption(
+            "Educational decision-support only. **Not financial advice.** "
+            "Not a SEBI-registered advisor. Verify before acting."
         )
 
     # -- Header ----------------------------------------------------------------
@@ -44,6 +52,10 @@ def main() -> None:
     st.caption(
         "Institutional-grade, explainable financial reasoning \u2014 "
         "locally and on your own terms."
+    )
+    st.info(
+        "**Not financial advice.** FinRoot is an educational reasoning agent. "
+        "Recommendations can be wrong. Consult a qualified advisor for decisions."
     )
 
     # -- Tabs ------------------------------------------------------------------

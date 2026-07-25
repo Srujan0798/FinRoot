@@ -137,6 +137,27 @@ class TestIntentClassifier:
         result = self.clf.classify("compare RELIANCE.NS INFY TCS.NS")
         assert len(result.entities["symbols"]) >= 3
 
+    # -- wave-ultra priority scoring --
+
+    def test_loan_to_buy_stocks_is_risk_not_news(self) -> None:
+        result = self.clf.classify(
+            "Should I take a personal loan to buy more stocks for higher returns?"
+        )
+        assert result.intent == Intent.RISK
+
+    def test_var_with_portfolio_is_risk(self) -> None:
+        result = self.clf.classify("Calculate VaR and max drawdown for my portfolio")
+        assert result.intent == Intent.RISK
+
+    def test_ltcg_not_extracted_as_symbol(self) -> None:
+        result = self.clf.classify("What is LTCG tax on equity gains")
+        assert result.intent == Intent.TAX
+        assert "LTCG" not in result.entities.get("symbols", [])
+
+    def test_plain_loan_still_credit(self) -> None:
+        result = self.clf.classify("should I take a loan for this")
+        assert result.intent == Intent.CREDIT
+
 
 # ---------------------------------------------------------------------------
 # ContextAssembler tests

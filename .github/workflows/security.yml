@@ -12,14 +12,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
-      - name: dependency audit
+      - name: dependency audit (report; non-blocking)
         run: |
           pip install pip-audit
-          pip-audit -r requirements.txt || true   # report; don't hard-fail the build on advisories yet
-      - name: secret scan (FM-07)
+          # Advisories are informational for a hackathon tree; upload-style report via stdout.
+          # Hard-fail is reserved for secrets + money-movement (below).
+          pip-audit -r requirements.txt || echo "::warning::pip-audit reported issues (non-blocking)"
+      - name: secret scan (FM-07) — hard fail
         run: |
-          git diff --cached -U0 2>/dev/null || true
-          bash orchestrator/hooks/block-secrets.sh || true
+          bash orchestrator/hooks/block-secrets.sh
       - name: trade/money-tool guard (must never exist)
         run: |
           if grep -rEni "def +(place_order|execute_trade|transfer_funds)" src/ 2>/dev/null; then

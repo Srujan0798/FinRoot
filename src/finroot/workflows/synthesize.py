@@ -350,39 +350,41 @@ _INTENT_TO_DOMAIN: dict[Intent, str] = {
 def detect_domain(query: str, intent: Intent | None) -> str:
     """Return the most likely financial domain for *query*.
 
-    Prefers explicit :class:`Intent` from the classifier; falls back to a
-    keyword sweep over the query. Returns ``"general"`` when nothing matches.
+    **Intent wins** when the classifier returned a strong non-GENERAL intent
+    (TAX / RISK / PORTFOLIO / CREDIT / CASHFLOW / NEWS). Keyword overrides
+    only refine:
+    - GENERAL / unknown intent → full keyword sweep
+    - PORTFOLIO intent + strong risk metrics (VaR, drawdown, …) → risk
+      (FRB must_mention for risk terminology)
+    - never demote TAX to news_impact (historical bug: ``ltcg tax`` was
+      listed under news overrides)
 
-    Wave-13 update: a query that contains strongly domain-specific terms
-    (e.g. "VaR", "drawdown", "HHI") overrides the generic ``portfolio``
-    keyword match. Without this, queries like "What is the VaR on my
-    equity portfolio?" were classified as ``portfolio`` (because the
-    classifier's keyword sweep is first-match-wins) and never produced
-    the risk-specific terminology the FRB grader's ``must_mention`` check
-    requires.
+    Returns ``"general"`` when nothing matches.
     """
-    # Domain-specific override keywords — these are strong enough to
-    # override the broad "portfolio" keyword match. Order: more specific
-    # (risk/news) before broader (portfolio).
+    # Strong domain signals used only when intent is weak/general, or to
+    # upgrade PORTFOLIO → risk for metric-heavy questions.
+    _RISK_METRICS: tuple[str, ...] = (
+        "var", "value-at-risk", "value at risk",
+        "drawdown", "hhi", "herfindahl",
+        "volatility", "sharpe",
+        "stress-test", "stress test", "scenario analysis",
+    )
     _OVERRIDE_KEYWORDS: dict[str, tuple[str, ...]] = {
-        "risk": (
-            "var", "value-at-risk", "value at risk",
-            "drawdown", "hhi", "herfindahl",
-            "volatility", "sharpe",
-            "hedge", "hedging", "index puts", "stress-test", "stress test",
-            "scenario analysis", "default risk", "sovereign bond",
+        "tax": (
+            "ltcg", "stcg", "capital gain", "ltcg tax", "stcg tax",
+            "section 80", "hra exemption", "80ccd", "80d",
+            "indexation", "tax harvesting",
+        ),
+        "risk": _RISK_METRICS + (
+            "hedge", "hedging", "index puts",
+            "default risk", "sovereign bond",
             "credit risk", "mark-to-market",
         ),
         "news_impact": (
             "rbi", "fed ", "rate cut", "rate hike", "bps", "f&o",
             "sebi", "budget 2024", "budget 2025",
             "rbi policy", "repo rate", "fed signaled", "fed signals",
-            "sensex", "rally", "ltcg tax",
-        ),
-        "tax": (
-            "ltcg", "stcg", "capital gain",
-            "section 80", "hra exemption", "80ccd", "80d",
-            "indexation", "tax harvesting",
+            "sensex", "rally",
         ),
         "behavioral": (
             "loss aversion", "recency bias", "fomo", "herd mentality",
@@ -414,6 +416,28 @@ def detect_domain(query: str, intent: Intent | None) -> str:
         ),
     }
     q_lower = (query or "").lower()
+
+    # Strong intents map directly — do not allow news keywords to steal TAX.
+    _STRONG = {
+        Intent.TAX,
+        Intent.RISK,
+        Intent.CREDIT,
+        Intent.CASHFLOW,
+        Intent.NEWS_IMPACT,
+    }
+    if intent is not None and intent in _STRONG and intent in _INTENT_TO_DOMAIN:
+        # Still allow risk-metric upgrade is N/A for these; return intent domain.
+        # Exception: none — TAX/RISK/etc. are trusted.
+        return _INTENT_TO_DOMAIN[intent]
+
+    if intent is Intent.PORTFOLIO:
+        # Upgrade portfolio → risk when query is clearly a risk-metrics ask
+        for kw in _RISK_METRICS:
+            if kw in q_lower:
+                return "risk"
+        return "portfolio"
+
+    # Weak / GENERAL / None: keyword override sweep (tax before news)
     for domain, kws in _OVERRIDE_KEYWORDS.items():
         for kw in kws:
             if kw in q_lower:
@@ -512,7 +536,7 @@ class ResultSynthesizer:
         )
         summary = self._build_summary(
             query, domain, signals, confidence, risk_flags, errors,
-            all_findings, analysis,
+            all_findings, analysis, outputs=outputs,
         )
         actions = self._build_actions(
             domain, signals, inferred_actions, errors,
@@ -854,6 +878,7 @@ class ResultSynthesizer:
         errors: list[str],
         all_findings: list[str],
         analysis: str,
+        outputs: list[dict[str, Any]] | None = None,
     ) -> str:
         """Build a substantive summary with actual financial advice.
 
@@ -865,6 +890,7 @@ class ResultSynthesizer:
             q_short = q_short[:137] + "..."
 
         parts: list[str] = []
+        outs = outputs or []
 
         # Domain-specific advice lead
         if domain == "portfolio":
@@ -879,16 +905,41 @@ class ResultSynthesizer:
                 "Use SIP and rupee cost averaging for gradual rebalancing."
             )
         elif domain == "tax":
-            parts.append(
-                "Based on Indian tax rules (FY 2024-25): LTCG on listed equity above "
-                "₹1 lakh exemption is taxed at 10% plus 4% cess. STCG on equity is "
-                "15% plus cess. STCG on debt funds is taxed at slab rate (up to 30%). "
-                "ITR filing is mandatory if capital gains exceed the basic exemption. "
-                "Section 80CCD(1B) offers ₹50,000 additional NPS deduction. "
-                "Section 80D allows health insurance deduction (₹25,000 / ₹50,000 senior). "
-                "Indexation (CII) applies to debt fund LTCG at 20%. "
-                "Consider tax-loss harvesting to offset gains."
-            )
+            tax_bits: list[str] = []
+            for o in outs:
+                if o.get("type") == "tax_computation" or o.get("tax_amount") is not None:
+                    ta = o.get("tax_amount")
+                    gt = o.get("gain_type", "capital gains")
+                    gain = o.get("gain")
+                    rate = o.get("effective_rate_pct")
+                    rule = o.get("rule_applied")
+                    if ta is not None and gain is not None:
+                        tax_bits.append(
+                            f"Computed tax on ₹{float(gain):,.0f} {gt}: "
+                            f"₹{float(ta):,.0f}"
+                            + (f" (effective {rate}%)" if rate is not None else "")
+                            + (f" under {rule}." if rule else ".")
+                        )
+                    elif ta is not None:
+                        tax_bits.append(f"Computed tax amount: ₹{float(ta):,.0f}.")
+            if tax_bits:
+                parts.append(
+                    " ".join(tax_bits)
+                    + " Based on Indian FY 2024-25 rules: listed equity LTCG is "
+                    "10% above the ₹1 lakh exemption + 4% cess; STCG equity 15% + cess. "
+                    "Verify holding period and ITR obligations before acting."
+                )
+            else:
+                parts.append(
+                    "Based on Indian tax rules (FY 2024-25): LTCG on listed equity above "
+                    "₹1 lakh exemption is taxed at 10% plus 4% cess. STCG on equity is "
+                    "15% plus cess. STCG on debt funds is taxed at slab rate (up to 30%). "
+                    "ITR filing is mandatory if capital gains exceed the basic exemption. "
+                    "Section 80CCD(1B) offers ₹50,000 additional NPS deduction. "
+                    "Section 80D allows health insurance deduction (₹25,000 / ₹50,000 senior). "
+                    "Indexation (CII) applies to debt fund LTCG at 20%. "
+                    "Consider tax-loss harvesting to offset gains."
+                )
         elif domain == "risk":
             parts.append(
                 "Risk assessment: evaluate VaR at 95% confidence, maximum drawdown, "

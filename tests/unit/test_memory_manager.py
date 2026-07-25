@@ -9,6 +9,8 @@ Covers
 * Twin read/write (``get_twin`` raises ``KeyError`` when missing).
 * ``update_twin`` partial update, persistence, reserved-field rejection.
 * ``create`` factory end-to-end.
+* Initialization with default params, history retrieval, context window
+  truncation, and concurrent access.
 """
 
 from __future__ import annotations
@@ -759,3 +761,146 @@ def test_create_factory_creates_sqlite_schema(
         conn.close()
     table_names = {r[0] for r in rows}
     assert "digital_twins" in table_names
+
+
+# ---------------------------------------------------------------------------
+# MemoryManager init with default params
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.wave1
+def test_memory_manager_init(
+    fake_working: WorkingMemory,
+    fallback_semantic: SemanticMemory,
+    twin_store: DigitalTwinStore,
+) -> None:
+    mgr = MemoryManager(
+        working=fake_working,
+        semantic=fallback_semantic,
+        twin_store=twin_store,
+        user_id="test-user",
+    )
+    assert mgr.user_id == "test-user"
+    assert mgr.working is fake_working
+    assert mgr.semantic is fallback_semantic
+    assert mgr.twin_store is twin_store
+
+
+# ---------------------------------------------------------------------------
+# add_turn: add a conversation turn, verify stored
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.wave1
+def test_memory_manager_add_turn(
+    fake_working: WorkingMemory,
+    fallback_semantic: SemanticMemory,
+    twin_store: DigitalTwinStore,
+) -> None:
+    mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
+    mgr.add_turn("user", "What is my portfolio balance?")
+    mgr.add_turn("assistant", "Your portfolio balance is $50,000.")
+    messages = mgr.get_context()
+    assert len(messages) == 2
+    assert messages[0] == {"role": "user", "content": "What is my portfolio balance?"}
+    assert messages[1] == {"role": "assistant", "content": "Your portfolio balance is $50,000."}
+
+
+# ---------------------------------------------------------------------------
+# get_history / get_context: retrieve conversation history
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.wave1
+def test_memory_manager_get_history(
+    fake_working: WorkingMemory,
+    fallback_semantic: SemanticMemory,
+    twin_store: DigitalTwinStore,
+) -> None:
+    mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
+    mgr.add_turn("user", "hello")
+    mgr.add_turn("assistant", "hi there")
+    mgr.add_turn("tool", "data fetched")
+    history = mgr.get_context()
+    assert len(history) == 3
+    assert history[0]["role"] == "user"
+    assert history[1]["role"] == "assistant"
+    assert history[2]["role"] == "tool"
+
+
+@pytest.mark.wave1
+def test_memory_manager_empty_history(
+    fake_working: WorkingMemory,
+    fallback_semantic: SemanticMemory,
+    twin_store: DigitalTwinStore,
+) -> None:
+    mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
+    assert mgr.get_context() == []
+
+
+# ---------------------------------------------------------------------------
+# Context window truncation
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.wave1
+def test_memory_manager_context_window(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.setitem(sys.modules, "chromadb", None)
+    db_path = str(tmp_path / "twin.db")
+    working = WorkingMemory(max_turns=3)
+    semantic = SemanticMemory()
+    twin_store = DigitalTwinStore(db_path=db_path)
+    mgr = MemoryManager(working, semantic, twin_store, "u-1")
+    for i in range(5):
+        mgr.add_turn("user", f"turn {i}")
+    messages = mgr.get_context()
+    assert len(messages) == 3
+    assert messages[0]["content"] == "turn 2"
+    assert messages[1]["content"] == "turn 3"
+    assert messages[2]["content"] == "turn 4"
+
+
+# ---------------------------------------------------------------------------
+# Concurrent access
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.wave1
+def test_memory_manager_concurrent_access(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    import threading
+
+    monkeypatch.setitem(sys.modules, "chromadb", None)
+    db_path = str(tmp_path / "twin.db")
+    working = WorkingMemory(max_turns=100)
+    semantic = SemanticMemory()
+    twin_store = DigitalTwinStore(db_path=db_path)
+    mgr = MemoryManager(working, semantic, twin_store, "u-1")
+
+    errors: list[Exception] = []
+
+    def writer(role: str, count: int) -> None:
+        try:
+            for i in range(count):
+                mgr.add_turn(role, f"thread-{role}-{i}")
+        except Exception as exc:
+            errors.append(exc)
+
+    threads = [
+        threading.Thread(target=writer, args=("user", 20)),
+        threading.Thread(target=writer, args=("assistant", 20)),
+        threading.Thread(target=writer, args=("tool", 20)),
+    ]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+    assert errors == []
+    messages = mgr.get_context()
+    assert len(messages) == 60

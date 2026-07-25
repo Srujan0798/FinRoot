@@ -125,15 +125,20 @@ class TestHelpers:
 
 
 class TestSemanticMemoryFallback:
-    def test_uses_fallback_when_chromadb_missing(self, fallback_only: SemanticMemory) -> None:
+    @pytest.mark.wave1
+    def test_semantic_memory_init(self, fallback_only: SemanticMemory) -> None:
         assert fallback_only._use_chroma is False
 
-    def test_add_returns_doc_id(self, fallback_only: SemanticMemory) -> None:
-        doc_id = fallback_only.add("hello", {"k": "v"})
+    @pytest.mark.wave1
+    def test_semantic_memory_add_fact(self, fallback_only: SemanticMemory) -> None:
+        doc_id = fallback_only.add("machine learning algorithms", {"domain": "ml"})
         assert isinstance(doc_id, str)
-        assert len(doc_id) == 36
+        results = fallback_only.search("machine learning", k=1)
+        assert len(results) == 1
+        assert results[0]["text"] == "machine learning algorithms"
 
-    def test_search_returns_results(self, fallback_only: SemanticMemory) -> None:
+    @pytest.mark.wave1
+    def test_semantic_memory_search(self, fallback_only: SemanticMemory) -> None:
         fallback_only.add("machine learning algorithms", {"domain": "ml"})
         fallback_only.add("stock market analysis", {"domain": "finance"})
         results = fallback_only.search("machine learning", k=2)
@@ -141,8 +146,19 @@ class TestSemanticMemoryFallback:
         assert results[0]["text"] == "machine learning algorithms"
         assert isinstance(results[0]["score"], float)
 
-    def test_search_empty_returns_empty_list(self, fallback_only: SemanticMemory) -> None:
+    @pytest.mark.wave1
+    def test_semantic_memory_empty_search(self, fallback_only: SemanticMemory) -> None:
         assert fallback_only.search("no docs", k=5) == []
+
+    @pytest.mark.wave1
+    def test_semantic_memory_persistence(self, fallback_only: SemanticMemory) -> None:
+        fallback_only.add("market outlook is bullish", {"topic": "finance"})
+        fallback_only.add("interest rates are rising", {"topic": "economy"})
+        results = fallback_only.search("market outlook", k=5)
+        assert len(results) == 2
+        results2 = fallback_only.search("interest rates", k=5)
+        assert len(results2) == 2
+        assert results[0]["metadata"]["topic"] == "finance"
 
     def test_delete(self, fallback_only: SemanticMemory) -> None:
         doc_id = fallback_only.add("ephemeral", {})

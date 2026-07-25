@@ -96,13 +96,39 @@ _CANNED: list[str] = [
 ]
 
 
+# Domain keyword → index ranges into _CANNED (inclusive start, exclusive end).
+# Kept in sync with the ordered sections of _CANNED above.
+_DOMAIN_RANGES: list[tuple[tuple[str, ...], range]] = [
+    (("portfolio", "rebalance", "allocation", "diversif", "holding", "sip"), range(0, 10)),
+    (("var", "drawdown", "sharpe", "beta", "volatility", "risk", "downside"), range(10, 18)),
+    (("tax", "ltcg", "stcg", "80c", "80ccd", "cess", "capital gain"), range(18, 28)),
+    (("news", "rbi", "sentiment", "headline", "repo", "budget", "market impact"), range(28, 36)),
+    (("cashflow", "emergency fund", "emi", "budget", "sip step"), range(36, 42)),
+    (("credit", "cibil", "credit card", "loan"), range(42, 46)),
+    (("insurance", "term", "ulip", "health cover"), range(46, 50)),
+    (("will", "nomination", "estate", "succession"), range(50, 53)),
+    (("bias", "fomo", "herd", "overconfidence", "loss aversion"), range(53, 57)),
+    (("international", "lrs", "usd", "currency", "nasdaq"), range(57, 60)),
+]
+
+
 class MockProvider:
     """Deterministic offline provider for tests and judging."""
 
     name: str = "mock"
 
     def _get_canned(self, prompt: str) -> str:
-        """Return the canned response for *prompt*."""
+        """Return a canned response biased by domain keywords in *prompt*.
+
+        When domain keywords match, pick deterministically within that domain's
+        pool so tax prompts stop hashing into news blurb and vice versa.
+        """
+        lower = (prompt or "").lower()
+        for keywords, rng in _DOMAIN_RANGES:
+            if any(k in lower for k in keywords):
+                pool = list(rng)
+                idx = int(hashlib.sha256(prompt.encode()).hexdigest(), 16) % len(pool)
+                return _CANNED[pool[idx]]
         idx = int(hashlib.sha256(prompt.encode()).hexdigest(), 16) % len(_CANNED)
         return _CANNED[idx]
 

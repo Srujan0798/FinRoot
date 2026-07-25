@@ -57,10 +57,13 @@ _ALLOCATION_CONTEXT_RE = re.compile(
     r"in\s+(?:one|a\s+single)|exposure|invest(?:ed|ing)?\s+\d|put\s+\d)\b",
     re.IGNORECASE,
 )
-# …but never when it's clearly a tax/rate/exemption figure.
+# …but never when it's clearly a tax/rate/exemption figure OR a risk-metric
+# confidence level (e.g. "VaR at 95% confidence" near the word "portfolio").
 _NON_ALLOCATION_CONTEXT_RE = re.compile(
     r"\b(?:tax|cess|ltcg|stcg|slab|exemption|hra|surcharge|rate|gst|tds|"
-    r"interest|yield|coupon|inflation|of\s+basic|return\s+of)\b",
+    r"interest|yield|coupon|inflation|of\s+basic|return\s+of|"
+    r"confidence|var|value[- ]at[- ]risk|percentile|drawdown|"
+    r"sharpe|volatility|stress[- ]?test|scenario)\b",
     re.IGNORECASE,
 )
 
