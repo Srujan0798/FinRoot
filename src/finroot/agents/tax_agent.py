@@ -251,11 +251,15 @@ class TaxPlannerAgent(BaseAgent):
                 "citation": result.citation,
             })
         except Exception as exc:
-            logger.error("TaxPlannerAgent tax computation failed: %s", exc)
+            context = (
+                "TaxPlannerAgent._compute_tax "
+                "(input keys available in state.context.profile_income)"
+            )
+            logger.error("%s failed: %s", context, exc, exc_info=True)
             state.tool_outputs.append({
                 "agent": self.name,
                 "type": "error",
-                "error": f"Tax computation failed: {exc}",
+                "error": f"Tax computation failed ({type(exc).__name__}): {exc}",
             })
 
 

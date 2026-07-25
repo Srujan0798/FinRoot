@@ -67,9 +67,12 @@ FINROOT_OPENAI_API_KEY=
 
 ## Quality gates
 
-Pre-commit runs: `ruff --fix`, `ruff-format`, trailing whitespace, end-of-file, check-yaml/json, detect-private-key, plus two custom hooks:
-- `block-secrets` (FM-07) — no secrets in commits
+Pre-commit runs: `ruff --fix`, `ruff-format`, trailing whitespace, end-of-file, check-yaml/json, detect-private-key, plus three custom hooks:
+- `block-secrets` (FM-07) — no secrets in commits (real-key-shape detection; doc text allowed)
 - `execution-no-drift` (FM-01) — `EXECUTION.md` matches reality
+- `docs-no-drift` — `.md` files cite current HEAD + canonical FinRoot mean (see `orchestrator/scripts/validate_docs.sh`)
+
+Pre-push: optional `orchestrator/hooks/pre-push` hook runs `validate_execution.sh` + `validate_docs.sh` before `git push`. Install with `ln -s ../../orchestrator/hooks/pre-push .git/hooks/pre-push`.
 
 ## Test markers
 
@@ -78,6 +81,8 @@ Pre-commit runs: `ruff --fix`, `ruff-format`, trailing whitespace, end-of-file, 
 @pytest.mark.integration  # cross-module
 @pytest.mark.e2e          # end-to-end
 @pytest.mark.golden       # hand-graded reasoning quality
+@pytest.mark.slow         # subprocess tests (>30s); skip with -m "not slow"
+@pytest.mark.stress       # stress tests (concurrency, large inputs); skip with -m "not stress"
 ```
 
 ## Key files to read first

@@ -129,11 +129,16 @@ class RiskAssessorAgent(BaseAgent):
                 "citation": result.citation,
             })
         except Exception as exc:
-            logger.error("RiskAssessorAgent risk calculation failed: %s", exc)
+            n_returns = len(returns) if returns else 0
+            context = (
+                f"RiskAssessorAgent._compute_risk_metrics "
+                f"(n_returns={n_returns}, returns[0:3]={returns[:3] if returns else []})"
+            )
+            logger.error("%s failed: %s", context, exc, exc_info=True)
             state.tool_outputs.append({
                 "agent": self.name,
                 "type": "error",
-                "error": f"Risk calculation failed: {exc}",
+                "error": f"Risk calculation failed (n_returns={n_returns}): {type(exc).__name__}: {exc}",
             })
 
     def _run_monte_carlo(

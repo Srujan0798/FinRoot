@@ -91,4 +91,5 @@ markers = [
   "golden: hand-graded reasoning quality tests",
   "security: input-validation and injection-prevention tests",
   "slow: tests that take >30s (subprocess, full eval, etc.); skip with -m 'not slow'",
+  "stress: stress tests (concurrency, large inputs); skip with -m 'not stress'",
 ]

@@ -182,11 +182,15 @@ def build_graph(
             try:
                 agent_st = agent.act(agent_st)
             except Exception as exc:
-                logger.error("Agent %s failed: %s", agent_name, exc)
+                logger.error(
+                    "Agent %s failed (state.query=%r): %s",
+                    agent_name, getattr(agent_st, "query", None), exc,
+                    exc_info=True,
+                )
                 agent_st.tool_outputs.append({
                     "agent": agent_name,
                     "type": "error",
-                    "error": str(exc),
+                    "error": f"Agent {agent_name} failed ({type(exc).__name__}): {exc}",
                 })
 
         return {"tool_outputs": list(agent_st.tool_outputs)}
