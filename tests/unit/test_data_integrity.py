@@ -125,6 +125,50 @@ class TestFRBBank:
                 "every FRB task should require at least 1 citation"
             )
 
+    def test_easy_medium_hard_distribution(self, bank: list[dict]) -> None:
+        """The bank should have a reasonable distribution of difficulty levels.
+        Lock the floor for each at 1 (a bank with 0 'hard' questions is a
+        problem because it means we're only testing easy cases).
+        """
+        from collections import Counter
+        counts = Counter(q["difficulty"] for q in bank)
+        for d in ("easy", "medium", "hard"):
+            assert counts.get(d, 0) >= 1, (
+                f"FRB bank has 0 {d!r} questions: {dict(counts)}. "
+                "Difficulty distribution should be roughly balanced."
+            )
+
+    def test_min_questions_per_domain(self, bank: list[dict]) -> None:
+        """Each domain should have a minimum number of questions (>= 3).
+        A domain with 1 question is statistically meaningless for
+        measuring mean_score, and suggests data collection was incomplete.
+        """
+        from collections import Counter
+        counts = Counter(q["domain"] for q in bank)
+        for domain, n in counts.items():
+            assert n >= 3, (
+                f"Domain {domain!r} has only {n} question(s). "
+                "Floor is 3 for statistical meaning. "
+                f"All counts: {dict(counts)}"
+            )
+
+    def test_domains_balanced(self, bank: list[dict]) -> None:
+        """No single domain should dominate the bank (more than 25%).
+        If one domain is over-represented, the headline mean_score is
+        biased toward that domain's difficulty.
+        """
+        from collections import Counter
+        counts = Counter(q["domain"] for q in bank)
+        total = len(bank)
+        for domain, n in counts.items():
+            pct = n / total
+            assert pct <= 0.25, (
+                f"Domain {domain!r} is {pct:.0%} of the bank ({n}/{total} questions). "
+                "A single domain should be <= 25% to keep the headline "
+                "mean_score balanced. All counts: "
+                f"{sorted(counts.items(), key=lambda x: -x[1])}"
+            )
+
 
 class TestAdversarialBank:
     @pytest.fixture(scope="class")

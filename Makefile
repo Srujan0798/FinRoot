@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 PY ?= python3
 
-.PHONY: help install smoke lint test test-fast test-slow test-cold test-zip cli ui evals validate validate-docs validate-links changelog-suggest session-start coverage metrics-drift test-pyramid dep-audit ship-prep docker clean
+.PHONY: help install smoke lint test test-fast test-slow test-cold test-zip cli ui evals validate validate-docs validate-links changelog-suggest session-start coverage metrics-drift test-pyramid dep-audit ship-prep doctor docker clean
 
 help:  ## show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -58,6 +58,9 @@ ship-prep:  ## regenerate metric + rebuild zip + check consistency
 	@echo "=== ship-prep complete. Verify:"
 	@echo "  unzip -p finroot-submission.zip results/metrics.json | python3 -c 'import json,sys;d=json.load(sys.stdin);print(d[\"as_of_sha\"],d[\"systems\"][\"finroot\"][\"mean_score\"])'"
 	@echo "  make session-start"
+
+doctor:  ## smoke-check all integrations (Python, CLI, validators, zip, data)
+	bash scripts/doctor.sh
 
 changelog-suggest:  ## print a draft CHANGELOG entry from the last 10 commits
 	bash scripts/changelog_suggest.sh

@@ -22,7 +22,7 @@ docker compose up --build
 ```
 CLI: `pip install -e .[ui] && PYTHONPATH=src python -m interface.cli --mock "Should I rebalance my 70/30 portfolio before FY-end?"`
 
-**The one headline metric (FRB, 83 tasks, 11 domains):** **FinRoot 0.8741 vs RAG 0.3384 = +158.30% composite lift at HEAD fcfee9e** — `results/metrics.json`.
+**The one headline metric (FRB, 83 tasks, 11 domains):** **FinRoot 0.8741 vs RAG 0.3384 = +158.30% composite lift at HEAD 7d695fc** — `results/metrics.json`.
 
 **Scorecard:** 35% Reasoning — 5-axis Self-Critic + Rooted Prudence + FRB +158% lift. 30% Architecture — LangGraph, 6 agents, 12 tools, Digital Twin, audit chain. 20% Code — modular `src/finroot/`, Pydantic v2, pytest 1000+, ruff-clean. 15% Idea — sovereign, auditable reasoning over your financial twin.
 
