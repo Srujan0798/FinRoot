@@ -22,7 +22,7 @@ docker compose up --build
 ```
 CLI: `pip install -e ".[ui]" && PYTHONPATH=src python -m interface.cli --mock "Should I rebalance my 70/30 portfolio before FY-end?"`
 
-**Headline metric (FRB, 83 tasks, mock k=1, regenerated):** FinRoot mean **0.9117** · pass@1 **1.0000** vs RAG mean **0.3390** = **+168.94%** composite lift at HEAD **add34a1** — `results/metrics.json`.
+**Headline metric (FRB, 83 tasks, mock k=1, regenerated):** FinRoot mean **0.9117** · pass@1 **1.0000** vs RAG mean **0.3390** = **+168.94%** composite lift at HEAD **75f23e2** — `results/metrics.json`.
 
 **Scorecard:** 35% Reasoning — Self-Critic + Prudence + FRB + golden GP tax/risk/trap. 30% Architecture — multi-agent + twin + audit. 20% Code — modular tests + locks. 15% Idea — sovereign auditable reasoning.
 
