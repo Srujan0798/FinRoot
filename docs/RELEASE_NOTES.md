@@ -26,7 +26,7 @@ against OpenAI/Groq, and ships with a dark-mode Streamlit UI, a Typer CLI, and D
 > - RAG baseline mean score: **0.3384** (33.8 %)
 > - Lift: **158.3 %** (2.58x)
 >
-> _Metrics stamped as of sha `696be57`._
+> _Metrics stamped as of sha `fcfee9e`._
 
 To refresh the numbers after re-running evals:
 

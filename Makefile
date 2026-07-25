@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 PY ?= python3
 
-.PHONY: help install smoke lint test test-fast test-slow test-cold test-zip cli ui evals validate validate-docs changelog-suggest session-start coverage metrics-drift test-pyramid dep-audit docker clean
+.PHONY: help install smoke lint test test-fast test-slow test-cold test-zip cli ui evals validate validate-docs validate-links changelog-suggest session-start coverage metrics-drift test-pyramid dep-audit ship-prep docker clean
 
 help:  ## show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -42,6 +42,22 @@ validate:  ## structural + execution-drift + doc-drift checks
 
 validate-docs:  ## scan .md files for stale SHA / metric references
 	bash orchestrator/scripts/validate_docs.sh
+
+validate-links:  ## check that internal .md cross-references resolve
+	bash orchestrator/scripts/validate_doc_links.sh
+
+# One-command "I'm about to ship" target. Refreshes the metric, regenerates
+# docs if they cite a stale SHA, and rebuilds the zip. Run before tagging
+# a release.
+ship-prep:  ## regenerate metric + rebuild zip + check consistency
+	make evals
+	bash scripts/make_submission.sh
+	bash orchestrator/scripts/validate_docs.sh
+	bash orchestrator/scripts/validate_doc_links.sh
+	@echo
+	@echo "=== ship-prep complete. Verify:"
+	@echo "  unzip -p finroot-submission.zip results/metrics.json | python3 -c 'import json,sys;d=json.load(sys.stdin);print(d[\"as_of_sha\"],d[\"systems\"][\"finroot\"][\"mean_score\"])'"
+	@echo "  make session-start"
 
 changelog-suggest:  ## print a draft CHANGELOG entry from the last 10 commits
 	bash scripts/changelog_suggest.sh
