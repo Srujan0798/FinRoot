@@ -93,6 +93,41 @@ Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced thi
 - [x] Docker compose smoke — `(healthy)`, verified twice, healthcheck bug fixed
 - [ ] Human freeze bet — reserved for the human; not something this session can grant
 
+## F. Known dependency CVEs (disclosed, not silently ignored)
+
+A dedicated `pip-audit` pass against `requirements.txt` found **14 real, PYSEC/OSV-backed
+advisories** across `langchain`/`langgraph`/`langgraph-checkpoint`/`langgraph-sdk`/
+`langchain-text-splitters`/`chromadb`, including RCE-class unsafe-deserialization advisories
+in `langgraph-checkpoint` and SSRF/path-traversal advisories in `langchain-core`. **The fixes
+for all of them ship only in major version bumps** (langchain/langgraph 1.x,
+langgraph-checkpoint 3.x/4.x) that this repo's own version ceilings
+(`langchain>=0.3,<0.4`, `langgraph>=0.2,<0.3`) actively block.
+
+**Why this was not fixed this session:** bumping a major version of the core orchestration
+framework without a full regression pass (the actual `StateGraph` API, message schemas, and
+checkpoint interfaces can and do change across majors) is exactly the kind of reckless,
+untested change this project's own laws forbid — "surgical changes," "verify in layers,"
+never trade a known, scoped issue for an unknown, unscoped one under time pressure.
+
+**Real exploitability in this codebase, checked directly (not assumed):**
+- `orchestrator.py:91` calls `StateGraph(...).compile()` with **no checkpointer argument** —
+  LangGraph's default in-memory execution is used. The vulnerable `JsonPlusSerializer`
+  deserialization path in `langgraph-checkpoint` (the RCE-class advisories) is only reachable
+  when loading persisted checkpoint state, which this codebase never does. Present as a
+  transitive dependency; not exercised.
+- `semantic.py:126` uses `chromadb.PersistentClient` (embedded/local), never
+  `chromadb.HttpClient`/a server — the chromadb pre-auth code-injection advisory requires an
+  exposed HTTP server, which this codebase never stands up.
+- The remaining SSRF/path-traversal advisories are in code paths (filesystem-search agent
+  middleware, ChatOpenAI's image-input SSRF, HTML header splitter) this project doesn't use.
+
+**Recommendation for whoever owns this next:** plan a dedicated wave to bump
+langchain/langgraph to their 1.x lines with a full regression pass before those version
+ceilings are relaxed — do not do it as a last-minute change. Full detail:
+`work/reports/*dependency-audit*` (this session's live `pip-audit` run).
+
+---
+
 **Bugs found and fixed this session via genuine hostile/cold verification (not present in any prior "~96%" claim):**
 1. `pip install -e ".[ui]"` warned about a non-existent extra
 2. Documented judge command silently needed dev deps (undocumented)
@@ -106,5 +141,8 @@ Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced thi
 10. CI (`ci.yml`/`test.yml`) used default shallow clone, which would break the new git-ancestry metrics check — added `fetch-depth: 0`
 11. `orchestrator/scripts/validate.sh` had two stale checks (KIMI.md/AGENTS.md forced byte-identical to CLAUDE.md; all historical `work/wave-*` dirs scanned for collisions) that permanently failed the `docs_sync` CI workflow — fixed to match how the project actually evolved
 12. README/docs overstated "Built with LangChain + LangGraph" when the code only uses LangGraph's StateGraph — corrected wording, verified via grep
+13. GP-1 (portfolio) misrouted to `news_impact` intent on a paraphrase lacking "portfolio"/"rebalance"/"allocation" — bare "stock" alone outscored an empty portfolio match. Broadened PORTFOLIO keyword triggers (HALL_OF_SHAME Pattern 8)
+14. GP-2 (tax) fell through to a non-answer on "a lakh" (word-form amount), "two years" (word-form holding period), and "equities" (plural not matching substring "equity") — three compounding gaps, all fixed with word-form parsing + plural support (HALL_OF_SHAME Pattern 9)
+15. Dependency audit found 14 real PYSEC-backed CVEs (incl. RCE-class in langgraph-checkpoint) blocked by this repo's own version ceilings — disclosed honestly in §F above rather than silently ignored or fixed with an untested, risky major-version bump under time pressure; real exploitability checked directly (no checkpointer compiled, chromadb runs embedded-only) and found low but non-zero
 
 **Real score: ~97-98%. Never invent 100% — the human freeze bet is the one thing this can't self-certify.**
