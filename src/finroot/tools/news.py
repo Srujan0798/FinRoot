@@ -242,7 +242,17 @@ def _select_mock_articles(query: str, max_results: int) -> list[NewsArticle]:
     topic_keywords = {
         "rbi": ["rbi", "repo", "rate", "monetary", "inflation", "interest rate"],
         "tax": ["tax", "itr", "budget", "capital gains", "80c", "deduction", "cess"],
-        "stock": ["reliance", "tcs", "infosys", "stock", "share", "equity", "nifty", "sensex", "buyback"],
+        "stock": [
+            "reliance",
+            "tcs",
+            "infosys",
+            "stock",
+            "share",
+            "equity",
+            "nifty",
+            "sensex",
+            "buyback",
+        ],
         "mutual_fund": ["mutual fund", "sip", "elss", "nfo", "nav", "scheme", "amc"],
         "insurance": ["insurance", "irdai", "term", "health", "premium", "claim"],
         "market": ["market", "rally", "index", "trading", "bull", "bear"],
@@ -250,9 +260,9 @@ def _select_mock_articles(query: str, max_results: int) -> list[NewsArticle]:
     for topic, keywords in topic_keywords.items():
         if any(kw in query_lower for kw in keywords):
             articles = _MOCK_ARTICLES_BY_TOPIC.get(topic, _MOCK_ARTICLES_BY_TOPIC["default"])
-            return articles[:min(max_results, len(articles))]
+            return articles[: min(max_results, len(articles))]
     articles = _MOCK_ARTICLES_BY_TOPIC["default"]
-    return articles[:min(max_results, len(articles))]
+    return articles[: min(max_results, len(articles))]
 
 
 # ---------------------------------------------------------------------------

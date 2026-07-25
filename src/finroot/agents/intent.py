@@ -18,24 +18,79 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from finroot.schemas.enums import Intent
 
-_SYMBOL_RE: re.Pattern[str] = re.compile(
-    r"\b([A-Z]{2,12}(?:\.NS|\.BO)?)\b"
-)
+_SYMBOL_RE: re.Pattern[str] = re.compile(r"\b([A-Z]{2,12}(?:\.NS|\.BO)?)\b")
 _TIMEFRAME_RE: re.Pattern[str] = re.compile(
     r"\b(\d+)\s*(day|days|week|weeks|month|months|year|years)\b",
     re.IGNORECASE,
 )
 
 # Finance jargon / tax codes that look like tickers but are not.
-_SYMBOL_DENYLIST: frozenset[str] = frozenset({
-    "LTCG", "STCG", "ETF", "SIP", "STP", "SWP", "NAV", "VAR", "HHI",
-    "ROI", "EMI", "GDP", "RBI", "SEBI", "NPS", "PPF", "EPF", "ELSS",
-    "HRA", "TDS", "GST", "INR", "USD", "API", "LLM", "FY", "ITR",
-    "VDA", "ULIP", "REIT", "LRS", "DTAA", "CII", "FNO", "NFO",
-    "THE", "AND", "FOR", "MY", "OR", "TO", "OF", "IN", "ON", "IS",
-    "WHAT", "HOW", "SHOULD", "CAN", "WILL", "FROM", "WITH", "THIS",
-    "THAT", "HAVE", "HAS", "ARE", "WAS", "BE", "ALL", "NOT", "DO",
-})
+_SYMBOL_DENYLIST: frozenset[str] = frozenset(
+    {
+        "LTCG",
+        "STCG",
+        "ETF",
+        "SIP",
+        "STP",
+        "SWP",
+        "NAV",
+        "VAR",
+        "HHI",
+        "ROI",
+        "EMI",
+        "GDP",
+        "RBI",
+        "SEBI",
+        "NPS",
+        "PPF",
+        "EPF",
+        "ELSS",
+        "HRA",
+        "TDS",
+        "GST",
+        "INR",
+        "USD",
+        "API",
+        "LLM",
+        "FY",
+        "ITR",
+        "VDA",
+        "ULIP",
+        "REIT",
+        "LRS",
+        "DTAA",
+        "CII",
+        "FNO",
+        "NFO",
+        "THE",
+        "AND",
+        "FOR",
+        "MY",
+        "OR",
+        "TO",
+        "OF",
+        "IN",
+        "ON",
+        "IS",
+        "WHAT",
+        "HOW",
+        "SHOULD",
+        "CAN",
+        "WILL",
+        "FROM",
+        "WITH",
+        "THIS",
+        "THAT",
+        "HAVE",
+        "HAS",
+        "ARE",
+        "WAS",
+        "BE",
+        "ALL",
+        "NOT",
+        "DO",
+    }
+)
 
 # Higher = wins ties. RISK_PRUDENCE > TAX > PORTFOLIO > RISK_METRICS >
 # CREDIT > NEWS > CASHFLOW > GENERAL
@@ -53,12 +108,30 @@ _TIE_PRIORITY: dict[Intent, int] = {
 # Partial (substring) match scores weight * 0.7
 _KEYWORD_RULES: list[tuple[list[str], Intent, float]] = [
     # --- RISK prudence / leverage (highest semantic weight) ---
+    # Note: bare "emergency fund" is NOT here — that would steal cashflow SIP
+    # questions. All-in + emergency is handled by compound / small-cap / all-in.
     (
         [
-            "emergency fund", "small-cap", "small cap", "penny stock", "all in",
-            "entire savings", "life savings", "all my savings", "borrow to invest",
-            "loan to invest", "loan to buy", "leverage", "margin trade", "f&o",
-            "futures and options", "10x", "all-in", "yolo",
+            "small-cap",
+            "small cap",
+            "penny stock",
+            "all in",
+            "all-in",
+            "entire savings",
+            "life savings",
+            "all my savings",
+            "borrow to invest",
+            "loan to invest",
+            "loan to buy",
+            "leverage",
+            "margin trade",
+            "f&o",
+            "futures and options",
+            "10x",
+            "yolo",
+            "put it all",
+            "put all",
+            "all of my emergency",
         ],
         Intent.RISK,
         12.0,
@@ -66,39 +139,110 @@ _KEYWORD_RULES: list[tuple[list[str], Intent, float]] = [
     # Compound: debt used to buy risk assets
     (
         [
-            "loan to buy stock", "loan to buy stocks", "personal loan to buy",
-            "borrow money to invest", "borrow to buy", "margin to buy",
+            "loan to buy stock",
+            "loan to buy stocks",
+            "personal loan to buy",
+            "borrow money to invest",
+            "borrow to buy",
+            "margin to buy",
         ],
         Intent.RISK,
         15.0,
     ),
     # --- RISK metrics ---
     (
-        ["var", "value-at-risk", "value at risk", "drawdown", "max drawdown",
-         "volatility", "sharpe", "beta", "hhi", "stress test", "stress-test"],
+        [
+            "var",
+            "value-at-risk",
+            "value at risk",
+            "drawdown",
+            "max drawdown",
+            "volatility",
+            "sharpe",
+            "beta",
+            "hhi",
+            "stress test",
+            "stress-test",
+        ],
         Intent.RISK,
         11.0,
     ),
     (["risk", "risky", "downside"], Intent.RISK, 6.0),
     # --- TAX ---
     (
-        ["tax", "capital gains", "ltcg", "stcg", "tax-loss", "tax loss",
-         "harvest", "80c", "80ccd", "80d", "indexation", "cess"],
+        [
+            "tax",
+            "capital gains",
+            "ltcg",
+            "stcg",
+            "tax-loss",
+            "tax loss",
+            "harvest",
+            "80c",
+            "80ccd",
+            "80d",
+            "indexation",
+            "cess",
+            "hra",
+            "hra exemption",
+            "section 80",
+            "deduction",
+            "exemption",
+            "taxable",
+            "tax saving",
+            "tax save",
+            "itr",
+            "vda",
+            "health insurance premium",
+        ],
         Intent.TAX,
         10.0,
     ),
+    # Strong tax-code / exemption phrases beat salary/insurance generic routing
+    (
+        [
+            "hra exemption",
+            "section 80d",
+            "section 80ccd",
+            "section 80c",
+            "ltcg tax",
+            "stcg tax",
+            "capital gain tax",
+            "capital gains tax",
+        ],
+        Intent.TAX,
+        14.0,
+    ),
     # --- PORTFOLIO ---
     (
-        ["portfolio", "allocation", "rebalance", "rebalancing", "diversif",
-         "asset allocation", "holdings"],
+        [
+            "portfolio",
+            "allocation",
+            "rebalance",
+            "rebalancing",
+            "diversif",
+            "asset allocation",
+            "holdings",
+        ],
         Intent.PORTFOLIO,
         8.0,
     ),
     # --- NEWS / policy (specific before generic market words) ---
     (
-        ["rbi policy", "policy change", "policy changes", "regulatory",
-         "regulation", "announcement", "rate decision", "monetary policy",
-         "fiscal policy", "repo rate", "rate cut", "rate hike"],
+        [
+            "rbi policy",
+            "policy change",
+            "policy changes",
+            "regulatory",
+            "regulation",
+            "announcement",
+            "rate decision",
+            "monetary policy",
+            "fiscal policy",
+            "repo rate",
+            "rate cut",
+            "rate hike",
+        ],
         Intent.NEWS_IMPACT,
         9.0,
     ),
@@ -113,21 +257,85 @@ _KEYWORD_RULES: list[tuple[list[str], Intent, float]] = [
         4.0,
     ),
     (
-        ["price", "market", "stock", "stocks", "fundamental", "pe ratio",
-         "earnings", "sector"],
+        ["price", "market", "stock", "stocks", "fundamental", "pe ratio", "earnings", "sector"],
         Intent.NEWS_IMPACT,
         3.0,
     ),
+    # FX / international (must not fall through to GENERAL — golden intl tests)
+    (
+        [
+            "currency",
+            "exchange rate",
+            "forex",
+            "usd/inr",
+            "usd",
+            "inr",
+            "international",
+            "overseas",
+            "lrs",
+            "remittance",
+            "dollar",
+            "rupee",
+        ],
+        Intent.NEWS_IMPACT,
+        8.0,
+    ),
     # --- CASHFLOW ---
     (
-        ["cashflow", "cash flow", "income", "expense", "budget", "sip"],
+        [
+            "cashflow",
+            "cash flow",
+            "income",
+            "expense",
+            "budget",
+            "sip",
+            "first salary",
+            "first job",
+            "monthly surplus",
+            "emergency fund",
+            "emergency corpus",
+            "salary",
+        ],
         Intent.CASHFLOW,
-        7.0,
+        7.5,
     ),
     # --- CREDIT (plain loan without invest/stock → credit) ---
     (
         ["credit", "loan", "emi", "debt", "cibil", "credit card"],
         Intent.CREDIT,
+        7.0,
+    ),
+    # --- BEHAVIORAL (maps to GENERAL intent; domain detect handles behavioral) ---
+    (
+        [
+            "loss aversion",
+            "recency bias",
+            "fomo",
+            "herd",
+            "overconfidence",
+            "anchoring",
+            "sunk cost",
+            "every hour",
+            "every day",
+            "panic sell",
+            "checking my portfolio",
+            "want to sell after",
+        ],
+        Intent.GENERAL,
+        6.0,
+    ),
+    # --- INSURANCE (GENERAL intent; domain detect → insurance) ---
+    (
+        [
+            "insurance",
+            "health cover",
+            "sum insured",
+            "term plan",
+            "ulip",
+            "health insurance",
+            "term insurance",
+        ],
+        Intent.GENERAL,
         7.0,
     ),
     # --- GENERAL ---
@@ -244,14 +452,25 @@ class IntentClassifier:
         debt = any(
             t in lower
             for t in (
-                "loan", "borrow", "leverage", "margin", "credit card debt",
+                "loan",
+                "borrow",
+                "leverage",
+                "margin",
+                "credit card debt",
             )
         )
         invest = any(
             t in lower
             for t in (
-                "stock", "stocks", "equity", "invest", "crypto", "share",
-                "shares", "mutual fund", "sip",
+                "stock",
+                "stocks",
+                "equity",
+                "invest",
+                "crypto",
+                "share",
+                "shares",
+                "mutual fund",
+                "sip",
             )
         )
         return debt and invest

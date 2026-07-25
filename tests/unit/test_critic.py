@@ -106,9 +106,7 @@ def _make_state(
 def _score(
     axis: str, value: float, *, rationale: str = "test", issues: list[str] | None = None
 ) -> CriticScore:
-    return CriticScore(
-        axis=axis, score=value, rationale=rationale, issues=issues or []
-    )
+    return CriticScore(axis=axis, score=value, rationale=rationale, issues=issues or [])
 
 
 # ---------------------------------------------------------------------------
@@ -257,10 +255,7 @@ class TestRiskyRecommendation:
         self.critic = SelfCritic()
         self.rec = _make_rec(
             summary="Diversified portfolio recommendation",
-            analysis=(
-                "Allocate 30% to equities, 30% to bonds, 20% to real estate, "
-                "20% to cash."
-            ),
+            analysis=("Allocate 30% to equities, 30% to bonds, 20% to real estate, 20% to cash."),
             risks=[],
             actions=[
                 "Allocate 30% to equities within Q1",
@@ -381,9 +376,7 @@ class TestThresholdBoundary:
 
     @staticmethod
     def _uniform_axes(target: float) -> list[CriticScore]:
-        return [
-            _score(axis, target, rationale="forced for test") for axis in AXES
-        ]
+        return [_score(axis, target, rationale="forced for test") for axis in AXES]
 
     def test_threshold_math_059_is_below(self) -> None:
         assert SelfCritic.THRESHOLD > 0.59
@@ -392,24 +385,18 @@ class TestThresholdBoundary:
         assert SelfCritic.THRESHOLD <= 0.60
 
     def test_overall_059_fails(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        monkeypatch.setattr(
-            self.critic, "_score_axes", lambda state, rec: self._uniform_axes(0.59)
-        )
+        monkeypatch.setattr(self.critic, "_score_axes", lambda state, rec: self._uniform_axes(0.59))
         verdict = self.critic.evaluate(self.state)
         assert verdict.overall == pytest.approx(0.59, abs=1e-9)
         assert verdict.passed is False
 
     def test_overall_060_passes(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        monkeypatch.setattr(
-            self.critic, "_score_axes", lambda state, rec: self._uniform_axes(0.60)
-        )
+        monkeypatch.setattr(self.critic, "_score_axes", lambda state, rec: self._uniform_axes(0.60))
         verdict = self.critic.evaluate(self.state)
         assert verdict.overall == pytest.approx(0.60, abs=1e-9)
         assert verdict.passed is True
 
-    def test_overall_computation_uses_weights(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_overall_computation_uses_weights(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Mix weights and verify the overall math directly."""
         per_axis = {
             "correctness": 1.0,
@@ -419,8 +406,7 @@ class TestThresholdBoundary:
             "evidence": 1.0,
         }
         scores = [
-            _score(axis, value, rationale="weighted-sum test")
-            for axis, value in per_axis.items()
+            _score(axis, value, rationale="weighted-sum test") for axis, value in per_axis.items()
         ]
         monkeypatch.setattr(self.critic, "_score_axes", lambda state, rec: scores)
         verdict = self.critic.evaluate(self.state)
@@ -428,9 +414,7 @@ class TestThresholdBoundary:
         assert verdict.overall == pytest.approx(expected, abs=1e-9)
         assert verdict.passed is True  # 0.60 exactly
 
-    def test_overall_just_below_threshold_fails(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_overall_just_below_threshold_fails(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """0.5999 must fail."""
         scores = self._uniform_axes(0.5999)
         monkeypatch.setattr(self.critic, "_score_axes", lambda state, rec: scores)
@@ -447,9 +431,7 @@ class TestThresholdBoundary:
 class TestMustFix:
     """must_fix must list every axis whose score dropped below MUST_FIX_THRESHOLD."""
 
-    def test_must_fix_lists_all_sub_half_axes(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_must_fix_lists_all_sub_half_axes(self, monkeypatch: pytest.MonkeyPatch) -> None:
         critic = SelfCritic()
         scores = [
             _score("correctness", 0.9),
@@ -467,9 +449,7 @@ class TestMustFix:
             "evidence",
         }
 
-    def test_must_fix_excludes_axes_at_threshold(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_must_fix_excludes_axes_at_threshold(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """0.5 exactly is the threshold — must_fix excludes it (strict <)."""
         critic = SelfCritic()
         scores = [_score(axis, 0.5) for axis in AXES]
@@ -478,9 +458,7 @@ class TestMustFix:
         verdict = critic.evaluate(state)
         assert verdict.must_fix == []
 
-    def test_must_fix_excludes_axes_above_threshold(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_must_fix_excludes_axes_above_threshold(self, monkeypatch: pytest.MonkeyPatch) -> None:
         critic = SelfCritic()
         scores = [_score(axis, 0.6) for axis in AXES]
         monkeypatch.setattr(critic, "_score_axes", lambda state, rec: scores)
@@ -563,9 +541,7 @@ class TestFailureModes:
         critic = SelfCritic()
         rec = _make_rec(
             summary="Final recommendation",
-            analysis=(
-                "Because your situation is unique, this is the final answer."
-            ),
+            analysis=("Because your situation is unique, this is the final answer."),
             risks=["loss of principal"],
             actions=["Hold for 6 months"],
             citations=[_citation()],

@@ -19,12 +19,14 @@ class _JsonFallbackStore:
     def add(self, text: str, metadata: dict[str, Any], doc_id: str | None = None) -> str:
         if doc_id is None:
             doc_id = str(uuid.uuid4())
-        self._docs.append({
-            "id": doc_id,
-            "text": text,
-            "metadata": metadata,
-            "tf_idf": [],
-        })
+        self._docs.append(
+            {
+                "id": doc_id,
+                "text": text,
+                "metadata": metadata,
+                "tf_idf": [],
+            }
+        )
         self._dirty = True
         return doc_id
 
@@ -45,7 +47,9 @@ class _JsonFallbackStore:
             tokens = _tokenize(doc["text"])
             tf = Counter(tokens)
             total = len(tokens) if tokens else 1
-            doc["tf_idf"] = {term: (count / total) * self._idf.get(term, 0.0) for term, count in tf.items()}
+            doc["tf_idf"] = {
+                term: (count / total) * self._idf.get(term, 0.0) for term, count in tf.items()
+            }
         self._dirty = False
 
     def search(self, query: str, k: int) -> list[dict[str, Any]]:
@@ -66,11 +70,13 @@ class _JsonFallbackStore:
         scored.sort(key=lambda x: x[0], reverse=True)
         results: list[dict[str, Any]] = []
         for score, doc in scored[:k]:
-            results.append({
-                "text": doc["text"],
-                "metadata": doc["metadata"],
-                "score": round(score, 6),
-            })
+            results.append(
+                {
+                    "text": doc["text"],
+                    "metadata": doc["metadata"],
+                    "score": round(score, 6),
+                }
+            )
         return results
 
     def delete(self, doc_id: str) -> None:
@@ -141,7 +147,13 @@ class SemanticMemory:
             for i, doc in enumerate(docs):
                 dist = dists[i] if i < len(dists) else 0.0
                 score = 1.0 - dist if dist <= 1.0 else 0.0
-                out.append({"text": doc, "metadata": metas[i] if i < len(metas) else {}, "score": round(score, 6)})
+                out.append(
+                    {
+                        "text": doc,
+                        "metadata": metas[i] if i < len(metas) else {},
+                        "score": round(score, 6),
+                    }
+                )
             return out
         return self._fallback.search(query, k)
 

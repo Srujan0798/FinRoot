@@ -97,9 +97,7 @@ class TestPromptInjection:
         assert isinstance(result.intent, Intent)
 
     @pytest.mark.parametrize("payload", PROMPT_INJECTIONS)
-    def test_prompt_injection_never_becomes_high_confidence(
-        self, payload: str
-    ) -> None:
+    def test_prompt_injection_never_becomes_high_confidence(self, payload: str) -> None:
         clf = IntentClassifier()
         result = clf.classify(payload)
         # Prompt injections should not trigger a 1.0 confidence match
@@ -130,17 +128,13 @@ class TestToolOutputInjection:
     ]
 
     @pytest.mark.parametrize("output", MALICIOUS_TOOL_OUTPUTS)
-    def test_agent_state_accepts_injected_tool_output_gracefully(
-        self, output: dict
-    ) -> None:
+    def test_agent_state_accepts_injected_tool_output_gracefully(self, output: dict) -> None:
         state = AgentState(query="test", tool_outputs=[output])
         assert len(state.tool_outputs) == 1
         assert state.tool_outputs[0]["result"] == "OK"
 
     @pytest.mark.parametrize("output", MALICIOUS_TOOL_OUTPUTS)
-    def test_injected_keys_not_promoted_to_state(
-        self, output: dict
-    ) -> None:
+    def test_injected_keys_not_promoted_to_state(self, output: dict) -> None:
         state = AgentState(query="test", tool_outputs=[output])
         assert not hasattr(state, "__proto__")
         assert state.intent is None
@@ -155,9 +149,7 @@ class TestToolOutputInjection:
 
     def test_agent_state_rejects_non_dict_tool_output(self) -> None:
         with pytest.raises(ValidationError):
-            AgentState.model_validate(
-                {"query": "test", "tool_outputs": ["malicious string"]}
-            )
+            AgentState.model_validate({"query": "test", "tool_outputs": ["malicious string"]})
 
 
 # ---------------------------------------------------------------------------

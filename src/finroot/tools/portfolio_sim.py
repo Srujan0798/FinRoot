@@ -75,22 +75,29 @@ class SimInput(BaseModel):
         ),
     )
     rebalance_frequency_days: int = Field(
-        default=63, ge=1, le=252,
+        default=63,
+        ge=1,
+        le=252,
         description="Days between rebalancing trades (only used if rebalance=True).",
     )
     monthly_contribution: float = Field(
-        default=0.0, ge=0.0,
+        default=0.0,
+        ge=0.0,
         description="Rupee amount added at the start of each calendar month.",
     )
     ltcg_rate: float = Field(
-        default=0.10, ge=0.0, le=0.5,
+        default=0.10,
+        ge=0.0,
+        le=0.5,
         description=(
             "LTCG tax rate applied to positive final-period gains (default 10% "
             "matches Indian listed-equity LTCG post the ₹1L exemption)."
         ),
     )
     stcg_rate: float = Field(
-        default=0.15, ge=0.0, le=0.5,
+        default=0.15,
+        ge=0.0,
+        le=0.5,
         description="STCG tax rate (default 15% for listed equity).",
     )
 
@@ -148,13 +155,9 @@ class PortfolioSimulatorTool(BaseTool[SimInput, SimOutput]):
 
         for h in inp.holdings:
             if "weight" not in h or not isinstance(h["weight"], (int, float)):
-                raise ToolCallError(
-                    f"Each holding must have a numeric 'weight' field; got {h}"
-                )
+                raise ToolCallError(f"Each holding must have a numeric 'weight' field; got {h}")
             if h["weight"] <= 0:
-                raise ToolCallError(
-                    f"Holdings weight must be positive; got {h['weight']}"
-                )
+                raise ToolCallError(f"Holdings weight must be positive; got {h['weight']}")
 
         total_weight = sum(h["weight"] for h in inp.holdings)
         if abs(total_weight - 1.0) > 0.01:
@@ -232,10 +235,7 @@ class PortfolioSimulatorTool(BaseTool[SimInput, SimOutput]):
                 if inp.monthly_contribution > 0
                 else "No contributions. "
             )
-            + (
-                f"After-tax assumes LTCG {inp.ltcg_rate:.0%} on positive "
-                "terminal gains."
-            )
+            + (f"After-tax assumes LTCG {inp.ltcg_rate:.0%} on positive terminal gains.")
         )
 
         citation = (

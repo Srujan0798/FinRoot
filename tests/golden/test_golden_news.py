@@ -16,7 +16,9 @@ pytestmark = pytest.mark.golden
 
 def _get_rec(state: AgentState) -> Recommendation:
     rec = state.candidate or state.final
-    assert rec is not None, "Pipeline produced no recommendation (candidate and final are both None)"
+    assert rec is not None, (
+        "Pipeline produced no recommendation (candidate and final are both None)"
+    )
     return rec
 
 
@@ -40,8 +42,7 @@ class TestGoldenNews:
         state = run_pipeline("Latest news on Indian stock market")
         tool_text = _all_tool_output_text(state)
         assert "news_search" in tool_text, (
-            f"News tool outputs should contain news_search. "
-            f"Tool output preview: {tool_text[:500]}"
+            f"News tool outputs should contain news_search. Tool output preview: {tool_text[:500]}"
         )
 
     def test_news_sentiment_analysis_in_tool_outputs(self, run_pipeline):
@@ -58,8 +59,7 @@ class TestGoldenNews:
         state = run_pipeline("What is the latest news about Indian markets?")
         rec = _get_rec(state)
         assert len(rec.citations) >= 1, (
-            f"News recommendation should have at least 1 citation, "
-            f"got {len(rec.citations)}"
+            f"News recommendation should have at least 1 citation, got {len(rec.citations)}"
         )
 
     def test_news_has_actions(self, run_pipeline):
@@ -67,8 +67,7 @@ class TestGoldenNews:
         state = run_pipeline("How does the budget news affect my portfolio?")
         rec = _get_rec(state)
         assert len(rec.actions) >= 1, (
-            f"News recommendation should have at least 1 action, "
-            f"got {len(rec.actions)}"
+            f"News recommendation should have at least 1 action, got {len(rec.actions)}"
         )
 
     def test_news_intent_classified(self, run_pipeline):

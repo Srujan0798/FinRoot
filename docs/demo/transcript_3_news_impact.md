@@ -1,6 +1,6 @@
 # Demo Transcript 3: News Impact
 
-> Generated: 2026-06-21 01:24 UTC  
+> Generated: 2026-07-25 15:20 UTC  
 > Mode: Mock (offline, no API keys)
 
 ---
@@ -32,7 +32,7 @@ The query falls in the **news_impact** domain. Key concepts to consider: duratio
 - sentiment_analysis: produced output
 
 ### Findings
-- [intent_classifier] {'intent': 'news_impact', 'confidence': 1.0, 'entities': {'symbols': ['RBI'], 'timeframe': None}, 'reasoning': "Keyword 'rbi policy' matched for intent news_impact"}
+- [intent_classifier] {'intent': 'news_impact', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Scored intent news_impact=28.3 (top keyword 'impact'); scores={news_impact:28.3, portfolio:8.0, credit:7.0}"}
 - [context_assembler] {'query': 'What is the impact of recent RBI policy changes on my debt fund holdings?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>, 'investment_horizon': <InvestmentHorizon.MEDIUM: 'medium'>, 'monthly_income': 150000.0, 'monthly_expenses': 85000.0, 'tax_bracket_pct': 20.0, 'goals': ['Build emergency fund of 12 months
 - [news_search] articles=[NewsArticle(title='RBI holds repo rate steady at 6.5% amid inflation concerns', url='https://example.com/news/rbi-holds-rate', published_at='2026-06-19T08:00:00Z', source='Mock Economic Times', summary='The Reserve Bank of India kept the repo rate unchanged at 6.5% in its latest monetary policy review, citing persistent inflation above the 4% target. Governor noted global uncertainty as 
 - [sentiment_analysis] results=[SentimentResult(text="articles=[NewsArticle(title='RBI holds repo rate steady at 6.5% amid inflation concerns', url='https://example.com/news/rbi-holds-rate', published_at='2026-06-19T08:00:00Z', source='Mock Economic Times', summary='The Reserve Bank of India kept the repo rate unchanged at 6.5% in its latest monetary policy review, citing persistent inflation above the 4% target. Govern
@@ -51,9 +51,9 @@ The query falls in the **news_impact** domain. Key concepts to consider: duratio
 
 | Source | Detail | Value | Retrieved At |
 |--------|--------|-------|--------------|
-| intent_classifier | Output from intent_classifier (synthesizer evidence) | {'intent': 'news_impact', 'confidence': 1.0, 'entities': {'symbols': ['RBI'], 'timeframe': None}, 'reasoning': "Keyword 'rbi policy' matched for intent news_impact"} | 2026-06-21 01:24:33.928610+00:00 |
-| context_assembler | Output from context_assembler (synthesizer evidence) | {'query': 'What is the impact of recent RBI policy changes on my debt fund holdings?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'co | 2026-06-21 01:24:33.928640+00:00 |
-| news_search | Output from news_search (synthesizer evidence) | articles=[NewsArticle(title='RBI holds repo rate steady at 6.5% amid inflation concerns', url='https://example.com/news/rbi-holds-rate', published_at='2026-06-19T08:00:00Z', source='Mock Economic Time | 2026-06-21 01:24:33.928643+00:00 |
+| intent_classifier | Output from intent_classifier (synthesizer evidence) | {'intent': 'news_impact', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Scored intent news_impact=28.3 (top keyword 'impact'); scores={news_impact:28.3, portfolio:8. | 2026-07-25 15:20:52.233799+00:00 |
+| context_assembler | Output from context_assembler (synthesizer evidence) | {'query': 'What is the impact of recent RBI policy changes on my debt fund holdings?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'co | 2026-07-25 15:20:52.233851+00:00 |
+| news_search | Output from news_search (synthesizer evidence) | articles=[NewsArticle(title='RBI holds repo rate steady at 6.5% amid inflation concerns', url='https://example.com/news/rbi-holds-rate', published_at='2026-06-19T08:00:00Z', source='Mock Economic Time | 2026-07-25 15:20:52.233857+00:00 |
 
 ---
 
@@ -63,13 +63,13 @@ The query falls in the **news_impact** domain. Key concepts to consider: duratio
 |------|------|--------|--------|
 | 0 | planner | plan_step | market_analyst |
 | 1 | planner | plan_step | news_interpreter |
-| 2 | intent_classifier | tool_output | output={'intent': 'news_impact', 'confidence': 1.0, 'entities': {'symbols': ['RBI'], 'timeframe': None}, 'reasoning': "K |
+| 2 | intent_classifier | tool_output | output={'intent': 'news_impact', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Scored |
 | 3 | context_assembler | tool_output | output={'query': 'What is the impact of recent RBI policy changes on my debt fund holdings?', 'twin': {'user_id': 'demo' |
-| 4 | news_search | tool_output | input=query='RBI' max_results=5, output=articles=[NewsArticle(title='RBI holds repo rate steady at 6.5% amid inflation c |
+| 4 | news_search | tool_output | input=query='What is the impact of recent RBI policy changes on my debt fund holdings?' max_results=5, output=articles=[ |
 | 5 | sentiment_analysis | tool_output | input=texts=["articles=[NewsArticle(title='RBI holds repo rate steady at 6.5% amid inflation concerns', url='https://exa |
 | 6 | critic | critique | SelfCritic passed (overall=0.77, threshold=0.6). Axes: correctness=1.00, risk_awareness=0.30, actionability=0.70, explai |
 | 7 | orchestrator | orchestrator.run | {"query": "What is the impact of recent RBI policy changes on my debt fund holdings?"} |
-| 8 | tool | tool.called | {"input": "query='RBI' max_results=5", "output": "articles=[NewsArticle(title='RBI holds repo rate steady at 6.5% amid i |
+| 8 | tool | tool.called | {"input": "query='What is the impact of recent RBI policy changes on my debt fund holdings?' max_results=5", "output": " |
 | 9 | tool | tool.called | {"input": "texts=[\"articles=[NewsArticle(title='RBI holds repo rate steady at 6.5% amid inflation concerns', url='https |
 | 10 | orchestrator | orchestrator.done | {"has_candidate": true, "intent": "news_impact", "query": "What is the impact of recent RBI policy changes on my debt fu |
 | 11 | synthesizer | recommendation | Market news impact: distinguish confirmed policy from rumor. RBI repo rate decisions affect debt fund NAV via duration.  |

@@ -25,6 +25,7 @@ from finroot.audit import (
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_trail(tmp_path: Path) -> AuditTrail:
     """Create an AuditTrail in a temp directory."""
     return AuditTrail(tmp_path / "audit.jsonl")
@@ -49,6 +50,7 @@ def _tamper_payload(path: Path, target_seq: int, new_value: str = "TAMPERED") ->
 # ---------------------------------------------------------------------------
 # Core chain tests
 # ---------------------------------------------------------------------------
+
 
 class TestAuditTrailAppend:
     """Test append and basic properties."""

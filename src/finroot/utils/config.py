@@ -57,9 +57,7 @@ def _ensure_writeable_dir(path: str) -> None:
     try:
         os.makedirs(path, exist_ok=True)
     except OSError as exc:
-        raise RuntimeError(
-            f"Cannot create directory '{path}': {exc}"
-        ) from exc
+        raise RuntimeError(f"Cannot create directory '{path}': {exc}") from exc
 
 
 def _ensure_writeable_parent(path: str) -> None:

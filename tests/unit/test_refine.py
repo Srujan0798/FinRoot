@@ -393,9 +393,7 @@ class TestRevisionAddressesMustFix:
     def test_overconfident_language_softened(self) -> None:
         rec = _make_rec(
             summary="Guaranteed returns",
-            analysis=(
-                "Guaranteed gains."
-            ),  # very short + overconfident + no connectors
+            analysis=("Guaranteed gains."),  # very short + overconfident + no connectors
             risks=[],  # empty risks → risk_awareness fails → must_fix includes it
             actions=["Invest now"],
             citations=[],  # no citations → evidence low

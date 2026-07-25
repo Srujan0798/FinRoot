@@ -33,9 +33,7 @@ class TaxInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     gain: float = Field(description="Absolute capital gain in INR")
-    gain_type: Literal["LTCG", "STCG", "STCG_EQUITY"] = Field(
-        description="Type of capital gain"
-    )
+    gain_type: Literal["LTCG", "STCG", "STCG_EQUITY"] = Field(description="Type of capital gain")
     annual_income: float = Field(
         description="Total annual income in INR (used for slab-rate determination)"
     )
@@ -118,19 +116,12 @@ def _build_rule_description(rule: dict, slab_rate: float | None = None) -> str:
     asset = rule.get("asset_class", "")
     exempt = rule.get("exemption", 0)
     if slab_rate is not None:
-        return (
-            f"{rid} — {asset} at slab rate {slab_rate * 100:.0f}% "
-            f"(Budget 2024)"
-        )
+        return f"{rid} — {asset} at slab rate {slab_rate * 100:.0f}% (Budget 2024)"
     if exempt > 0:
         return (
-            f"{rid} — {asset} {rule['rate'] * 100:.0f}% "
-            f"over \u20b9{exempt:,} exempt (Budget 2024)"
+            f"{rid} — {asset} {rule['rate'] * 100:.0f}% over \u20b9{exempt:,} exempt (Budget 2024)"
         )
-    return (
-        f"{rid} — {asset} {rule['rate'] * 100:.0f}% flat "
-        f"(Budget 2024)"
-    )
+    return f"{rid} — {asset} {rule['rate'] * 100:.0f}% flat (Budget 2024)"
 
 
 # ---------------------------------------------------------------------------
@@ -160,15 +151,13 @@ class TaxRuleTool(BaseTool[TaxInput, TaxOutput]):
         # Fail loud on negative gain (FM-11)
         if inp.gain < 0:
             raise ToolError(
-                f"Negative gain ({inp.gain}) is not allowed. "
-                "Capital gains must be non-negative."
+                f"Negative gain ({inp.gain}) is not allowed. Capital gains must be non-negative."
             )
 
         rule = _find_rule(self._rules, inp.gain_type)
         if rule is None:
             raise ToolError(
-                f"Unknown gain_type '{inp.gain_type}'. "
-                "Valid types: LTCG, STCG, STCG_EQUITY."
+                f"Unknown gain_type '{inp.gain_type}'. Valid types: LTCG, STCG, STCG_EQUITY."
             )
 
         slabs: list[dict] = self._rules.get("income_tax_slabs", [])
@@ -204,9 +193,7 @@ class TaxRuleTool(BaseTool[TaxInput, TaxOutput]):
 
         total = round(base_tax + surcharge + cess_amount, 2)
 
-        effective_rate = (
-            round(total / inp.gain * 100, 4) if inp.gain > 0 else 0.0
-        )
+        effective_rate = round(total / inp.gain * 100, 4) if inp.gain > 0 else 0.0
 
         meta = self._rules.get("metadata", {})
         return TaxOutput(

@@ -42,9 +42,7 @@ class SelfConsistency:
         candidates = self._generate_candidates(state)
         return self.compute_consensus(candidates)
 
-    def compute_consensus(
-        self, candidates: list[Recommendation]
-    ) -> ConsistencyResult:
+    def compute_consensus(self, candidates: list[Recommendation]) -> ConsistencyResult:
         """Compare N candidates and return the majority vote.
 
         The winner is the candidate whose summary text appears most frequently.
@@ -79,9 +77,7 @@ class SelfConsistency:
             dissenting_view=dissenting_view,
         )
 
-    def _generate_candidates(
-        self, state: AgentState
-    ) -> list[Recommendation]:
+    def _generate_candidates(self, state: AgentState) -> list[Recommendation]:
         """Generate N candidates in mock mode (deterministic rewording).
 
         Args:
@@ -103,9 +99,7 @@ class SelfConsistency:
         return [self._reword(base, i) for i in range(self.N_CANDIDATES)]
 
     @staticmethod
-    def _reword(
-        candidate: Recommendation, variant: int
-    ) -> Recommendation:
+    def _reword(candidate: Recommendation, variant: int) -> Recommendation:
         """Deterministic rewording for mock mode.
 
         Produces variants by prefixing the summary with different phrases.

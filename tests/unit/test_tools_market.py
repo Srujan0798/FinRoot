@@ -122,9 +122,7 @@ class TestMarketDataToolMock:
         for p in ("5d", "1mo", "3mo", "1y"):
             again = tool(MarketDataInput(symbol="AAPL", period=p))
             assert again.latest_price == first.latest_price
-            assert [pt.close for pt in again.prices] == [
-                pt.close for pt in first.prices
-            ]
+            assert [pt.close for pt in again.prices] == [pt.close for pt in first.prices]
 
     def test_currency_inference_for_ns_symbols(self) -> None:
         tool = MarketDataTool(mock=True)
@@ -183,8 +181,8 @@ class TestMarketDataToolCache:
         inp = MarketDataInput(symbol="AAPL")
         r1 = tool(inp)
         r2 = tool(inp)
-        assert r1 is r2                   # object identity → cache hit
-        assert tool.run_count == 1        # underlying fetch only once
+        assert r1 is r2  # object identity → cache hit
+        assert tool.run_count == 1  # underlying fetch only once
 
     def test_different_symbols_have_distinct_caches(self) -> None:
         tool = _CountingMarketTool(mock=True)
@@ -241,9 +239,7 @@ class TestMarketDataToolRateLimit:
 
 
 class TestMarketDataToolLive:
-    def test_yfinance_unavailable_raises_tool_error(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_yfinance_unavailable_raises_tool_error(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """If yfinance cannot be imported, live mode must fail loud (FM-11)."""
 
         def _fail_import(self):  # noqa: ANN001 - monkeypatch seam
@@ -255,9 +251,7 @@ class TestMarketDataToolLive:
         with pytest.raises((ToolCallError, ToolError)):
             tool(MarketDataInput(symbol="AAPL"))
 
-    def test_live_network_error_maps_to_tool_error(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_live_network_error_maps_to_tool_error(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Any yfinance-side error must be wrapped as a ToolError (no silent fallback)."""
 
         class _BrokenTicker:
@@ -267,6 +261,7 @@ class TestMarketDataToolLive:
         def _fake_yf(self):  # noqa: ANN001 - monkeypatch seam
             class _Mod:
                 Ticker = _BrokenTicker
+
             return _Mod
 
         monkeypatch.setattr(MarketDataTool, "_import_yfinance", _fake_yf)
@@ -312,8 +307,13 @@ class TestFundamentalAnalysisToolMock:
         tool = FundamentalAnalysisTool(mock=True)
         out = tool(FundamentalInput(symbol="AAPL"))
         for fld in (
-            "pe_ratio", "pb_ratio", "eps", "dividend_yield",
-            "market_cap", "revenue_ttm", "debt_to_equity",
+            "pe_ratio",
+            "pb_ratio",
+            "eps",
+            "dividend_yield",
+            "market_cap",
+            "revenue_ttm",
+            "debt_to_equity",
         ):
             assert isinstance(getattr(out, fld), float), fld
 
@@ -373,23 +373,17 @@ class TestFundamentalAnalysisToolCacheAndAudit:
 
 
 class TestFundamentalAnalysisToolLive:
-    def test_yfinance_unavailable_raises_tool_error(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_yfinance_unavailable_raises_tool_error(self, monkeypatch: pytest.MonkeyPatch) -> None:
         def _fail_import(self):  # noqa: ANN001 - monkeypatch seam
             raise ToolError("yfinance is not installed (test stub)")
 
-        monkeypatch.setattr(
-            FundamentalAnalysisTool, "_import_yfinance", _fail_import
-        )
+        monkeypatch.setattr(FundamentalAnalysisTool, "_import_yfinance", _fail_import)
         tool = FundamentalAnalysisTool(mock=False)
         _fast_tool(tool)
         with pytest.raises((ToolCallError, ToolError)):
             tool(FundamentalInput(symbol="AAPL"))
 
-    def test_live_missing_fields_surface_as_none(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_live_missing_fields_surface_as_none(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """A sparse ``Ticker.info`` must NOT raise; missing fields → None."""
 
         class _SparseTicker:
@@ -401,12 +395,12 @@ class TestFundamentalAnalysisToolLive:
 
         def _fake_yf(self):  # noqa: ANN001 - monkeypatch seam
             class _Mod:
-                def Ticker(_symbol): return _SparseTicker()
+                def Ticker(_symbol):
+                    return _SparseTicker()
+
             return _Mod
 
-        monkeypatch.setattr(
-            FundamentalAnalysisTool, "_import_yfinance", _fake_yf
-        )
+        monkeypatch.setattr(FundamentalAnalysisTool, "_import_yfinance", _fake_yf)
         tool = FundamentalAnalysisTool(mock=False)
         _fast_tool(tool)
         out = tool(FundamentalInput(symbol="AAPL"))
@@ -419,9 +413,7 @@ class TestFundamentalAnalysisToolLive:
         assert out.revenue_ttm is None
         assert out.debt_to_equity is None
 
-    def test_live_sentinel_values_surface_as_none(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_live_sentinel_values_surface_as_none(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """yfinance uses ``1e308`` as a "not applicable" sentinel — treat as None."""
 
         class _SentinelTicker:
@@ -432,12 +424,12 @@ class TestFundamentalAnalysisToolLive:
 
         def _fake_yf(self):  # noqa: ANN001 - monkeypatch seam
             class _Mod:
-                def Ticker(_symbol): return _SentinelTicker()
+                def Ticker(_symbol):
+                    return _SentinelTicker()
+
             return _Mod
 
-        monkeypatch.setattr(
-            FundamentalAnalysisTool, "_import_yfinance", _fake_yf
-        )
+        monkeypatch.setattr(FundamentalAnalysisTool, "_import_yfinance", _fake_yf)
         tool = FundamentalAnalysisTool(mock=False)
         _fast_tool(tool)
         out = tool(FundamentalInput(symbol="AAPL"))

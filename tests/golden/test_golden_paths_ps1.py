@@ -10,7 +10,7 @@ import pytest
 
 from finroot.agents.intent import IntentClassifier
 from finroot.agents.tax_agent import _parse_gain_from_query, _parse_indian_amount
-from finroot.schemas.enums import Intent
+from finroot.schemas.enums import ConfidenceLevel, Intent
 from finroot.workflows.synthesize import detect_domain
 from interface.core import answer
 
@@ -22,15 +22,11 @@ class TestIntentMatrixGP:
         self.clf = IntentClassifier()
 
     def test_gp1_portfolio_intent(self) -> None:
-        r = self.clf.classify(
-            "Should I rebalance my 70/30 equity portfolio before FY-end?"
-        )
+        r = self.clf.classify("Should I rebalance my 70/30 equity portfolio before FY-end?")
         assert r.intent == Intent.PORTFOLIO
 
     def test_gp2_tax_intent(self) -> None:
-        r = self.clf.classify(
-            "What is LTCG tax on ₹1,00,000 equity gains held 2 years in India?"
-        )
+        r = self.clf.classify("What is LTCG tax on ₹1,00,000 equity gains held 2 years in India?")
         assert r.intent == Intent.TAX
         assert "LTCG" not in r.entities.get("symbols", [])
 
@@ -112,6 +108,31 @@ class TestAnswerGoldenPaths:
         text = (rec.summary or "").lower()
         assert "market news impact" not in text
         assert s.intent == Intent.RISK
+
+    def test_gp3_emergency_smallcap_refuses(self) -> None:
+        """GP-3: emergency fund → all-in small-cap must refuse + LOW confidence."""
+        s = answer(
+            "I have ₹2 lakh emergency fund. Should I put it all in a small-cap stock?",
+            user_id="demo",
+            mock=True,
+        )
+        rec = s.final or s.candidate
+        assert rec is not None
+        text = (rec.summary or "").lower()
+        assert s.intent == Intent.RISK
+        assert any(
+            k in text
+            for k in (
+                "do not act",
+                "emergency fund",
+                "refuse",
+                "never deploy",
+                "prudence",
+            )
+        ), f"Expected refuse copy, got: {rec.summary!r}"
+        assert rec.confidence == ConfidenceLevel.LOW
+        vv = getattr(s, "verifier_verdict", None) or {}
+        assert vv.get("compliant") is False, f"Prudence should fail: {vv}"
 
     def test_gp1_portfolio_runs(self) -> None:
         s = answer(

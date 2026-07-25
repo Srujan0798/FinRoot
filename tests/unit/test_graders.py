@@ -14,6 +14,7 @@ namespace package is importable when pytest is launched with
 ``PYTHONPATH=src`` (the only path the orchestrator's acceptance command
 guarantees).
 """
+
 from __future__ import annotations
 
 import sys
@@ -48,7 +49,9 @@ UTC_NOW = datetime(2026, 6, 20, 12, 0, 0, tzinfo=UTC)
 # ---------------------------------------------------------------------------
 
 
-def _citation(source: str = "yfinance", detail: str = "market data", value: str = "100") -> Citation:
+def _citation(
+    source: str = "yfinance", detail: str = "market data", value: str = "100"
+) -> Citation:
     return Citation(
         source=source,
         detail=detail,
@@ -75,11 +78,15 @@ def _make_rec(
         summary=summary,
         analysis=analysis,
         risks=risks if risks is not None else ["market volatility", "concentration risk"],
-        actions=actions if actions is not None else [
+        actions=actions
+        if actions is not None
+        else [
             "Allocate 30% to equity by Q1",
             "Rebalance portfolio quarterly",
         ],
-        citations=citations if citations is not None else [_citation(), _citation(source="tax_tables")],
+        citations=citations
+        if citations is not None
+        else [_citation(), _citation(source="tax_tables")],
         confidence=confidence,
     )
 
@@ -285,12 +292,16 @@ class TestCodeBased:
         assert result.breakdown["numeric"]["passed"] is False
         assert result.breakdown["numeric"]["extracted"] is None
 
-    def test_confidence_mismatch_fails(self) -> None:
-        """Expected confidence 'high' but the agent answered 'low' → fails."""
+    def test_confidence_mismatch_is_soft(self) -> None:
+        """Confidence is soft (0.10 weight): mismatch lowers score, not hard-fail.
+
+        Well-evidenced answers that land medium vs high (or low vs high on a
+        pure label miss) still pass when hard gates (must_not, citations,
+        numeric) and score threshold are met.
+        """
         rec = _make_rec(
             summary=(
-                "Concentration risk is real. Tax and LTCG apply. Diversification "
-                "is recommended."
+                "Concentration risk is real. Tax and LTCG apply. Diversification is recommended."
             ),
             confidence=ConfidenceLevel.LOW,  # task expected HIGH
         )
@@ -299,7 +310,9 @@ class TestCodeBased:
         assert result.breakdown["confidence"]["passed"] is False
         assert result.breakdown["confidence"]["expected"] == "high"
         assert result.breakdown["confidence"]["actual"] == "low"
-        assert result.passed is False
+        # Soft only: overall pass depends on hard gates + score, not exact label.
+        assert result.score < 1.0
+        assert result.passed is True
 
     def test_must_mention_keyword_coverage(self) -> None:
         """Partial keyword coverage reduces the must_mention ratio and the weighted score."""
@@ -573,7 +586,9 @@ class TestGradeResultContract:
         from pydantic import ValidationError
 
         with pytest.raises(ValidationError):
-            GradeResult(task_id="x", passed=True, score=0.5, breakdown={}, grader="code", evil="extra")
+            GradeResult(
+                task_id="x", passed=True, score=0.5, breakdown={}, grader="code", evil="extra"
+            )
 
     def test_score_is_normalized(self) -> None:
         """score is always in [0.0, 1.0]."""
@@ -595,7 +610,13 @@ class TestHumanReviewTemplate:
         return path.read_text(encoding="utf-8")
 
     def test_template_lists_all_five_axes(self, template_text: str) -> None:
-        for axis in ("Correctness", "Risk-awareness", "Actionability", "Explainability", "Evidence-grounding"):
+        for axis in (
+            "Correctness",
+            "Risk-awareness",
+            "Actionability",
+            "Explainability",
+            "Evidence-grounding",
+        ):
             assert axis in template_text, f"axis {axis!r} missing from template"
 
     def test_template_has_honesty_checks(self, template_text: str) -> None:

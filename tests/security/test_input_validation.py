@@ -94,12 +94,12 @@ class TestSQLInjectionProfileName:
 class TestXSSInQuery:
     XSS_PAYLOADS = [
         "<script>alert('xss')</script>",
-        '<img src=x onerror=alert(1)>',
+        "<img src=x onerror=alert(1)>",
         "<svg/onload=alert('xss')>",
-        'javascript:alert(document.cookie)',
+        "javascript:alert(document.cookie)",
         '<body onload=alert("xss")>',
-        '{{7*7}}',  # template injection
-        '${7*7}',  # expression injection
+        "{{7*7}}",  # template injection
+        "${7*7}",  # expression injection
     ]
 
     @pytest.mark.parametrize("payload", XSS_PAYLOADS)
@@ -197,7 +197,10 @@ class TestUnicodeHandling:
         ("Show me \u4e2d\u56fd stocks", "Chinese/CJK"),
         ("\u0939\u093f\u0928\u094d\u0926\u0940 \u092c\u091c\u0e3e\u0930", "Hindi"),
         ("Price of \u0410\u041f\u0422\u041b", "Russian"),
-        ("\u0627\u0644\u0623\u0633\u0647\u0645 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629", "Arabic"),
+        (
+            "\u0627\u0644\u0623\u0633\u0647\u0645 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629",
+            "Arabic",
+        ),
     ]
 
     EMOJI_PAYLOADS = [
@@ -396,9 +399,7 @@ class TestEnvVarsNotLeaked:
         serialized = str(result.entities)
         for key, value in os.environ.items():
             if key.startswith(self.FINROOT_ENV_PREFIX):
-                assert key not in serialized, (
-                    f"FINROOT env var {key} leaked in classifier output"
-                )
+                assert key not in serialized, f"FINROOT env var {key} leaked in classifier output"
                 if value:
                     assert value not in serialized, (
                         "FINROOT env var value leaked in classifier output"
@@ -409,9 +410,7 @@ class TestEnvVarsNotLeaked:
         serialized = state.model_dump_json()
         for key, value in os.environ.items():
             if key.startswith(self.FINROOT_ENV_PREFIX):
-                assert key not in serialized, (
-                    f"FINROOT env var {key} leaked in AgentState JSON"
-                )
+                assert key not in serialized, f"FINROOT env var {key} leaked in AgentState JSON"
                 if value:
                     assert value not in serialized, (
                         "FINROOT env var value leaked in AgentState JSON"
@@ -422,6 +421,4 @@ class TestEnvVarsNotLeaked:
         serialized = str(result.entities) + str(result.intent)
         llm_provider = os.environ.get("FINROOT_LLM_PROVIDER", "mock")
         if llm_provider and llm_provider != "mock":
-            assert llm_provider not in serialized, (
-                f"LLM provider {llm_provider} leaked in response"
-            )
+            assert llm_provider not in serialized, f"LLM provider {llm_provider} leaked in response"

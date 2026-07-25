@@ -39,8 +39,7 @@ class GroqProvider:
             from groq import Groq  # noqa: F811
         except ImportError as exc:
             raise RuntimeError(
-                "The 'groq' package is required for GroqProvider. "
-                "Install it with: pip install groq"
+                "The 'groq' package is required for GroqProvider. Install it with: pip install groq"
             ) from exc
 
         messages: list[dict[str, str]] = []

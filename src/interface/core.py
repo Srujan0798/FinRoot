@@ -54,9 +54,7 @@ def _load_demo_twin(user_id: str) -> DigitalTwin | None:
     if not _TWIN_PROFILES_PATH.exists():
         return None
     try:
-        profiles: list[dict[str, Any]] = json.loads(
-            _TWIN_PROFILES_PATH.read_text(encoding="utf-8")
-        )
+        profiles: list[dict[str, Any]] = json.loads(_TWIN_PROFILES_PATH.read_text(encoding="utf-8"))
         if not profiles:
             return None
         chosen: dict[str, Any] | None = None
@@ -325,9 +323,7 @@ def _apply_prudence_downgrade(state: AgentState, verdict: dict[str, Any]) -> Non
     caution naming the violated principle(s) when the prudence verifier flags
     the advice. Best-effort (never raises)."""
     failed = [
-        f"{c['principle']} — {c['detail']}"
-        for c in verdict.get("checks", [])
-        if not c.get("pass")
+        f"{c['principle']} — {c['detail']}" for c in verdict.get("checks", []) if not c.get("pass")
     ]
     if failed:
         note = (
@@ -366,13 +362,15 @@ def build_trace(state: AgentState) -> list[dict[str, Any]]:
 
     # 1. Pipeline steps from the plan
     for plan_item in state.plan:
-        events.append({
-            "step": step,
-            "node": "planner",
-            "action": "plan_step",
-            "detail": plan_item,
-            "source": None,
-        })
+        events.append(
+            {
+                "step": step,
+                "node": "planner",
+                "action": "plan_step",
+                "detail": plan_item,
+                "source": None,
+            }
+        )
         step += 1
 
     # 2. Tool outputs
@@ -386,47 +384,57 @@ def build_trace(state: AgentState) -> list[dict[str, Any]]:
             if k not in ("agent", "tool", "type"):
                 detail_parts.append(f"{k}={v}")
         detail = ", ".join(detail_parts) if detail_parts else str(out)
-        events.append({
-            "step": step,
-            "node": str(node),
-            "action": str(action),
-            "detail": detail[:300],
-            "source": out.get("tool"),
-        })
+        events.append(
+            {
+                "step": step,
+                "node": str(node),
+                "action": str(action),
+                "detail": detail[:300],
+                "source": out.get("tool"),
+            }
+        )
         step += 1
 
     # 3. Critique verdict
     if state.critique:
-        events.append({
-            "step": step,
-            "node": "critic",
-            "action": "critique",
-            "detail": state.critique.get("summary", "critique completed"),
-            "source": "self_critic",
-        })
+        events.append(
+            {
+                "step": step,
+                "node": "critic",
+                "action": "critique",
+                "detail": state.critique.get("summary", "critique completed"),
+                "source": "self_critic",
+            }
+        )
         step += 1
 
     # 4. Audit events (hash-chain entries)
     for audit_event in state.audit_events:
-        events.append({
-            "step": step,
-            "node": audit_event.type.split(".")[0] if "." in audit_event.type else audit_event.type,
-            "action": audit_event.type,
-            "detail": json.dumps(audit_event.payload, default=str)[:300],
-            "source": "audit_trail",
-        })
+        events.append(
+            {
+                "step": step,
+                "node": audit_event.type.split(".")[0]
+                if "." in audit_event.type
+                else audit_event.type,
+                "action": audit_event.type,
+                "detail": json.dumps(audit_event.payload, default=str)[:300],
+                "source": "audit_trail",
+            }
+        )
         step += 1
 
     # 5. Candidate / final recommendation summary
     rec = state.candidate or state.final
     if rec is not None:
-        events.append({
-            "step": step,
-            "node": "synthesizer",
-            "action": "recommendation",
-            "detail": rec.summary[:300],
-            "source": None,
-        })
+        events.append(
+            {
+                "step": step,
+                "node": "synthesizer",
+                "action": "recommendation",
+                "detail": rec.summary[:300],
+                "source": None,
+            }
+        )
         step += 1
 
     return events

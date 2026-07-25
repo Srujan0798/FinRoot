@@ -80,9 +80,7 @@ class WorkingMemory:
 
     def __init__(self, max_turns: int = 10) -> None:
         if isinstance(max_turns, bool) or not isinstance(max_turns, int):
-            raise TypeError(
-                f"max_turns must be int, got {type(max_turns).__name__}"
-            )
+            raise TypeError(f"max_turns must be int, got {type(max_turns).__name__}")
         if max_turns < 1:
             raise ValueError(f"max_turns must be >= 1, got {max_turns}")
         self._max_turns: int = max_turns
@@ -123,14 +121,10 @@ class WorkingMemory:
             If ``content`` is not a ``str``.
         """
         if not isinstance(content, str):
-            raise TypeError(
-                f"content must be str, got {type(content).__name__}"
-            )
+            raise TypeError(f"content must be str, got {type(content).__name__}")
         with self._lock:
             if role not in _ALLOWED_ROLES:
-                raise ValueError(
-                    f"role must be one of {sorted(_ALLOWED_ROLES)}, got {role!r}"
-                )
+                raise ValueError(f"role must be one of {sorted(_ALLOWED_ROLES)}, got {role!r}")
             self._buffer.append(_Turn(role=role, content=content))
 
     def get_messages(self) -> list[dict[str, str]]:
@@ -157,9 +151,7 @@ class WorkingMemory:
         with self._lock:
             payload = {
                 "max_turns": self._max_turns,
-                "turns": [
-                    {"role": t.role, "content": t.content} for t in self._buffer
-                ],
+                "turns": [{"role": t.role, "content": t.content} for t in self._buffer],
             }
         return json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
 
@@ -195,29 +187,19 @@ class WorkingMemory:
         except json.JSONDecodeError as exc:
             raise ValueError(f"invalid JSON: {exc.msg}") from exc
         if not isinstance(payload, dict):
-            raise ValueError(
-                f"payload must be a JSON object, got {type(payload).__name__}"
-            )
+            raise ValueError(f"payload must be a JSON object, got {type(payload).__name__}")
         if "max_turns" not in payload or "turns" not in payload:
-            raise ValueError(
-                "payload must contain 'max_turns' and 'turns' keys"
-            )
+            raise ValueError("payload must contain 'max_turns' and 'turns' keys")
         max_turns = payload["max_turns"]
         turns = payload["turns"]
         if not isinstance(turns, list):
-            raise ValueError(
-                f"'turns' must be a list, got {type(turns).__name__}"
-            )
+            raise ValueError(f"'turns' must be a list, got {type(turns).__name__}")
         mem = cls(max_turns=max_turns)
         for i, turn in enumerate(turns):
             if not isinstance(turn, dict):
-                raise ValueError(
-                    f"turn at index {i} must be a dict, got {type(turn).__name__}"
-                )
+                raise ValueError(f"turn at index {i} must be a dict, got {type(turn).__name__}")
             if "role" not in turn or "content" not in turn:
-                raise ValueError(
-                    f"turn at index {i} must have 'role' and 'content' keys"
-                )
+                raise ValueError(f"turn at index {i} must have 'role' and 'content' keys")
             mem.add(turn["role"], turn["content"])
         return mem
 

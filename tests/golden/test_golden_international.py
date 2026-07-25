@@ -17,7 +17,9 @@ pytestmark = pytest.mark.golden
 
 def _get_rec(state: AgentState) -> Recommendation:
     rec = state.candidate or state.final
-    assert rec is not None, "Pipeline produced no recommendation (candidate and final are both None)"
+    assert rec is not None, (
+        "Pipeline produced no recommendation (candidate and final are both None)"
+    )
     return rec
 
 
@@ -46,10 +48,7 @@ class TestGoldenInternational:
         """Currency-related query should contain currency/exchange concepts in tool outputs."""
         state = run_pipeline("What is the exchange rate between USD and INR?")
         tool_text = _all_tool_output_text(state)
-        has_currency = any(
-            kw in tool_text
-            for kw in ("currency", "usd", "inr", "exchange")
-        )
+        has_currency = any(kw in tool_text for kw in ("currency", "usd", "inr", "exchange"))
         assert has_currency, (
             f"Currency query tool outputs should mention currency concepts. "
             f"Tool output preview: {tool_text[:500]}"
@@ -69,8 +68,7 @@ class TestGoldenInternational:
         state = run_pipeline("How do I invest in US markets from India?")
         rec = _get_rec(state)
         assert len(rec.actions) >= 1, (
-            f"International recommendation should have at least 1 action, "
-            f"got {len(rec.actions)}"
+            f"International recommendation should have at least 1 action, got {len(rec.actions)}"
         )
 
     def test_international_citations_exist(self, run_pipeline):
@@ -86,10 +84,7 @@ class TestGoldenInternational:
         """FX risk query should reference currency or FX in tool outputs."""
         state = run_pipeline("What is the FX risk in my foreign holdings?")
         tool_text = _all_tool_output_text(state)
-        has_fx = any(
-            kw in tool_text
-            for kw in ("fx", "currency", "foreign", "exchange")
-        )
+        has_fx = any(kw in tool_text for kw in ("fx", "currency", "foreign", "exchange"))
         assert has_fx, (
             f"FX risk query tool outputs should mention FX or currency. "
             f"Tool output preview: {tool_text[:500]}"

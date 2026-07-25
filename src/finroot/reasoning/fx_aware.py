@@ -115,17 +115,21 @@ class FxAwareAnalyzer:
             inr_eq = amount * rate if ccy != "INR" else amount
             total_inr += inr_eq
 
-            exposures.append(CurrencyExposure(
-                currency=ccy,
-                amount=amount,
-                percentage=0.0,  # Calculated below
-                inr_equivalent=inr_eq,
-                risk_level=self._currency_risk(ccy),
-            ))
+            exposures.append(
+                CurrencyExposure(
+                    currency=ccy,
+                    amount=amount,
+                    percentage=0.0,  # Calculated below
+                    inr_equivalent=inr_eq,
+                    risk_level=self._currency_risk(ccy),
+                )
+            )
 
         # Calculate percentages
         for exp in exposures:
-            exp.percentage = round(exp.inr_equivalent / total_inr * 100, 2) if total_inr > 0 else 0.0
+            exp.percentage = (
+                round(exp.inr_equivalent / total_inr * 100, 2) if total_inr > 0 else 0.0
+            )
 
         # Aggregate by currency
         aggregated = self._aggregate_exposures(exposures)
@@ -163,7 +167,9 @@ class FxAwareAnalyzer:
             currency_exposures=aggregated,
             fx_risk_score=round(fx_risk, 2),
             hedging_recommended=hedge_recommended,
-            hedging_cost_estimate=round(total_inr * 0.03 * (foreign_pct / 100), 2),  # ~3% of foreign exposure
+            hedging_cost_estimate=round(
+                total_inr * 0.03 * (foreign_pct / 100), 2
+            ),  # ~3% of foreign exposure
             currency_diversification_score=round(div_score, 2),
             recommendations=recommendations,
             assumptions=assumptions,

@@ -17,6 +17,7 @@ number that proves the 35%-weight Reasoning-Quality story.
 
 Writes: ``src/finroot/evaluation/harness.py`` (wave-6, task 04).
 """
+
 from __future__ import annotations
 
 import json
@@ -168,9 +169,7 @@ def _load_frb(path: Path) -> list[dict[str, Any]]:
     except json.JSONDecodeError as exc:
         raise ValueError(f"FRB bank at {path} is not valid JSON: {exc}") from exc
     if not isinstance(data, list):
-        raise ValueError(
-            f"FRB bank must be a JSON array, got {type(data).__name__}"
-        )
+        raise ValueError(f"FRB bank must be a JSON array, got {type(data).__name__}")
     return data
 
 
@@ -190,11 +189,7 @@ def _load_twins(path: Path) -> dict[str, dict[str, Any]]:
         return {}
     if not isinstance(data, list):
         return {}
-    return {
-        p.get("user_id"): p
-        for p in data
-        if isinstance(p, dict) and p.get("user_id")
-    }
+    return {p.get("user_id"): p for p in data if isinstance(p, dict) and p.get("user_id")}
 
 
 # ---------------------------------------------------------------------------
@@ -289,9 +284,7 @@ def _run_baseline(system: str, query: str, twin: dict | None) -> AgentState:
     raise ValueError(f"Unknown baseline system: {system!r}")
 
 
-def _run_system(
-    system: str, query: str, twin: dict | None, twin_id: str | None
-) -> AgentState:
+def _run_system(system: str, query: str, twin: dict | None, twin_id: str | None) -> AgentState:
     """Dispatch to the right runner for *system*."""
     if system == "finroot":
         return _run_finroot(query, twin_id)
@@ -389,10 +382,7 @@ def run_harness(config: HarnessConfig) -> list[HarnessResult]:
     systems = list(config.systems)
     if config.system_filter:
         if config.system_filter not in systems:
-            raise ValueError(
-                f"Unknown system {config.system_filter!r}; "
-                f"choose from {systems}"
-            )
+            raise ValueError(f"Unknown system {config.system_filter!r}; choose from {systems}")
         systems = [config.system_filter]
 
     twins = _load_twins(DEFAULT_TWIN_PROFILES_PATH)
@@ -459,10 +449,7 @@ def run_harness(config: HarnessConfig) -> list[HarnessResult]:
     # Invariant guards — fail loud (FM-11): pass^k <= pass@k <= 1.0.
     for r in results:
         if r.pass_at_k > 1.0 + 1e-9:
-            raise ValueError(
-                f"Invariant broken: pass_at_k > 1.0 for {r.system!r} "
-                f"({r.pass_at_k})"
-            )
+            raise ValueError(f"Invariant broken: pass_at_k > 1.0 for {r.system!r} ({r.pass_at_k})")
         if r.pass_hat_k > r.pass_at_k + 1e-9:
             raise ValueError(
                 f"Invariant broken: pass^k > pass@k for {r.system!r} "
@@ -488,9 +475,7 @@ def run_harness(config: HarnessConfig) -> list[HarnessResult]:
     return results
 
 
-def _aggregate(
-    trials: list[TrialResult], systems: list[str], *, k: int
-) -> list[HarnessResult]:
+def _aggregate(trials: list[TrialResult], systems: list[str], *, k: int) -> list[HarnessResult]:
     """Aggregate a flat trial list into one :class:`HarnessResult` per system."""
     results: list[HarnessResult] = []
     for system in systems:
@@ -640,9 +625,7 @@ def write_metrics(
 # ---------------------------------------------------------------------------
 
 
-def build_transcript(
-    task: dict, trials: list[TrialResult]
-) -> dict[str, Any]:
+def build_transcript(task: dict, trials: list[TrialResult]) -> dict[str, Any]:
     """Build a printable transcript for a single FRB task.
 
     Shape::

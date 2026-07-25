@@ -30,17 +30,13 @@ def _parse_iso(s: str) -> datetime:
 
 
 def test_metrics_json_exists() -> None:
-    assert METRICS_PATH.exists(), (
-        "results/metrics.json missing. Run `make evals` to generate it."
-    )
+    assert METRICS_PATH.exists(), "results/metrics.json missing. Run `make evals` to generate it."
 
 
 def test_metrics_json_is_fresh() -> None:
     """The canonical metric must be recent (regenerated within MAX_AGE_HOURS)."""
     data = json.loads(METRICS_PATH.read_text())
-    assert "generated_at" in data, (
-        "results/metrics.json missing 'generated_at' field"
-    )
+    assert "generated_at" in data, "results/metrics.json missing 'generated_at' field"
     gen_at = _parse_iso(data["generated_at"])
     if gen_at.tzinfo is None:
         gen_at = gen_at.replace(tzinfo=UTC)
@@ -55,9 +51,11 @@ def test_metrics_json_is_fresh() -> None:
 def test_metrics_json_sha_matches_head() -> None:
     """The as_of_sha in the metric must match the current HEAD."""
     data = json.loads(METRICS_PATH.read_text())
-    head_sha = subprocess.check_output(
-        ["git", "rev-parse", "--short", "HEAD"], cwd=REPO_ROOT
-    ).decode().strip()
+    head_sha = (
+        subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=REPO_ROOT)
+        .decode()
+        .strip()
+    )
     assert data.get("as_of_sha") == head_sha, (
         f"metrics.json as_of_sha = {data.get('as_of_sha')!r} but HEAD = {head_sha!r}. "
         "Re-run `make evals` to refresh."
@@ -72,6 +70,4 @@ def test_metrics_json_pass_at_1_in_range() -> None:
             v = sys_data.get(k)
             if v is None:
                 continue
-            assert 0.0 <= v <= 1.0, (
-                f"{sys_name}.{k} = {v} not in [0, 1]"
-            )
+            assert 0.0 <= v <= 1.0, f"{sys_name}.{k} = {v} not in [0, 1]"

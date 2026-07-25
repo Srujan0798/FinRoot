@@ -20,36 +20,40 @@ PUBLIC_API = [
     # Core entry points (used by the CLI and the Streamlit UI)
     ("interface.core", ["answer", "stream_answer", "build_trace"]),
     ("interface.cli.main", ["app"]),
-
     # Schemas (used by every agent/tool)
     ("finroot.schemas", []),  # any class imported is part of the API
-
     # Tools (the judge queries these in the FRB benchmark)
     ("finroot.tools.market", ["MarketDataTool", "MarketDataInput", "MarketDataOutput"]),
-    ("finroot.tools.profile", ["UserProfileTool", "ProfileReadInput",
-                              "ProfileWriteInput", "ProfileOutput"]),
+    (
+        "finroot.tools.profile",
+        ["UserProfileTool", "ProfileReadInput", "ProfileWriteInput", "ProfileOutput"],
+    ),
     ("finroot.tools.tax", ["TaxRuleTool", "TaxInput", "TaxOutput"]),
     ("finroot.tools.risk", ["RiskCalculationTool", "RiskInput", "RiskOutput"]),
-    ("finroot.tools.watchlist", ["WatchlistAlertTool", "WatchlistEntry",
-                                 "add_to_watchlist", "load_watchlist",
-                                 "remove_from_watchlist", "save_watchlist"]),
+    (
+        "finroot.tools.watchlist",
+        [
+            "WatchlistAlertTool",
+            "WatchlistEntry",
+            "add_to_watchlist",
+            "load_watchlist",
+            "remove_from_watchlist",
+            "save_watchlist",
+        ],
+    ),
     ("finroot.tools.documents", ["DocumentParserTool"]),
-
     # Agents
     ("finroot.agents.market_agent", ["MarketAnalystAgent"]),
     ("finroot.agents.tax_agent", ["TaxPlannerAgent"]),
     ("finroot.agents.risk_agent", ["RiskAssessorAgent"]),
     ("finroot.agents.portfolio_agent", ["PortfolioOptimizerAgent"]),
-
     # Memory (used by orchestrator)
     ("finroot.memory.digital_twin", ["DigitalTwin", "DigitalTwinStore"]),
     ("finroot.memory.semantic", ["SemanticMemory"]),
     ("finroot.memory.working", ["WorkingMemory"]),
-
     # Config (used by CLI and conftest)
     ("config.settings", ["Settings", "get_settings"]),
     ("config.prompts", ["PromptRegistry"]),
-
     # LLM providers
     ("finroot.llm.mock", ["MockProvider"]),
 ]
@@ -63,9 +67,7 @@ def test_module_imports(module_name: str, expected_attrs: list[str]) -> None:
 
 
 @pytest.mark.parametrize("module_name,expected_attrs", PUBLIC_API)
-def test_expected_attributes_exist(
-    module_name: str, expected_attrs: list[str]
-) -> None:
+def test_expected_attributes_exist(module_name: str, expected_attrs: list[str]) -> None:
     """Each public module must expose the expected attributes."""
     if not expected_attrs:
         return  # nothing to check
@@ -90,6 +92,4 @@ def test_finroot_top_level_has_no_accidental_reexports() -> None:
     # `_`-prefixed name in the top-level namespace (convention for
     # private — should not be re-exported at the package level).
     leaked = [n for n in dir(finroot) if n.startswith("_") and not n.startswith("__")]
-    assert not leaked, (
-        f"finroot package re-exports private names: {leaked}"
-    )
+    assert not leaked, f"finroot package re-exports private names: {leaked}"

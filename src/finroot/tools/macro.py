@@ -101,9 +101,7 @@ _MOCK_VALUES: dict[str, MacroOutput] = {
         unit=str(meta["unit"]),
         period=str(meta["period"]),
         source="mock",
-        citation=(
-            f"Mock {indicator} value for IN ({meta['unit']}, period {meta['period']})"
-        ),
+        citation=(f"Mock {indicator} value for IN ({meta['unit']}, period {meta['period']})"),
     )
     for indicator, meta in _INDICATOR_TABLE.items()
 }
@@ -163,16 +161,13 @@ class MacroDataTool(BaseTool[MacroInput, MacroOutput]):
     def _run_live(self, inp: MacroInput) -> MacroOutput:
         meta = _INDICATOR_TABLE.get(inp.indicator)
         if meta is None:  # pragma: no cover - Literal guards this
-            raise ToolCallError(
-                f"MacroDataTool: unknown indicator {inp.indicator!r}"
-            )
+            raise ToolCallError(f"MacroDataTool: unknown indicator {inp.indicator!r}")
         wb_code = str(meta["wb_code"])
         unit = str(meta["unit"])
         country = inp.country.upper()
 
         url = (
-            "https://api.worldbank.org/v2/"
-            f"country/{country}/indicator/{wb_code}?format=json&mrv=1"
+            f"https://api.worldbank.org/v2/country/{country}/indicator/{wb_code}?format=json&mrv=1"
         )
 
         try:
@@ -181,8 +176,7 @@ class MacroDataTool(BaseTool[MacroInput, MacroOutput]):
                 payload = json.loads(resp.read().decode("utf-8"))
         except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError) as exc:
             raise ToolCallError(
-                f"MacroDataTool: World Bank request failed for {inp.indicator} "
-                f"({country}): {exc}"
+                f"MacroDataTool: World Bank request failed for {inp.indicator} ({country}): {exc}"
             ) from exc
 
         try:
@@ -195,8 +189,7 @@ class MacroDataTool(BaseTool[MacroInput, MacroOutput]):
 
         if not data_list:
             raise ToolCallError(
-                f"MacroDataTool: World Bank returned no data points for "
-                f"{inp.indicator} ({country})"
+                f"MacroDataTool: World Bank returned no data points for {inp.indicator} ({country})"
             )
 
         point = data_list[0]
@@ -216,9 +209,7 @@ class MacroDataTool(BaseTool[MacroInput, MacroOutput]):
             unit=unit,
             period=period,
             source="worldbank",
-            citation=(
-                f"World Bank indicator {wb_code} for {country}, period {period}"
-            ),
+            citation=(f"World Bank indicator {wb_code} for {country}, period {period}"),
         )
 
 

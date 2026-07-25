@@ -274,7 +274,10 @@ class TestCurrencyMock:
     def test_extra_forbidden(self) -> None:
         with pytest.raises(ValidationError):
             CurrencyInput(
-                amount=1.0, from_currency="USD", to_currency="INR", extra="x"  # type: ignore[call-arg]
+                amount=1.0,
+                from_currency="USD",
+                to_currency="INR",
+                extra="x",  # type: ignore[call-arg]
             )
 
     def test_short_currency_code_rejected(self) -> None:

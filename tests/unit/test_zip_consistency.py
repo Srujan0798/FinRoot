@@ -56,8 +56,9 @@ def test_zip_contains_canonical_metrics() -> None:
     # Also check the headline numbers match (defense-in-depth: someone could
     # have stamped a new SHA but kept the old numbers)
     for sys_name in ("finroot", "rag"):
-        assert zip_metrics["systems"][sys_name]["mean_score"] == (
-            canonical_metrics["systems"][sys_name]["mean_score"]
+        assert (
+            zip_metrics["systems"][sys_name]["mean_score"]
+            == (canonical_metrics["systems"][sys_name]["mean_score"])
         ), f"Zip {sys_name} mean_score drifted from canonical. Rebuild the zip."
 
 
@@ -67,9 +68,11 @@ def test_zip_sha_matches_head() -> None:
         pytest.skip("zip not built")
     zip_metrics_bytes = _read_zip_member(ZIP_PATH, "results/metrics.json")
     zip_metrics = json.loads(zip_metrics_bytes)
-    head_sha = subprocess.check_output(
-        ["git", "rev-parse", "--short", "HEAD"], cwd=REPO_ROOT
-    ).decode().strip()
+    head_sha = (
+        subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=REPO_ROOT)
+        .decode()
+        .strip()
+    )
     assert zip_metrics["as_of_sha"] == head_sha, (
         f"Zip metrics as_of_sha {zip_metrics['as_of_sha']!r} != HEAD {head_sha!r}. "
         f"Rebuild the zip after committing."
@@ -82,9 +85,11 @@ def test_zip_submission_message_cites_head() -> None:
         pytest.skip("zip not built")
     msg_bytes = _read_zip_member(ZIP_PATH, "docs/SUBMISSION_MESSAGE.md")
     msg = msg_bytes.decode("utf-8", errors="replace")
-    head_sha = subprocess.check_output(
-        ["git", "rev-parse", "--short", "HEAD"], cwd=REPO_ROOT
-    ).decode().strip()
+    head_sha = (
+        subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=REPO_ROOT)
+        .decode()
+        .strip()
+    )
     # Accept either the full short SHA or just the first 7 chars (git's
     # default short format)
     short_sha = head_sha[:7]
@@ -100,9 +105,7 @@ def test_zip_under_5mb() -> None:
     if not ZIP_PATH.exists():
         pytest.skip("zip not built")
     size = ZIP_PATH.stat().st_size
-    assert size < 5 * 1024 * 1024, (
-        f"Zip is {size:,} bytes, which is over 5 MB. Investigate bloat."
-    )
+    assert size < 5 * 1024 * 1024, f"Zip is {size:,} bytes, which is over 5 MB. Investigate bloat."
 
 
 def test_zip_clean_of_real_key_shapes() -> None:
@@ -119,7 +122,8 @@ def test_zip_clean_of_real_key_shapes() -> None:
         # Use ripgrep if available, else grep -r
         result = subprocess.run(
             [
-                "grep", "-rInE",
+                "grep",
+                "-rInE",
                 r"(sk-[A-Za-z0-9]{20,}|gsk_[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16,})",
                 str(tmp_path),
             ],
@@ -161,7 +165,8 @@ def test_zip_no_node_modules_or_pycache() -> None:
         pytest.skip("zip not built")
     with zipfile.ZipFile(ZIP_PATH) as zf:
         bad = [
-            n for n in zf.namelist()
+            n
+            for n in zf.namelist()
             if "__pycache__" in n
             or "/.pytest_cache" in n
             or "/.ruff_cache" in n

@@ -68,8 +68,13 @@ class TestImports:
 
     def test_public_api(self) -> None:
         """All four chart builders and the availability helper are exported."""
-        for name in ("is_plotly_available", "allocation_pie", "domain_bar_chart",
-                     "confidence_gauge", "risk_meter"):
+        for name in (
+            "is_plotly_available",
+            "allocation_pie",
+            "domain_bar_chart",
+            "confidence_gauge",
+            "risk_meter",
+        ):
             assert hasattr(charts, name), f"missing public name: {name}"
 
     def test_is_plotly_available_returns_bool(self) -> None:

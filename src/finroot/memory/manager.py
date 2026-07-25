@@ -99,21 +99,13 @@ class MemoryManager:
         user_id: str,
     ) -> None:
         if not isinstance(working, WorkingMemory):
-            raise TypeError(
-                f"working must be WorkingMemory, got {type(working).__name__}"
-            )
+            raise TypeError(f"working must be WorkingMemory, got {type(working).__name__}")
         if not isinstance(semantic, SemanticMemory):
-            raise TypeError(
-                f"semantic must be SemanticMemory, got {type(semantic).__name__}"
-            )
+            raise TypeError(f"semantic must be SemanticMemory, got {type(semantic).__name__}")
         if not isinstance(twin_store, DigitalTwinStore):
-            raise TypeError(
-                f"twin_store must be DigitalTwinStore, got {type(twin_store).__name__}"
-            )
+            raise TypeError(f"twin_store must be DigitalTwinStore, got {type(twin_store).__name__}")
         if not isinstance(user_id, str):
-            raise TypeError(
-                f"user_id must be str, got {type(user_id).__name__}"
-            )
+            raise TypeError(f"user_id must be str, got {type(user_id).__name__}")
         if not user_id:
             raise ValueError("user_id must be a non-empty string")
         self._working: WorkingMemory = working
@@ -322,8 +314,7 @@ class MemoryManager:
         forbidden = _RESERVED_TWIN_FIELDS & kwargs.keys()
         if forbidden:
             raise ValueError(
-                f"update_twin does not allow changing reserved fields: "
-                f"{sorted(forbidden)!r}"
+                f"update_twin does not allow changing reserved fields: {sorted(forbidden)!r}"
             )
         current = self._twin_store.load(self._user_id)
         merged: dict[str, Any] = current.model_dump(mode="python")

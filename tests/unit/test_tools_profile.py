@@ -124,9 +124,7 @@ class TestUserProfileToolRead:
         assert result.data["portfolio_value_inr"] == 5000000
         assert "DigitalTwin profile for test_user" in result.citation
 
-    def test_read_filters_fields(
-        self, profile_tool: UserProfileTool, profiles_path: Path
-    ) -> None:
+    def test_read_filters_fields(self, profile_tool: UserProfileTool, profiles_path: Path) -> None:
         result = profile_tool(
             ProfileReadInput(user_id="test_user", fields=["name", "risk_tolerance"])
         )
@@ -146,9 +144,7 @@ class TestUserProfileToolWrite:
         self, profile_tool: UserProfileTool, profiles_path: Path
     ) -> None:
         result = profile_tool(
-            ProfileWriteInput(
-                user_id="test_user", updates={"risk_tolerance": "aggressive"}
-            )
+            ProfileWriteInput(user_id="test_user", updates={"risk_tolerance": "aggressive"})
         )
         assert result.data["risk_tolerance"] == "aggressive"
         # Verify persistence
@@ -159,9 +155,7 @@ class TestUserProfileToolWrite:
         self, profile_tool: UserProfileTool, profiles_path: Path
     ) -> None:
         with pytest.raises(ToolCallError, match="no profile found"):
-            profile_tool(
-                ProfileWriteInput(user_id="nonexistent", updates={"name": "New"})
-            )
+            profile_tool(ProfileWriteInput(user_id="nonexistent", updates={"name": "New"}))
 
 
 # ===========================================================================
@@ -230,27 +224,21 @@ class TestDocumentParserTax:
 class TestDocumentParserGeneric:
     """Tests for generic parsing and unknown doc_type."""
 
-    def test_generic_extracts_amounts_and_dates(
-        self, doc_tool: DocumentParserTool
-    ) -> None:
+    def test_generic_extracts_amounts_and_dates(self, doc_tool: DocumentParserTool) -> None:
         content = "Paid ₹1,500 on 15/06/2026. Received Rs 3,000 on 20/06/2026."
         result = doc_tool(DocParseInput(content=content, doc_type="generic"))
         assert 1500.0 in result.extracted["amounts"]
         assert 3000.0 in result.extracted["amounts"]
         assert len(result.extracted["dates"]) == 2
 
-    def test_unknown_doc_type_returns_generic(
-        self, doc_tool: DocumentParserTool
-    ) -> None:
+    def test_unknown_doc_type_returns_generic(self, doc_tool: DocumentParserTool) -> None:
         # "invoice" is not a known type, should fall back to generic
         content = "Invoice total ₹5,000 dated 01/03/2026"
         result = doc_tool(DocParseInput(content=content, doc_type="generic"))
         assert result.extracted  # should have some extraction
         assert result.confidence >= 0.0
 
-    def test_empty_content_returns_zero_confidence(
-        self, doc_tool: DocumentParserTool
-    ) -> None:
+    def test_empty_content_returns_zero_confidence(self, doc_tool: DocumentParserTool) -> None:
         result = doc_tool(DocParseInput(content="", doc_type="portfolio_statement"))
         assert result.confidence == 0.0
         assert result.extracted == {}
@@ -277,9 +265,7 @@ class TestWatchlistAlert:
         ]
         save_watchlist("test_user", entries)
         result = alert_tool(
-            AlertCheckInput(
-                user_id="test_user", current_prices={"RELIANCE": 2600.0}
-            )
+            AlertCheckInput(user_id="test_user", current_prices={"RELIANCE": 2600.0})
         )
         assert len(result.triggered) == 1
         assert result.triggered[0].symbol == "RELIANCE"
@@ -297,9 +283,7 @@ class TestWatchlistAlert:
             )
         ]
         save_watchlist("test_user", entries)
-        result = alert_tool(
-            AlertCheckInput(user_id="test_user", current_prices={"TCS": 3400.0})
-        )
+        result = alert_tool(AlertCheckInput(user_id="test_user", current_prices={"TCS": 3400.0}))
         assert len(result.triggered) == 1
         assert result.triggered[0].symbol == "TCS"
 
@@ -316,9 +300,7 @@ class TestWatchlistAlert:
         ]
         save_watchlist("test_user", entries)
         # Price exactly at target triggers (>=)
-        result = alert_tool(
-            AlertCheckInput(user_id="test_user", current_prices={"INFY": 1500.0})
-        )
+        result = alert_tool(AlertCheckInput(user_id="test_user", current_prices={"INFY": 1500.0}))
         assert len(result.triggered) == 1
 
     def test_no_alert_when_price_hasnt_crossed(
@@ -333,18 +315,14 @@ class TestWatchlistAlert:
             )
         ]
         save_watchlist("test_user", entries)
-        result = alert_tool(
-            AlertCheckInput(user_id="test_user", current_prices={"WIPRO": 450.0})
-        )
+        result = alert_tool(AlertCheckInput(user_id="test_user", current_prices={"WIPRO": 450.0}))
         assert len(result.triggered) == 0
 
     def test_empty_watchlist_file_absent(
         self, alert_tool: WatchlistAlertTool, watchlists_dir: Path
     ) -> None:
         result = alert_tool(
-            AlertCheckInput(
-                user_id="no_such_user", current_prices={"RELIANCE": 2500.0}
-            )
+            AlertCheckInput(user_id="no_such_user", current_prices={"RELIANCE": 2500.0})
         )
         assert result.triggered == []
         assert "no_such_user" in result.citation
@@ -361,11 +339,7 @@ class TestWatchlistAlert:
             )
         ]
         save_watchlist("test_user", entries)
-        result = alert_tool(
-            AlertCheckInput(
-                user_id="test_user", current_prices={"TCS": 3500.0}
-            )
-        )
+        result = alert_tool(AlertCheckInput(user_id="test_user", current_prices={"TCS": 3500.0}))
         assert len(result.triggered) == 0
 
 
@@ -398,9 +372,7 @@ class TestWatchlistPersistence:
         assert loaded[0].target_price == 1700.0
 
     def test_remove_from_watchlist(self, watchlists_dir: Path) -> None:
-        e = WatchlistEntry(
-            symbol="TCS", target_price=3500.0, direction="above", alert_message="m"
-        )
+        e = WatchlistEntry(symbol="TCS", target_price=3500.0, direction="above", alert_message="m")
         add_to_watchlist("u", e)
         remove_from_watchlist("u", "TCS")
         loaded = load_watchlist("u")

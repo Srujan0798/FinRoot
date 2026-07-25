@@ -41,10 +41,9 @@ def test_full_workflow_mock_risk() -> None:
     assert state.candidate is not None
     summary = state.candidate.summary.lower()
     analysis = state.candidate.analysis.lower()
-    assert "risk" in summary or "risk" in analysis or "volatil" in summary or "volatil" in analysis, (
-        f"Expected risk-related content in output. "
-        f"summary={state.candidate.summary[:200]}"
-    )
+    assert (
+        "risk" in summary or "risk" in analysis or "volatil" in summary or "volatil" in analysis
+    ), f"Expected risk-related content in output. summary={state.candidate.summary[:200]}"
 
 
 # ------------------------------------------------------------------
@@ -63,8 +62,7 @@ def test_full_workflow_mock_tax() -> None:
     assert state.candidate is not None
     combined = (state.candidate.summary + " " + state.candidate.analysis).lower()
     assert "tax" in combined, (
-        f"Expected tax-related content in output. "
-        f"summary={state.candidate.summary[:200]}"
+        f"Expected tax-related content in output. summary={state.candidate.summary[:200]}"
     )
 
 

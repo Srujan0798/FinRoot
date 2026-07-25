@@ -19,9 +19,7 @@ from finroot.schemas.audit import AuditEvent
 from finroot.schemas.enums import ConfidenceLevel
 from finroot.schemas.state import AgentState
 
-_DISCLAIMER = (
-    "This answer has not met quality standards. Please verify independently."
-)
+_DISCLAIMER = "This answer has not met quality standards. Please verify independently."
 
 _OVERCONFIDENT_RE = re.compile(
     r"\b(?:guaranteed|guarantee[sd]?|certain(?:ly)?|definitely|always|never|"
@@ -155,9 +153,7 @@ class RefinementLoop:
         assert rec is not None  # noqa: S101
 
         for axis in verdict.must_fix:
-            axis_score = next(
-                (s for s in verdict.scores if s.axis == axis), None
-            )
+            axis_score = next((s for s in verdict.scores if s.axis == axis), None)
             if axis_score is None:
                 continue
             score_val = axis_score.score

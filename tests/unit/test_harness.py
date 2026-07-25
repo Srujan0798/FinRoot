@@ -14,6 +14,7 @@ at the repo root, so it is NOT importable with only ``PYTHONPATH=src``. The
 harness internally prepends the repo root to ``sys.path``; these tests must
 do the same.
 """
+
 from __future__ import annotations
 
 import json
@@ -233,8 +234,7 @@ class TestFinRootBeatsRAG:
         rag_score = by_sys["rag"].mean_score
         # If this assertion fires, the pipeline or graders are broken.
         assert finroot_score + 1e-9 >= rag_score, (
-            f"FinRoot underperforms RAG: finroot={finroot_score:.4f} "
-            f"< rag={rag_score:.4f}"
+            f"FinRoot underperforms RAG: finroot={finroot_score:.4f} < rag={rag_score:.4f}"
         )
 
     def test_composite_lift_is_nonnegative_when_finroot_wins(self) -> None:
@@ -289,9 +289,7 @@ class TestWriteMetrics:
         # All three systems present in the file.
         assert set(data["systems"].keys()) == {"finroot", "rag", "single_agent"}
 
-    def test_metrics_systems_match_harness_result_shape(
-        self, tmp_metrics_path: Path
-    ) -> None:
+    def test_metrics_systems_match_harness_result_shape(self, tmp_metrics_path: Path) -> None:
         results = run_harness(_small_config(task_filter="frb-001"))
         write_metrics(results, path=tmp_metrics_path, k=2, n_tasks=1)
         data = json.loads(tmp_metrics_path.read_text(encoding="utf-8"))
@@ -334,6 +332,7 @@ class TestSingleTaskMode:
             assert "portfolio" in r.per_domain
 
     @pytest.mark.slow
+    @pytest.mark.timeout(180)
     def test_cli_single_task_runs(self) -> None:
         """The CLI's --task mode must produce a transcript + metrics.json."""
         env = os.environ.copy()
@@ -366,6 +365,7 @@ class TestSingleTaskMode:
         assert "finroot" in data["systems"]
 
     @pytest.mark.slow
+    @pytest.mark.timeout(300)
     def test_cli_full_runs(self) -> None:
         """The CLI's full-bank mode produces the canonical metrics.json."""
         env = os.environ.copy()

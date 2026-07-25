@@ -1,6 +1,6 @@
 # Demo Transcript 1: Portfolio
 
-> Generated: 2026-06-21 01:24 UTC  
+> Generated: 2026-07-25 15:20 UTC  
 > Mode: Mock (offline, no API keys)
 
 ---
@@ -41,12 +41,12 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 - risk_assessor: produced monte_carlo
 
 ### Findings
-- [intent_classifier] {'intent': 'portfolio', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 'portfolio' matched for intent portfolio"}
+- [intent_classifier] {'intent': 'portfolio', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Scored intent portfolio=16.0 (top keyword 'allocation'); scores={portfolio:16.0, risk:6.0}"}
 - [context_assembler] {'query': 'What is my current portfolio allocation and risk level?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>, 'investment_horizon': <InvestmentHorizon.MEDIUM: 'medium'>, 'monthly_income': 150000.0, 'monthly_expenses': 85000.0, 'tax_bracket_pct': 20.0, 'goals': ['Build emergency fund of 12 months expenses', "Save 
-- [market_data] symbol='FD_HDFC_001' currency='USD' prices=[PricePoint(date='2026-06-17', open=36298.9, high=36299.5, low=36298.5, close=36299.0, volume=1255294), PricePoint(date='2026-06-18', open=36300.4, high=36301.0, low=36300.0, close=36300.5, volume=1255294), PricePoint(date='2026-06-19', open=36299.4, high=36300.0, low=36299.0, close=36299.5, volume=1255294), PricePoint(date='2026-06-20', open=36300.15, hi
-- [market_data] symbol='MF_ICICI_BALANCED_001' currency='USD' prices=[PricePoint(date='2026-06-17', open=11498.9, high=11499.5, low=11498.5, close=11499.0, volume=1896883), PricePoint(date='2026-06-18', open=11500.4, high=11501.0, low=11500.0, close=11500.5, volume=1896883), PricePoint(date='2026-06-19', open=11499.4, high=11500.0, low=11499.0, close=11499.5, volume=1896883), PricePoint(date='2026-06-20', open=11
-- [market_data] symbol='MF_SBI_DEBT_001' currency='USD' prices=[PricePoint(date='2026-06-17', open=44398.9, high=44399.5, low=44398.5, close=44399.0, volume=1878908), PricePoint(date='2026-06-18', open=44400.4, high=44401.0, low=44400.0, close=44400.5, volume=1878908), PricePoint(date='2026-06-19', open=44399.4, high=44400.0, low=44399.0, close=44399.5, volume=1878908), PricePoint(date='2026-06-20', open=44400.15
-- [market_data] symbol='PPF_ACCOUNT_001' currency='USD' prices=[PricePoint(date='2026-06-17', open=4298.9, high=4299.5, low=4298.5, close=4299.0, volume=1596647), PricePoint(date='2026-06-18', open=4300.4, high=4301.0, low=4300.0, close=4300.5, volume=1596647), PricePoint(date='2026-06-19', open=4299.4, high=4300.0, low=4299.0, close=4299.5, volume=1596647), PricePoint(date='2026-06-20', open=4300.15, high=4300.7
+- [market_data] symbol='FD_HDFC_001' currency='INR' prices=[PricePoint(date='2026-07-21', open=36298.9, high=36299.5, low=36298.5, close=36299.0, volume=1255294), PricePoint(date='2026-07-22', open=36300.4, high=36301.0, low=36300.0, close=36300.5, volume=1255294), PricePoint(date='2026-07-23', open=36299.4, high=36300.0, low=36299.0, close=36299.5, volume=1255294), PricePoint(date='2026-07-24', open=36300.15, hi
+- [market_data] symbol='MF_ICICI_BALANCED_001' currency='INR' prices=[PricePoint(date='2026-07-21', open=11498.9, high=11499.5, low=11498.5, close=11499.0, volume=1896883), PricePoint(date='2026-07-22', open=11500.4, high=11501.0, low=11500.0, close=11500.5, volume=1896883), PricePoint(date='2026-07-23', open=11499.4, high=11500.0, low=11499.0, close=11499.5, volume=1896883), PricePoint(date='2026-07-24', open=11
+- [market_data] symbol='MF_SBI_DEBT_001' currency='INR' prices=[PricePoint(date='2026-07-21', open=44398.9, high=44399.5, low=44398.5, close=44399.0, volume=1878908), PricePoint(date='2026-07-22', open=44400.4, high=44401.0, low=44400.0, close=44400.5, volume=1878908), PricePoint(date='2026-07-23', open=44399.4, high=44400.0, low=44399.0, close=44399.5, volume=1878908), PricePoint(date='2026-07-24', open=44400.15
+- [market_data] symbol='PPF_ACCOUNT_001' currency='INR' prices=[PricePoint(date='2026-07-21', open=4298.9, high=4299.5, low=4298.5, close=4299.0, volume=1596647), PricePoint(date='2026-07-22', open=4300.4, high=4301.0, low=4300.0, close=4300.5, volume=1596647), PricePoint(date='2026-07-23', open=4299.4, high=4300.0, low=4299.0, close=4299.5, volume=1596647), PricePoint(date='2026-07-24', open=4300.15, high=4300.7
 - [portfolio_optimizer] prices: {'FD_HDFC_001': 36300.0, 'MF_ICICI_BALANCED_001': 11500.0, 'MF_SBI_DEBT_001': 44400.0, 'PPF_ACCOUNT_001': 4300.0}
 - [portfolio_optimizer] current_allocation: [{'symbol': 'FD_HDFC_001', 'weight': 0.224601, 'price': 36300.0}, {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.273574, 'price': 11500.0}, {'symbol': 'MF_SBI_DEBT_001', 'weight': 0.344603, 'price': 44400.0}, {'symbol': 'PPF_ACCOUNT_001', 'weight': 0.157221, 'price': 4300.0}]
 - [portfolio_simulator] expected_return=0.093536 p10_return=-0.134036 p90_return=0.363626 probability_of_loss=0.31 expected_final_value=1.093536 median_final_value=1.093536 p10_final_value=0.865964 p90_final_value=1.363626 expected_after_tax_return=0.084182 methodology='Geometric Brownian motion: dS/S = mu*dt + sigma*dW, discretised daily over 1y (252 trading days). mu_annual=0.1000, sigma_annual=0.1800. 500 scenarios. N
@@ -80,9 +80,9 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 
 | Source | Detail | Value | Retrieved At |
 |--------|--------|-------|--------------|
-| risk_assessor | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | 2026-06-21 01:24:33.495986+00:00 |
-| intent_classifier | Output from intent_classifier (synthesizer evidence) | {'intent': 'portfolio', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 'portfolio' matched for intent portfolio"} | 2026-06-21 01:24:33.496001+00:00 |
-| context_assembler | Output from context_assembler (synthesizer evidence) | {'query': 'What is my current portfolio allocation and risk level?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>, 'inv | 2026-06-21 01:24:33.496025+00:00 |
+| risk_assessor | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | Monte Carlo (GBM): 1000 paths, 1-year horizon, mu=0.1000/yr, sigma=0.1800/yr. Past performance does not guarantee future returns. | 2026-07-25 15:20:51.798339+00:00 |
+| intent_classifier | Output from intent_classifier (synthesizer evidence) | {'intent': 'portfolio', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Scored intent portfolio=16.0 (top keyword 'allocation'); scores={portfolio:16.0, risk:6.0}"} | 2026-07-25 15:20:51.798360+00:00 |
+| context_assembler | Output from context_assembler (synthesizer evidence) | {'query': 'What is my current portfolio allocation and risk level?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>, 'inv | 2026-07-25 15:20:51.798389+00:00 |
 
 ---
 
@@ -92,12 +92,12 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 |------|------|--------|--------|
 | 0 | planner | plan_step | portfolio_optimizer |
 | 1 | planner | plan_step | risk_assessor |
-| 2 | intent_classifier | tool_output | output={'intent': 'portfolio', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Keyword  |
+| 2 | intent_classifier | tool_output | output={'intent': 'portfolio', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Scored i |
 | 3 | context_assembler | tool_output | output={'query': 'What is my current portfolio allocation and risk level?', 'twin': {'user_id': 'demo', 'name': 'Priya S |
-| 4 | market_data | tool_output | input=symbol='FD_HDFC_001' period='1d', output=symbol='FD_HDFC_001' currency='USD' prices=[PricePoint(date='2026-06-17', |
-| 5 | market_data | tool_output | input=symbol='MF_ICICI_BALANCED_001' period='1d', output=symbol='MF_ICICI_BALANCED_001' currency='USD' prices=[PricePoin |
-| 6 | market_data | tool_output | input=symbol='MF_SBI_DEBT_001' period='1d', output=symbol='MF_SBI_DEBT_001' currency='USD' prices=[PricePoint(date='2026 |
-| 7 | market_data | tool_output | input=symbol='PPF_ACCOUNT_001' period='1d', output=symbol='PPF_ACCOUNT_001' currency='USD' prices=[PricePoint(date='2026 |
+| 4 | market_data | tool_output | input=symbol='FD_HDFC_001' period='1d', output=symbol='FD_HDFC_001' currency='INR' prices=[PricePoint(date='2026-07-21', |
+| 5 | market_data | tool_output | input=symbol='MF_ICICI_BALANCED_001' period='1d', output=symbol='MF_ICICI_BALANCED_001' currency='INR' prices=[PricePoin |
+| 6 | market_data | tool_output | input=symbol='MF_SBI_DEBT_001' period='1d', output=symbol='MF_SBI_DEBT_001' currency='INR' prices=[PricePoint(date='2026 |
+| 7 | market_data | tool_output | input=symbol='PPF_ACCOUNT_001' period='1d', output=symbol='PPF_ACCOUNT_001' currency='INR' prices=[PricePoint(date='2026 |
 | 8 | portfolio_optimizer | current_prices | prices={'FD_HDFC_001': 36300.0, 'MF_ICICI_BALANCED_001': 11500.0, 'MF_SBI_DEBT_001': 44400.0, 'PPF_ACCOUNT_001': 4300.0} |
 | 9 | portfolio_optimizer | allocation_analysis | current_allocation=[{'symbol': 'FD_HDFC_001', 'weight': 0.224601, 'price': 36300.0}, {'symbol': 'MF_ICICI_BALANCED_001', |
 | 10 | portfolio_simulator | tool_output | input=holdings=[{'symbol': 'FD_HDFC_001', 'weight': 0.224601}, {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.273574},  |
@@ -107,10 +107,10 @@ The query falls in the **portfolio** domain. Key concepts to consider: asset all
 | 14 | risk_assessor | monte_carlo | expected_return=0.0895, p10_return=-0.1477, p90_return=0.376208, probability_of_loss=0.315, citation=Monte Carlo (GBM):  |
 | 15 | critic | critique | SelfCritic passed (overall=0.94, threshold=0.6). Axes: correctness=1.00, risk_awareness=1.00, actionability=0.70, explai |
 | 16 | orchestrator | orchestrator.run | {"query": "What is my current portfolio allocation and risk level?"} |
-| 17 | tool | tool.called | {"input": "symbol='FD_HDFC_001' period='1d'", "output": "symbol='FD_HDFC_001' currency='USD' prices=[PricePoint(date='20 |
-| 18 | tool | tool.called | {"input": "symbol='MF_ICICI_BALANCED_001' period='1d'", "output": "symbol='MF_ICICI_BALANCED_001' currency='USD' prices= |
-| 19 | tool | tool.called | {"input": "symbol='MF_SBI_DEBT_001' period='1d'", "output": "symbol='MF_SBI_DEBT_001' currency='USD' prices=[PricePoint( |
-| 20 | tool | tool.called | {"input": "symbol='PPF_ACCOUNT_001' period='1d'", "output": "symbol='PPF_ACCOUNT_001' currency='USD' prices=[PricePoint( |
+| 17 | tool | tool.called | {"input": "symbol='FD_HDFC_001' period='1d'", "output": "symbol='FD_HDFC_001' currency='INR' prices=[PricePoint(date='20 |
+| 18 | tool | tool.called | {"input": "symbol='MF_ICICI_BALANCED_001' period='1d'", "output": "symbol='MF_ICICI_BALANCED_001' currency='INR' prices= |
+| 19 | tool | tool.called | {"input": "symbol='MF_SBI_DEBT_001' period='1d'", "output": "symbol='MF_SBI_DEBT_001' currency='INR' prices=[PricePoint( |
+| 20 | tool | tool.called | {"input": "symbol='PPF_ACCOUNT_001' period='1d'", "output": "symbol='PPF_ACCOUNT_001' currency='INR' prices=[PricePoint( |
 | 21 | tool | tool.called | {"input": "holdings=[{'symbol': 'FD_HDFC_001', 'weight': 0.224601}, {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.2735 |
 | 22 | tool | tool.called | {"input": "holdings=[{'symbol': 'FD_HDFC_001', 'weight': 0.25}, {'symbol': 'MF_ICICI_BALANCED_001', 'weight': 0.25}, {'s |
 | 23 | tool | tool.called | {"input": "holdings=[{'asset_id': 'FD_HDFC_001', 'asset_type': 'fixed_deposit', 'name': 'HDFC Bank Fixed Deposit', 'quan |

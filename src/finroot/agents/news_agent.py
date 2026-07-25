@@ -61,7 +61,9 @@ class NewsInterpreterAgent(BaseAgent):
 
             # Think: determine what we still need
             needs_news = not self._has_tool_output(state, "news_search")
-            needs_sentiment = self._has_tool_output(state, "news_search") and not self._has_tool_output(state, "sentiment_analysis")
+            needs_sentiment = self._has_tool_output(
+                state, "news_search"
+            ) and not self._has_tool_output(state, "sentiment_analysis")
 
             if not needs_news and not needs_sentiment:
                 logger.debug("NewsInterpreterAgent: all data collected; stopping early.")

@@ -22,6 +22,7 @@ Notes
   orchestrator uses to invoke it Just Works. See
   ``docs/waves/wave-6-gotchas.md`` for the rationale.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -116,8 +117,10 @@ def print_summary_table(results: list[HarnessResult]) -> None:
 def print_transcript(task: dict, trials: list[TrialResult]) -> None:
     """Print the full transcript for a single FRB task (CLI ``--task`` mode)."""
     print("=" * 78)
-    print(f"Task: {task.get('id')}  domain={task.get('domain')}  "
-          f"difficulty={task.get('difficulty')}  twin_id={task.get('twin_id')}")
+    print(
+        f"Task: {task.get('id')}  domain={task.get('domain')}  "
+        f"difficulty={task.get('difficulty')}  twin_id={task.get('twin_id')}"
+    )
     print(f"Query: {task.get('query')}")
     print("-" * 78)
     expected = task.get("expected", {}) or {}
@@ -126,8 +129,10 @@ def print_transcript(task: dict, trials: list[TrialResult]) -> None:
     print(f"Min citations:         {expected.get('min_citations')}")
     print(f"Expected confidence:   {expected.get('expected_confidence')}")
     if expected.get("numeric_answer") is not None:
-        print(f"Expected numeric:      {expected.get('numeric_answer')} "
-              f"±{expected.get('numeric_tolerance')}")
+        print(
+            f"Expected numeric:      {expected.get('numeric_answer')} "
+            f"±{expected.get('numeric_tolerance')}"
+        )
     print("=" * 78)
 
     for t in trials:
@@ -136,14 +141,12 @@ def print_transcript(task: dict, trials: list[TrialResult]) -> None:
         if "must_mention" in bd and isinstance(bd["must_mention"], dict):
             mm = bd["must_mention"]
             breakdown_lines.append(
-                f"    must_mention: {mm.get('ratio', 0):.2f} "
-                f"(missing: {mm.get('missing', [])})"
+                f"    must_mention: {mm.get('ratio', 0):.2f} (missing: {mm.get('missing', [])})"
             )
         if "citations" in bd and isinstance(bd["citations"], dict):
             c = bd["citations"]
             breakdown_lines.append(
-                f"    citations:    {c.get('count', 0)} "
-                f"(min_required: {c.get('min_required', 0)})"
+                f"    citations:    {c.get('count', 0)} (min_required: {c.get('min_required', 0)})"
             )
         if "numeric" in bd and isinstance(bd["numeric"], dict):
             n = bd["numeric"]
@@ -154,15 +157,16 @@ def print_transcript(task: dict, trials: list[TrialResult]) -> None:
         if "confidence" in bd and isinstance(bd["confidence"], dict):
             cf = bd["confidence"]
             breakdown_lines.append(
-                f"    confidence:   expected={cf.get('expected')} "
-                f"actual={cf.get('actual')}"
+                f"    confidence:   expected={cf.get('expected')} actual={cf.get('actual')}"
             )
         if "error" in bd:
             breakdown_lines.append(f"    error:        {bd['error']}")
 
         print()
-        print(f"  trial {t.trial}  system={t.system}  passed={t.passed}  "
-              f"score={t.score:.4f}  elapsed={t.elapsed_s:.2f}s")
+        print(
+            f"  trial {t.trial}  system={t.system}  passed={t.passed}  "
+            f"score={t.score:.4f}  elapsed={t.elapsed_s:.2f}s"
+        )
         for line in breakdown_lines:
             print(line)
 
@@ -172,9 +176,7 @@ def print_transcript(task: dict, trials: list[TrialResult]) -> None:
 # ---------------------------------------------------------------------------
 
 
-def _gather_trials_for_task(
-    task: dict, config: HarnessConfig
-) -> list[TrialResult]:
+def _gather_trials_for_task(task: dict, config: HarnessConfig) -> list[TrialResult]:
     """Re-run the harness restricted to one task to build a transcript.
 
     The full ``run_harness`` aggregates and discards per-trial records; here
@@ -192,14 +194,11 @@ def _gather_trials_for_task(
     # Inline a slim copy of the harness loop. We can't reuse run_harness
     # because it returns HarnessResult (aggregated), not TrialResult.
     twins = _h._load_twins(_h.DEFAULT_TWIN_PROFILES_PATH)
-    systems = (
-        [config.system_filter]
-        if config.system_filter
-        else list(config.systems)
-    )
+    systems = [config.system_filter] if config.system_filter else list(config.systems)
     judge_llm = None
     if config.judge_with_llm:
         from finroot.llm.mock import MockProvider
+
         judge_llm = MockProvider()
 
     trials: list[TrialResult] = []
@@ -208,9 +207,7 @@ def _gather_trials_for_task(
         twin = twins.get(twin_id) if twin_id else None
         for system in systems:
             for trial_idx in range(config.k):
-                trial_query = (
-                    str(t.get("query", "")) + _h._seed_suffix(trial_idx, config.base_seed)
-                )
+                trial_query = str(t.get("query", "")) + _h._seed_suffix(trial_idx, config.base_seed)
                 t0 = time.monotonic()
                 error: str | None = None
                 try:
@@ -391,8 +388,10 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     # Full-bank mode.
-    print(f"FRB harness: k={config.k} systems={config.systems} mock={config.mock} "
-          f"judge_with_llm={config.judge_with_llm}")
+    print(
+        f"FRB harness: k={config.k} systems={config.systems} mock={config.mock} "
+        f"judge_with_llm={config.judge_with_llm}"
+    )
     print(f"FRB bank: {config.frb_path}")
     print()
 
@@ -411,8 +410,7 @@ def main(argv: list[str] | None = None) -> int:
     print()
 
     report = write_metrics(results, path=args.out, k=config.k, n_tasks=n_tasks)
-    print(f"Wrote {args.out}  as_of_sha={report.as_of_sha}  "
-          f"generated_at={report.generated_at}")
+    print(f"Wrote {args.out}  as_of_sha={report.as_of_sha}  generated_at={report.generated_at}")
     return 0
 
 

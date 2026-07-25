@@ -190,9 +190,7 @@ class TestAddTurnAndAutoRemember:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         mgr.add_turn("user", "hi")
         mgr.add_turn("assistant", "hello there")
         assert mgr.get_context() == [
@@ -206,9 +204,7 @@ class TestAddTurnAndAutoRemember:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         mgr.add_turn("user", "hi")
         # 2 chars — well below threshold; semantic store must be empty
         assert fallback_semantic.search("hi", k=10) == []
@@ -219,9 +215,7 @@ class TestAddTurnAndAutoRemember:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         mgr.add_turn("user", "")
         assert fallback_semantic.search("", k=10) == []
 
@@ -232,9 +226,7 @@ class TestAddTurnAndAutoRemember:
         twin_store: DigitalTwinStore,
     ) -> None:
         """Threshold is strictly greater-than 50, so 50 chars must NOT be remembered."""
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         content = "x" * 50
         assert len(content) == _AUTO_REMEMBER_MIN_CHARS  # 50
         mgr.add_turn("user", content)
@@ -249,9 +241,7 @@ class TestAddTurnAndAutoRemember:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         content = "x" * 51
         mgr.add_turn("user", content)
         results = fallback_semantic.search(content, k=5)
@@ -267,9 +257,7 @@ class TestAddTurnAndAutoRemember:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         mgr.add_turn(
             "assistant",
             "Here is a long, detailed explanation that should be remembered.",
@@ -284,9 +272,7 @@ class TestAddTurnAndAutoRemember:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         with pytest.raises(ValueError, match="role must be one of"):
             mgr.add_turn("system", "hello")
         # the failed add must not have polluted either store
@@ -298,9 +284,7 @@ class TestAddTurnAndAutoRemember:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         with pytest.raises(TypeError, match="content must be str"):
             mgr.add_turn("user", 123)  # type: ignore[arg-type]
 
@@ -310,9 +294,7 @@ class TestAddTurnAndAutoRemember:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         mgr.add_turn("user", "hi")
         ctx = mgr.get_context()
         ctx.clear()
@@ -333,9 +315,7 @@ class TestRememberAndRecall:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         doc_id = mgr.remember("market outlook is bullish this quarter")
         assert isinstance(doc_id, str)
         assert len(doc_id) == 36  # UUID
@@ -346,9 +326,7 @@ class TestRememberAndRecall:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         mgr.remember("just the text", metadata=None)
         results = fallback_semantic.search("just the text", k=1)
         assert len(results) == 1
@@ -362,9 +340,7 @@ class TestRememberAndRecall:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         mgr.remember("rupee depreciation risk", metadata={"source": "news", "year": 2026})
         results = fallback_semantic.search("rupee", k=1)
         assert results[0]["metadata"]["source"] == "news"
@@ -377,9 +353,7 @@ class TestRememberAndRecall:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         with pytest.raises(TypeError, match="text must be str"):
             mgr.remember(123)  # type: ignore[arg-type]
 
@@ -389,9 +363,7 @@ class TestRememberAndRecall:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         mgr.remember("equity markets are volatile right now")
         mgr.remember("bond yields are rising globally")
         results = mgr.recall("volatile equity", k=2)
@@ -404,9 +376,7 @@ class TestRememberAndRecall:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         for i in range(8):
             mgr.remember(f"document {i} about finance topic number {i}")
         results = mgr.recall("document finance")
@@ -418,9 +388,7 @@ class TestRememberAndRecall:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         assert mgr.recall("anything", k=3) == []
 
     def test_recall_validates_k(
@@ -429,9 +397,7 @@ class TestRememberAndRecall:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         with pytest.raises(ValueError, match="k must be >= 1"):
             mgr.recall("q", k=0)
         with pytest.raises(TypeError, match="k must be int"):
@@ -443,9 +409,7 @@ class TestRememberAndRecall:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         with pytest.raises(TypeError, match="query must be str"):
             mgr.recall(123)  # type: ignore[arg-type]
 
@@ -462,9 +426,7 @@ class TestGetAndUpdateTwin:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         twin_store.save(_make_twin(user_id="u-1", name="Aarav"))
         twin = mgr.get_twin()
         assert twin.user_id == "u-1"
@@ -476,9 +438,7 @@ class TestGetAndUpdateTwin:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "ghost"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "ghost")
         with pytest.raises(KeyError, match="not found"):
             mgr.get_twin()
 
@@ -488,9 +448,7 @@ class TestGetAndUpdateTwin:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         twin_store.save(_make_twin(user_id="u-1", name="Aarav", age=30))
         updated = mgr.update_twin(age=31, monthly_income=15000.0)
         assert updated.age == 31
@@ -506,18 +464,14 @@ class TestGetAndUpdateTwin:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         twin_store.save(_make_twin(user_id="u-1"))
         mgr.update_twin(
             risk_tolerance=RiskTolerance.AGGRESSIVE,
             goals=["retire by 50", "buy beach house"],
         )
         # new manager bound to the same store must see the change
-        mgr2 = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr2 = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         reloaded = mgr2.get_twin()
         assert reloaded.risk_tolerance is RiskTolerance.AGGRESSIVE
         assert reloaded.goals == ["retire by 50", "buy beach house"]
@@ -528,9 +482,7 @@ class TestGetAndUpdateTwin:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "ghost"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "ghost")
         with pytest.raises(KeyError, match="not found"):
             mgr.update_twin(age=40)
 
@@ -541,9 +493,7 @@ class TestGetAndUpdateTwin:
         twin_store: DigitalTwinStore,
     ) -> None:
         """Changing ``user_id`` would orphan the persisted row — fail loud."""
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         twin_store.save(_make_twin(user_id="u-1"))
         with pytest.raises(ValueError, match="reserved fields"):
             mgr.update_twin(user_id="u-2")
@@ -556,9 +506,7 @@ class TestGetAndUpdateTwin:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         twin_store.save(_make_twin(user_id="u-1"))
         with pytest.raises(ValidationError):
             mgr.update_twin(unknown_field="nope")
@@ -569,9 +517,7 @@ class TestGetAndUpdateTwin:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         twin_store.save(_make_twin(user_id="u-1", age=30))
         with pytest.raises(ValidationError):
             mgr.update_twin(age=200)
@@ -582,9 +528,7 @@ class TestGetAndUpdateTwin:
         fallback_semantic: SemanticMemory,
         twin_store: DigitalTwinStore,
     ) -> None:
-        mgr = MemoryManager(
-            fake_working, fallback_semantic, twin_store, "u-1"
-        )
+        mgr = MemoryManager(fake_working, fallback_semantic, twin_store, "u-1")
         original = _make_twin(user_id="u-1", age=30)
         twin_store.save(original)
         before = mgr.get_twin().updated_at
@@ -620,9 +564,7 @@ class TestCreateFactory:
         monkeypatch.setitem(sys.modules, "chromadb", None)
         chroma_dir = tmp_path / "chroma"
         db_path = str(tmp_path / "twin.db")
-        mgr = MemoryManager.create(
-            user_id="u-2", chroma_dir=str(chroma_dir), db_path=db_path
-        )
+        mgr = MemoryManager.create(user_id="u-2", chroma_dir=str(chroma_dir), db_path=db_path)
         # twin store must point at the custom path
         assert mgr.twin_store._db_path == db_path
         # get_twin on an empty store raises — proves the store is wired
@@ -754,9 +696,7 @@ def test_create_factory_creates_sqlite_schema(
     # SQL-level check that the table exists
     conn = sqlite3.connect(mgr.twin_store._db_path)
     try:
-        rows = conn.execute(
-            "SELECT name FROM sqlite_master WHERE type='table'"
-        ).fetchall()
+        rows = conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
     finally:
         conn.close()
     table_names = {r[0] for r in rows}

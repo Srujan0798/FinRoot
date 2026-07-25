@@ -57,7 +57,7 @@ class FundamentalOutput(BaseModel):
     market_cap: float | None
     revenue_ttm: float | None
     debt_to_equity: float | None
-    source: str   # "yfinance" | "mock"
+    source: str  # "yfinance" | "mock"
     citation: str
 
 
@@ -89,8 +89,8 @@ class FundamentalAnalysisTool(BaseTool[FundamentalInput, FundamentalOutput]):
     """Fundamental ratios tool. See module docstring for mode semantics."""
 
     name = "fundamental_analysis"
-    ttl_seconds = 3600   # contract: fundamentals = 3600s
-    rate_per_sec = 5.0   # contract: ≤ 10 req/s per tool instance
+    ttl_seconds = 3600  # contract: fundamentals = 3600s
+    rate_per_sec = 5.0  # contract: ≤ 10 req/s per tool instance
 
     def __init__(
         self,
@@ -171,13 +171,11 @@ class FundamentalAnalysisTool(BaseTool[FundamentalInput, FundamentalOutput]):
             info = ticker.info
         except Exception as e:
             raise ToolError(
-                f"FundamentalAnalysisTool live fetch failed for "
-                f"symbol={inp.symbol!r}: {e}"
+                f"FundamentalAnalysisTool live fetch failed for symbol={inp.symbol!r}: {e}"
             ) from e
         if not info:
             raise ToolError(
-                f"FundamentalAnalysisTool received empty info for "
-                f"symbol={inp.symbol!r}"
+                f"FundamentalAnalysisTool received empty info for symbol={inp.symbol!r}"
             )
         return FundamentalOutput(
             symbol=inp.symbol,
@@ -189,10 +187,7 @@ class FundamentalAnalysisTool(BaseTool[FundamentalInput, FundamentalOutput]):
             revenue_ttm=self._coerce_float(info.get("totalRevenue")),
             debt_to_equity=self._coerce_float(info.get("debtToEquity")),
             source="yfinance",
-            citation=(
-                f"Yahoo Finance via yfinance, fetched "
-                f"{datetime.now(UTC).isoformat()}"
-            ),
+            citation=(f"Yahoo Finance via yfinance, fetched {datetime.now(UTC).isoformat()}"),
         )
 
 

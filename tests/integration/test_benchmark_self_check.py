@@ -35,7 +35,11 @@ def _run_eval() -> dict:
     env["FINROOT_METRICS_PATH"] = str(REPO_ROOT / "results" / "metrics.json")
     result = subprocess.run(
         [sys.executable, "scripts/run_evals.py", "--mock", "--k", "2"],
-        capture_output=True, text=True, timeout=600, env=env, cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        timeout=600,
+        env=env,
+        cwd=REPO_ROOT,
     )
     assert result.returncode == 0, (
         f"Eval run failed: rc={result.returncode}\n"
@@ -47,6 +51,7 @@ def _run_eval() -> dict:
 
 
 @pytest.mark.slow
+@pytest.mark.timeout(590)
 def test_eval_produces_sane_metric() -> None:
     """Run the eval end-to-end and verify the headline numbers are sane."""
     metrics = _run_eval()
@@ -59,9 +64,7 @@ def test_eval_produces_sane_metric() -> None:
         sys_data = metrics["systems"][sys_name]
         assert "mean_score" in sys_data, f"{sys_name} missing mean_score"
         score = sys_data["mean_score"]
-        assert 0.0 <= score <= 1.0, (
-            f"{sys_name} mean_score {score} not in [0, 1] — eval is broken"
-        )
+        assert 0.0 <= score <= 1.0, f"{sys_name} mean_score {score} not in [0, 1] — eval is broken"
 
     # All 83 tasks ran
     n_tasks = metrics.get("n_tasks", 0)
@@ -90,9 +93,10 @@ def test_eval_produces_sane_metric() -> None:
 
     # SHA matches HEAD (eval was run against the current commit)
     import subprocess as sp
-    head_sha = sp.check_output(
-        ["git", "rev-parse", "--short", "HEAD"], cwd=REPO_ROOT
-    ).decode().strip()
+
+    head_sha = (
+        sp.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=REPO_ROOT).decode().strip()
+    )
     assert metrics["as_of_sha"] == head_sha, (
         f"Eval stamped {metrics['as_of_sha']!r} but HEAD is {head_sha!r}. "
         "This is a sign of stale state — re-run the eval from a clean checkout."

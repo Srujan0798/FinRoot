@@ -24,7 +24,11 @@ def _run_cli(query: str) -> subprocess.CompletedProcess:
     env["PYTHONPATH"] = "src"
     return subprocess.run(
         [sys.executable, "-m", "interface.cli", "--mock", query],
-        capture_output=True, text=True, timeout=120, env=env, cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        env=env,
+        cwd=REPO_ROOT,
     )
 
 
@@ -33,8 +37,7 @@ def _stdout_clean(text: str) -> str:
     # Remove warnings lines (UserWarning, DeprecationWarning, LangChainPendingDeprecationWarning)
     lines = text.splitlines()
     return "\n".join(
-        line for line in lines
-        if "Warning" not in line and "warning" not in line.lower()[:20]
+        line for line in lines if "Warning" not in line and "warning" not in line.lower()[:20]
     )
 
 
@@ -42,8 +45,7 @@ def test_cli_runs_successfully() -> None:
     """The CLI must exit 0 for a normal query in mock mode."""
     result = _run_cli(CLI_QUERY_PORTFOLIO)
     assert result.returncode == 0, (
-        f"CLI failed with rc={result.returncode}; "
-        f"stderr={result.stderr[:500]}"
+        f"CLI failed with rc={result.returncode}; stderr={result.stderr[:500]}"
     )
 
 
@@ -52,13 +54,9 @@ def test_cli_produces_answer() -> None:
     result = _run_cli(CLI_QUERY_PORTFOLIO)
     clean = _stdout_clean(result.stdout)
     # The CLI renders a box with "Answer" header
-    assert "Answer" in clean, (
-        f"CLI output missing 'Answer' section. Output:\n{clean[:500]}"
-    )
+    assert "Answer" in clean, f"CLI output missing 'Answer' section. Output:\n{clean[:500]}"
     # The answer should be more than 200 chars (non-trivial)
-    assert len(clean) > 200, (
-        f"CLI output suspiciously short ({len(clean)} chars):\n{clean[:500]}"
-    )
+    assert len(clean) > 200, f"CLI output suspiciously short ({len(clean)} chars):\n{clean[:500]}"
 
 
 def test_cli_includes_citations() -> None:
@@ -71,9 +69,7 @@ def test_cli_includes_citations() -> None:
         or "[1]" in clean
         or re.search(r"\[citation", clean, re.IGNORECASE) is not None
     )
-    assert has_citation, (
-        f"CLI output missing Citation reference. Output:\n{clean[:1000]}"
-    )
+    assert has_citation, f"CLI output missing Citation reference. Output:\n{clean[:1000]}"
 
 
 def test_cli_includes_confidence_label() -> None:
@@ -81,12 +77,10 @@ def test_cli_includes_confidence_label() -> None:
     result = _run_cli(CLI_QUERY_PORTFOLIO)
     clean = _stdout_clean(result.stdout)
     # Confidence is usually rendered in lowercase
-    has_confidence = re.search(
-        r"confidence[:\s]*(low|medium|high)", clean, re.IGNORECASE
-    ) is not None
-    assert has_confidence, (
-        f"CLI output missing confidence label. Output:\n{clean[:1000]}"
+    has_confidence = (
+        re.search(r"confidence[:\s]*(low|medium|high)", clean, re.IGNORECASE) is not None
     )
+    assert has_confidence, f"CLI output missing confidence label. Output:\n{clean[:1000]}"
 
 
 def test_cli_trap_refuses_unsafe_advice() -> None:
@@ -107,9 +101,7 @@ def test_cli_trap_refuses_unsafe_advice() -> None:
             "prudence",
         ]
     )
-    assert has_refusal, (
-        f"CLI should refuse the small-cap trap. Output:\n{clean[:1500]}"
-    )
+    assert has_refusal, f"CLI should refuse the small-cap trap. Output:\n{clean[:1500]}"
     # Must NOT say "yes, put it all in" or similar unconditional endorsement
     bad_endorsement = any(
         phrase in clean

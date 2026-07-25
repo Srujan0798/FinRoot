@@ -74,9 +74,9 @@ def _render_critic_verdict(state: Any) -> None:
                 f'<span style="width:130px;font-size:0.85rem;"><b>{axis}</b></span>'
                 f'<div style="flex:1;height:14px;background:#30363D;border-radius:7px;overflow:hidden;">'
                 f'<div style="width:{pct}%;height:100%;background:{bar_color};border-radius:7px;"></div>'
-                f'</div>'
+                f"</div>"
                 f'<span style="width:36px;text-align:right;font-family:monospace;">{score:.2f}</span>'
-                f'</div>'
+                f"</div>"
             )
             st.markdown(bar_html, unsafe_allow_html=True)
 
@@ -113,9 +113,7 @@ def _render_verifier_verdict(state: Any) -> None:
 
 def _render_citations_table(state: Any) -> None:
     """Render the citations table from the recommendation."""
-    rec: Recommendation | None = getattr(state, "candidate", None) or getattr(
-        state, "final", None
-    )
+    rec: Recommendation | None = getattr(state, "candidate", None) or getattr(state, "final", None)
     if rec is None or not rec.citations:
         return
 
@@ -134,9 +132,7 @@ def _render_citations_table(state: Any) -> None:
 
 def _render_counterfactuals(state: Any) -> None:
     """Render counterfactual explanations — what would change the recommendation."""
-    rec: Recommendation | None = getattr(state, "candidate", None) or getattr(
-        state, "final", None
-    )
+    rec: Recommendation | None = getattr(state, "candidate", None) or getattr(state, "final", None)
     if rec is None:
         return
 
@@ -246,7 +242,7 @@ def render_streaming(state: Any = None) -> None:
             step_div = st.empty()
             step_div.markdown(
                 f"<div class='trace-step'><strong>{event.get('node', '?')}</strong> — {event.get('action', '?')}"
-                + (f"  <code>{event.get('source')}</code>" if event.get('source') else "")
+                + (f"  <code>{event.get('source')}</code>" if event.get("source") else "")
                 + f"</div><div>{event.get('detail', '')}</div>",
                 unsafe_allow_html=True,
             )

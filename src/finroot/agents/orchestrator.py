@@ -108,7 +108,9 @@ class FinRootOrchestrator:
                 FundamentalAnalysisTool(audit=self._audit),
             ]
             self._agent_map["market_analyst"] = MarketAnalystAgent(
-                llm=self._llm, tools=market_tools, audit=self._audit,
+                llm=self._llm,
+                tools=market_tools,
+                audit=self._audit,
             )
 
             news_tools = [
@@ -116,8 +118,11 @@ class FinRootOrchestrator:
                 SentimentAnalysisTool(mock=True, audit=self._audit),
             ]
             from finroot.agents.news_agent import NewsInterpreterAgent
+
             self._agent_map["news_interpreter"] = NewsInterpreterAgent(
-                llm=self._llm, tools=news_tools, audit=self._audit,
+                llm=self._llm,
+                tools=news_tools,
+                audit=self._audit,
             )
         except ImportError as exc:
             logger.warning("Could not load market/news agents: %s", exc)
@@ -132,7 +137,9 @@ class FinRootOrchestrator:
                 PortfolioSimulatorTool(audit=self._audit, mock=True),
             ]
             self._agent_map["risk_assessor"] = RiskAssessorAgent(
-                llm=self._llm, tools=risk_tools, audit=self._audit,
+                llm=self._llm,
+                tools=risk_tools,
+                audit=self._audit,
             )
         except ImportError as exc:
             logger.warning("Could not load risk agent: %s", exc)
@@ -141,7 +148,8 @@ class FinRootOrchestrator:
             from finroot.agents.portfolio_agent import PortfolioOptimizerAgent
 
             self._agent_map["portfolio_optimizer"] = PortfolioOptimizerAgent(
-                llm=self._llm, audit=self._audit,
+                llm=self._llm,
+                audit=self._audit,
             )
         except ImportError as exc:
             logger.warning("Could not load portfolio agent: %s", exc)
@@ -150,7 +158,8 @@ class FinRootOrchestrator:
             from finroot.agents.tax_agent import TaxPlannerAgent
 
             self._agent_map["tax_planner"] = TaxPlannerAgent(
-                llm=self._llm, audit=self._audit,
+                llm=self._llm,
+                audit=self._audit,
             )
         except ImportError as exc:
             logger.warning("Could not load tax agent: %s", exc)
@@ -195,11 +204,14 @@ class FinRootOrchestrator:
 
         final_state = graph_state_to_agent(result)
 
-        self._audit.append("orchestrator.done", {
-            "query": query,
-            "intent": final_state.intent.value if final_state.intent else None,
-            "has_candidate": final_state.candidate is not None,
-        })
+        self._audit.append(
+            "orchestrator.done",
+            {
+                "query": query,
+                "intent": final_state.intent.value if final_state.intent else None,
+                "has_candidate": final_state.candidate is not None,
+            },
+        )
 
         return final_state
 

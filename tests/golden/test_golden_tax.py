@@ -23,7 +23,9 @@ pytestmark = pytest.mark.golden
 def _get_rec(state: AgentState) -> Recommendation:
     """Extract the recommendation from candidate or final."""
     rec = state.candidate or state.final
-    assert rec is not None, "Pipeline produced no recommendation (candidate and final are both None)"
+    assert rec is not None, (
+        "Pipeline produced no recommendation (candidate and final are both None)"
+    )
     return rec
 
 
@@ -62,12 +64,9 @@ class TestGoldenTax:
         state = run_pipeline("What is the tax on ₹2,00,000 LTCG from equity?")
         rec = _get_rec(state)
         # Check citations reference tax rules
-        citation_text = " ".join(
-            f"{c.source} {c.detail}" for c in rec.citations
-        ).lower()
+        citation_text = " ".join(f"{c.source} {c.detail}" for c in rec.citations).lower()
         has_tax_citation = any(
-            kw in citation_text
-            for kw in ("tax", "income tax", "finance act", "budget", "ltcg")
+            kw in citation_text for kw in ("tax", "income tax", "finance act", "budget", "ltcg")
         )
         assert has_tax_citation or len(rec.citations) >= 1, (
             f"Tax recommendation should cite tax rules. "
@@ -79,7 +78,8 @@ class TestGoldenTax:
         state = run_pipeline("What is the tax on ₹2,00,000 LTCG from equity?")
         rec = _get_rec(state)
         assert rec.confidence in (
-            ConfidenceLevel.MEDIUM, ConfidenceLevel.HIGH,
+            ConfidenceLevel.MEDIUM,
+            ConfidenceLevel.HIGH,
         ), f"Tax confidence should be MEDIUM or HIGH, got {rec.confidence.value}"
 
     def test_tax_includes_breakdown(self, run_pipeline):
@@ -92,8 +92,7 @@ class TestGoldenTax:
             for kw in ("breakdown", "taxable_gain", "base_tax", "cess", "effective_rate")
         )
         assert has_breakdown, (
-            f"Tax tool output should include breakdown. "
-            f"Tool output preview: {tool_text[:500]}"
+            f"Tax tool output should include breakdown. Tool output preview: {tool_text[:500]}"
         )
 
     def test_tax_mentions_ltcg(self, run_pipeline):
@@ -101,9 +100,7 @@ class TestGoldenTax:
         state = run_pipeline("What is the tax on ₹2,00,000 LTCG from equity?")
         text = _all_text(state)
         has_ltcg = any(kw in text for kw in ("ltcg", "long term capital gain", "capital gain"))
-        assert has_ltcg, (
-            f"Tax analysis should mention LTCG. Text preview: {text[:300]}"
-        )
+        assert has_ltcg, f"Tax analysis should mention LTCG. Text preview: {text[:300]}"
 
     def test_tax_intent_classified(self, run_pipeline):
         """Tax query must be classified as TAX intent."""
@@ -114,6 +111,4 @@ class TestGoldenTax:
     def test_tax_plan_includes_tax_planner(self, run_pipeline):
         """Tax pipeline plan should include tax_planner agent."""
         state = run_pipeline("What is the tax on ₹2,00,000 LTCG from equity?")
-        assert "tax_planner" in state.plan, (
-            f"Plan should include tax_planner. Plan: {state.plan}"
-        )
+        assert "tax_planner" in state.plan, f"Plan should include tax_planner. Plan: {state.plan}"

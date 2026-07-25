@@ -278,9 +278,7 @@ def test_from_json_rejects_turn_without_role() -> None:
 
 
 def test_from_json_rejects_unknown_role() -> None:
-    blob = json.dumps(
-        {"max_turns": 3, "turns": [{"role": "system", "content": "x"}]}
-    )
+    blob = json.dumps({"max_turns": 3, "turns": [{"role": "system", "content": "x"}]})
     with pytest.raises(ValueError, match="role must be one of"):
         WorkingMemory.from_json(blob)
 
@@ -364,9 +362,7 @@ def test_concurrent_adds_respect_max_turns() -> None:
             mem.add("user", f"t{tid}-i{i}")
             assert mem.size <= 50  # lock + deque maxlen ⇒ invariant holds
 
-    threads = [
-        threading.Thread(target=worker, args=(tid,)) for tid in range(4)
-    ]
+    threads = [threading.Thread(target=worker, args=(tid,)) for tid in range(4)]
     for t in threads:
         t.start()
     for t in threads:

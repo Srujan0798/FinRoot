@@ -35,9 +35,7 @@ logger = logging.getLogger(__name__)
 class PDFIngestionInput(BaseModel):
     """Input for PDF statement ingestion."""
 
-    pdf_path: str = Field(
-        description="Path to the PDF statement file"
-    )
+    pdf_path: str = Field(description="Path to the PDF statement file")
     statement_type: str = Field(
         default="auto",
         description="Type of statement: 'cas_cdsl', 'cas_nsdl', 'amc', 'bank', 'auto'",
@@ -224,8 +222,7 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
             if self.mock:
                 return self._mock_pdf_text()
             raise ToolCallError(
-                "PDF extraction requires PyPDF2 or pdftotext. "
-                "Install with: pip install PyPDF2"
+                "PDF extraction requires PyPDF2 or pdftotext. Install with: pip install PyPDF2"
             ) from None
 
     def _detect_statement_type(self, text: str) -> str:
@@ -236,9 +233,13 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
             return "cas_cdsl"
         if "nsdl" in text_lower or "national securities depository" in text_lower:
             return "cas_nsdl"
-        if any(amc in text_lower for amc in ["hdfc mutual fund", "sbi mutual fund", "icici prudential"]):
+        if any(
+            amc in text_lower for amc in ["hdfc mutual fund", "sbi mutual fund", "icici prudential"]
+        ):
             return "amc"
-        if any(bank in text_lower for bank in ["savings account", "current account", "bank statement"]):
+        if any(
+            bank in text_lower for bank in ["savings account", "current account", "bank statement"]
+        ):
             return "bank"
         return "generic"
 
@@ -259,7 +260,7 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
             if isin_match:
                 isin = isin_match.group()
                 # Try to extract quantity and price from nearby lines
-                context = " ".join(lines[max(0, i - 1):min(len(lines), i + 3)])
+                context = " ".join(lines[max(0, i - 1) : min(len(lines), i + 3)])
                 qty_match = _QTY_RE.search(context)
                 amount_match = _AMOUNT_RE.search(context)
 
@@ -270,16 +271,18 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
                 name_match = re.search(r"([A-Z][A-Za-z\s&]+?)(?:\s+ISIN|\s+" + isin + ")", line)
                 name = name_match.group(1).strip() if name_match else f"Holding {isin}"
 
-                holdings.append(Holding(
-                    symbol=isin,
-                    name=name,
-                    asset_class=self._classify_asset(name, isin),
-                    quantity=qty,
-                    unit_price=price / qty if qty > 0 and price > 0 else price,
-                    market_value=price,
-                    isin=isin,
-                    confidence=0.7 if qty > 0 else 0.3,
-                ))
+                holdings.append(
+                    Holding(
+                        symbol=isin,
+                        name=name,
+                        asset_class=self._classify_asset(name, isin),
+                        quantity=qty,
+                        unit_price=price / qty if qty > 0 and price > 0 else price,
+                        market_value=price,
+                        isin=isin,
+                        confidence=0.7 if qty > 0 else 0.3,
+                    )
+                )
 
         return holdings, account_info
 
@@ -302,15 +305,15 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
         lines = text.split("\n")
         for i, line in enumerate(lines):
             # Common AMC patterns
-            scheme_match = re.search(
-                r"([A-Z][A-Za-z\s]+(?:Fund|Plan|Option|Growth|Direct))", line
-            )
+            scheme_match = re.search(r"([A-Z][A-Za-z\s]+(?:Fund|Plan|Option|Growth|Direct))", line)
             if scheme_match:
                 scheme_name = scheme_match.group(1).strip()
-                context = " ".join(lines[max(0, i - 1):min(len(lines), i + 3)])
+                context = " ".join(lines[max(0, i - 1) : min(len(lines), i + 3)])
 
                 # Extract units and NAV
-                units_match = re.search(r"(?:Units|Balance)\s*[:.]?\s*([\d,]+\.?\d*)", context, re.IGNORECASE)
+                units_match = re.search(
+                    r"(?:Units|Balance)\s*[:.]?\s*([\d,]+\.?\d*)", context, re.IGNORECASE
+                )
                 nav_match = re.search(r"NAV\s*[:.]?\s*₹?([\d,]+\.?\d*)", context, re.IGNORECASE)
 
                 units = self._parse_number(units_match.group(1)) if units_match else 0
@@ -318,16 +321,18 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
 
                 market_value = units * nav if units > 0 and nav > 0 else 0
 
-                holdings.append(Holding(
-                    symbol=scheme_name[:20].upper().replace(" ", ""),
-                    name=scheme_name,
-                    asset_class="mutual_fund",
-                    quantity=units,
-                    unit_price=nav,
-                    market_value=market_value,
-                    folio=folio_match.group(1) if folio_match else None,
-                    confidence=0.6 if units > 0 else 0.3,
-                ))
+                holdings.append(
+                    Holding(
+                        symbol=scheme_name[:20].upper().replace(" ", ""),
+                        name=scheme_name,
+                        asset_class="mutual_fund",
+                        quantity=units,
+                        unit_price=nav,
+                        market_value=market_value,
+                        folio=folio_match.group(1) if folio_match else None,
+                        confidence=0.6 if units > 0 else 0.3,
+                    )
+                )
 
         return holdings, account_info
 
@@ -342,18 +347,22 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
             account_info["account_number"] = acct_match.group(1)
 
         # Extract balance
-        balance_match = re.search(r"(?:Balance|Closing Balance)\s*[:.]?\s*₹?([\d,]+\.?\d*)", text, re.IGNORECASE)
+        balance_match = re.search(
+            r"(?:Balance|Closing Balance)\s*[:.]?\s*₹?([\d,]+\.?\d*)", text, re.IGNORECASE
+        )
         if balance_match:
             balance = self._parse_number(balance_match.group(1))
-            holdings.append(Holding(
-                symbol="BANK_BALANCE",
-                name="Bank Savings Account",
-                asset_class="cash",
-                quantity=1,
-                unit_price=balance,
-                market_value=balance,
-                confidence=0.8,
-            ))
+            holdings.append(
+                Holding(
+                    symbol="BANK_BALANCE",
+                    name="Bank Savings Account",
+                    asset_class="cash",
+                    quantity=1,
+                    unit_price=balance,
+                    market_value=balance,
+                    confidence=0.8,
+                )
+            )
 
         return holdings, account_info
 
@@ -365,16 +374,18 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
         # Try to find any ISINs
         isins = _ISIN_RE.findall(text)
         for isin in set(isins):
-            holdings.append(Holding(
-                symbol=isin,
-                name=f"Holding {isin}",
-                asset_class="unknown",
-                quantity=0,
-                unit_price=0,
-                market_value=0,
-                isin=isin,
-                confidence=0.2,
-            ))
+            holdings.append(
+                Holding(
+                    symbol=isin,
+                    name=f"Holding {isin}",
+                    asset_class="unknown",
+                    quantity=0,
+                    unit_price=0,
+                    market_value=0,
+                    isin=isin,
+                    confidence=0.2,
+                )
+            )
 
         return holdings, account_info
 
@@ -401,9 +412,7 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
         except (ValueError, AttributeError):
             return 0.0
 
-    def _generate_warnings(
-        self, holdings: list[Holding], stmt_type: str, text: str
-    ) -> list[str]:
+    def _generate_warnings(self, holdings: list[Holding], stmt_type: str, text: str) -> list[str]:
         """Generate warnings about the extraction."""
         warnings: list[str] = []
 
@@ -425,10 +434,7 @@ class PDFIngestionTool(BaseTool[PDFIngestionInput, PDFIngestionOutput]):
             )
 
         if stmt_type == "generic":
-            warnings.append(
-                "Statement type could not be determined. "
-                "Extraction may be incomplete."
-            )
+            warnings.append("Statement type could not be determined. Extraction may be incomplete.")
 
         return warnings
 
@@ -478,17 +484,19 @@ def build_twin_from_ingestion(
 
     holdings = []
     for h in output.holdings:
-        holdings.append({
-            "symbol": h.symbol,
-            "name": h.name,
-            "asset_class": h.asset_class,
-            "quantity": h.quantity,
-            "unit_price": h.unit_price,
-            "market_value": h.market_value,
-            "currency": h.currency,
-            "isin": h.isin,
-            "folio": h.folio,
-        })
+        holdings.append(
+            {
+                "symbol": h.symbol,
+                "name": h.name,
+                "asset_class": h.asset_class,
+                "quantity": h.quantity,
+                "unit_price": h.unit_price,
+                "market_value": h.market_value,
+                "currency": h.currency,
+                "isin": h.isin,
+                "folio": h.folio,
+            }
+        )
 
     return {
         "user_id": user_id,

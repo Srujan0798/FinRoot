@@ -107,9 +107,7 @@ class UserProfileTool(BaseTool[ProfileReadInput | ProfileWriteInput, ProfileOutp
         """Read a user profile."""
         profile = self._load_profile(inp.user_id)
         if profile is None:
-            raise ToolCallError(
-                f"UserProfileTool: no profile found for user_id={inp.user_id!r}"
-            )
+            raise ToolCallError(f"UserProfileTool: no profile found for user_id={inp.user_id!r}")
         # Filter fields if requested
         if inp.fields is not None:
             data = {k: v for k, v in profile.items() if k in inp.fields}
@@ -125,9 +123,7 @@ class UserProfileTool(BaseTool[ProfileReadInput | ProfileWriteInput, ProfileOutp
         """Update a user profile and persist."""
         profile = self._load_profile(inp.user_id)
         if profile is None:
-            raise ToolCallError(
-                f"UserProfileTool: no profile found for user_id={inp.user_id!r}"
-            )
+            raise ToolCallError(f"UserProfileTool: no profile found for user_id={inp.user_id!r}")
         profile.update(inp.updates)
         self._save_profile(inp.user_id, profile)
         return ProfileOutput(

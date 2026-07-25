@@ -17,7 +17,9 @@ pytestmark = pytest.mark.golden
 
 def _get_rec(state: AgentState) -> Recommendation:
     rec = state.candidate or state.final
-    assert rec is not None, "Pipeline produced no recommendation (candidate and final are both None)"
+    assert rec is not None, (
+        "Pipeline produced no recommendation (candidate and final are both None)"
+    )
     return rec
 
 
@@ -51,17 +53,16 @@ class TestGoldenRisk:
             for kw in ("risk_assessor", "monte_carlo", "expected_return", "probability_of_loss")
         )
         assert has_metrics, (
-            f"Risk tool outputs should contain risk metrics. "
-            f"Tool output preview: {tool_text[:500]}"
+            f"Risk tool outputs should contain risk metrics. Tool output preview: {tool_text[:500]}"
         )
 
     def test_risk_tolerance_matching(self, run_pipeline):
         """Risk query should reference the twin snapshot risk tolerance."""
         state = run_pipeline("Am I taking too much risk?")
         snap_text = str(state.twin_snapshot).lower()
-        assert "risk_tolerance" in snap_text or "conservative" in snap_text or "risk" in snap_text, (
-            f"Twin snapshot should contain risk tolerance. Snapshot: {state.twin_snapshot}"
-        )
+        assert (
+            "risk_tolerance" in snap_text or "conservative" in snap_text or "risk" in snap_text
+        ), f"Twin snapshot should contain risk tolerance. Snapshot: {state.twin_snapshot}"
 
     def test_risk_warnings_in_text(self, run_pipeline):
         """Risk query recommendation should contain risk-related language."""

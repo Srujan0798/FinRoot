@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 PY ?= python3
 
-.PHONY: help install smoke lint test test-fast test-slow test-cold test-zip cli ui evals validate validate-docs validate-links changelog-suggest session-start coverage metrics-drift test-pyramid dep-audit ship-prep doctor docker clean shellcheck test-unit test-integration test-stress bench audit zip-rebuild
+.PHONY: help install smoke lint test test-fast test-slow test-cold test-zip cli ui evals validate validate-docs validate-links changelog-suggest session-start coverage metrics-drift test-pyramid dep-audit ship-prep doctor docker clean shellcheck test-unit test-integration test-stress bench audit zip-rebuild eval-report setup-hooks judge-dry-run api-smoke
 
 help:  ## show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -10,8 +10,17 @@ help:  ## show this help
 install:  ## install deps (editable)
 	pip install -r requirements.txt && pip install -e .
 
+setup-hooks:  ## Install git hooks
+	bash scripts/setup_hooks.sh
+
 smoke:  ## run the foundation smoke test
 	$(PY) scripts/smoke_test.py
+
+judge-dry-run:  ## offline hostile/judge dry-run (smoke + GP locks + API + metrics)
+	bash scripts/judge_dry_run.sh
+
+api-smoke:  ## FastAPI health + tax + trap + metrics smoke
+	bash scripts/api_smoke.sh
 
 lint:  ## ruff check
 	ruff check src/ tests/ scripts/
@@ -124,6 +133,9 @@ audit: ## Run full audit: lint + test + coverage + doctor + validate
 
 zip-rebuild: ## Rebuild submission zip
 	bash scripts/make_submission.sh
+
+eval-report:  ## Show formatted evaluation report
+	PYTHONPATH=src python3 scripts/eval_report.py
 
 clean:  ## remove caches + generated artifacts (keeps source)
 	find . -type d -name __pycache__ -prune -exec rm -rf {} + ; rm -rf .pytest_cache .ruff_cache

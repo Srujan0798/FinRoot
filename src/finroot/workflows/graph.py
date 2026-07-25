@@ -135,10 +135,12 @@ def build_graph(
             result.intent.value,
             result.confidence,
         )
-        agent_st.tool_outputs.append({
-            "tool": "intent_classifier",
-            "output": result.model_dump(mode="json"),
-        })
+        agent_st.tool_outputs.append(
+            {
+                "tool": "intent_classifier",
+                "output": result.model_dump(mode="json"),
+            }
+        )
         return {
             "intent": result.intent,
             "tool_outputs": list(agent_st.tool_outputs),
@@ -148,10 +150,12 @@ def build_graph(
         """Assemble reasoning context from state and memory."""
         agent_st = graph_state_to_agent(state)
         context = context_assembler.assemble(agent_st, memory)
-        agent_st.tool_outputs.append({
-            "tool": "context_assembler",
-            "output": context,
-        })
+        agent_st.tool_outputs.append(
+            {
+                "tool": "context_assembler",
+                "output": context,
+            }
+        )
         logger.info("Context assembled for intent=%s", state.get("intent"))
         return {
             "twin_snapshot": context.get("twin", {}),
@@ -184,14 +188,18 @@ def build_graph(
             except Exception as exc:
                 logger.error(
                     "Agent %s failed (state.query=%r): %s",
-                    agent_name, getattr(agent_st, "query", None), exc,
+                    agent_name,
+                    getattr(agent_st, "query", None),
+                    exc,
                     exc_info=True,
                 )
-                agent_st.tool_outputs.append({
-                    "agent": agent_name,
-                    "type": "error",
-                    "error": f"Agent {agent_name} failed ({type(exc).__name__}): {exc}",
-                })
+                agent_st.tool_outputs.append(
+                    {
+                        "agent": agent_name,
+                        "type": "error",
+                        "error": f"Agent {agent_name} failed ({type(exc).__name__}): {exc}",
+                    }
+                )
 
         return {"tool_outputs": list(agent_st.tool_outputs)}
 
@@ -210,11 +218,17 @@ def build_graph(
     # ------------------------------------------------------------------
 
     def _route_after_classify(state: GraphState) -> str:
-        """Route based on intent: GENERAL goes straight to synthesize."""
+        """Always assemble Digital Twin / memory context before planning.
+
+        GENERAL still selects zero specialized agents (empty plan), but must
+        not skip context — otherwise insurance/behavioral/educational answers
+        only have 1 tool output and trip the prudence evidence gate.
+        """
         intent = state.get("intent") or Intent.GENERAL
         if intent == Intent.GENERAL:
-            logger.info("GENERAL intent — skipping agent execution, synthesizing directly.")
-            return "synthesize"
+            logger.info(
+                "GENERAL intent — assembling context then synthesizing (no specialized agents)."
+            )
         return "assemble_context"
 
     # ------------------------------------------------------------------
@@ -231,13 +245,12 @@ def build_graph(
 
     graph.set_entry_point("classify_intent")
 
-    # Conditional: GENERAL intent skips directly to synthesize
+    # All intents (including GENERAL) go through context assembly.
     graph.add_conditional_edges(
         "classify_intent",
         _route_after_classify,
         {
             "assemble_context": "assemble_context",
-            "synthesize": "synthesize",
         },
     )
 

@@ -32,9 +32,12 @@ def test_eval_is_idempotent(tmp_path: Path) -> None:
     env["PYTHONPATH"] = "src"
     env["FINROOT_METRICS_PATH"] = str(tmp_path / "metrics_run1.json")
     result1 = subprocess.run(
-        [sys.executable, "scripts/run_evals.py", "--mock", "--task", "frb-001",
-         "--k", "1"],
-        capture_output=True, text=True, timeout=120, env=env, cwd=REPO_ROOT,
+        [sys.executable, "scripts/run_evals.py", "--mock", "--task", "frb-001", "--k", "1"],
+        capture_output=True,
+        text=True,
+        timeout=120,
+        env=env,
+        cwd=REPO_ROOT,
     )
     assert result1.returncode == 0, f"Run 1 failed: {result1.stderr}"
 
@@ -42,17 +45,19 @@ def test_eval_is_idempotent(tmp_path: Path) -> None:
 
     env["FINROOT_METRICS_PATH"] = str(tmp_path / "metrics_run2.json")
     result2 = subprocess.run(
-        [sys.executable, "scripts/run_evals.py", "--mock", "--task", "frb-001",
-         "--k", "1"],
-        capture_output=True, text=True, timeout=120, env=env, cwd=REPO_ROOT,
+        [sys.executable, "scripts/run_evals.py", "--mock", "--task", "frb-001", "--k", "1"],
+        capture_output=True,
+        text=True,
+        timeout=120,
+        env=env,
+        cwd=REPO_ROOT,
     )
     assert result2.returncode == 0, f"Run 2 failed: {result2.stderr}"
 
     data2 = json.loads((tmp_path / "metrics_run2.json").read_text())
     for sys_name in ("finroot", "rag", "single_agent"):
         assert (
-            data1["systems"][sys_name]["mean_score"]
-            == data2["systems"][sys_name]["mean_score"]
+            data1["systems"][sys_name]["mean_score"] == data2["systems"][sys_name]["mean_score"]
         ), f"{sys_name} mean_score differs across runs (not idempotent)"
 
 
@@ -67,10 +72,12 @@ def test_concurrent_evals_no_corruption(tmp_path: Path) -> None:
         env = env_base.copy()
         env["FINROOT_METRICS_PATH"] = str(tmp_path / f"metrics_concurrent_{i}.json")
         result = subprocess.run(
-            [sys.executable, "scripts/run_evals.py", "--mock",
-             "--task", "frb-001", "--k", "1"],
-            capture_output=True, text=True, timeout=120,
-            env=env, cwd=REPO_ROOT,
+            [sys.executable, "scripts/run_evals.py", "--mock", "--task", "frb-001", "--k", "1"],
+            capture_output=True,
+            text=True,
+            timeout=120,
+            env=env,
+            cwd=REPO_ROOT,
         )
         data = json.loads((tmp_path / f"metrics_concurrent_{i}.json").read_text())
         return result.returncode, data["systems"]["finroot"]["mean_score"]
@@ -101,7 +108,11 @@ def test_long_input_does_not_crash(tmp_path: Path) -> None:
     env["PYTHONPATH"] = "src"
     result = subprocess.run(
         [sys.executable, "-m", "interface.cli", "--mock", long_query],
-        capture_output=True, text=True, timeout=120, env=env, cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        env=env,
+        cwd=REPO_ROOT,
     )
     # The CLI may "succeed" (rc=0) with a degenerate answer, or "fail" with
     # a clear error message — both are acceptable. The failure mode we DON'T

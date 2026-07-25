@@ -182,9 +182,7 @@ class TestDigitalTwin:
         assert "monthly_expenses" in caplog.text
         assert "verify data" in caplog.text
 
-    def test_expenses_sanity_passes_without_warning(
-        self, caplog: pytest.LogCaptureFixture
-    ) -> None:
+    def test_expenses_sanity_passes_without_warning(self, caplog: pytest.LogCaptureFixture) -> None:
         caplog.set_level(logging.WARNING)
         _make_twin(monthly_income=5000.0, monthly_expenses=10000.0)
         assert len(caplog.records) == 0
@@ -289,9 +287,7 @@ class TestDigitalTwinStore:
     def test_schema_table_created(self, store: DigitalTwinStore) -> None:
         conn = sqlite3.connect(store._db_path)
         try:
-            tables = conn.execute(
-                "SELECT name FROM sqlite_master WHERE type='table'"
-            ).fetchall()
+            tables = conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
             assert ("digital_twins",) in tables
         finally:
             conn.close()

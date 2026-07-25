@@ -127,12 +127,7 @@ def _compute_hash(prev_hash: str, canonical_payload: str, ts: datetime, seq: int
     # ``prev_hash`` is already hex-normalized to lowercase by AuditEvent's
     # validator; we still pass it through ``.lower()`` defensively in case a
     # caller constructs a chain manually.
-    material = (
-        prev_hash.lower()
-        + canonical_payload
-        + ts.isoformat()
-        + str(seq)
-    )
+    material = prev_hash.lower() + canonical_payload + ts.isoformat() + str(seq)
     return hashlib.sha256(material.encode("utf-8")).hexdigest()
 
 
@@ -394,9 +389,7 @@ class AuditTrail:
         """
         if last_n is not None and last_n < 0:
             raise ValueError(f"last_n must be non-negative or None, got {last_n}")
-        raw_events = (
-            self._store.read_tail(last_n) if last_n is not None else self._store.read_all()
-        )
+        raw_events = self._store.read_tail(last_n) if last_n is not None else self._store.read_all()
         events: list[AuditEvent] = []
         for raw in raw_events:
             try:

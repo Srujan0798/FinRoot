@@ -24,7 +24,19 @@ BANK_PATH = REPO_ROOT / "data" / "gold" / "frb_questions.json"
 TWINS_PATH = REPO_ROOT / "data" / "samples" / "twin_profiles.json"
 TAX_RULES_PATH = REPO_ROOT / "data" / "tax_rules.json"
 
-VALID_DOMAINS = {"portfolio", "risk", "tax", "news_impact", "cashflow", "credit", "general", "insurance", "estate_planning", "behavioral", "international"}
+VALID_DOMAINS = {
+    "portfolio",
+    "risk",
+    "tax",
+    "news_impact",
+    "cashflow",
+    "credit",
+    "general",
+    "insurance",
+    "estate_planning",
+    "behavioral",
+    "international",
+}
 VALID_DIFFICULTIES = {"easy", "medium", "hard"}
 VALID_CONFIDENCES = {"high", "medium", "low", None}
 REQUIRED_TOP_KEYS = {"id", "domain", "difficulty", "query", "twin_id", "expected", "rationale"}
@@ -111,8 +123,7 @@ class TestItemShape:
         """Domain is one of the contract's allowed values."""
         for q in bank:
             assert q["domain"] in VALID_DOMAINS, (
-                f"{q['id']} has invalid domain '{q['domain']}'; "
-                f"allowed: {sorted(VALID_DOMAINS)}"
+                f"{q['id']} has invalid domain '{q['domain']}'; allowed: {sorted(VALID_DOMAINS)}"
             )
 
     def test_valid_difficulty(self, bank):
@@ -176,7 +187,16 @@ class TestDomainCoverage:
     def test_each_required_domain_present(self, bank):
         """Each domain required by the brief is represented."""
         domains = {q["domain"] for q in bank}
-        for required in ("portfolio", "risk", "tax", "news_impact", "insurance", "estate_planning", "behavioral", "international"):
+        for required in (
+            "portfolio",
+            "risk",
+            "tax",
+            "news_impact",
+            "insurance",
+            "estate_planning",
+            "behavioral",
+            "international",
+        ):
             assert required in domains, f"required domain '{required}' missing"
 
     def test_minimum_per_domain(self, bank):
@@ -184,11 +204,18 @@ class TestDomainCoverage:
         from collections import Counter
 
         counts = Counter(q["domain"] for q in bank)
-        minima = {"portfolio": 4, "risk": 4, "tax": 4, "news_impact": 3, "insurance": 3, "estate_planning": 2, "behavioral": 3, "international": 2}
+        minima = {
+            "portfolio": 4,
+            "risk": 4,
+            "tax": 4,
+            "news_impact": 3,
+            "insurance": 3,
+            "estate_planning": 2,
+            "behavioral": 3,
+            "international": 2,
+        }
         for domain, n in minima.items():
-            assert counts[domain] >= n, (
-                f"domain '{domain}' has {counts[domain]} items; need >= {n}"
-            )
+            assert counts[domain] >= n, f"domain '{domain}' has {counts[domain]} items; need >= {n}"
 
     def test_difficulty_spread_present(self, bank):
         """All three difficulty values are present."""
@@ -241,9 +268,9 @@ class TestAdversarialTraps:
         forbidden_substrings = ("guaranteed", "you will definitely", "certain to")
         for trap in traps:
             must_not_blob = " ".join(trap["expected"]["must_not"]).lower()
-            assert any(
-                bad in must_not_blob for bad in forbidden_substrings
-            ), f"{trap['id']} trap must explicitly forbid {forbidden_substrings}"
+            assert any(bad in must_not_blob for bad in forbidden_substrings), (
+                f"{trap['id']} trap must explicitly forbid {forbidden_substrings}"
+            )
 
 
 # ---------------------------------------------------------------------------

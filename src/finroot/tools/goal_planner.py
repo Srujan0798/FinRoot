@@ -186,7 +186,12 @@ class GoalPlannerTool(BaseTool[GoalInput, GoalOutput]):
         if monthly_rate <= 0:
             return monthly_amount * n_months
         # FV = P * [(1 + r)^n - 1] / r * (1 + r)
-        return monthly_amount * ((1 + monthly_rate) ** n_months - 1) / monthly_rate * (1 + monthly_rate)
+        return (
+            monthly_amount
+            * ((1 + monthly_rate) ** n_months - 1)
+            / monthly_rate
+            * (1 + monthly_rate)
+        )
 
     @staticmethod
     def _required_sip(target_fv: float, monthly_rate: float, n_months: int) -> float:

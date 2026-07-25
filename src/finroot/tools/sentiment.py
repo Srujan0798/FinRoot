@@ -54,17 +54,60 @@ class SentimentOutput(BaseModel):
 # ---------------------------------------------------------------------------
 
 _POSITIVE_KEYWORDS: set[str] = {
-    "surge", "rally", "gain", "profit", "bullish", "upgrade", "outperform",
-    "beat", "growth", "record", "high", "strong", "optimistic", "positive",
-    "rise", "soar", "jump", "boom", "recovery", "uptrend", "breakout",
-    "dividend", "buyback", "expansion", "innovation", "efficient",
+    "surge",
+    "rally",
+    "gain",
+    "profit",
+    "bullish",
+    "upgrade",
+    "outperform",
+    "beat",
+    "growth",
+    "record",
+    "high",
+    "strong",
+    "optimistic",
+    "positive",
+    "rise",
+    "soar",
+    "jump",
+    "boom",
+    "recovery",
+    "uptrend",
+    "breakout",
+    "dividend",
+    "buyback",
+    "expansion",
+    "innovation",
+    "efficient",
 }
 
 _NEGATIVE_KEYWORDS: set[str] = {
-    "crash", "plunge", "loss", "bearish", "downgrade", "underperform",
-    "miss", "decline", "low", "weak", "pessimistic", "negative", "fall",
-    "drop", "slump", "recession", "bankruptcy", "default", "risk",
-    "sell-off", "selloff", "panic", "crisis", "debt", "inflation",
+    "crash",
+    "plunge",
+    "loss",
+    "bearish",
+    "downgrade",
+    "underperform",
+    "miss",
+    "decline",
+    "low",
+    "weak",
+    "pessimistic",
+    "negative",
+    "fall",
+    "drop",
+    "slump",
+    "recession",
+    "bankruptcy",
+    "default",
+    "risk",
+    "sell-off",
+    "selloff",
+    "panic",
+    "crisis",
+    "debt",
+    "inflation",
 }
 
 
@@ -115,9 +158,7 @@ def _get_finbert_pipeline():  # type: ignore[no-untyped-def]
     try:
         from transformers import pipeline  # type: ignore[import-untyped]
     except ImportError:
-        logger.warning(
-            "transformers package not available; falling back to heuristic sentiment."
-        )
+        logger.warning("transformers package not available; falling back to heuristic sentiment.")
         return None
 
     try:
@@ -184,9 +225,7 @@ class SentimentAnalysisTool(BaseTool[SentimentInput, SentimentOutput]):
 
         for text in inp.texts:
             if not text or not text.strip():
-                results.append(
-                    SentimentResult(text=text, label="neutral", score=0.0)
-                )
+                results.append(SentimentResult(text=text, label="neutral", score=0.0))
                 continue
 
             if self._use_finbert:

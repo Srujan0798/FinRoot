@@ -113,8 +113,10 @@ def _format_citations(state: object) -> str:
     if not citations:
         return "*No citations (qualitative analysis only).*"
 
-    parts: list[str] = ["| Source | Detail | Value | Retrieved At |",
-                         "|--------|--------|-------|--------------|"]
+    parts: list[str] = [
+        "| Source | Detail | Value | Retrieved At |",
+        "|--------|--------|-------|--------------|",
+    ]
     for c in citations:
         src = getattr(c, "source", "")
         detail = getattr(c, "detail", "")
@@ -129,8 +131,7 @@ def _format_trace(events: list[dict]) -> str:
     if not events:
         return "*No trace events.*"
 
-    parts: list[str] = ["| Step | Node | Action | Detail |",
-                         "|------|------|--------|--------|"]
+    parts: list[str] = ["| Step | Node | Action | Detail |", "|------|------|--------|--------|"]
     for evt in events:
         step = evt.get("step", "?")
         node = evt.get("node", "?")

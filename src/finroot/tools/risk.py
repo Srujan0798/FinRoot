@@ -174,9 +174,7 @@ class RiskCalculationTool(BaseTool[RiskInput, RiskOutput]):
         n = len(returns)
 
         if n < 2:
-            raise ToolCallError(
-                f"RiskCalculationTool requires at least 2 returns, got {n}"
-            )
+            raise ToolCallError(f"RiskCalculationTool requires at least 2 returns, got {n}")
 
         np_ = _lazy_numpy()
         if np_ is not None:
@@ -186,7 +184,9 @@ class RiskCalculationTool(BaseTool[RiskInput, RiskOutput]):
 
         hhi, hhi_interp = self._compute_hhi(inp.weights)
 
-        stress_tests = self._build_stress_tests(inp.stress_shocks, core["mu_daily"], core["sigma_daily"])
+        stress_tests = self._build_stress_tests(
+            inp.stress_shocks, core["mu_daily"], core["sigma_daily"]
+        )
         scenarios = self._build_scenarios(core["mu_annual"], core["sigma_annual"])
 
         methodology = (
@@ -270,9 +270,7 @@ class RiskCalculationTool(BaseTool[RiskInput, RiskOutput]):
         if downside.size > 0:
             dstd = float(np_.std(downside, ddof=1))
             sortino = (
-                (mean - rf_daily) / dstd * math.sqrt(_TRADING_DAYS_PER_YEAR)
-                if dstd > 0
-                else None
+                (mean - rf_daily) / dstd * math.sqrt(_TRADING_DAYS_PER_YEAR) if dstd > 0 else None
             )
         else:
             sortino = None
@@ -282,9 +280,7 @@ class RiskCalculationTool(BaseTool[RiskInput, RiskOutput]):
         dd = 1.0 - cum / running_max
         max_dd = float(np_.max(dd))
 
-        calmar = (
-            mu_annual / max_dd if max_dd > 0 else None
-        )
+        calmar = mu_annual / max_dd if max_dd > 0 else None
 
         # skewness/kurtosis are None for small samples (n<3 / n<4) — guard the
         # float() conversion so identical/short return series don't crash.
@@ -336,9 +332,7 @@ class RiskCalculationTool(BaseTool[RiskInput, RiskOutput]):
         if downside:
             dstd = statistics.stdev(downside)
             sortino = (
-                (mean - rf_daily) / dstd * math.sqrt(_TRADING_DAYS_PER_YEAR)
-                if dstd > 0
-                else None
+                (mean - rf_daily) / dstd * math.sqrt(_TRADING_DAYS_PER_YEAR) if dstd > 0 else None
             )
         else:
             sortino = None
@@ -354,9 +348,7 @@ class RiskCalculationTool(BaseTool[RiskInput, RiskOutput]):
             if dd > max_dd:
                 max_dd = dd
 
-        calmar = (
-            mu_annual / max_dd if max_dd > 0 else None
-        )
+        calmar = mu_annual / max_dd if max_dd > 0 else None
 
         skewness = _skewness(returns)
         kurtosis = _excess_kurtosis(returns)
@@ -424,9 +416,7 @@ class RiskCalculationTool(BaseTool[RiskInput, RiskOutput]):
                 name="Base (mu)",
                 shock_pct=0.0,
                 portfolio_change_pct=base,
-                interpretation=(
-                    f"Expected annual return under the historical mean: {base:.1%}."
-                ),
+                interpretation=(f"Expected annual return under the historical mean: {base:.1%}."),
             ),
             ScenarioResult(
                 name="Bear (mu - 1*sigma)",

@@ -10,7 +10,7 @@ import os
 
 from finroot.llm.base import LLMResult, parse_reasoning_confidence
 
-_DEFAULT_MODEL = os.environ.get("FINROOT_OLLAMA_MODEL", "llama3")
+_DEFAULT_MODEL = os.environ.get("FINROOT_OLLAMA_MODEL", "tinyllama")
 
 
 class OllamaProvider:

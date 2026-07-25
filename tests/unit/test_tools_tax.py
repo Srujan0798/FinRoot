@@ -37,7 +37,7 @@ from finroot.tools.tax import (
 # ---------------------------------------------------------------------------
 
 _LTCG_2L_EXPECTED = 10_400.0  # (2L - 1L) * 10% = 10k + 400 cess
-_LTCG_50K_EXPECTED = 0.0      # fully exempt
+_LTCG_50K_EXPECTED = 0.0  # fully exempt
 _STCG_EQ_1L_EXPECTED = 15_600.0  # 1L * 15% = 15k + 600 cess
 _STCG_DEBT_8L_EXPECTED = 10_400.0  # 1L * 10% (slab) = 10k + 400 cess
 
@@ -100,9 +100,7 @@ class TestTaxRuleToolComputation:
     def test_surcharge_over_50l(self) -> None:
         """Surcharge kicks in when annual_income > ₹50L."""
         tool = TaxRuleTool()
-        out = tool(
-            TaxInput(gain=1_000_000, gain_type="LTCG", annual_income=6_000_000)
-        )
+        out = tool(TaxInput(gain=1_000_000, gain_type="LTCG", annual_income=6_000_000))
         # Taxable gain = 1M - 100k = 900k; base = 900k * 10% = 90k
         # Surcharge = 90k * 10% = 9k
         # Cess = (90k + 9k) * 4% = 3,960
@@ -121,9 +119,7 @@ class TestTaxRuleToolComputation:
     def test_stcg_equity_surcharge(self) -> None:
         """STCG_EQUITY with income > ₹50L includes surcharge + cess."""
         tool = TaxRuleTool()
-        out = tool(
-            TaxInput(gain=500_000, gain_type="STCG_EQUITY", annual_income=10_000_000)
-        )
+        out = tool(TaxInput(gain=500_000, gain_type="STCG_EQUITY", annual_income=10_000_000))
         # Base = 500k * 15% = 75k
         # Surcharge = 75k * 10% = 7.5k
         # Cess = (75k + 7.5k) * 4% = 3.3k
@@ -161,9 +157,7 @@ class TestTaxRuleToolComputation:
     def test_cess_false_with_surcharge(self) -> None:
         """When cess=False but surcharge applies, only surcharge is added."""
         tool = TaxRuleTool()
-        out = tool(
-            TaxInput(gain=1_000_000, gain_type="LTCG", annual_income=6_000_000, cess=False)
-        )
+        out = tool(TaxInput(gain=1_000_000, gain_type="LTCG", annual_income=6_000_000, cess=False))
         assert out.breakdown["base_tax"] == 90_000.0
         assert out.breakdown["surcharge"] == 9_000.0
         assert out.breakdown["cess"] == 0.0

@@ -330,8 +330,10 @@ class TestExplainabilityAssembly:
 def test_confidence_label_thresholds(overall: float, expected_label: str) -> None:
     """Parametrized boundary tests for confidence label mapping."""
     assembly = ExplainabilityAssembly()
-    result = assembly._build_confidence_breakdown({
-        "overall": overall,
-        "scores": [{"axis": "correctness", "score": overall}],
-    })
+    result = assembly._build_confidence_breakdown(
+        {
+            "overall": overall,
+            "scores": [{"axis": "correctness", "score": overall}],
+        }
+    )
     assert result["label"] == expected_label

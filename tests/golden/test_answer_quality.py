@@ -61,9 +61,7 @@ class TestAnswerQuality:
 
     def test_basic_question_answerable(self, run_pipeline):
         """A simple financial question returns a non-empty answer."""
-        state = run_pipeline(
-            "What is a reasonable asset allocation for a conservative investor?"
-        )
+        state = run_pipeline("What is a reasonable asset allocation for a conservative investor?")
         rec = _get_rec(state)
         assert rec.summary.strip(), "Answer summary is empty"
         assert rec.analysis.strip(), "Answer analysis is empty"
@@ -88,9 +86,22 @@ class TestAnswerQuality:
         )
         # The analysis should contain connective reasoning words.
         reasoning_markers = [
-            "because", "therefore", "however", "consider", "since",
-            "given", "if ", "should", "will", "would", "could",
-            "first", "next", "also", "additionally", "further",
+            "because",
+            "therefore",
+            "however",
+            "consider",
+            "since",
+            "given",
+            "if ",
+            "should",
+            "will",
+            "would",
+            "could",
+            "first",
+            "next",
+            "also",
+            "additionally",
+            "further",
         ]
         text_lower = _all_text_lower(state)
         found = [m for m in reasoning_markers if m in text_lower]
@@ -107,8 +118,7 @@ class TestAnswerQuality:
         )
         rec = _get_rec(state)
         assert len(rec.citations) >= 1, (
-            "Answer has zero citations. "
-            "Every financial answer should cite at least one source."
+            "Answer has zero citations. Every financial answer should cite at least one source."
         )
         for cite in rec.citations:
             assert cite.source.strip(), "Citation has empty source"
@@ -156,11 +166,20 @@ class TestAnswerQuality:
         )
         text = _all_text_lower(state)
         risk_metrics = [
-            "var", "value-at-risk", "value at risk",
-            "sharpe", "sortino", "drawdown",
-            "volatility", "standard deviation", "risk",
-            "confidence interval", "confidence level",
-            "historical", "parametric", "monte carlo",
+            "var",
+            "value-at-risk",
+            "value at risk",
+            "sharpe",
+            "sortino",
+            "drawdown",
+            "volatility",
+            "standard deviation",
+            "risk",
+            "confidence interval",
+            "confidence level",
+            "historical",
+            "parametric",
+            "monte carlo",
         ]
         found = [m for m in risk_metrics if m in text]
         assert len(found) >= 2, (
@@ -176,12 +195,24 @@ class TestAnswerQuality:
         )
         text = _all_text_lower(state)
         tax_concepts = [
-            "ltcg", "long-term capital gain", "long term capital gain",
-            "stcg", "short-term capital gain",
-            "exemption", "cess", "tax slab",
-            "income tax", "finance act", "budget",
-            "10%", "15%", "20%", "30%",
-            "taxable", "tax rate", "capital gain",
+            "ltcg",
+            "long-term capital gain",
+            "long term capital gain",
+            "stcg",
+            "short-term capital gain",
+            "exemption",
+            "cess",
+            "tax slab",
+            "income tax",
+            "finance act",
+            "budget",
+            "10%",
+            "15%",
+            "20%",
+            "30%",
+            "taxable",
+            "tax rate",
+            "capital gain",
         ]
         found = [m for m in tax_concepts if m in text]
         assert len(found) >= 2, (
@@ -197,10 +228,17 @@ class TestAnswerQuality:
         )
         text = _all_text_lower(state)
         portfolio_concepts = [
-            "diversif", "rebalanc", "allocation",
-            "concentration", "single-stock", "single stock",
-            "risk", "correlation", "asset class",
-            "glide path", "glide-path",
+            "diversif",
+            "rebalanc",
+            "allocation",
+            "concentration",
+            "single-stock",
+            "single stock",
+            "risk",
+            "correlation",
+            "asset class",
+            "glide path",
+            "glide-path",
         ]
         found = [m for m in portfolio_concepts if m in text]
         assert len(found) >= 2, (
@@ -217,9 +255,7 @@ class TestAnswerQuality:
         text = _all_text(state)
         for pattern in _HALLUCINATION_PATTERNS:
             matches = pattern.findall(text)
-            assert not matches, (
-                f"Answer contains potentially hallucinated data: {matches}"
-            )
+            assert not matches, f"Answer contains potentially hallucinated data: {matches}"
         # Also verify no absurdly large numbers (e.g., tax > gain by 100x).
         numbers = re.findall(r"[\d,]+(?:\.\d+)?", text.replace("₹", ""))
         for num_str in numbers:
@@ -244,18 +280,27 @@ class TestAnswerQuality:
         rec = _get_rec(state)
         text = _all_text_lower(state)
         # Uncertainty should be expressed via low confidence or hedging language.
-        has_uncertainty_signal = (
-            rec.confidence in (ConfidenceLevel.LOW, ConfidenceLevel.INSUFFICIENT)
-            or any(
-                kw in text
-                for kw in [
-                    "uncertain", "not guaranteed", "not confirmed",
-                    "risk", "caution", "do not act yet",
-                    "do not invest", "should not", "unverified",
-                    "insufficient evidence", "untested",
-                    "tip", "rumor", "herd",
-                ]
-            )
+        has_uncertainty_signal = rec.confidence in (
+            ConfidenceLevel.LOW,
+            ConfidenceLevel.INSUFFICIENT,
+        ) or any(
+            kw in text
+            for kw in [
+                "uncertain",
+                "not guaranteed",
+                "not confirmed",
+                "risk",
+                "caution",
+                "do not act yet",
+                "do not invest",
+                "should not",
+                "unverified",
+                "insufficient evidence",
+                "untested",
+                "tip",
+                "rumor",
+                "herd",
+            ]
         )
         assert has_uncertainty_signal, (
             f"Answer does not express uncertainty for an unverified tip. "
@@ -264,9 +309,14 @@ class TestAnswerQuality:
         )
         # Must NOT give a confident "yes" to a speculative tip.
         confident_yes_patterns = [
-            "yes, invest", "definitely invest", "go ahead",
-            "you will profit", "certain to", "guaranteed",
-            "you will definitely", "10x is certain",
+            "yes, invest",
+            "definitely invest",
+            "go ahead",
+            "you will profit",
+            "certain to",
+            "guaranteed",
+            "you will definitely",
+            "10x is certain",
         ]
         for pat in confident_yes_patterns:
             assert pat not in text, (

@@ -27,10 +27,12 @@ from finroot.tools.base import BaseTool, ToolCallError
 # Dummy tools for testing
 # ---------------------------------------------------------------------------
 
+
 class _DummyCounterTool(BaseTool[int, int]):
     """Returns an incrementing counter each time ``_run`` is actually called.
     Used to verify cache hits vs. misses.
     """
+
     name = "counter"
     ttl_seconds = 3600  # long enough for testing
     rate_per_sec = 1000.0  # effectively unlimited
@@ -46,6 +48,7 @@ class _DummyCounterTool(BaseTool[int, int]):
 
 class _DummyFailingTool(BaseTool[str, str]):
     """Always raises — used to test loud-failure propagation."""
+
     name = "failing"
     max_retries = 2
     base_delay = 0.01  # fast for testing
@@ -57,6 +60,7 @@ class _DummyFailingTool(BaseTool[str, str]):
 
 class _DummySlowTool(BaseTool[str, str]):
     """Tool with a low rate limit — used to test rate limiting."""
+
     name = "slow"
     rate_per_sec = 0.5  # 1 token per 2 seconds
 
@@ -66,6 +70,7 @@ class _DummySlowTool(BaseTool[str, str]):
 
 class _DummyAddTool(BaseTool[tuple[int, int], int]):
     """Simple additive tool for agent dispatch tests."""
+
     name = "add"
 
     def _run(self, inp: tuple[int, int]) -> int:
@@ -184,6 +189,7 @@ class TestBaseToolAudit:
 
 class _ConcreteAgent(BaseAgent):
     """Minimal concrete agent for testing."""
+
     name = "test_agent"
     tools = []
 

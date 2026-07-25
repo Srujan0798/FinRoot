@@ -90,19 +90,24 @@ class Span:
 
     def add_event(self, name: str, attributes: dict[str, Any] | None = None) -> None:
         """Add a timed event to the span."""
-        self.events.append({
-            "name": name,
-            "timestamp": time.time(),
-            "attributes": attributes or {},
-        })
+        self.events.append(
+            {
+                "name": name,
+                "timestamp": time.time(),
+                "attributes": attributes or {},
+            }
+        )
 
     def record_exception(self, exc: Exception) -> None:
         """Record an exception on the span."""
         self.set_status(SpanStatus.ERROR, str(exc))
-        self.add_event("exception", {
-            "type": type(exc).__name__,
-            "message": str(exc),
-        })
+        self.add_event(
+            "exception",
+            {
+                "type": type(exc).__name__,
+                "message": str(exc),
+            },
+        )
 
     def end(self) -> None:
         """End the span."""
@@ -160,8 +165,10 @@ class Tracer:
         The span is automatically ended when the context exits.
         If an exception occurs, it's recorded on the span.
         """
-        parent_id = parent.span_id if parent else (
-            self._current_span.span_id if self._current_span else None
+        parent_id = (
+            parent.span_id
+            if parent
+            else (self._current_span.span_id if self._current_span else None)
         )
 
         span = Span(

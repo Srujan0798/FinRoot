@@ -20,9 +20,7 @@ def test_stream_answer_yields_progress_events() -> None:
     """The stream should yield multiple progress events before the final
     'result' event."""
     events = list(stream_answer("Should I rebalance my 70/30 portfolio?", mock=True))
-    assert len(events) >= 3, (
-        f"Expected at least 3 stream events, got {len(events)}: {events[:5]}"
-    )
+    assert len(events) >= 3, f"Expected at least 3 stream events, got {len(events)}: {events[:5]}"
 
 
 def test_stream_answer_first_event_is_status() -> None:
@@ -43,9 +41,7 @@ def test_stream_answer_last_event_is_result() -> None:
         f"Last event should be 'result' or 'error', got {last_type}: {events[-1]}"
     )
     if last_type == "result":
-        assert "state" in events[-1], (
-            f"'result' event should have 'state' key: {events[-1]}"
-        )
+        assert "state" in events[-1], f"'result' event should have 'state' key: {events[-1]}"
 
 
 def test_stream_answer_rejects_empty_query() -> None:

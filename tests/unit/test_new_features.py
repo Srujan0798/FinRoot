@@ -77,11 +77,13 @@ class TestCounterfactualGenerator:
             risks=risks or [],
             actions=["Rebalance portfolio"],
             confidence=ConfidenceLevel.MEDIUM,
-            citations=[Citation(
-                source="test",
-                detail="test citation",
-                retrieved_at=datetime.now(UTC),
-            )],
+            citations=[
+                Citation(
+                    source="test",
+                    detail="test citation",
+                    retrieved_at=datetime.now(UTC),
+                )
+            ],
             assumptions=assumptions or [],
         )
         return AgentState(
@@ -216,16 +218,27 @@ class TestGoalPlannerTool:
 
         tool = GoalPlannerTool(mock=True)
 
-        conservative = tool._run(GoalInput(
-            goal_name="Test", target_amount=1000000, years_to_goal=10,
-            risk_profile="conservative",
-        ))
-        aggressive = tool._run(GoalInput(
-            goal_name="Test", target_amount=1000000, years_to_goal=10,
-            risk_profile="aggressive",
-        ))
+        conservative = tool._run(
+            GoalInput(
+                goal_name="Test",
+                target_amount=1000000,
+                years_to_goal=10,
+                risk_profile="conservative",
+            )
+        )
+        aggressive = tool._run(
+            GoalInput(
+                goal_name="Test",
+                target_amount=1000000,
+                years_to_goal=10,
+                risk_profile="aggressive",
+            )
+        )
 
-        assert conservative.recommended_allocation["equity"] < aggressive.recommended_allocation["equity"]
+        assert (
+            conservative.recommended_allocation["equity"]
+            < aggressive.recommended_allocation["equity"]
+        )
 
     def test_short_horizon_more_conservative(self) -> None:
         """Short time horizon should result in more conservative allocation."""
@@ -233,12 +246,20 @@ class TestGoalPlannerTool:
 
         tool = GoalPlannerTool(mock=True)
 
-        short = tool._run(GoalInput(
-            goal_name="Test", target_amount=1000000, years_to_goal=3,
-        ))
-        long = tool._run(GoalInput(
-            goal_name="Test", target_amount=1000000, years_to_goal=20,
-        ))
+        short = tool._run(
+            GoalInput(
+                goal_name="Test",
+                target_amount=1000000,
+                years_to_goal=3,
+            )
+        )
+        long = tool._run(
+            GoalInput(
+                goal_name="Test",
+                target_amount=1000000,
+                years_to_goal=20,
+            )
+        )
 
         assert short.recommended_allocation["equity"] < long.recommended_allocation["equity"]
 

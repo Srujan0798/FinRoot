@@ -124,9 +124,7 @@ class TestSentimentAnalysisToolHeuristic:
     def test_multiple_texts(self) -> None:
         tool = SentimentAnalysisTool(mock=True)
         result = tool(
-            SentimentInput(
-                texts=["surge rally profit", "crash bankruptcy", "stable market"]
-            )
+            SentimentInput(texts=["surge rally profit", "crash bankruptcy", "stable market"])
         )
         assert len(result.results) == 3
         assert result.results[0].label == "positive"
@@ -181,7 +179,9 @@ class TestSentimentPydanticValidation:
         # Text with many positive keywords should clip to 1.0
         result = tool(
             SentimentInput(
-                texts=["surge rally gain profit bullish upgrade outperform beat growth record high strong"]
+                texts=[
+                    "surge rally gain profit bullish upgrade outperform beat growth record high strong"
+                ]
             )
         )
         assert result.results[0].score <= 1.0

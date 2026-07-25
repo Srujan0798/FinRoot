@@ -19,9 +19,9 @@ from finroot.schemas.enums import Domain
 class Horizon(str, Enum):  # noqa: UP042  (mirrors contract enums)
     """Investment / planning horizon. Drives confidence and risk framing."""
 
-    SHORT = "short"          # < 1 year
-    MEDIUM = "medium"        # 1-5 years
-    LONG = "long"            # 5-20 years
+    SHORT = "short"  # < 1 year
+    MEDIUM = "medium"  # 1-5 years
+    LONG = "long"  # 5-20 years
     GENERATIONAL = "generational"  # > 20 years
 
 
@@ -118,7 +118,9 @@ class Portfolio(BaseModel):
 
     holdings: list[Holding] = Field(default_factory=list)
     base_currency: str = Field(default="USD", min_length=3, max_length=3)
-    as_of: datetime = Field(default_factory=lambda: datetime.now(tz=__import__("datetime").timezone.utc))
+    as_of: datetime = Field(
+        default_factory=lambda: datetime.now(tz=__import__("datetime").timezone.utc)
+    )
     notes: str = ""
 
     @field_validator("base_currency")

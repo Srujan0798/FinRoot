@@ -41,7 +41,9 @@ class TestAnswerPipelinePortfolio:
         state = answer("Analyze my portfolio allocation", mock=True)
 
         assert len(state.tool_outputs) > 0
-        tool_names = {entry.get("tool", "") or entry.get("agent", "") for entry in state.tool_outputs}
+        tool_names = {
+            entry.get("tool", "") or entry.get("agent", "") for entry in state.tool_outputs
+        }
         # Should have at least intent classification
         assert "intent_classifier" in tool_names
 
@@ -147,4 +149,8 @@ class TestAnswerPipelineEdgeCases:
         state = answer("Analyze my investment strategy", mock=True)
 
         assert state.candidate is not None
-        assert state.candidate.confidence in (ConfidenceLevel.HIGH, ConfidenceLevel.MEDIUM, ConfidenceLevel.LOW)
+        assert state.candidate.confidence in (
+            ConfidenceLevel.HIGH,
+            ConfidenceLevel.MEDIUM,
+            ConfidenceLevel.LOW,
+        )

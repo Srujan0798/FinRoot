@@ -55,7 +55,9 @@ class MarketAnalystAgent(BaseAgent):
             return state
 
         for iteration in range(_MAX_REACT_ITERATIONS):
-            logger.debug("MarketAnalystAgent ReAct iteration %d/%d", iteration + 1, _MAX_REACT_ITERATIONS)
+            logger.debug(
+                "MarketAnalystAgent ReAct iteration %d/%d", iteration + 1, _MAX_REACT_ITERATIONS
+            )
 
             # Think: use LLM to reason about what data we need
             llm_reasoning = self._llm_think(state, symbols, iteration)
@@ -72,12 +74,14 @@ class MarketAnalystAgent(BaseAgent):
 
             # Record LLM reasoning in tool_outputs
             if llm_reasoning:
-                state.tool_outputs.append({
-                    "agent": self.name,
-                    "type": "llm_reasoning",
-                    "iteration": iteration + 1,
-                    "reasoning": llm_reasoning,
-                })
+                state.tool_outputs.append(
+                    {
+                        "agent": self.name,
+                        "type": "llm_reasoning",
+                        "iteration": iteration + 1,
+                        "reasoning": llm_reasoning,
+                    }
+                )
 
         return state
 
@@ -180,18 +184,22 @@ class MarketAnalystAgent(BaseAgent):
         for symbol in symbols:
             market_key = str(MarketDataInput(symbol=symbol))
             if ("market_data", market_key) not in fetched:
-                actions.append({
-                    "tool": "market_data",
-                    "symbol": symbol,
-                    "input": MarketDataInput(symbol=symbol),
-                })
+                actions.append(
+                    {
+                        "tool": "market_data",
+                        "symbol": symbol,
+                        "input": MarketDataInput(symbol=symbol),
+                    }
+                )
             fund_key = str(FundamentalInput(symbol=symbol))
             if ("fundamental_analysis", fund_key) not in fetched:
-                actions.append({
-                    "tool": "fundamental_analysis",
-                    "symbol": symbol,
-                    "input": FundamentalInput(symbol=symbol),
-                })
+                actions.append(
+                    {
+                        "tool": "fundamental_analysis",
+                        "symbol": symbol,
+                        "input": FundamentalInput(symbol=symbol),
+                    }
+                )
 
         return actions
 

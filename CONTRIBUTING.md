@@ -19,6 +19,12 @@ rules below keep the build collision-free and the quality high.
 6. **Never delete (§6.5).** Superseded work → `attic/`, `docs/historical/`, `prompts/archive/`.
 7. **Publish gate (FM-07).** No secrets, raw prompts, or scratch files committed.
 
+## Quick Setup
+1. `make install` — install dependencies
+2. `make setup-hooks` — install git hooks
+3. `make test-fast` — run tests
+4. `make doctor` — verify everything works
+
 ## Code conventions
 - Python 3.11, type-hinted, **Pydantic v2** for all data at boundaries.
 - `ruff` for lint+format (`make lint`). Tests with `pytest` (`make test`).

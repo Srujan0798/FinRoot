@@ -93,11 +93,13 @@ class BaseAgent(ABC):
             value=str(result)[:200] if result is not None else None,
             retrieved_at=datetime.now(UTC),
         )
-        state.tool_outputs.append({
-            "tool": tool_name,
-            "input": str(inp) if inp is not None else None,
-            "output": str(result)[:500] if result is not None else None,
-        })
+        state.tool_outputs.append(
+            {
+                "tool": tool_name,
+                "input": str(inp) if inp is not None else None,
+                "output": str(result)[:500] if result is not None else None,
+            }
+        )
 
         if state.candidate is not None:
             state.candidate.citations.append(citation)

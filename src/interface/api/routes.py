@@ -50,11 +50,21 @@ def handle_query(body: QueryRequest) -> QueryResponse:
 
 
 def handle_health() -> HealthResponse:
-    """GET /health — basic service health check."""
+    """GET /health — basic service health check.
+
+    ``test_count`` is the number of unit *test files* under ``tests/unit/``,
+    not the number of pytest assertions (honest field semantics).
+    """
     status = "ok"
     version = "0.1.0"
     test_count = _count_tests()
-    return HealthResponse(status=status, version=version, test_count=test_count)
+    return HealthResponse(
+        status=status,
+        version=version,
+        test_count=test_count,
+        mode="single-user-local",
+        llm_default="mock",
+    )
 
 
 def handle_metrics() -> dict:

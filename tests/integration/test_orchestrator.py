@@ -93,7 +93,9 @@ def _make_orchestrator(memory: MemoryManager, audit: AuditTrail, llm: MockProvid
 # ------------------------------------------------------------------
 
 
-def test_full_pipeline_portfolio(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+def test_full_pipeline_portfolio(
+    memory: MemoryManager, audit: AuditTrail, llm: MockProvider
+) -> None:
     """'Review my portfolio' → PORTFOLIO → PortfolioOptimizer + RiskAssessor → synthesis."""
     orch = _make_orchestrator(memory, audit, llm)
     state = orch.run("Review my portfolio")
@@ -164,7 +166,9 @@ def test_greeting_no_agents(memory: MemoryManager, audit: AuditTrail, llm: MockP
 # ------------------------------------------------------------------
 
 
-def test_audit_trail_has_entries(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+def test_audit_trail_has_entries(
+    memory: MemoryManager, audit: AuditTrail, llm: MockProvider
+) -> None:
     """The audit trail records orchestrator.run and orchestrator.done events."""
     orch = _make_orchestrator(memory, audit, llm)
     orch.run("Hello")
@@ -200,7 +204,9 @@ def test_state_roundtrip_valid(memory: MemoryManager, audit: AuditTrail, llm: Mo
 # ------------------------------------------------------------------
 
 
-def test_intent_routes_to_correct_agents(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+def test_intent_routes_to_correct_agents(
+    memory: MemoryManager, audit: AuditTrail, llm: MockProvider
+) -> None:
     """Verify the routing map: PORTFOLIO→portfolio_optimizer+risk_assessor,
     TAX→tax_planner, NEWS_IMPACT→market_analyst+news_interpreter.
     """
@@ -224,7 +230,9 @@ def test_intent_routes_to_correct_agents(memory: MemoryManager, audit: AuditTrai
 # ------------------------------------------------------------------
 
 
-def test_context_assembly_populates_twin(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+def test_context_assembly_populates_twin(
+    memory: MemoryManager, audit: AuditTrail, llm: MockProvider
+) -> None:
     """The context assembler should populate twin_snapshot from memory."""
     orch = _make_orchestrator(memory, audit, llm)
     state = orch.run("Review my portfolio")
@@ -265,7 +273,9 @@ def test_build_graph_compilable(audit: AuditTrail) -> None:
 # ------------------------------------------------------------------
 
 
-def test_candidate_has_citations(memory: MemoryManager, audit: AuditTrail, llm: MockProvider) -> None:
+def test_candidate_has_citations(
+    memory: MemoryManager, audit: AuditTrail, llm: MockProvider
+) -> None:
     """When sub-agents produce tool outputs, the candidate should have citations."""
     orch = _make_orchestrator(memory, audit, llm)
     state = orch.run("What is the tax on ₹2,00,000 LTCG?")

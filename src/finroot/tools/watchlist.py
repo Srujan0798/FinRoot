@@ -120,10 +120,7 @@ class WatchlistAlertTool(BaseTool[AlertCheckInput, AlertCheckOutput]):
 
         return AlertCheckOutput(
             triggered=triggered,
-            citation=(
-                f"Watchlist check for {inp.user_id}, "
-                f"{len(entries)} symbols evaluated"
-            ),
+            citation=(f"Watchlist check for {inp.user_id}, {len(entries)} symbols evaluated"),
         )
 
 

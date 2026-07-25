@@ -59,9 +59,7 @@ class TestFRBBank:
 
     def test_id_format(self, bank: list[dict]) -> None:
         for q in bank:
-            assert q["id"].startswith("frb-"), (
-                f"ID {q['id']!r} must start with 'frb-'"
-            )
+            assert q["id"].startswith("frb-"), f"ID {q['id']!r} must start with 'frb-'"
             assert q["id"].split("-")[1].isdigit(), (
                 f"ID {q['id']!r} must be frb-NNN (zero-padded NNN optional)"
             )
@@ -69,26 +67,21 @@ class TestFRBBank:
     def test_required_fields(self, bank: list[dict]) -> None:
         for i, q in enumerate(bank):
             missing = FRB_REQUIRED_FIELDS - set(q.keys())
-            assert not missing, (
-                f"Question {i} (id={q.get('id', '?')}) missing fields: {missing}"
-            )
+            assert not missing, f"Question {i} (id={q.get('id', '?')}) missing fields: {missing}"
 
     def test_expected_schema(self, bank: list[dict]) -> None:
         for q in bank:
             expected = q["expected"]
             missing = EXPECTED_REQUIRED_FIELDS - set(expected.keys())
-            assert not missing, (
-                f"Question {q['id']!r} expected missing: {missing}"
-            )
+            assert not missing, f"Question {q['id']!r} expected missing: {missing}"
             assert isinstance(expected["must_mention"], list)
             assert isinstance(expected["must_not"], list)
             assert isinstance(expected["min_citations"], int)
             assert expected["min_citations"] >= 0
             assert expected["expected_confidence"] in VALID_CONFIDENCE
             # numeric_answer can be null OR a number
-            assert (
-                expected["numeric_answer"] is None
-                or isinstance(expected["numeric_answer"], (int, float))
+            assert expected["numeric_answer"] is None or isinstance(
+                expected["numeric_answer"], (int, float)
             )
 
     def test_difficulty_values(self, bank: list[dict]) -> None:
@@ -114,9 +107,7 @@ class TestFRBBank:
         domains = {q["domain"] for q in bank}
         # Per the brief, 11 financial domains. Lock the floor at 8 (we may
         # have consolidated some, but a big drop is a data bug).
-        assert len(domains) >= 8, (
-            f"FRB bank covers {len(domains)} domains {domains}, expected >= 8"
-        )
+        assert len(domains) >= 8, f"FRB bank covers {len(domains)} domains {domains}, expected >= 8"
 
     def test_min_citations_at_least_one(self, bank: list[dict]) -> None:
         for q in bank:
@@ -131,6 +122,7 @@ class TestFRBBank:
         problem because it means we're only testing easy cases).
         """
         from collections import Counter
+
         counts = Counter(q["difficulty"] for q in bank)
         for d in ("easy", "medium", "hard"):
             assert counts.get(d, 0) >= 1, (
@@ -144,6 +136,7 @@ class TestFRBBank:
         measuring mean_score, and suggests data collection was incomplete.
         """
         from collections import Counter
+
         counts = Counter(q["domain"] for q in bank)
         for domain, n in counts.items():
             assert n >= 3, (
@@ -158,6 +151,7 @@ class TestFRBBank:
         biased toward that domain's difficulty.
         """
         from collections import Counter
+
         counts = Counter(q["domain"] for q in bank)
         total = len(bank)
         for domain, n in counts.items():
@@ -179,9 +173,7 @@ class TestAdversarialBank:
         return json.loads(path.read_text())
 
     def test_minimum_size(self, bank: list[dict]) -> None:
-        assert len(bank) >= 20, (
-            f"Adversarial bank has {len(bank)} tasks, expected >= 20"
-        )
+        assert len(bank) >= 20, f"Adversarial bank has {len(bank)} tasks, expected >= 20"
 
     def test_ids_unique(self, bank: list[dict]) -> None:
         ids = [q["id"] for q in bank]

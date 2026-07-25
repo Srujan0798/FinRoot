@@ -107,7 +107,10 @@ class BaseTool(ABC, Generic[In, Out]):
                 last_exc = exc
                 logger.warning(
                     "Tool %r attempt %d/%d failed: %s",
-                    self.name, attempt + 1, self.max_retries + 1, exc,
+                    self.name,
+                    attempt + 1,
+                    self.max_retries + 1,
+                    exc,
                 )
                 if attempt < self.max_retries:
                     time.sleep(self.base_delay * (2**attempt))
@@ -121,8 +124,7 @@ class BaseTool(ABC, Generic[In, Out]):
         # All retries exhausted — fail loud (FM-11, FM-09)
         self._emit_audit("tool.failed", inp, last_exc)
         raise ToolCallError(
-            f"Tool {self.name!r} failed after {self.max_retries + 1} "
-            f"attempt(s): {last_exc}"
+            f"Tool {self.name!r} failed after {self.max_retries + 1} attempt(s): {last_exc}"
         ) from last_exc
 
     @abstractmethod
@@ -178,11 +180,14 @@ class BaseTool(ABC, Generic[In, Out]):
         if self._audit is None:
             return
         try:
-            self._audit.append(event_type, {
-                "tool": self.name,
-                "input": str(inp) if inp is not None else None,
-                "output": str(result_or_error)[:500],
-            })
+            self._audit.append(
+                event_type,
+                {
+                    "tool": self.name,
+                    "input": str(inp) if inp is not None else None,
+                    "output": str(result_or_error)[:500],
+                },
+            )
         except Exception as exc:
             logger.warning("Audit append failed (non-blocking): %s", exc)
 

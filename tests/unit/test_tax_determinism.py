@@ -48,8 +48,7 @@ def test_tax_engine_different_inputs_differ() -> None:
     # For 100k: STCG = 30% × 100k = 30k; LTCG = 10% × 100k = 10k
     # They should differ.
     assert r1.tax_amount != r2.tax_amount, (
-        f"STCG and LTCG should produce different tax amounts; "
-        f"both returned {r1.tax_amount}"
+        f"STCG and LTCG should produce different tax amounts; both returned {r1.tax_amount}"
     )
 
 

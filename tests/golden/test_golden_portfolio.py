@@ -23,7 +23,9 @@ pytestmark = pytest.mark.golden
 def _get_rec(state: AgentState) -> Recommendation:
     """Extract the recommendation from candidate or final."""
     rec = state.candidate or state.final
-    assert rec is not None, "Pipeline produced no recommendation (candidate and final are both None)"
+    assert rec is not None, (
+        "Pipeline produced no recommendation (candidate and final are both None)"
+    )
     return rec
 
 
@@ -60,8 +62,13 @@ class TestGoldenPortfolio:
         state = run_pipeline("Analyze my portfolio allocation")
         text = _all_text(state)
         allocation_keywords = [
-            "allocation", "diversif", "weight", "concentration",
-            "equity", "debt", "asset",
+            "allocation",
+            "diversif",
+            "weight",
+            "concentration",
+            "equity",
+            "debt",
+            "asset",
         ]
         found = [kw for kw in allocation_keywords if kw in text]
         assert len(found) >= 2, (
@@ -89,8 +96,7 @@ class TestGoldenPortfolio:
         rec = _get_rec(state)
         # The recommendation should have citations from the pipeline
         assert len(rec.citations) >= 1, (
-            f"Portfolio recommendation should have at least 1 citation, "
-            f"got {len(rec.citations)}"
+            f"Portfolio recommendation should have at least 1 citation, got {len(rec.citations)}"
         )
 
     def test_portfolio_has_actions(self, run_pipeline):
@@ -98,8 +104,7 @@ class TestGoldenPortfolio:
         state = run_pipeline("How should I rebalance my portfolio?")
         rec = _get_rec(state)
         assert len(rec.actions) >= 1, (
-            f"Portfolio recommendation should have at least 1 action, "
-            f"got {len(rec.actions)}"
+            f"Portfolio recommendation should have at least 1 action, got {len(rec.actions)}"
         )
 
     def test_portfolio_confidence_medium_or_high(self, run_pipeline):
@@ -128,18 +133,14 @@ class TestGoldenPortfolio:
         state = run_pipeline("How diversified is my portfolio?")
         text = _all_text(state)
         assert "diversif" in text, (
-            f"Portfolio analysis should discuss diversification. "
-            f"Text preview: {text[:300]}"
+            f"Portfolio analysis should discuss diversification. Text preview: {text[:300]}"
         )
 
     def test_portfolio_rebalancing_has_comparison(self, run_pipeline):
         """Rebalancing query should produce rebalancing comparison in tool outputs."""
         state = run_pipeline("How should I rebalance my portfolio?")
         tool_text = _all_tool_output_text(state)
-        has_rebalance = any(
-            kw in tool_text
-            for kw in ("rebalancing_comparison", "rebalanc")
-        )
+        has_rebalance = any(kw in tool_text for kw in ("rebalancing_comparison", "rebalanc"))
         assert has_rebalance, (
             f"Rebalancing tool output should contain rebalancing comparison. "
             f"Tool output preview: {tool_text[:500]}"
@@ -150,8 +151,7 @@ class TestGoldenPortfolio:
         state = run_pipeline("Assess the risk in my portfolio")
         tool_text = _all_tool_output_text(state)
         has_risk_assessor = any(
-            kw in tool_text
-            for kw in ("risk_assessor", "monte_carlo", "probability_of_loss")
+            kw in tool_text for kw in ("risk_assessor", "monte_carlo", "probability_of_loss")
         )
         assert has_risk_assessor, (
             f"Portfolio tool outputs should include risk assessment. "
@@ -162,10 +162,7 @@ class TestGoldenPortfolio:
         """Portfolio optimization query should mention optimization or allocation."""
         state = run_pipeline("Optimize my portfolio allocation")
         text = _all_text(state)
-        has_optimization = any(
-            kw in text
-            for kw in ("optim", "allocation", "weight", "rebalanc")
-        )
+        has_optimization = any(kw in text for kw in ("optim", "allocation", "weight", "rebalanc"))
         assert has_optimization, (
             f"Portfolio analysis should mention optimization or allocation concepts. "
             f"Text preview: {text[:300]}"

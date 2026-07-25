@@ -3,6 +3,7 @@
 
 Usage: python3 _render_svg.py <input.mmd> <output.svg>
 """
+
 from __future__ import annotations
 
 import base64

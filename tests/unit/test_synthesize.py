@@ -250,4 +250,8 @@ class TestFeatures:
         # Summary should contain substantive financial advice
         assert len(rec.summary) > 50, f"Summary too short: {rec.summary}"
         # Should mention errors if there were any
-        assert "error" in rec.summary.lower() or "errors" in rec.summary.lower() or "failed" in rec.summary.lower()
+        assert (
+            "error" in rec.summary.lower()
+            or "errors" in rec.summary.lower()
+            or "failed" in rec.summary.lower()
+        )

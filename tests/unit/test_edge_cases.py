@@ -163,10 +163,7 @@ class TestPortfolioEdgeCases:
         assert p.base_currency == "USD"
 
     def test_portfolio_with_many_holdings(self) -> None:
-        holdings = [
-            Holding(symbol=f"T{i}", name=f"Stock {i}")
-            for i in range(100)
-        ]
+        holdings = [Holding(symbol=f"T{i}", name=f"Stock {i}") for i in range(100)]
         p = Portfolio(holdings=holdings)
         assert len(p.holdings) == 100
 
@@ -234,9 +231,7 @@ class TestRiskToolEdgeCases:
             risk_tool(RiskInput(returns=[0.01, -0.01], weights=[0.0, 0.0]))
 
     def test_risk_tool_valid_weights_hhi(self, risk_tool: RiskCalculationTool) -> None:
-        result = risk_tool(
-            RiskInput(returns=[0.01, -0.01, 0.02], weights=[0.5, 0.3, 0.2])
-        )
+        result = risk_tool(RiskInput(returns=[0.01, -0.01, 0.02], weights=[0.5, 0.3, 0.2]))
         assert result.hhi is not None
         assert result.hhi_interpretation is not None
 
@@ -246,9 +241,7 @@ class TestRiskToolEdgeCases:
         assert result.hhi_interpretation is None
 
     def test_risk_tool_custom_stress_shocks(self, risk_tool: RiskCalculationTool) -> None:
-        result = risk_tool(
-            RiskInput(returns=[0.01, -0.01], stress_shocks=[-0.5])
-        )
+        result = risk_tool(RiskInput(returns=[0.01, -0.01], stress_shocks=[-0.5]))
         assert len(result.stress_tests) == 1
         assert result.stress_tests[0].shock_pct == -0.5
 
@@ -266,43 +259,31 @@ class TestRiskToolEdgeCases:
 @pytest.mark.wave1
 class TestTaxToolEdgeCases:
     def test_tax_tool_zero_income(self, tax_tool: TaxRuleTool) -> None:
-        result = tax_tool(
-            TaxInput(gain=100000, gain_type="STCG", annual_income=0)
-        )
+        result = tax_tool(TaxInput(gain=100000, gain_type="STCG", annual_income=0))
         assert isinstance(result, TaxOutput)
         assert result.tax_amount >= 0
 
     def test_tax_tool_very_high_income(self, tax_tool: TaxRuleTool) -> None:
-        result = tax_tool(
-            TaxInput(gain=500000, gain_type="STCG", annual_income=15000000)
-        )
+        result = tax_tool(TaxInput(gain=500000, gain_type="STCG", annual_income=15000000))
         assert isinstance(result, TaxOutput)
         assert result.tax_amount > 0
 
     def test_tax_tool_zero_gain(self, tax_tool: TaxRuleTool) -> None:
-        result = tax_tool(
-            TaxInput(gain=0, gain_type="STCG", annual_income=500000)
-        )
+        result = tax_tool(TaxInput(gain=0, gain_type="STCG", annual_income=500000))
         assert result.tax_amount == 0
         assert result.effective_rate_pct == 0.0
 
     def test_tax_tool_negative_gain_rejected(self, tax_tool: TaxRuleTool) -> None:
         with pytest.raises(ToolCallError, match="Negative gain"):
-            tax_tool(
-                TaxInput(gain=-100, gain_type="STCG", annual_income=500000)
-            )
+            tax_tool(TaxInput(gain=-100, gain_type="STCG", annual_income=500000))
 
     def test_tax_tool_ltcg_with_exemption(self, tax_tool: TaxRuleTool) -> None:
-        result = tax_tool(
-            TaxInput(gain=100000, gain_type="LTCG", annual_income=500000)
-        )
+        result = tax_tool(TaxInput(gain=100000, gain_type="LTCG", annual_income=500000))
         assert result.tax_amount >= 0
         assert result.breakdown["taxable_gain"] <= 100000
 
     def test_tax_tool_stcg_equity(self, tax_tool: TaxRuleTool) -> None:
-        result = tax_tool(
-            TaxInput(gain=200000, gain_type="STCG_EQUITY", annual_income=1000000)
-        )
+        result = tax_tool(TaxInput(gain=200000, gain_type="STCG_EQUITY", annual_income=1000000))
         assert isinstance(result, TaxOutput)
         assert result.tax_amount > 0
 
@@ -316,9 +297,7 @@ class TestTaxToolEdgeCases:
         assert without_cess.tax_amount <= with_cess.tax_amount
 
     def test_tax_tool_huge_gain(self, tax_tool: TaxRuleTool) -> None:
-        result = tax_tool(
-            TaxInput(gain=100000000, gain_type="STCG", annual_income=10000000)
-        )
+        result = tax_tool(TaxInput(gain=100000000, gain_type="STCG", annual_income=10000000))
         assert result.tax_amount > 0
 
 
@@ -329,36 +308,24 @@ class TestTaxToolEdgeCases:
 
 @pytest.mark.wave1
 class TestProfileEdgeCases:
-    def test_profile_empty_name(
-        self, profile_tool: UserProfileTool, profiles_path: Path
-    ) -> None:
-        result = profile_tool(
-            ProfileWriteInput(user_id="edge_user", updates={"name": ""})
-        )
+    def test_profile_empty_name(self, profile_tool: UserProfileTool, profiles_path: Path) -> None:
+        result = profile_tool(ProfileWriteInput(user_id="edge_user", updates={"name": ""}))
         assert result.data["name"] == ""
 
     def test_profile_extreme_age_zero(
         self, profile_tool: UserProfileTool, profiles_path: Path
     ) -> None:
-        result = profile_tool(
-            ProfileWriteInput(user_id="edge_user", updates={"age": 0})
-        )
+        result = profile_tool(ProfileWriteInput(user_id="edge_user", updates={"age": 0}))
         assert result.data["age"] == 0
 
     def test_profile_extreme_age_150(
         self, profile_tool: UserProfileTool, profiles_path: Path
     ) -> None:
-        result = profile_tool(
-            ProfileWriteInput(user_id="edge_user", updates={"age": 150})
-        )
+        result = profile_tool(ProfileWriteInput(user_id="edge_user", updates={"age": 150}))
         assert result.data["age"] == 150
 
-    def test_profile_zero_income(
-        self, profile_tool: UserProfileTool, profiles_path: Path
-    ) -> None:
-        result = profile_tool(
-            ProfileWriteInput(user_id="edge_user", updates={"annual_income": 0})
-        )
+    def test_profile_zero_income(self, profile_tool: UserProfileTool, profiles_path: Path) -> None:
+        result = profile_tool(ProfileWriteInput(user_id="edge_user", updates={"annual_income": 0}))
         assert result.data["annual_income"] == 0
 
     def test_profile_negative_income(
@@ -385,14 +352,10 @@ class TestProfileEdgeCases:
         self, profile_tool: UserProfileTool, profiles_path: Path
     ) -> None:
         with pytest.raises(ValidationError):
-            profile_tool(
-                ProfileWriteInput(user_id="edge_user", updates={})
-            )
+            profile_tool(ProfileWriteInput(user_id="edge_user", updates={}))
 
     def test_profile_write_nonexistent_user(
         self, profile_tool: UserProfileTool, profiles_path: Path
     ) -> None:
         with pytest.raises(ToolCallError, match="no profile found"):
-            profile_tool(
-                ProfileWriteInput(user_id="ghost_user", updates={"name": "Ghost"})
-            )
+            profile_tool(ProfileWriteInput(user_id="ghost_user", updates={"name": "Ghost"}))

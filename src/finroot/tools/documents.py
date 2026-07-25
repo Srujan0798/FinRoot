@@ -41,9 +41,7 @@ class DocParseOutput(BaseModel):
 # ---------------------------------------------------------------------------
 
 # Indian Rupee amounts: ₹1,23,456.78 or Rs 123456.78 or INR 123456
-_RUPEE_PATTERN = re.compile(
-    r"(?:₹|Rs\.?|INR)\s*([\d,]+(?:\.\d{1,2})?)", re.IGNORECASE
-)
+_RUPEE_PATTERN = re.compile(r"(?:₹|Rs\.?|INR)\s*([\d,]+(?:\.\d{1,2})?)", re.IGNORECASE)
 
 # Date patterns: DD/MM/YYYY, DD-MM-YYYY, DD Mon YYYY
 _DATE_PATTERN = re.compile(

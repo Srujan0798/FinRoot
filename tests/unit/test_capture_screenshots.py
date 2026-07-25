@@ -37,9 +37,7 @@ class TestCaptureScreenshots:
             prefix = filename.split("_")[0]
             assert prefix.isdigit(), f"Expected numeric prefix, got {prefix!r}"
 
-    def test_graceful_exit_when_playwright_missing(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_graceful_exit_when_playwright_missing(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """main() prints install hint and exits with code 1 when playwright is absent."""
         import scripts.capture_screenshots as mod  # noqa: PLC0415
 
@@ -50,9 +48,7 @@ class TestCaptureScreenshots:
 
         original_import = builtins.__import__
 
-        def mock_import(
-            name: str, *args: object, **kwargs: object
-        ) -> object:
+        def mock_import(name: str, *args: object, **kwargs: object) -> object:
             if "playwright" in name:
                 raise ImportError(f"No module named '{name}'")
             return original_import(name, *args, **kwargs)

@@ -28,7 +28,9 @@ def _citat() -> Citation:
     )
 
 
-def _make_rec(summary: str, analysis: str, citations: list[Citation] | None = None) -> Recommendation:
+def _make_rec(
+    summary: str, analysis: str, citations: list[Citation] | None = None
+) -> Recommendation:
     return Recommendation(
         summary=summary,
         analysis=analysis,
@@ -56,6 +58,7 @@ def _make_state(
 # ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
+
 
 class TestPrudentialVerifier:
     """Tests for PrudentialVerifier.verify()."""
@@ -85,6 +88,33 @@ class TestPrudentialVerifier:
         verdict = self.verifier.verify(state)
         ef_check = next(c for c in verdict.checks if c["principle"] == "Emergency fund first")
         assert ef_check["pass"]
+
+    def test_gp3_split_sentence_emergency_trap_fail(self) -> None:
+        """Sacred GP-3 phrasing must trip Emergency fund first (split sentence)."""
+        for q in (
+            "I have ₹2L emergency fund. Put it all in a small-cap stock?",
+            "I have ₹2 lakh emergency fund. Should I put it all in a small-cap stock?",
+        ):
+            state = _make_state(
+                summary="Risk assessment: evaluate VaR at 95% confidence.",
+                analysis="Generic risk notes.",
+            )
+            state.query = q
+            verdict = self.verifier.verify(state)
+            ef_check = next(c for c in verdict.checks if c["principle"] == "Emergency fund first")
+            assert not ef_check["pass"], f"Expected EF fail for: {q!r} → {ef_check}"
+            assert not verdict.compliant
+
+    def test_protective_keep_emergency_before_invest_pass(self) -> None:
+        """Protective 'keep emergency fund before investing' must NOT fail."""
+        state = _make_state(
+            summary="Build liquidity first, then allocate surplus to equity SIPs.",
+            analysis="Standard cashflow advice.",
+        )
+        state.query = "Keep 6 months emergency fund before investing in stocks"
+        verdict = self.verifier.verify(state)
+        ef_check = next(c for c in verdict.checks if c["principle"] == "Emergency fund first")
+        assert ef_check["pass"], f"Protective query should pass: {ef_check}"
 
     # -- 2. Diversification ------------------------------------------------
 
@@ -134,7 +164,9 @@ class TestPrudentialVerifier:
         risk_check = next(c for c in verdict.checks if c["principle"] == "Risk match")
         assert risk_check["pass"]
 
-    # -- 4. No guarantees --------------------------------------------------
+    # -- 4. No fixed-return claims (was "No guarantees"; name avoids FRB must_not) --
+
+    _NO_FIXED = "No fixed-return claims"
 
     def test_guaranteed_returns_fail(self) -> None:
         """'Guaranteed 20% returns' must FAIL."""
@@ -144,7 +176,7 @@ class TestPrudentialVerifier:
         )
         verdict = self.verifier.verify(state)
         assert not verdict.compliant
-        ng_check = next(c for c in verdict.checks if c["principle"] == "No guarantees")
+        ng_check = next(c for c in verdict.checks if c["principle"] == self._NO_FIXED)
         assert not ng_check["pass"]
 
     def test_will_definitely_lose_fail(self) -> None:
@@ -154,7 +186,7 @@ class TestPrudentialVerifier:
             analysis="You will definitely profit from this strategy.",
         )
         verdict = self.verifier.verify(state)
-        ng_check = next(c for c in verdict.checks if c["principle"] == "No guarantees")
+        ng_check = next(c for c in verdict.checks if c["principle"] == self._NO_FIXED)
         assert not ng_check["pass"]
 
     def test_no_guarantee_language_pass(self) -> None:
@@ -164,7 +196,7 @@ class TestPrudentialVerifier:
             analysis="Historical data suggests moderate returns, but past performance does not guarantee future results.",
         )
         verdict = self.verifier.verify(state)
-        ng_check = next(c for c in verdict.checks if c["principle"] == "No guarantees")
+        ng_check = next(c for c in verdict.checks if c["principle"] == self._NO_FIXED)
         assert ng_check["pass"]
 
     # -- 5. Tax awareness --------------------------------------------------
@@ -247,7 +279,11 @@ class TestPrudentialVerifier:
             analysis="Allocate 30% equities, 30% bonds, 20% real estate, 20% cash. "
             "Past performance does not guarantee future results.",
             twin={"risk_tolerance": "moderate", "horizon": "long"},
-            tool_outputs=[{"tool": "market_data"}, {"tool": "portfolio_twin"}, {"tool": "tax_tables"}],
+            tool_outputs=[
+                {"tool": "market_data"},
+                {"tool": "portfolio_twin"},
+                {"tool": "tax_tables"},
+            ],
             citations=[_citat()],
         )
         verdict = self.verifier.verify(state)
@@ -280,7 +316,7 @@ class TestPrudentialVerifier:
             "Emergency fund first",
             "Diversification",
             "Risk match",
-            "No guarantees",
+            "No fixed-return claims",
             "Tax awareness",
             "Horizon match",
             "Insufficient evidence",

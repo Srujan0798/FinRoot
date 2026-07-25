@@ -62,6 +62,7 @@ def _make_memory(tmp_path: Path, user_id: str = "bench_user") -> MemoryManager:
 # Test 1: Single-query workflow latency
 # ------------------------------------------------------------------
 
+
 @pytest.mark.performance
 def test_workflow_single_query_latency(tmp_path: Path) -> None:
     """Time a single mock query through the full orchestrator pipeline.
@@ -84,9 +85,7 @@ def test_workflow_single_query_latency(tmp_path: Path) -> None:
         elapsed = time.perf_counter() - start
 
         assert state is not None, "Orchestrator returned None"
-        assert elapsed < 5.0, (
-            f"Single query took {elapsed:.2f}s; expected < 5s"
-        )
+        assert elapsed < 5.0, f"Single query took {elapsed:.2f}s; expected < 5s"
     finally:
         monkeypatch_marker.undo()
 
@@ -94,6 +93,7 @@ def test_workflow_single_query_latency(tmp_path: Path) -> None:
 # ------------------------------------------------------------------
 # Test 2: Eval harness throughput
 # ------------------------------------------------------------------
+
 
 @pytest.mark.performance
 def test_eval_harness_throughput(tmp_path: Path) -> None:
@@ -146,6 +146,7 @@ def test_eval_harness_throughput(tmp_path: Path) -> None:
 # Test 3: Memory store operations
 # ------------------------------------------------------------------
 
+
 @pytest.mark.performance
 def test_memory_store_operations(tmp_path: Path) -> None:
     """Time 100 memory store operations (add_turn) and assert < 1 second total."""
@@ -162,9 +163,7 @@ def test_memory_store_operations(tmp_path: Path) -> None:
         assert memory.working.size == 10, (
             f"Working memory size {memory.working.size} != 10 (max_turns)"
         )
-        assert elapsed < 1.0, (
-            f"100 memory store operations took {elapsed:.3f}s; expected < 1s"
-        )
+        assert elapsed < 1.0, f"100 memory store operations took {elapsed:.3f}s; expected < 1s"
     finally:
         monkeypatch_marker.undo()
 
@@ -172,6 +171,7 @@ def test_memory_store_operations(tmp_path: Path) -> None:
 # ------------------------------------------------------------------
 # Test 4: Profile loading speed
 # ------------------------------------------------------------------
+
 
 @pytest.mark.performance
 def test_profile_load_speed(tmp_path: Path) -> None:
@@ -216,8 +216,6 @@ def test_profile_load_speed(tmp_path: Path) -> None:
             assert loaded.user_id == f"profile_{i:04d}"
         elapsed = time.perf_counter() - start
 
-        assert elapsed < 2.0, (
-            f"Loading 100 profiles took {elapsed:.3f}s; expected < 2s"
-        )
+        assert elapsed < 2.0, f"Loading 100 profiles took {elapsed:.3f}s; expected < 2s"
     finally:
         monkeypatch_marker.undo()

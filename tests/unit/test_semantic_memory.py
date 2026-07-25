@@ -181,7 +181,9 @@ class TestSemanticMemoryFallback:
 
 
 class TestSemanticMemoryChroma:
-    def test_uses_chroma_when_available(self, mock_chroma: tuple[SemanticMemory, MagicMock]) -> None:
+    def test_uses_chroma_when_available(
+        self, mock_chroma: tuple[SemanticMemory, MagicMock]
+    ) -> None:
         mem, _ = mock_chroma
         assert mem._use_chroma is True
 

@@ -134,9 +134,26 @@ def _infer_currency(symbol: str) -> str:
         return "JPY"
     # India-first demo instruments (FD/MF/PPF IDs, common bank prefixes)
     india_tokens = (
-        "FD_", "MF_", "PPF", "EPF", "NPS", "HDFC", "ICICI", "SBI", "AXIS",
-        "KOTAK", "NIFTY", "SENSEX", "INR", "NSE", "BSE", "RELIANCE", "TCS",
-        "INFY", "WIPRO", "ITC",
+        "FD_",
+        "MF_",
+        "PPF",
+        "EPF",
+        "NPS",
+        "HDFC",
+        "ICICI",
+        "SBI",
+        "AXIS",
+        "KOTAK",
+        "NIFTY",
+        "SENSEX",
+        "INR",
+        "NSE",
+        "BSE",
+        "RELIANCE",
+        "TCS",
+        "INFY",
+        "WIPRO",
+        "ITC",
     )
     if any(tok in sym for tok in india_tokens):
         return "INR"
@@ -192,8 +209,8 @@ class MarketDataTool(BaseTool[MarketDataInput, MarketDataOutput]):
     """Live OHLCV price tool. See module docstring for mode semantics."""
 
     name = "market_data"
-    ttl_seconds = 300      # contract: market/news = 300s
-    rate_per_sec = 5.0     # contract: ≤ 10 req/s per tool instance
+    ttl_seconds = 300  # contract: market/news = 300s
+    rate_per_sec = 5.0  # contract: ≤ 10 req/s per tool instance
 
     def __init__(
         self,
@@ -265,9 +282,7 @@ class MarketDataTool(BaseTool[MarketDataInput, MarketDataOutput]):
                 f"MarketDataTool live fetch failed for symbol={inp.symbol!r}: {e}"
             ) from e
         if hist is None or len(hist) == 0:
-            raise ToolError(
-                f"MarketDataTool received empty history for symbol={inp.symbol!r}"
-            )
+            raise ToolError(f"MarketDataTool received empty history for symbol={inp.symbol!r}")
         prices: list[PricePoint] = []
         for idx, row in hist.iterrows():
             prices.append(
@@ -291,10 +306,7 @@ class MarketDataTool(BaseTool[MarketDataInput, MarketDataOutput]):
             latest_price=latest,
             change_pct=change_pct,
             source="yfinance",
-            citation=(
-                f"Yahoo Finance via yfinance, fetched "
-                f"{datetime.now(UTC).isoformat()}"
-            ),
+            citation=(f"Yahoo Finance via yfinance, fetched {datetime.now(UTC).isoformat()}"),
         )
 
     @staticmethod

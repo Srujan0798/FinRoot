@@ -60,15 +60,17 @@ class RiskAssessorAgent(BaseAgent):
             self._run_monte_carlo(state, holdings)
 
         if returns is None and holdings is None:
-            state.tool_outputs.append({
-                "agent": self.name,
-                "type": "error",
-                "error": (
-                    "RiskAssessorAgent: no returns or holdings data available "
-                    "in state. Provide returns (list of float) or holdings "
-                    "(list of dict with 'weight' field) to compute risk metrics."
-                ),
-            })
+            state.tool_outputs.append(
+                {
+                    "agent": self.name,
+                    "type": "error",
+                    "error": (
+                        "RiskAssessorAgent: no returns or holdings data available "
+                        "in state. Provide returns (list of float) or holdings "
+                        "(list of dict with 'weight' field) to compute risk metrics."
+                    ),
+                }
+            )
 
         return state
 
@@ -115,19 +117,19 @@ class RiskAssessorAgent(BaseAgent):
     def _compute_risk_metrics(self, state: AgentState, returns: list[float]) -> None:
         """Call RiskCalculationTool and record results."""
         try:
-            result = self._call_tool(
-                state, "risk_calculation", RiskInput(returns=returns)
+            result = self._call_tool(state, "risk_calculation", RiskInput(returns=returns))
+            state.tool_outputs.append(
+                {
+                    "agent": self.name,
+                    "type": "risk_metrics",
+                    "volatility_annual": result.volatility_annual,
+                    "var_95": result.var_95,
+                    "cvar_95": result.cvar_95,
+                    "sharpe_ratio": result.sharpe_ratio,
+                    "max_drawdown": result.max_drawdown,
+                    "citation": result.citation,
+                }
             )
-            state.tool_outputs.append({
-                "agent": self.name,
-                "type": "risk_metrics",
-                "volatility_annual": result.volatility_annual,
-                "var_95": result.var_95,
-                "cvar_95": result.cvar_95,
-                "sharpe_ratio": result.sharpe_ratio,
-                "max_drawdown": result.max_drawdown,
-                "citation": result.citation,
-            })
         except Exception as exc:
             n_returns = len(returns) if returns else 0
             context = (
@@ -135,35 +137,39 @@ class RiskAssessorAgent(BaseAgent):
                 f"(n_returns={n_returns}, returns[0:3]={returns[:3] if returns else []})"
             )
             logger.error("%s failed: %s", context, exc, exc_info=True)
-            state.tool_outputs.append({
-                "agent": self.name,
-                "type": "error",
-                "error": f"Risk calculation failed (n_returns={n_returns}): {type(exc).__name__}: {exc}",
-            })
+            state.tool_outputs.append(
+                {
+                    "agent": self.name,
+                    "type": "error",
+                    "error": f"Risk calculation failed (n_returns={n_returns}): {type(exc).__name__}: {exc}",
+                }
+            )
 
-    def _run_monte_carlo(
-        self, state: AgentState, holdings: list[dict[str, Any]]
-    ) -> None:
+    def _run_monte_carlo(self, state: AgentState, holdings: list[dict[str, Any]]) -> None:
         """Call PortfolioSimulatorTool and record results."""
         try:
             sim_input = SimInput(holdings=holdings, horizon_years=1, scenarios=1000)
             result = self._call_tool(state, "portfolio_simulator", sim_input)
-            state.tool_outputs.append({
-                "agent": self.name,
-                "type": "monte_carlo",
-                "expected_return": result.expected_return,
-                "p10_return": result.p10_return,
-                "p90_return": result.p90_return,
-                "probability_of_loss": result.probability_of_loss,
-                "citation": result.citation,
-            })
+            state.tool_outputs.append(
+                {
+                    "agent": self.name,
+                    "type": "monte_carlo",
+                    "expected_return": result.expected_return,
+                    "p10_return": result.p10_return,
+                    "p90_return": result.p90_return,
+                    "probability_of_loss": result.probability_of_loss,
+                    "citation": result.citation,
+                }
+            )
         except Exception as exc:
             logger.error("RiskAssessorAgent Monte Carlo simulation failed: %s", exc, exc_info=True)
-            state.tool_outputs.append({
-                "agent": self.name,
-                "type": "error",
-                "error": f"Monte Carlo simulation failed: {exc}",
-            })
+            state.tool_outputs.append(
+                {
+                    "agent": self.name,
+                    "type": "error",
+                    "error": f"Monte Carlo simulation failed: {exc}",
+                }
+            )
 
 
 __all__ = ["RiskAssessorAgent"]

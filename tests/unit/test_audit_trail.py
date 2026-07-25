@@ -34,12 +34,8 @@ def test_chain_links_correctly(tmp_path: Path) -> None:
     e1 = audit.append("a", {"n": 1})
     e2 = audit.append("b", {"n": 2})
     e3 = audit.append("c", {"n": 3})
-    assert e2.prev_hash == e1.hash, (
-        f"e2.prev_hash {e2.prev_hash!r} != e1.hash {e1.hash!r}"
-    )
-    assert e3.prev_hash == e2.hash, (
-        f"e3.prev_hash {e3.prev_hash!r} != e2.hash {e2.hash!r}"
-    )
+    assert e2.prev_hash == e1.hash, f"e2.prev_hash {e2.prev_hash!r} != e1.hash {e1.hash!r}"
+    assert e3.prev_hash == e2.hash, f"e3.prev_hash {e3.prev_hash!r} != e2.hash {e2.hash!r}"
 
 
 def test_verify_chain_clean(tmp_path: Path) -> None:
@@ -78,9 +74,7 @@ def test_reordered_events_detected(tmp_path: Path) -> None:
     lines = log_path.read_text().splitlines()
     lines[0], lines[1] = lines[1], lines[0]
     log_path.write_text("\n".join(lines) + "\n")
-    assert audit.verify_chain() is False, (
-        "Reordering events should break the chain"
-    )
+    assert audit.verify_chain() is False, "Reordering events should break the chain"
 
 
 def test_truncated_chain_detected(tmp_path: Path) -> None:

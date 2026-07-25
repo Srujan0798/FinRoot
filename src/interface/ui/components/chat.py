@@ -42,9 +42,7 @@ def _render_citations(citations: list[Any]) -> None:
 
 def _render_answer_card(state: Any) -> None:
     """Render the answer as a finance card with structured fields."""
-    rec: Recommendation | None = getattr(state, "candidate", None) or getattr(
-        state, "final", None
-    )
+    rec: Recommendation | None = getattr(state, "candidate", None) or getattr(state, "final", None)
     if rec is None:
         st.warning("The agent produced no recommendation.")
         return
@@ -116,14 +114,32 @@ def render(*, user_id: str = "demo", mock: bool = True) -> None:
     # Initialise session state
     if "chat_history" not in st.session_state:
         st.session_state["chat_history"] = []
+    if "pending_query" not in st.session_state:
+        st.session_state["pending_query"] = None
+
+    # Sacred demo chips (judge / stranger path)
+    st.caption("Try a golden-path question:")
+    chip_cols = st.columns(3)
+    _CHIPS = [
+        "Should I rebalance my 70/30 equity portfolio before FY-end?",
+        "What is LTCG tax on ₹1,00,000 equity gains held 2 years in India?",
+        "I have ₹2 lakh emergency fund. Should I put it all in a small-cap stock?",
+        "Should I take a personal loan to buy more stocks for higher returns?",
+        "Calculate VaR and max drawdown for my portfolio",
+        "How much health insurance cover does a family of 4 need in a metro?",
+    ]
+    for i, chip in enumerate(_CHIPS):
+        if chip_cols[i % 3].button(chip[:42] + ("…" if len(chip) > 42 else ""), key=f"chip_{i}"):
+            st.session_state["pending_query"] = chip
 
     # Render previous messages
     for msg in st.session_state["chat_history"]:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-    # Chat input
-    query: str | None = st.chat_input("Ask a financial question…")
+    # Chat input (chips inject pending_query)
+    typed: str | None = st.chat_input("Ask a financial question…")
+    query = st.session_state.pop("pending_query", None) or typed
     if not query:
         return
 
@@ -164,9 +180,7 @@ def render(*, user_id: str = "demo", mock: bool = True) -> None:
             state, "final", None
         )
         summary = rec.summary if rec is not None else "[No recommendation produced]"
-        st.session_state["chat_history"].append(
-            {"role": "assistant", "content": summary}
-        )
+        st.session_state["chat_history"].append({"role": "assistant", "content": summary})
 
         # Render the trace with streaming effect
         from interface.ui.components.trace import render_streaming

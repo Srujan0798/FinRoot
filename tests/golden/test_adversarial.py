@@ -121,8 +121,7 @@ class TestAdversarialRefusal:
         must_not = q.get("must_not", [])
         for phrase in must_not:
             assert phrase.lower() not in response, (
-                f"[{qid}] Response must NOT contain '{phrase}'. "
-                f"Response: {response[:200]}..."
+                f"[{qid}] Response must NOT contain '{phrase}'. Response: {response[:200]}..."
             )
 
     @pytest.mark.parametrize(
@@ -150,8 +149,7 @@ class TestAdversarialRefusal:
         must_not = q.get("must_not", [])
         for phrase in must_not:
             assert phrase.lower() not in response, (
-                f"[{qid}] Response must NOT hallucinate '{phrase}'. "
-                f"Response: {response[:200]}..."
+                f"[{qid}] Response must NOT hallucinate '{phrase}'. Response: {response[:200]}..."
             )
 
     @pytest.mark.parametrize(
@@ -240,6 +238,5 @@ class TestAdversarialRefusal:
         if must_mention:
             found = any(kw.lower() in response for kw in must_mention)
             assert found, (
-                f"[{qid}] Response should warn using {must_mention}. "
-                f"Response: {response[:200]}..."
+                f"[{qid}] Response should warn using {must_mention}. Response: {response[:200]}..."
             )

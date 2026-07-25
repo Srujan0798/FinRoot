@@ -1,6 +1,6 @@
 # Demo Transcript 2: Tax With Number
 
-> Generated: 2026-06-21 01:24 UTC  
+> Generated: 2026-07-25 15:20 UTC  
 > Mode: Mock (offline, no API keys)
 
 ---
@@ -31,7 +31,7 @@ The query falls in the **tax** domain. Key concepts to consider: LTCG, STCG, exe
 - tax_planner: produced diagnostic
 
 ### Findings
-- [intent_classifier] {'intent': 'tax', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 'tax' matched for intent tax"}
+- [intent_classifier] {'intent': 'tax', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Scored intent tax=10.0 (top keyword 'tax'); scores={tax:10.0, portfolio:8.0}"}
 - [context_assembler] {'query': 'How much tax will I owe if I sell my equity holdings this year?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative'>, 'investment_horizon': <InvestmentHorizon.MEDIUM: 'medium'>, 'monthly_income': 150000.0, 'monthly_expenses': 85000.0, 'tax_bracket_pct': 20.0, 'goals': ['Build emergency fund of 12 months expenses'
 - [tax_planner] message: TaxPlannerAgent: missing required input — gain amount, gain type (LTCG/STCG/STCG_EQUITY). Please provide the capital gain amount and type, e.g. '₹1,00,000 LTCG from equity'.
 
@@ -49,9 +49,9 @@ The query falls in the **tax** domain. Key concepts to consider: LTCG, STCG, exe
 
 | Source | Detail | Value | Retrieved At |
 |--------|--------|-------|--------------|
-| intent_classifier | Output from intent_classifier (synthesizer evidence) | {'intent': 'tax', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 'tax' matched for intent tax"} | 2026-06-21 01:24:33.765844+00:00 |
-| context_assembler | Output from context_assembler (synthesizer evidence) | {'query': 'How much tax will I owe if I sell my equity holdings this year?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative | 2026-06-21 01:24:33.765941+00:00 |
-| intent_classifier | Domain 'tax' resolved from query via keyword override + intent map | Domain 'tax' resolved from query via keyword override + intent map | 2026-06-21 01:24:33.765957+00:00 |
+| intent_classifier | Output from intent_classifier (synthesizer evidence) | {'intent': 'tax', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Scored intent tax=10.0 (top keyword 'tax'); scores={tax:10.0, portfolio:8.0}"} | 2026-07-25 15:20:52.021600+00:00 |
+| context_assembler | Output from context_assembler (synthesizer evidence) | {'query': 'How much tax will I owe if I sell my equity holdings this year?', 'twin': {'user_id': 'demo', 'name': 'Priya Sharma', 'age': 32, 'risk_tolerance': <RiskTolerance.CONSERVATIVE: 'conservative | 2026-07-25 15:20:52.021746+00:00 |
+| intent_classifier | Domain 'tax' resolved from query via keyword override + intent map | Domain 'tax' resolved from query via keyword override + intent map | 2026-07-25 15:20:52.021774+00:00 |
 
 ---
 
@@ -60,10 +60,10 @@ The query falls in the **tax** domain. Key concepts to consider: LTCG, STCG, exe
 | Step | Node | Action | Detail |
 |------|------|--------|--------|
 | 0 | planner | plan_step | tax_planner |
-| 1 | intent_classifier | tool_output | output={'intent': 'tax', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Keyword 'tax'  |
+| 1 | intent_classifier | tool_output | output={'intent': 'tax', 'confidence': 1.0, 'entities': {'symbols': [], 'timeframe': None}, 'reasoning': "Scored intent  |
 | 2 | context_assembler | tool_output | output={'query': 'How much tax will I owe if I sell my equity holdings this year?', 'twin': {'user_id': 'demo', 'name':  |
 | 3 | tax_planner | diagnostic | message=TaxPlannerAgent: missing required input — gain amount, gain type (LTCG/STCG/STCG_EQUITY). Please provide the cap |
-| 4 | critic | critique | SelfCritic passed (overall=0.69, threshold=0.6). Axes: correctness=0.95, risk_awareness=0.30, actionability=0.40, explai |
+| 4 | critic | critique | SelfCritic passed (overall=0.69, threshold=0.6). Axes: correctness=0.96, risk_awareness=0.30, actionability=0.40, explai |
 | 5 | orchestrator | orchestrator.run | {"query": "How much tax will I owe if I sell my equity holdings this year?"} |
 | 6 | orchestrator | orchestrator.done | {"has_candidate": true, "intent": "tax", "query": "How much tax will I owe if I sell my equity holdings this year?"} |
 | 7 | synthesizer | recommendation | Based on Indian tax rules (FY 2024-25): LTCG on listed equity above ₹1 lakh exemption is taxed at 10% plus 4% cess. STCG |
@@ -72,11 +72,11 @@ The query falls in the **tax** domain. Key concepts to consider: LTCG, STCG, exe
 
 ## Critic Verdict (5-Axis)
 
-**Verdict:** SelfCritic passed (overall=0.69, threshold=0.6). Axes: correctness=0.95, risk_awareness=0.30, actionability=0.40, explainability=1.00, evidence=1.00. Must fix: risk_awareness, actionability.
+**Verdict:** SelfCritic passed (overall=0.69, threshold=0.6). Axes: correctness=0.96, risk_awareness=0.30, actionability=0.40, explainability=1.00, evidence=1.00. Must fix: risk_awareness, actionability.
 
 | Axis | Score |
 |------|-------|
-| correctness | 0.9526 |
+| correctness | 0.9571 |
 | risk_awareness | 0.3 |
 | actionability | 0.4 |
 | explainability | 1.0 |

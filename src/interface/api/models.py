@@ -23,7 +23,11 @@ class QueryResponse(BaseModel):
 class HealthResponse(BaseModel):
     status: str
     version: str
+    # Honest name kept as test_count for API stability: count of unit test *files*
+    # under tests/unit/ (not assertion count). See handle_health docs.
     test_count: int
+    mode: str = "single-user-local"
+    llm_default: str = "mock"
 
 
 __all__ = ["HealthResponse", "QueryRequest", "QueryResponse"]

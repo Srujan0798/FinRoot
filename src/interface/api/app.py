@@ -28,13 +28,26 @@ def create_app() -> FastAPI | None:
 
     app = FastAPI(
         title="FinRoot API",
-        description="Sovereign, reasoning-first AI financial agent REST API",
+        description=(
+            "Sovereign, reasoning-first AI financial agent REST API. "
+            "**Single-user / local demo surface** — no multi-tenant auth. "
+            "Do not expose to the public internet without an auth gateway. "
+            "Default mock=True keeps the LLM offline."
+        ),
         version="0.1.0",
     )
 
+    # Demo default: open CORS for local Streamlit/judge machines.
+    # Production-style deploys should set FINROOT_CORS_ORIGINS to an explicit list.
+    import os
+
+    cors_raw = os.environ.get("FINROOT_CORS_ORIGINS", "*").strip()
+    allow_origins = (
+        ["*"] if cors_raw == "*" else [o.strip() for o in cors_raw.split(",") if o.strip()]
+    )
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=allow_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -60,9 +73,7 @@ app = create_app()
 if app is None:
 
     def _stub_app():
-        raise RuntimeError(
-            "FastAPI is not installed. Install it with: pip install fastapi uvicorn"
-        )
+        raise RuntimeError("FastAPI is not installed. Install it with: pip install fastapi uvicorn")
 
     app = _stub_app  # type: ignore[assignment]
 

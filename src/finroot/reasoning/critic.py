@@ -217,9 +217,7 @@ class SelfCritic:
     # Axis scorers (public so refine.py and tests can call individually)
     # ------------------------------------------------------------------
 
-    def score_correctness(
-        self, state: AgentState, rec: Recommendation
-    ) -> CriticScore:
+    def score_correctness(self, state: AgentState, rec: Recommendation) -> CriticScore:
         """Are numbers accurate? Do they match tool outputs?
 
         Public so ``RefinementLoop`` (task 02) can re-score a single axis
@@ -227,27 +225,19 @@ class SelfCritic:
         """
         return self._score_correctness(state, rec)
 
-    def score_risk_awareness(
-        self, state: AgentState, rec: Recommendation
-    ) -> CriticScore:
+    def score_risk_awareness(self, state: AgentState, rec: Recommendation) -> CriticScore:
         """Does the answer flag risks? Does it warn about downsides?"""
         return self._score_risk_awareness(rec)
 
-    def score_actionability(
-        self, state: AgentState, rec: Recommendation
-    ) -> CriticScore:
+    def score_actionability(self, state: AgentState, rec: Recommendation) -> CriticScore:
         """Is the advice specific enough to act on (what / when / how)?"""
         return self._score_actionability(rec)
 
-    def score_explainability(
-        self, state: AgentState, rec: Recommendation
-    ) -> CriticScore:
+    def score_explainability(self, state: AgentState, rec: Recommendation) -> CriticScore:
         """Can the user follow the reasoning chain?"""
         return self._score_explainability(rec)
 
-    def score_evidence(
-        self, state: AgentState, rec: Recommendation
-    ) -> CriticScore:
+    def score_evidence(self, state: AgentState, rec: Recommendation) -> CriticScore:
         """Is every claim backed by a tool output citation? Are sources named?"""
         return self._score_evidence(rec)
 
@@ -307,8 +297,7 @@ class SelfCritic:
                 axis="correctness",
                 score=0.2,
                 rationale=(
-                    "Answer expresses epistemic uncertainty; any subsequent "
-                    "claims are unverified."
+                    "Answer expresses epistemic uncertainty; any subsequent claims are unverified."
                 ),
                 issues=["contains uncertainty language (e.g. 'I don't know')"],
             )
@@ -319,8 +308,7 @@ class SelfCritic:
                 axis="correctness",
                 score=0.8,
                 rationale=(
-                    "No numeric claims in analysis; nothing to verify "
-                    "against tool outputs."
+                    "No numeric claims in analysis; nothing to verify against tool outputs."
                 ),
                 issues=[],
             )
@@ -334,8 +322,7 @@ class SelfCritic:
                     f"tool outputs to verify against."
                 ),
                 issues=[
-                    f"Numeric claim {n} has no tool output to cite."
-                    for n in sorted(unique_numbers)
+                    f"Numeric claim {n} has no tool output to cite." for n in sorted(unique_numbers)
                 ],
             )
 
@@ -352,10 +339,7 @@ class SelfCritic:
                 f"{len(found)}/{len(unique_numbers)} numeric claim(s) "
                 f"verified against tool outputs."
             ),
-            issues=[
-                f"Numeric claim {n} not found in any tool output."
-                for n in missing
-            ],
+            issues=[f"Numeric claim {n} not found in any tool output." for n in missing],
         )
 
     def _score_risk_awareness(self, rec: Recommendation) -> CriticScore:
@@ -401,9 +385,7 @@ class SelfCritic:
         )
         forbidden = _FORBIDDEN_RISK_RE.search(text)
         if forbidden is not None and not _NEGATION_RE.search(text):
-            issues.append(
-                f"Contains forbidden aggressive pattern: {forbidden.group()}."
-            )
+            issues.append(f"Contains forbidden aggressive pattern: {forbidden.group()}.")
             score = min(score, 0.3)
 
         return CriticScore(
@@ -429,9 +411,7 @@ class SelfCritic:
         if _ACTION_VERB_RE.search(actions_text):
             score += 0.3
         else:
-            issues.append(
-                "Actions lack clear action verbs (buy, sell, hold, etc.)."
-            )
+            issues.append("Actions lack clear action verbs (buy, sell, hold, etc.).")
 
         if _TEMPORAL_HINT_RE.search(actions_text):
             score += 0.3
@@ -459,16 +439,12 @@ class SelfCritic:
         elif length >= 50:
             score += 0.1
         else:
-            issues.append(
-                f"Analysis is too short ({length} chars); reasoning not visible."
-            )
+            issues.append(f"Analysis is too short ({length} chars); reasoning not visible.")
 
         if _REASONING_CONNECTOR_RE.search(text):
             score += 0.3
         else:
-            issues.append(
-                "No reasoning connectors (because, therefore, since, …) found."
-            )
+            issues.append("No reasoning connectors (because, therefore, since, …) found.")
 
         summary_words = len(rec.summary.split())
         if summary_words >= 5:
@@ -507,15 +483,11 @@ class SelfCritic:
             score += 0.3
         elif len(sources) == 1:
             score += 0.15
-            issues.append(
-                "Only one source cited; diverse sources strengthen evidence."
-            )
+            issues.append("Only one source cited; diverse sources strengthen evidence.")
 
         numbers = _NUMBER_RE.findall(rec.analysis)
         if numbers and not citations:
-            issues.append(
-                f"{len(numbers)} numeric claim(s) in analysis but zero citations."
-            )
+            issues.append(f"{len(numbers)} numeric claim(s) in analysis but zero citations.")
             score = min(score, 0.1)
 
         return CriticScore(

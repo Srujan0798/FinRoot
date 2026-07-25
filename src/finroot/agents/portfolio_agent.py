@@ -57,15 +57,17 @@ class PortfolioOptimizerAgent(BaseAgent):
         holdings = self._extract_holdings(state)
 
         if holdings is None or len(holdings) == 0:
-            state.tool_outputs.append({
-                "agent": self.name,
-                "type": "error",
-                "error": (
-                    "PortfolioOptimizerAgent: no holdings data available "
-                    "in state. Provide holdings (list of dict with 'symbol' "
-                    "and optional 'shares' or 'weight') to run optimisation."
-                ),
-            })
+            state.tool_outputs.append(
+                {
+                    "agent": self.name,
+                    "type": "error",
+                    "error": (
+                        "PortfolioOptimizerAgent: no holdings data available "
+                        "in state. Provide holdings (list of dict with 'symbol' "
+                        "and optional 'shares' or 'weight') to run optimisation."
+                    ),
+                }
+            )
             return state
 
         prices = self._fetch_prices(state, holdings)
@@ -113,20 +115,20 @@ class PortfolioOptimizerAgent(BaseAgent):
                 symbols.append(sym)
 
         if not symbols:
-            state.tool_outputs.append({
-                "agent": self.name,
-                "type": "error",
-                "error": "Holdings missing 'symbol' field; cannot fetch prices.",
-            })
+            state.tool_outputs.append(
+                {
+                    "agent": self.name,
+                    "type": "error",
+                    "error": "Holdings missing 'symbol' field; cannot fetch prices.",
+                }
+            )
             return None
 
         prices: dict[str, float] = {}
         errors: list[str] = []
         for sym in symbols:
             try:
-                result = self._call_tool(
-                    state, "market_data", MarketDataInput(symbol=sym)
-                )
+                result = self._call_tool(state, "market_data", MarketDataInput(symbol=sym))
                 prices[sym] = result.latest_price
             except Exception as exc:
                 msg = f"{sym}: {exc}"
@@ -134,25 +136,31 @@ class PortfolioOptimizerAgent(BaseAgent):
                 logger.warning("PortfolioOptimizerAgent price fetch failed: %s", msg)
 
         if errors:
-            state.tool_outputs.append({
-                "agent": self.name,
-                "type": "price_errors",
-                "errors": errors,
-            })
+            state.tool_outputs.append(
+                {
+                    "agent": self.name,
+                    "type": "price_errors",
+                    "errors": errors,
+                }
+            )
 
         if not prices:
-            state.tool_outputs.append({
-                "agent": self.name,
-                "type": "error",
-                "error": "Failed to fetch prices for any holding symbol.",
-            })
+            state.tool_outputs.append(
+                {
+                    "agent": self.name,
+                    "type": "error",
+                    "error": "Failed to fetch prices for any holding symbol.",
+                }
+            )
             return None
 
-        state.tool_outputs.append({
-            "agent": self.name,
-            "type": "current_prices",
-            "prices": prices,
-        })
+        state.tool_outputs.append(
+            {
+                "agent": self.name,
+                "type": "current_prices",
+                "prices": prices,
+            }
+        )
         return prices
 
     # ------------------------------------------------------------------
@@ -171,7 +179,10 @@ class PortfolioOptimizerAgent(BaseAgent):
         if all("weight" in h for h in holdings):
             total = sum(h["weight"] for h in holdings)
             if abs(total - 1.0) > 0.01:
-                weighted = [{"symbol": h["symbol"], "weight": round(h["weight"] / total, 6)} for h in holdings]
+                weighted = [
+                    {"symbol": h["symbol"], "weight": round(h["weight"] / total, 6)}
+                    for h in holdings
+                ]
             else:
                 weighted = [{"symbol": h["symbol"], "weight": h["weight"]} for h in holdings]
             return weighted
@@ -187,10 +198,7 @@ class PortfolioOptimizerAgent(BaseAgent):
                 total_value += val
             if total_value <= 0:
                 return None
-            return [
-                {"symbol": sym, "weight": round(val / total_value, 6)}
-                for sym, val in values
-            ]
+            return [{"symbol": sym, "weight": round(val / total_value, 6)} for sym, val in values]
 
         return None
 
@@ -213,11 +221,13 @@ class PortfolioOptimizerAgent(BaseAgent):
             }
             for h in weighted_holdings
         ]
-        state.tool_outputs.append({
-            "agent": self.name,
-            "type": "allocation_analysis",
-            "current_allocation": allocation,
-        })
+        state.tool_outputs.append(
+            {
+                "agent": self.name,
+                "type": "allocation_analysis",
+                "current_allocation": allocation,
+            }
+        )
 
     def _simulate_alternatives(
         self,
@@ -230,8 +240,7 @@ class PortfolioOptimizerAgent(BaseAgent):
             return
 
         equal_holdings = [
-            {"symbol": h["symbol"], "weight": round(1.0 / n, 6)}
-            for h in weighted_holdings
+            {"symbol": h["symbol"], "weight": round(1.0 / n, 6)} for h in weighted_holdings
         ]
 
         scenarios = [
@@ -242,35 +251,41 @@ class PortfolioOptimizerAgent(BaseAgent):
         results: list[dict[str, Any]] = []
         for label, h in scenarios:
             try:
-                sim_input = SimInput(
-                    holdings=h, horizon_years=1, scenarios=500
-                )
+                sim_input = SimInput(holdings=h, horizon_years=1, scenarios=500)
                 result = self._call_tool(state, "portfolio_simulator", sim_input)
-                results.append({
-                    "label": label,
-                    "expected_return": result.expected_return,
-                    "p10_return": result.p10_return,
-                    "p90_return": result.p90_return,
-                    "probability_of_loss": result.probability_of_loss,
-                    "citation": result.citation,
-                })
+                results.append(
+                    {
+                        "label": label,
+                        "expected_return": result.expected_return,
+                        "p10_return": result.p10_return,
+                        "p90_return": result.p90_return,
+                        "probability_of_loss": result.probability_of_loss,
+                        "citation": result.citation,
+                    }
+                )
             except Exception as exc:
                 logger.error(
                     "PortfolioOptimizerAgent simulation for %s failed: %s",
-                    label, exc, exc_info=True,
+                    label,
+                    exc,
+                    exc_info=True,
                 )
-                state.tool_outputs.append({
-                    "agent": self.name,
-                    "type": "error",
-                    "error": f"Simulation for {label} allocation failed: {exc}",
-                })
+                state.tool_outputs.append(
+                    {
+                        "agent": self.name,
+                        "type": "error",
+                        "error": f"Simulation for {label} allocation failed: {exc}",
+                    }
+                )
 
         if results:
-            state.tool_outputs.append({
-                "agent": self.name,
-                "type": "rebalancing_comparison",
-                "simulations": results,
-            })
+            state.tool_outputs.append(
+                {
+                    "agent": self.name,
+                    "type": "rebalancing_comparison",
+                    "simulations": results,
+                }
+            )
 
 
 __all__ = ["PortfolioOptimizerAgent"]

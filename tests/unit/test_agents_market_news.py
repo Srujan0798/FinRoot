@@ -40,11 +40,14 @@ def _make_state(
     """Build an AgentState with optional intent classifier output."""
     outputs = list(tool_outputs or [])
     if symbols is not None:
-        outputs.insert(0, {
-            "tool": "intent_classifier",
-            "input": query,
-            "output": {"symbols": symbols, "intent": intent.value},
-        })
+        outputs.insert(
+            0,
+            {
+                "tool": "intent_classifier",
+                "input": query,
+                "output": {"symbols": symbols, "intent": intent.value},
+            },
+        )
     return AgentState(
         query=query,
         intent=intent,
@@ -77,59 +80,61 @@ class TestMarketAnalystAgent:
     def test_agent_name_is_market_analyst(self) -> None:
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = MarketAnalystAgent(
-            llm=MockProvider(), tools=_make_market_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_market_tools(audit),
+            audit=audit,
         )
         assert agent.name == "market_analyst"
 
     def test_returns_price_data_in_tool_outputs(self) -> None:
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = MarketAnalystAgent(
-            llm=MockProvider(), tools=_make_market_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_market_tools(audit),
+            audit=audit,
         )
         state = _make_state(symbols=["AAPL"])
         result = agent.act(state)
 
-        market_outputs = [
-            e for e in result.tool_outputs if e.get("tool") == "market_data"
-        ]
+        market_outputs = [e for e in result.tool_outputs if e.get("tool") == "market_data"]
         assert len(market_outputs) == 1
         assert "AAPL" in str(market_outputs[0].get("input", ""))
 
     def test_returns_fundamental_data_in_tool_outputs(self) -> None:
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = MarketAnalystAgent(
-            llm=MockProvider(), tools=_make_market_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_market_tools(audit),
+            audit=audit,
         )
         state = _make_state(symbols=["AAPL"])
         result = agent.act(state)
 
-        fund_outputs = [
-            e for e in result.tool_outputs if e.get("tool") == "fundamental_analysis"
-        ]
+        fund_outputs = [e for e in result.tool_outputs if e.get("tool") == "fundamental_analysis"]
         assert len(fund_outputs) == 1
         assert "AAPL" in str(fund_outputs[0].get("input", ""))
 
     def test_multiple_symbols_generates_multiple_calls(self) -> None:
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = MarketAnalystAgent(
-            llm=MockProvider(), tools=_make_market_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_market_tools(audit),
+            audit=audit,
         )
         state = _make_state(symbols=["AAPL", "MSFT"])
         result = agent.act(state)
 
-        market_outputs = [
-            e for e in result.tool_outputs if e.get("tool") == "market_data"
-        ]
-        fund_outputs = [
-            e for e in result.tool_outputs if e.get("tool") == "fundamental_analysis"
-        ]
+        market_outputs = [e for e in result.tool_outputs if e.get("tool") == "market_data"]
+        fund_outputs = [e for e in result.tool_outputs if e.get("tool") == "fundamental_analysis"]
         assert len(market_outputs) == 2
         assert len(fund_outputs) == 2
 
     def test_empty_symbols_no_tool_calls_state_unchanged(self) -> None:
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = MarketAnalystAgent(
-            llm=MockProvider(), tools=_make_market_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_market_tools(audit),
+            audit=audit,
         )
         state = _make_state(symbols=[])
         original_outputs = list(state.tool_outputs)
@@ -139,7 +144,9 @@ class TestMarketAnalystAgent:
     def test_no_intent_classifier_no_symbols_state_unchanged(self) -> None:
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = MarketAnalystAgent(
-            llm=MockProvider(), tools=_make_market_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_market_tools(audit),
+            audit=audit,
         )
         state = AgentState(query="hello", tool_outputs=[])
         result = agent.act(state)
@@ -149,7 +156,9 @@ class TestMarketAnalystAgent:
         tmpdir = Path(mkdtemp())
         audit = AuditTrail(tmpdir / "audit.jsonl")
         agent = MarketAnalystAgent(
-            llm=MockProvider(), tools=_make_market_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_market_tools(audit),
+            audit=audit,
         )
         state = _make_state(symbols=["AAPL"])
         agent.act(state)
@@ -162,7 +171,9 @@ class TestMarketAnalystAgent:
     def test_tool_outputs_contain_mock_source(self) -> None:
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = MarketAnalystAgent(
-            llm=MockProvider(), tools=_make_market_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_market_tools(audit),
+            audit=audit,
         )
         state = _make_state(symbols=["AAPL"])
         result = agent.act(state)
@@ -181,27 +192,31 @@ class TestNewsInterpreterAgent:
     def test_agent_name_is_news_interpreter(self) -> None:
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = NewsInterpreterAgent(
-            llm=MockProvider(), tools=_make_news_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_news_tools(audit),
+            audit=audit,
         )
         assert agent.name == "news_interpreter"
 
     def test_returns_news_in_tool_outputs(self) -> None:
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = NewsInterpreterAgent(
-            llm=MockProvider(), tools=_make_news_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_news_tools(audit),
+            audit=audit,
         )
         state = _make_state(symbols=["AAPL"])
         result = agent.act(state)
 
-        news_outputs = [
-            e for e in result.tool_outputs if e.get("tool") == "news_search"
-        ]
+        news_outputs = [e for e in result.tool_outputs if e.get("tool") == "news_search"]
         assert len(news_outputs) == 1
 
     def test_returns_sentiment_in_tool_outputs(self) -> None:
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = NewsInterpreterAgent(
-            llm=MockProvider(), tools=_make_news_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_news_tools(audit),
+            audit=audit,
         )
         state = _make_state(symbols=["AAPL"])
         result = agent.act(state)
@@ -214,7 +229,9 @@ class TestNewsInterpreterAgent:
     def test_empty_query_no_tool_calls_state_unchanged(self) -> None:
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = NewsInterpreterAgent(
-            llm=MockProvider(), tools=_make_news_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_news_tools(audit),
+            audit=audit,
         )
         state = AgentState(query="", tool_outputs=[])
         result = agent.act(state)
@@ -224,7 +241,9 @@ class TestNewsInterpreterAgent:
         tmpdir = Path(mkdtemp())
         audit = AuditTrail(tmpdir / "audit.jsonl")
         agent = NewsInterpreterAgent(
-            llm=MockProvider(), tools=_make_news_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_news_tools(audit),
+            audit=audit,
         )
         state = _make_state(symbols=["AAPL"])
         agent.act(state)
@@ -237,14 +256,14 @@ class TestNewsInterpreterAgent:
     def test_news_output_has_articles(self) -> None:
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = NewsInterpreterAgent(
-            llm=MockProvider(), tools=_make_news_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_news_tools(audit),
+            audit=audit,
         )
         state = _make_state(symbols=["AAPL"])
         result = agent.act(state)
 
-        news_outputs = [
-            e for e in result.tool_outputs if e.get("tool") == "news_search"
-        ]
+        news_outputs = [e for e in result.tool_outputs if e.get("tool") == "news_search"]
         assert len(news_outputs) == 1
         output_str = news_outputs[0].get("output", "")
         assert output_str  # not empty
@@ -260,7 +279,9 @@ class TestAgentEdgeCases:
         """Agent should append, not overwrite, existing tool_outputs."""
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = MarketAnalystAgent(
-            llm=MockProvider(), tools=_make_market_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_market_tools(audit),
+            audit=audit,
         )
         existing = {"tool": "prior_tool", "input": "x", "output": "y"}
         state = _make_state(symbols=["AAPL"], tool_outputs=[existing])
@@ -274,12 +295,12 @@ class TestAgentEdgeCases:
         """When no intent_classifier output, agent falls back to state.query."""
         audit = AuditTrail(Path(mkdtemp()) / "audit.jsonl")
         agent = NewsInterpreterAgent(
-            llm=MockProvider(), tools=_make_news_tools(audit), audit=audit,
+            llm=MockProvider(),
+            tools=_make_news_tools(audit),
+            audit=audit,
         )
         state = AgentState(query="What's happening with Indian markets?", tool_outputs=[])
         result = agent.act(state)
 
-        news_outputs = [
-            e for e in result.tool_outputs if e.get("tool") == "news_search"
-        ]
+        news_outputs = [e for e in result.tool_outputs if e.get("tool") == "news_search"]
         assert len(news_outputs) == 1

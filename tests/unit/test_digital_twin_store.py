@@ -64,9 +64,7 @@ def test_store_init_creates_db(tmp_path: Path) -> None:
     assert Path(db_path).exists()
     conn = sqlite3.connect(db_path)
     try:
-        rows = conn.execute(
-            "SELECT name FROM sqlite_master WHERE type='table'"
-        ).fetchall()
+        rows = conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
         table_names = {r[0] for r in rows}
         assert "digital_twins" in table_names
     finally:

@@ -105,11 +105,7 @@ def main() -> None:
 
     try:
         if not _check_health(port):
-            msg = (
-                streamlit_proc.stderr.read(1024).decode()
-                if streamlit_proc.stderr
-                else ""
-            )
+            msg = streamlit_proc.stderr.read(1024).decode() if streamlit_proc.stderr else ""
             print(f"FATAL: Streamlit did not start on port {port}\n{msg}", file=sys.stderr)
             sys.exit(1)
 

@@ -61,9 +61,7 @@ class TestQuery:
         assert len(body["summary"]) > 0
 
     def test_query_custom_user_id(self) -> None:
-        resp = client.post(
-            "/query", json={"query": "Analyze risks", "user_id": "api_test_user"}
-        )
+        resp = client.post("/query", json={"query": "Analyze risks", "user_id": "api_test_user"})
         assert resp.status_code == 200
 
     def test_query_explicit_mock_true(self) -> None:

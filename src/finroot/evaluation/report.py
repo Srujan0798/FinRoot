@@ -29,8 +29,7 @@ _FOOTER = """
 
 def _fail_loud_missing(path: str) -> None:
     raise FileNotFoundError(
-        f"metrics file not found at {path!r}. "
-        "Run `scripts/run_evals.py` first to generate it."
+        f"metrics file not found at {path!r}. Run `scripts/run_evals.py` first to generate it."
     )
 
 
@@ -72,7 +71,12 @@ def _build_system_table(data: dict[str, Any]) -> str:
     systems = data.get("systems", {})
     if not systems:
         return "## System Comparison\n\n*No system results available.*\n"
-    rows = ["## System Comparison", "", "| System | pass@1 | pass@k | pass^k | Mean Score | n_tasks |", "|-------|--------|--------|--------|------------|---------|"]
+    rows = [
+        "## System Comparison",
+        "",
+        "| System | pass@1 | pass@k | pass^k | Mean Score | n_tasks |",
+        "|-------|--------|--------|--------|------------|---------|",
+    ]
     for sys_name, sys_data in systems.items():
         p1 = _format_pct(sys_data.get("pass_at_1", 0.0))
         pk = _format_pct(sys_data.get("pass_at_k", 0.0))
@@ -151,7 +155,9 @@ def generate_report(metrics_path: str = "results/metrics.json") -> str:
     return "\n".join(parts)
 
 
-def write_report(metrics_path: str = "results/metrics.json", out_dir: str = "evals/reports") -> Path:
+def write_report(
+    metrics_path: str = "results/metrics.json", out_dir: str = "evals/reports"
+) -> Path:
     """Generate the report and write it to disk.
 
     Writes two files:

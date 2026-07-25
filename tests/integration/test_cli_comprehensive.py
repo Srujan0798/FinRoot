@@ -64,9 +64,7 @@ def test_cli_help_exits_zero():
 def test_cli_mock_produces_output():
     """A mock query must produce non-empty stdout."""
     result = _run_cli("What is compound interest?")
-    assert result.returncode == 0, (
-        f"CLI exited {result.returncode}; stderr={result.stderr[:500]}"
-    )
+    assert result.returncode == 0, f"CLI exited {result.returncode}; stderr={result.stderr[:500]}"
     assert result.stdout.strip(), "CLI produced empty output"
 
 
@@ -76,9 +74,7 @@ def test_cli_output_has_answer_section():
     result = _run_cli("What is compound interest?")
     stdout = result.stdout
     has_answer = "Answer" in stdout or "##" in stdout
-    assert has_answer, (
-        f"CLI output missing 'Answer' section. First 500 chars:\n{stdout[:500]}"
-    )
+    assert has_answer, f"CLI output missing 'Answer' section. First 500 chars:\n{stdout[:500]}"
 
 
 @pytest.mark.integration
@@ -157,7 +153,6 @@ def test_cli_mock_no_api_key():
         cwd=REPO_ROOT,
     )
     assert result.returncode == 0, (
-        f"Mock CLI failed without API key: rc={result.returncode}; "
-        f"stderr={result.stderr[:500]}"
+        f"Mock CLI failed without API key: rc={result.returncode}; stderr={result.stderr[:500]}"
     )
     assert result.stdout.strip(), "Mock CLI produced no output without API key"

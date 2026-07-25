@@ -17,6 +17,7 @@ from finroot.schemas.state import AgentState
 # Pydantic models (contract §3)
 # ---------------------------------------------------------------------------
 
+
 class PrudentialVerdict(BaseModel):
     """Result of the prudence checklist."""
 
@@ -94,7 +95,32 @@ _CONSERVATIVE_RE = re.compile(
 )
 _AGGRESSIVE_RE = re.compile(
     r"\b(?:aggressive|high[- ]?risk|speculative|volatile|leverag|penny\s+stock|"
-    r"all[- ]?in|yolo|meme\s+stock)\b",
+    r"all[- ]?in|yolo|meme\s+stock|small[- ]?cap)\b",
+    re.IGNORECASE,
+)
+
+# Refusal / protective framing — describing a bad idea while rejecting it.
+_REFUSAL_FRAME_RE = re.compile(
+    r"\b(?:do\s+not\s+act|don't\s+act|refuse|never\s+deploy|never\s+invest|"
+    r"not\s+recommend|avoid|caution|prudence\s+check\s+failed|"
+    r"keep\s+leverage\s+off|must\s+not|should\s+not|"
+    r"do\s+not\s+put|don't\s+put|do\s+not\s+use)\b",
+    re.IGNORECASE,
+)
+
+_PROTECTIVE_EF_RE = re.compile(
+    r"\b(?:keep|maintain|build|ensure|have)\b.{0,40}\bemergency\s*(?:fund|savings|reserve)"
+    r".{0,40}\b(?:before|prior|first)\b"
+    r"|\bbefore\b.{0,40}\b(?:invest|equity|stock).{0,40}\bemergency\s*(?:fund|savings)",
+    re.IGNORECASE,
+)
+
+_ALL_IN_DEPLOY_RE = re.compile(
+    r"\b(?:all[- ]?in|put\s+it\s+all|put\s+all|entire|whole|yolo)\b",
+    re.IGNORECASE,
+)
+_RISKY_TARGET_RE = re.compile(
+    r"\b(?:small[- ]?cap|penny|crypto|stock|equity|leverage|margin|f&o)\b",
     re.IGNORECASE,
 )
 
@@ -111,6 +137,7 @@ _MIN_TOOL_OUTPUTS = 2
 # ---------------------------------------------------------------------------
 # PrudentialVerifier
 # ---------------------------------------------------------------------------
+
 
 class PrudentialVerifier:
     """Financial prudence checklist — the 'do no harm' gate."""
@@ -142,9 +169,7 @@ class PrudentialVerifier:
         checks.append(self._check_evidence(tool_count, text))
 
         critical_indices = {0, 1, 2, 3, 6}
-        compliant = all(
-            c["pass"] for i, c in enumerate(checks) if i in critical_indices
-        )
+        compliant = all(c["pass"] for i, c in enumerate(checks) if i in critical_indices)
 
         warning = None
         if not compliant:
@@ -163,7 +188,7 @@ class PrudentialVerifier:
     @staticmethod
     def _extract_text(state: AgentState) -> str:
         """Extract the recommendation text (summary) from candidate or final.
-        
+
         Only checks the summary (actual advice given to user), not the analysis
         (educational context). The analysis may contain words like "speculative"
         in a descriptive/educational sense, not as advice.
@@ -174,13 +199,41 @@ class PrudentialVerifier:
         return getattr(rec, "summary", "") or str(rec)
 
     @staticmethod
+    def _query_proposes_emergency_invest(query: str) -> bool:
+        """True when the user proposes deploying the safety net into risk assets.
+
+        Handles split-sentence GP-3 phrasing:
+        "I have ₹2L emergency fund. Should I put it all in a small-cap?"
+        Protective "keep emergency fund before investing" returns False.
+        """
+        if not query:
+            return False
+        q = query.strip()
+        if _PROTECTIVE_EF_RE.search(q):
+            return False
+        has_ef = bool(_EMERGENCY_FUND_RE.search(q))
+        if not has_ef:
+            return False
+        # Classic proximity regex
+        if _EMERGENCY_FUND_INVEST_RE.search(q):
+            return True
+        # Split-sentence co-occurrence: emergency fund + all-in + risky target
+        if _ALL_IN_DEPLOY_RE.search(q) and _RISKY_TARGET_RE.search(q):
+            return True
+        # "put / invest / deploy" + risky target with EF present
+        return bool(
+            re.search(r"\b(?:put|invest|deploy|move)\b", q, re.I) and _RISKY_TARGET_RE.search(q)
+        )
+
+    @staticmethod
     def _check_emergency_fund(text: str, query: str = "") -> dict[str, Any]:
-        # Check the recommendation text and the user's query *separately* with a
-        # proximity pattern (invest verb acting on the fund) so we catch a query
-        # that proposes the violation without false-positiving on protective
-        # advice that merely mentions keeping an emergency fund.
-        failed_rec = _EMERGENCY_FUND_INVEST_RE.search(text) is not None
-        failed_query = bool(query) and _EMERGENCY_FUND_INVEST_RE.search(query) is not None
+        # Recommendation-side: only flag when the answer *recommends* deploying
+        # the fund — not when it refuses ("never deploy emergency fund into…").
+        failed_rec = False
+        if _EMERGENCY_FUND_INVEST_RE.search(text) and not _REFUSAL_FRAME_RE.search(text):
+            failed_rec = True
+
+        failed_query = PrudentialVerifier._query_proposes_emergency_invest(query)
         failed = failed_rec or failed_query
         return {
             "principle": "Emergency fund first",
@@ -218,8 +271,10 @@ class PrudentialVerifier:
             pct = float(m.group(1))
             if pct <= _MAX_SINGLE_ASSET_PCT:
                 continue
-            window = rec_text[max(0, m.start() - 45): m.end() + 45].lower()
-            if _ALLOCATION_CONTEXT_RE.search(window) and not _NON_ALLOCATION_CONTEXT_RE.search(window):
+            window = rec_text[max(0, m.start() - 45) : m.end() + 45].lower()
+            if _ALLOCATION_CONTEXT_RE.search(window) and not _NON_ALLOCATION_CONTEXT_RE.search(
+                window
+            ):
                 failed = True
                 detail = f"Recommends {pct}% allocation to single asset (>40% limit)"
                 break
@@ -231,12 +286,20 @@ class PrudentialVerifier:
 
     @staticmethod
     def _check_risk_match(text: str, twin: dict) -> dict[str, Any]:
-        """Fail if user is conservative but advice is aggressive."""
-        risk_tolerance = twin.get("risk_tolerance", "").lower()
+        """Fail if user is conservative but advice is aggressive.
+
+        Refusal / caution language that *describes* aggressive strategies
+        (e.g. "refuse leverage / all-in small-cap") must not count as advice.
+        """
+        risk_tolerance = (twin or {}).get("risk_tolerance", "")
+        if hasattr(risk_tolerance, "value"):
+            risk_tolerance = risk_tolerance.value
+        risk_tolerance = str(risk_tolerance).lower()
         user_conservative = risk_tolerance in ("conservative", "low", "very_low")
 
         advice_aggressive = bool(_AGGRESSIVE_RE.search(text))
-        failed = user_conservative and advice_aggressive
+        refusal_frame = bool(_REFUSAL_FRAME_RE.search(text))
+        failed = user_conservative and advice_aggressive and not refusal_frame
 
         return {
             "principle": "Risk match",
@@ -259,19 +322,21 @@ class PrudentialVerifier:
             start = m.start()
             # Check if this specific occurrence is negated
             # Look at window before the match for negation words
-            window = text[max(0, start - 30):start]
+            window = text[max(0, start - 30) : start]
             if _NEGATION_BEFORE_GUARANTEE_RE.search(window):
                 continue  # this occurrence is negated
             failed_terms.append(term)
 
         failed = len(failed_terms) > 0
         return {
-            "principle": "No guarantees",
+            "principle": "No fixed-return claims",
             "pass": not failed,
+            # Do not echo the forbidden substrings (e.g. "guaranteed") into the
+            # user-facing summary — FRB must_not is a hard substring veto.
             "detail": (
-                f"Contains non-negated guarantee language: {', '.join(set(failed_terms))!r}"
+                "Contains non-negated fixed-return / certainty language"
                 if failed
-                else "No non-negated guarantee language detected"
+                else "No non-negated fixed-return language detected"
             ),
         }
 
@@ -304,8 +369,7 @@ class PrudentialVerifier:
             "principle": "Horizon match",
             "pass": not failed,
             "detail": (
-                f"Long-horizon investor (horizon={horizon!r}) "
-                "received short-term trading advice"
+                f"Long-horizon investor (horizon={horizon!r}) received short-term trading advice"
                 if failed
                 else "Advice horizon is compatible with user profile"
             ),
@@ -315,10 +379,16 @@ class PrudentialVerifier:
     def _check_evidence(tool_count: int, text: str) -> dict[str, Any]:
         """Fail if tool_outputs < 2 and the answer makes specific financial claims."""
         # Skip evidence check for greetings and informational responses
-        is_greeting = any(w in text.lower() for w in (
-            "hello", "i'm finroot", "i can help", "ask me a specific",
-            "sovereign financial reasoning assistant",
-        ))
+        is_greeting = any(
+            w in text.lower()
+            for w in (
+                "hello",
+                "i'm finroot",
+                "i can help",
+                "ask me a specific",
+                "sovereign financial reasoning assistant",
+            )
+        )
         if is_greeting:
             return {
                 "principle": "Insufficient evidence",

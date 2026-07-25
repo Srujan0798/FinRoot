@@ -53,8 +53,7 @@ class DigitalTwin(BaseModel):
     def _expenses_sanity(self) -> DigitalTwin:
         if self.monthly_expenses > self.monthly_income * 2:
             logger.warning(
-                "monthly_expenses (%.2f) > 2× monthly_income (%.2f) for user %s "
-                "— verify data",
+                "monthly_expenses (%.2f) > 2× monthly_income (%.2f) for user %s — verify data",
                 self.monthly_expenses,
                 self.monthly_income,
                 self.user_id,
@@ -213,9 +212,7 @@ class DigitalTwinStore:
         if self._use_sqlite:
             conn = sqlite3.connect(self._db_path)
             try:
-                conn.execute(
-                    "DELETE FROM digital_twins WHERE user_id = ?", (user_id,)
-                )
+                conn.execute("DELETE FROM digital_twins WHERE user_id = ?", (user_id,))
                 conn.commit()
             finally:
                 conn.close()

@@ -117,7 +117,7 @@ Diagram source: [docs/architecture/architecture.mmd](docs/architecture/architect
 |---:|---|---|
 | **35%** | **Reasoning Quality** | 5-axis Self-Critic + Rooted Prudence + Digital-Twin synthesis + FRB harness vs RAG baseline |
 | **30%** | **Agent Architecture** | LangGraph Plan-and-Execute + 6 agents + 14 tools + 4-tier memory + refine loops + audit + LLM abstraction |
-| **20%** | **Code Implementation** | Modular `src/finroot/` · Pydantic v2 · 1087 tests · ruff-clean · CI · Docker · honest exit codes |
+| **20%** | **Code Implementation** | Modular `src/finroot/` · Pydantic v2 · large pytest suite · ruff · CI · Docker · golden GP locks |
 | **15%** | **Solution Idea** | Sovereign, auditable reasoning over your Digital Twin — downside-aware, locally runnable, with proof harness |
 
 ---
@@ -173,22 +173,22 @@ All captured in Mock mode via `scripts/capture_screenshots.py`.
 |---|---:|---:|---:|---:|---:|
 | Baseline RAG (retrieve + single LLM) | 0.2892 | 0.3976 | 0.1446 | 0.3384 | — |
 | Single-agent (no critic) | 0.1807 | 0.3012 | 0.0482 | 0.3298 | −2.5% |
-| **FinRoot (full pipeline)** | **0.4578** | **0.4578** | **0.4578** | **0.8741** | **+158.30%** |
+| **FinRoot (full pipeline)** | **0.6265** | **0.6265** | **0.6265** | **0.9007** | **+164.68%** |
 
-**Measured at:** `as_of_sha = bc8cc5b` · `n_tasks = 83` · `k = 2` · `mock = True` · regenerate with `make evals`.
+**Measured at:** `as_of_sha = fe0ffb6` · `n_tasks = 83` · `k = 2` · `mock = True` · regenerate with `make evals`.
 
 ### Per-domain mean scores (FinRoot)
 
 | Domain | Score | | Domain | Score |
 |---|---:|---|---|---:|
-| general | 0.9655 | | risk | 0.8734 |
-| tax | 0.8677 | | international | 0.8137 |
-| portfolio | 0.8621 | | behavioral | 0.7920 |
-| credit | 0.9667 | | cashflow | 0.8163 |
-| news_impact | 0.9578 | | estate_planning | 0.8080 |
-| | | | insurance | 0.8250 |
+| general | 0.9106 | | risk | 0.9271 |
+| tax | 0.8956 | | international | 0.7950 |
+| portfolio | 0.8892 | | behavioral | 0.8083 |
+| credit | 0.9667 | | cashflow | 0.8797 |
+| news_impact | 0.9261 | | estate_planning | 0.8680 |
+| | | | insurance | 0.9857 |
 
-**Composite lift vs RAG: +158.30%.** RAG baseline 0.3384 mean cannot satisfy must-mention + must-not + citation requirements. **FinRoot 0.8741 mean across 83 tasks, 11 domains.** Demo transcripts: `docs/demo/transcript_*.md`.
+**Composite lift vs RAG: +164.68%.** RAG baseline 0.3403 mean. **FinRoot 0.9007 mean · pass@1 0.6265 across 83 tasks, 11 domains (as_of_sha fe0ffb6).** Demo transcripts: `docs/demo/transcript_*.md`.
 
 ---
 

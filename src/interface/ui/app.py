@@ -50,8 +50,7 @@ def main() -> None:
     # -- Header ----------------------------------------------------------------
     st.markdown("# FinRoot \u2014 Sovereign Financial Reasoning")
     st.caption(
-        "Institutional-grade, explainable financial reasoning \u2014 "
-        "locally and on your own terms."
+        "Institutional-grade, explainable financial reasoning \u2014 locally and on your own terms."
     )
     st.info(
         "**Not financial advice.** FinRoot is an educational reasoning agent. "
@@ -60,20 +59,33 @@ def main() -> None:
 
     # -- Tabs ------------------------------------------------------------------
     tab_chat, tab_trace, tab_twin, tab_harness = st.tabs(
-        ["\U0001f4ac Chat", "\U0001f9e0 Reasoning Trace", "\U0001f464 Digital Twin", "\U0001f4ca Harness"]
+        [
+            "\U0001f4ac Chat",
+            "\U0001f9e0 Reasoning Trace",
+            "\U0001f464 Digital Twin",
+            "\U0001f4ca Harness",
+        ]
     )
 
-    with tab_chat:
-        _render_tab_chat(user_id=user_id, mock=mock_mode)
+    try:
+        with tab_chat:
+            _render_tab_chat(user_id=user_id, mock=mock_mode)
 
-    with tab_trace:
-        _render_tab_trace()
+        with tab_trace:
+            _render_tab_trace()
 
-    with tab_twin:
-        _render_tab_twin(user_id=user_id)
+        with tab_twin:
+            _render_tab_twin(user_id=user_id)
 
-    with tab_harness:
-        _render_tab_harness()
+        with tab_harness:
+            _render_tab_harness()
+    except Exception as exc:
+        logger.exception("Unexpected error rendering FinRoot UI")
+        st.error(f"Something went wrong: {exc}")
+
+    # -- Footer ----------------------------------------------------------------
+    st.divider()
+    st.caption("Powered by FinRoot — Sovereign Financial Reasoning")
 
 
 # -- Tab renderers (component imports deferred / guarded) ---------------------

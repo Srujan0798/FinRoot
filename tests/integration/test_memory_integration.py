@@ -172,12 +172,8 @@ def test_different_users_have_independent_twins(workspace: dict[str, str]) -> No
     The store is keyed on ``user_id``; the manager facade is the only piece
     that has to keep them straight.
     """
-    alice = MemoryManager.create(
-        user_id="alice", db_path=workspace["db_path"]
-    )
-    bob = MemoryManager.create(
-        user_id="bob", db_path=workspace["db_path"]
-    )
+    alice = MemoryManager.create(user_id="alice", db_path=workspace["db_path"])
+    bob = MemoryManager.create(user_id="bob", db_path=workspace["db_path"])
 
     alice.twin_store.save(_seed_twin("alice", name="Alice", age=30))
     bob.twin_store.save(_seed_twin("bob", name="Bob", age=42))
@@ -197,9 +193,7 @@ def test_semantic_and_twin_persist_independently(workspace: dict[str, str]) -> N
     """Semantic remember and twin update are independent — twin update
     should not accidentally clear the semantic store, and vice-versa.
     """
-    mgr = MemoryManager.create(
-        user_id="carol", db_path=workspace["db_path"]
-    )
+    mgr = MemoryManager.create(user_id="carol", db_path=workspace["db_path"])
     mgr.twin_store.save(_seed_twin("carol"))
     mgr.remember("the bond market is showing signs of stress this quarter")
     mgr.update_twin(monthly_income=20000.0)
@@ -221,9 +215,7 @@ def test_long_conversation_auto_remembers_consistently(
     only the long ones are in the semantic store, while the working
     buffer keeps the most recent ``max_turns`` (default 10).
     """
-    mgr = MemoryManager.create(
-        user_id="dan", db_path=workspace["db_path"], max_turns=10
-    )
+    mgr = MemoryManager.create(user_id="dan", db_path=workspace["db_path"], max_turns=10)
 
     short_turns: list[str] = []
     long_turns: list[str] = []
@@ -246,12 +238,12 @@ def test_long_conversation_auto_remembers_consistently(
     ctx = mgr.get_context()
     assert len(ctx) == 10
     # The first surviving turn should be turn 10 (index 10 of the 20)
-    assert ctx[0]["content"].startswith("short turn 10") or ctx[0]["content"].startswith("this is a fairly long turn 10")
+    assert ctx[0]["content"].startswith("short turn 10") or ctx[0]["content"].startswith(
+        "this is a fairly long turn 10"
+    )
 
     # The semantic store should contain all 10 long turns
     # (it is append-only; the working buffer is the only sliding window)
     semantic_docs = mgr.recall("turn", k=50)
-    long_count = sum(
-        1 for d in semantic_docs if "more than fifty characters" in d["text"]
-    )
+    long_count = sum(1 for d in semantic_docs if "more than fifty characters" in d["text"])
     assert long_count == 10  # all 10 odd-indexed long turns
