@@ -27,6 +27,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# streamlit is already a base dependency; this extra exists only so the
+# documented `pip install -e ".[ui]"` command resolves without a
+# "does not provide the extra" warning for a first-time judge/stranger.
+ui = []
 vector = ["chromadb>=0.5"]
 groq = ["groq>=0.9"]
 openai = ["openai>=1.40"]

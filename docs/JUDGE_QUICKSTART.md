@@ -21,7 +21,7 @@ Open **http://localhost:8501** — dark UI, **Mock Mode** badge, **Not financial
 ## 2. CLI (no Docker)
 
 ```bash
-pip install -e ".[ui]"
+pip install -e ".[ui,dev]"   # dev extra needed for `make judge-dry-run` below
 PYTHONPATH=src python -m interface.cli --mock \
   "Should I rebalance my 70/30 equity portfolio before FY-end?"
 ```
