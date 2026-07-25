@@ -140,3 +140,44 @@
 - Prevention: a compose-level `healthcheck:` silently *overrides* the image's own
   `HEALTHCHECK` — if the Dockerfile already has a working one, don't redefine it in compose
   with a different (and possibly image-incompatible) command.
+
+## Pattern 8: Portfolio intent misroutes to news_impact without exact trigger keywords
+- Date 2026-07-25 · `src/finroot/agents/intent.py` (keyword scoring table) · Severity Critical
+- Root cause: GP-1's keyword-scoring intent classifier only awarded PORTFOLIO points for
+  "portfolio"/"allocation"/"rebalance"/"diversif"/"holdings". A paraphrase using none of
+  those ("70/30 stock-bond split... adjusting the mix") scored 0 for portfolio, while the
+  bare word "stock" alone scored 3.0 for NEWS_IMPACT — an outright win, not even a tie-break.
+- Impact: the response was entirely RBI repo rates / SEBI F&O rules / a fabricated news
+  article, never mentioning rebalancing or allocation for what was unambiguously a portfolio
+  question. The Self-Critic passed it anyway (0.765) — it doesn't detect domain misrouting.
+- Fix: added compound paraphrase triggers ("stock-bond split", "asset mix", "adjust the mix",
+  "shift my allocation", "rejig", "tweak my portfolio", etc.) to the PORTFOLIO keyword group.
+  Verified original + broken paraphrase both now route to `portfolio`. Commit pending.
+- Prevention: same root pattern as Pattern 1 (GP-3) — a keyword list that only covers the
+  exact scripted vocabulary will misroute on any paraphrase that avoids those specific words.
+  Any golden path should be paraphrase-stress-tested, not just checked against its scripted
+  phrasing, before a GREEN claim.
+
+## Pattern 9: Word-form numbers ("a lakh", "two years") break tax parsing; "equities" plural missed
+- Date 2026-07-25 · `src/finroot/agents/tax_agent.py` (`_parse_indian_amount`,
+  `_parse_gain_from_query`) · Severity Critical
+- Root cause: three separate, compounding gaps — (1) the amount regex required a digit before
+  the unit ("2 lakh") and never matched word-form "a lakh"; (2) the holding-period heuristic
+  only checked digit forms ("2 year(s)") and never matched "two years"; (3) the equity-type
+  check tested for the exact substring "equity" (and "share"/"stock"), which does not match
+  the plural "equities"/"shares"/"stocks" (`"equity" in "equities"` is `False` — different
+  strings, not a substring).
+- Impact: "If I made a lakh in profit from equities I held for two years... how much tax do I
+  owe?" fell all the way through to a generic non-answer ("match the gain type to the correct
+  regime before quoting a number") instead of computing ₹0 tax, exactly as the scripted GP-2
+  query does — degrading a computed, confident answer into a diagnostic dead-end on ordinary
+  paraphrase.
+- Fix: added a word-form "a lakh/crore" branch to `_parse_indian_amount`; added
+  `_extract_holding_months()` supporting both digit and word-number (one..twelve, eighteen,
+  twenty-four) forms; extended the equity-type check to include plural forms. Verified against
+  the original query, the broken paraphrase, and a second already-working paraphrase (no
+  regression). Commit pending.
+- Prevention: **plural/word-form blind spots in substring-based entity extraction are easy to
+  miss because the singular/digit form usually appears in test fixtures.** Any `X in text`
+  substring check for a domain noun should consider whether the plural form is a completely
+  different string, not a superset.

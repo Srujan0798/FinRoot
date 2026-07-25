@@ -223,6 +223,20 @@ _KEYWORD_RULES: list[tuple[list[str], Intent, float]] = [
             "diversif",
             "asset allocation",
             "holdings",
+            # Paraphrases of "rebalance my allocation" that don't use those exact
+            # words (found brittle under paraphrase-stress-test, HALL_OF_SHAME
+            # Pattern 8): stock/bond split language, "mix" adjustments, "rejig".
+            "stock-bond split",
+            "stock and bond split",
+            "asset mix",
+            "adjust the mix",
+            "adjusting the mix",
+            "adjust my mix",
+            "shift my allocation",
+            "shift my portfolio",
+            "rejig",
+            "tweak my portfolio",
+            "tweak the mix",
         ],
         Intent.PORTFOLIO,
         8.0,

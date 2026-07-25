@@ -63,6 +63,25 @@ def _parse_indian_amount(text: str) -> float | None:
         with contextlib.suppress(ValueError):
             return float(raw)
 
+    # Word-form "a lakh" / "a crore" (no digit) — paraphrase found brittle
+    # under stress-test (HALL_OF_SHAME Pattern 9): "made a lakh in profit".
+    m = re.search(
+        r"\ba\s+(lakh|lakhs|lacs|lac|crore|crores)\b",
+        q,
+        re.IGNORECASE,
+    )
+    if m:
+        unit = m.group(1).lower()
+        mult = {
+            "lakh": 100_000.0,
+            "lakhs": 100_000.0,
+            "lac": 100_000.0,
+            "lacs": 100_000.0,
+            "crore": 10_000_000.0,
+            "crores": 10_000_000.0,
+        }[unit]
+        return 1.0 * mult
+
     # 1L / 1.5L / 2lakh / 2 lakhs / 3 Cr / 50k / 50K
     m = re.search(
         r"(?<![A-Za-z])(\d+(?:\.\d+)?)\s*(lakh|lakhs|lacs|lac|crore|crores|cr|l|k)\b",
@@ -147,6 +166,45 @@ def _parse_income_from_query(query: str) -> float | None:
     return num * mult
 
 
+_WORD_NUMBERS: dict[str, int] = {
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+    "eleven": 11,
+    "twelve": 12,
+    "eighteen": 18,
+    "twenty-four": 24,
+    "twenty four": 24,
+}
+
+
+def _extract_holding_months(lower_text: str) -> int | None:
+    """Extract a holding period in months from digit or word-form numbers.
+
+    Handles both ``"2 years"`` and ``"two years"`` — the word form was found
+    brittle under paraphrase stress-test (HALL_OF_SHAME Pattern 9).
+    """
+    m = re.search(r"(\d+)\s*(year|years|month|months)\b", lower_text)
+    if m:
+        n = int(m.group(1))
+        return n * 12 if m.group(2).startswith("year") else n
+    m = re.search(
+        r"\b(" + "|".join(_WORD_NUMBERS) + r")\s*(year|years|month|months)\b",
+        lower_text,
+    )
+    if m:
+        n = _WORD_NUMBERS[m.group(1)]
+        return n * 12 if m.group(2).startswith("year") else n
+    return None
+
+
 def _parse_gain_from_query(query: str) -> dict[str, Any]:
     """Extract gain amount and type from query text.
 
@@ -159,7 +217,9 @@ def _parse_gain_from_query(query: str) -> dict[str, Any]:
     if amount is not None:
         result["gain"] = amount
 
-    is_equity = any(t in lower for t in ("equity", "share", "stock", "listed"))
+    is_equity = any(
+        t in lower for t in ("equity", "equities", "share", "shares", "stock", "stocks", "listed")
+    )
     is_debt = "debt" in lower
 
     for keyword, gain_type in _GAIN_TYPE_KEYWORDS.items():
@@ -173,21 +233,14 @@ def _parse_gain_from_query(query: str) -> dict[str, Any]:
                 result["gain_type"] = gain_type
             break
 
-    # Equity holding period heuristic: held > 12 months → LTCG if type missing
+    # Equity holding period heuristic: held > 12 months → LTCG if type missing.
+    # Accepts word-form numbers ("held for two years") not just digits — found
+    # brittle under paraphrase stress-test (HALL_OF_SHAME Pattern 9).
+    holding_months = _extract_holding_months(lower)
     if "gain_type" not in result and is_equity:
-        if any(
-            t in lower
-            for t in (
-                "ltcg",
-                "long term",
-                "held 2",
-                "held for 2",
-                "18 month",
-                "24 month",
-                "2 year",
-                "2 years",
-                "12 month",
-            )
+        if (
+            any(t in lower for t in ("ltcg", "long term"))
+            or (holding_months is not None and holding_months >= 12)
         ):
             result["gain_type"] = "LTCG"
         elif any(t in lower for t in ("stcg", "short term")):
