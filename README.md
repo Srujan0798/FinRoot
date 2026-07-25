@@ -140,7 +140,7 @@ All captured in Mock mode via `scripts/capture_screenshots.py`.
 | Single-agent (no critic) | 0.1807 | 0.3012 | 0.0482 | 0.3298 | −2.5% |
 | **FinRoot (full pipeline)** | **0.4578** | **0.4578** | **0.4578** | **0.8741** | **+158.30%** |
 
-**Measured at:** `as_of_sha = 75eca43` · `n_tasks = 83` · `k = 2` · `mock = True` · regenerate with `make evals`.
+**Measured at:** `as_of_sha = 696be57` · `n_tasks = 83` · `k = 2` · `mock = True` · regenerate with `make evals`.
 
 ### Per-domain mean scores (FinRoot)
 

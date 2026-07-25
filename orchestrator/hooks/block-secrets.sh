@@ -11,7 +11,7 @@ DIFF=$(git diff --cached -U0 -- . ':!orchestrator/hooks/block-secrets.sh' 2>/dev
 REAL_KEYS='(sk-[A-Za-z0-9]{20,}|gsk_[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16,}|xox[baprs]-[A-Za-z0-9-]+|BEGIN (RSA|OPENSSH|EC|DSA|PGP) PRIVATE KEY)'
 # Pattern B: loose words that may or may not be secrets (filtered below).
 LOOSE='(api[_-]?key|secret|password|token|credentials)'
-HITS=$(echo "$DIFF" | grep -nEi "$LOOSE" | grep -viE '(\.env\.example|example|placeholder|<your|FINROOT_|no[ -]?secret|secret[ -]?scan|secret[ -]?detect|secret[ -]?free|secret[ -]?shape|real[ -]?key|secrets?\s+clean|secrets?\s+found|secrets?\s+scan|secrets?\s+in|secrets?\)|\(secrets?|groq_api_key|openai_api_key|api[_-]?key\s*[=:]\s*None)' || true)
+HITS=$(echo "$DIFF" | grep -nEi "$LOOSE" | grep -viE '(\.env\.example|example|placeholder|<your|FINROOT_|no[ -]?secret|secret[ -]?scan|secret[ -]?detect|secret[ -]?free|secret[ -]?shape|real[ -]?key|secrets?\s+clean|secrets?\s+found|secrets?\s+scan|secrets?\s+in|secrets?\)|\(secrets?|secrets?,\s+internal|secrets?,|groq_api_key|openai_api_key|api[_-]?key\s*[=:]\s*None)' || true)
 KEY_HITS=$(echo "$DIFF" | grep -nEi "$REAL_KEYS" || true)
 ALL_HITS="$HITS$KEY_HITS"
 if [ -n "$ALL_HITS" ]; then

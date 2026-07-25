@@ -32,10 +32,31 @@ rules below keep the build collision-free and the quality high.
 4. Fill `work/reports/<wave>/<task>.report.md` using `work/REPORT_TEMPLATE.md` (with command output).
 5. If you hit a surprise, add it to `docs/waves/<wave>-gotchas.md` immediately.
 
+## Quality gates (run before you commit)
+- `make lint` — ruff clean
+- `make test-fast` — fast pytest path (skips `@pytest.mark.slow`)
+- `make validate` — structural + execution + doc drift checks
+- `make coverage` — coverage ≥ threshold (default 80%)
+- `make session-start` — print current context (HEAD, metric, dirty tree, zip status)
+
 ## Commits
-- Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`) — enforced by pre-commit.
+- Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`) — used by
+  `scripts/changelog_suggest.sh` to draft a CHANGELOG entry.
 - One logical change per commit. Reference the wave/task: `feat(wave-1): LLM provider layer (task 01)`.
+- Use `git push --no-verify` to bypass pre-push hooks only in an emergency. The default hook
+  runs `validate_execution.sh` + `validate_docs.sh`.
 
 ## Reviews
 The orchestrator runs acceptance commands from your task's `acceptance` block before approving.
 APPROVE → merge · REVISE → it rewrites your brief with specifics · REJECT → work moves to `attic/`.
+
+## Local development tips
+- Run `make session-start` at the start of any session to see current state.
+- The suite is hermetic (no `data/` leakage) and runs in 5-7 minutes without slow tests.
+  The slow tests (`test_cli_*_runs` subprocess tests) take 5-10 min; skip with `-m 'not slow'`.
+- `make evals` regenerates `results/metrics.json`. After that, update any doc that cites
+  the old metric (or run `make validate` to catch it).
+- `make metrics-drift` compares HEAD's `results/metrics.json` with the on-disk version and
+  flags regressions. Useful before deciding to commit.
+- The submission zip (`finroot-submission.zip`) must be rebuilt after every metric change
+  via `bash scripts/make_submission.sh`. The `test_zip_consistency.py` tests catch zip drift.

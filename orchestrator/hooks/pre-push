@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# pre-push: validate_docs + validate_execution before allowing git push.
+# Catches the case where the local commit is fine but the artifacts (zip,
+# metrics) are stale or the docs are out of date. Install with:
+#   ln -s ../../orchestrator/hooks/pre-push .git/hooks/pre-push
+#
+# Bypass with:  git push --no-verify
+
+set -uo pipefail
+cd "$(dirname "$0")/../.."
+
+FAILED=0
+
+echo "pre-push: running structural validations..."
+
+if ! bash orchestrator/scripts/validate_execution.sh; then
+  echo "pre-push: validate_execution.sh FAILED" >&2
+  FAILED=1
+fi
+
+if ! bash orchestrator/scripts/validate_docs.sh; then
+  echo "pre-push: validate_docs.sh FAILED" >&2
+  FAILED=1
+fi
+
+# Optional: quick ruff check (skipped by default to keep push fast; uncomment
+# to enable)
+# if ! ruff check src/ tests/ scripts/ config/ > /dev/null 2>&1; then
+#   echo "pre-push: ruff check FAILED" >&2
+#   FAILED=1
+# fi
+
+if [ "$FAILED" -gt 0 ]; then
+  echo "" >&2
+  echo "pre-push: ABORTED. Fix the failures above, or use 'git push --no-verify' to bypass." >&2
+  exit 1
+fi
+
+echo "pre-push: OK"
+exit 0

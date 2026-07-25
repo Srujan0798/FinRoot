@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 PY ?= python3
 
-.PHONY: help install smoke lint test test-fast test-slow test-cold test-zip cli ui evals validate validate-docs changelog-suggest session-start coverage metrics-drift docker clean
+.PHONY: help install smoke lint test test-fast test-slow test-cold test-zip cli ui evals validate validate-docs changelog-suggest session-start coverage metrics-drift test-pyramid dep-audit docker clean
 
 help:  ## show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -54,6 +54,12 @@ coverage:  ## run pytest with coverage and fail if below threshold (default 80%)
 
 metrics-drift:  ## compare two metrics.json files; exit 1 if regression > threshold
 	bash scripts/metrics_drift.sh HEAD:results/metrics.json results/metrics.json
+
+test-pyramid:  ## print test counts by category (unit/integration/e2e/...) and time budget
+	bash scripts/test_pyramid.sh
+
+dep-audit:  ## check for outdated / vulnerable dependencies
+	bash scripts/dep_audit.sh
 
 docker:  ## build + run the full stack
 	docker compose up --build
