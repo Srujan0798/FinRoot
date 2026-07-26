@@ -1,12 +1,26 @@
 # HANDOFF — Current State
 
-> Replaced 2026-07-26T05:40Z — hostile stranger-verification loop, round 4 (this session).
+> Replaced 2026-07-26T06:12Z — hostile stranger-verification loop, round 5 (this session).
 
 ## Snapshot
 - **Honest blended score:** **~97-98%** — **not 100%, not frozen**
-- **FRB @ `b62088f`:** mean **0.9114** · pass@1 **1.0000** · lift **+168.85%** vs RAG
-- **Evidence:** `docs/SCOREBOARD.md` §E-F (full list of 20 bugs found + fixed this session, plus 2 clean-audit confirmations)
+- **FRB @ `30e2ed9`:** mean **0.9114** · pass@1 **1.0000** · lift **+168.85%** vs RAG
+- **Evidence:** `docs/SCOREBOARD.md` §E-F (full list of 21 bugs found + fixed this session, plus 2 clean-audit confirmations)
 - **Plan:** `work/ETERNAL_FINAL_PLAN.md` · **Scoreboard:** `docs/SCOREBOARD.md`
+
+## Round 5 additions
+1. **Audit-trail tail-truncation now detected** — an already-documented known gap (test had
+   a TODO) was actually fixed rather than left: `verify_chain_detailed()` now compares the
+   highest seq seen on disk against the in-process instance's own tracked `_last_seq`,
+   catching deletion of the LAST event(s), the one tamper scenario that wasn't caught.
+   Field-edits, mid-chain deletion, and partial-hash-patch-without-cascade were all already
+   correctly detected (re-verified adversarially, not just structurally).
+2. **`WorkingMemory` confirmed dead code in the live path** — implemented and unit-tested,
+   but `add_turn()` is never called from `orchestrator.py`/`workflows/`/`interface/`;
+   `answer()` builds a fresh empty `MemoryManager` every call with no session-ID concept in
+   the API. Confirmed live: a coherent follow-up question got a totally unrelated generic
+   response. `docs/SUBMISSION.md:15` overclaimed "retains context across turns" — corrected;
+   tracked as a real architectural item in BACKLOG.md (not attempted as a rushed fix).
 
 ## Round 4 additions (on top of rounds 1-3)
 1. **Truncated golden-path chip labels** (`chat.py:132`) had no accessible fallback — added
@@ -71,9 +85,9 @@ PYTHONPATH=src python3 scripts/run_evals.py --mock --k 1
 docker-compose up -d && sleep 30 && docker-compose ps   # expect (healthy)
 docker-compose down
 ```
-All of the above were re-verified on **5 independent fresh `git clone`s**, not just the local
-working tree, after every fix landed — most recently confirmed at HEAD `416b6bc` before the
-final housekeeping regen to `b62088f`.
+All of the above were re-verified on **6 independent fresh `git clone`s**, not just the local
+working tree, after every fix landed — most recently confirmed at HEAD `dc92f07` before the
+final housekeeping regen to `30e2ed9`.
 
 ## Still open for freeze
 1. **Human freeze bet** — the one thing this session cannot self-certify. Everything
