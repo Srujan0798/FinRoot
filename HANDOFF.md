@@ -1,12 +1,23 @@
 # HANDOFF — Current State
 
-> Replaced 2026-07-26T05:13Z — hostile stranger-verification loop, round 3 (this session).
+> Replaced 2026-07-26T05:40Z — hostile stranger-verification loop, round 4 (this session).
 
 ## Snapshot
 - **Honest blended score:** **~97-98%** — **not 100%, not frozen**
-- **FRB @ `98f56d1`:** mean **0.9114** · pass@1 **1.0000** · lift **+166.34%** vs RAG
-- **Evidence:** `docs/SCOREBOARD.md` §E-F (full list of 18 bugs found + fixed this session)
+- **FRB @ `b62088f`:** mean **0.9114** · pass@1 **1.0000** · lift **+168.85%** vs RAG
+- **Evidence:** `docs/SCOREBOARD.md` §E-F (full list of 20 bugs found + fixed this session, plus 2 clean-audit confirmations)
 - **Plan:** `work/ETERNAL_FINAL_PLAN.md` · **Scoreboard:** `docs/SCOREBOARD.md`
+
+## Round 4 additions (on top of rounds 1-3)
+1. **Truncated golden-path chip labels** (`chat.py:132`) had no accessible fallback — added
+   `help=chip` tooltip. Rest of accessibility audit clean (contrast, headings, keyboard nav,
+   mobile viewport).
+2. **Self-Critic and prompt-injection resistance independently verified, not assumed** — the
+   critic correctly failed 2 freshly-constructed bad recommendations (0.285, 0.47, both
+   below threshold with correct diagnostics); 4 injection-style queries produced zero
+   compliance (no leakage, no forced confidence, no dropped disclaimers). One cosmetic-only
+   artifact (all-caps injection words misparsed as ticker candidates) fixed via denylist
+   even though confirmed harmless.
 
 ## Trajectory
 | Stage | % | pass@1 |
@@ -60,9 +71,9 @@ PYTHONPATH=src python3 scripts/run_evals.py --mock --k 1
 docker-compose up -d && sleep 30 && docker-compose ps   # expect (healthy)
 docker-compose down
 ```
-All of the above were re-verified on **4 independent fresh `git clone`s**, not just the local
-working tree, after every fix landed — most recently confirmed at HEAD `fb09935` before the
-final housekeeping regen to `98f56d1`.
+All of the above were re-verified on **5 independent fresh `git clone`s**, not just the local
+working tree, after every fix landed — most recently confirmed at HEAD `416b6bc` before the
+final housekeeping regen to `b62088f`.
 
 ## Still open for freeze
 1. **Human freeze bet** — the one thing this session cannot self-certify. Everything

@@ -1,8 +1,8 @@
 # FinRoot SCOREBOARD
 
 > Living truth table. Cells move RED → YELLOW → GREEN **only with evidence path**.  
-> As of: 2026-07-26T05:13Z · hostile stranger-verification loop, round 3 · Evidence: `HALL_OF_SHAME.md` Patterns 1-11 (this session)  
-> **Blended honest score: ~97-98%** (not 100%). FRB pass@1 **1.0000** mean **0.9114** lift **+166.34%** @98f56d1
+> As of: 2026-07-26T05:40Z · hostile stranger-verification loop, round 4 · Evidence: `HALL_OF_SHAME.md` Patterns 1-12 + 2 clean-audit confirmations (this session)  
+> **Blended honest score: ~97-98%** (not 100%). FRB pass@1 **1.0000** mean **0.9114** lift **+168.85%** @b62088f
 
 Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced this freeze window
 
@@ -33,7 +33,7 @@ Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced thi
 | Full fast pytest | **GREEN** | locked suite + principles; timeout flakes on 2 subprocess tests fixed |
 | Docker | **GREEN** | `docker-compose up --build` → `(healthy)`, verified twice; healthcheck curl-missing bug found and fixed |
 | Streamlit 4 tabs | **GREEN** | Playwright PNGs + live browser verification this session (found + fixed a citations-rendering crash) |
-| FRB metrics | **GREEN** | 98f56d1 pass@1=**1.0000** mean=**0.9114** lift=+166.34% |
+| FRB metrics | **GREEN** | b62088f pass@1=**1.0000** mean=**0.9114** lift=+168.85% |
 | API smoke | **GREEN** | verified on true cold clone (found + fixed missing fastapi/uvicorn deps) |
 | Judge dry-run | **GREEN** | `scripts/judge_dry_run.sh` — verified 3x on independent fresh clones, incl. after every fix |
 | Audit chain | **GREEN** | smoke + security review confirmed genuine hash-chaining (not cosmetic) |
@@ -147,5 +147,7 @@ ceilings are relaxed — do not do it as a last-minute change. Full detail:
 16. `detect_domain()`'s GENERAL-intent fallback returned before the broader `_DOMAIN_KEYWORDS` sweep ever ran — that entire keyword dict was **permanently dead code**, affecting even the baseline scripted cashflow gold question, not just a paraphrase. Reordered (HALL_OF_SHAME Pattern 10)
 17. Stress-tested the 7 remaining FRB domains: credit + insurance robust; behavioral, estate_planning (worst break — complete generic-greeting non-answer), international, and general/portfolio all misrouted on paraphrase. Fixed all 4 with evidence-based keyword additions (HALL_OF_SHAME Pattern 11); flagged the underlying keyword-override architecture as structurally paraphrase-fragile — a real follow-up for semantic classification, not silently left as a one-line patch
 18. API's first request after boot measured ~3x slower than steady-state (0.96s vs 0.32s) and was undocumented anywhere a judge would see it before testing — added a one-line note to JUDGE_QUICKSTART.md
+19. Accessibility audit found golden-path suggestion chips truncate to 42 chars with no accessible fallback (full text discarded, not just visually hidden) — added a hover tooltip (HALL_OF_SHAME Pattern 12)
+20. Independently verified (not assumed) that the Self-Critic has real teeth — 2 freshly-constructed bad recommendations correctly scored 0.285/0.47 and failed — and that 4 prompt-injection-style queries produced zero compliance (no leakage, no forced confidence, no dropped disclaimers); fixed one cosmetic-only artifact (all-caps injection words misparsed as ticker candidates) anyway
 
 **Real score: ~97-98%. Never invent 100% — the human freeze bet is the one thing this can't self-certify.**
