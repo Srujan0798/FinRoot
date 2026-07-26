@@ -1,42 +1,72 @@
 {
-  "as_of_sha": "da03ff9",
-  "generated_at": "2026-07-26T16:18:20.737365+00:00",
+  "as_of_sha": "fa0ebac",
+  "generated_at": "2026-07-26T18:13:10.629950+00:00",
   "systems": {
     "finroot": {
       "system": "finroot",
       "pass_at_1": 1.0,
       "pass_at_k": 1.0,
       "pass_hat_k": 1.0,
-      "mean_score": 1.0,
+      "mean_score": 0.9092,
       "per_domain": {
-        "portfolio": 1.0
+        "behavioral": 0.8949,
+        "cashflow": 0.88,
+        "credit": 0.9667,
+        "estate_planning": 0.916,
+        "general": 0.8481,
+        "insurance": 0.9857,
+        "international": 0.88,
+        "news_impact": 0.8443,
+        "portfolio": 0.8992,
+        "risk": 0.8604,
+        "tax": 1.0
       },
-      "n_tasks": 1
+      "n_tasks": 83
     },
     "rag": {
       "system": "rag",
-      "pass_at_1": 0.0,
-      "pass_at_k": 0.0,
-      "pass_hat_k": 0.0,
-      "mean_score": 0.05,
+      "pass_at_1": 0.2048,
+      "pass_at_k": 0.2048,
+      "pass_hat_k": 0.2048,
+      "mean_score": 0.339,
       "per_domain": {
-        "portfolio": 0.05
+        "behavioral": 0.4143,
+        "cashflow": 0.3583,
+        "credit": 0.4633,
+        "estate_planning": 0.464,
+        "general": 0.375,
+        "insurance": 0.4457,
+        "international": 0.2775,
+        "news_impact": 0.2978,
+        "portfolio": 0.1928,
+        "risk": 0.2611,
+        "tax": 0.3167
       },
-      "n_tasks": 1
+      "n_tasks": 83
     },
     "single_agent": {
       "system": "single_agent",
-      "pass_at_1": 0.0,
-      "pass_at_k": 0.0,
-      "pass_hat_k": 0.0,
-      "mean_score": 0.15,
+      "pass_at_1": 0.253,
+      "pass_at_k": 0.253,
+      "pass_hat_k": 0.253,
+      "mean_score": 0.342,
       "per_domain": {
-        "portfolio": 0.15
+        "behavioral": 0.4214,
+        "cashflow": 0.4117,
+        "credit": 0.4333,
+        "estate_planning": 0.452,
+        "general": 0.3763,
+        "insurance": 0.4571,
+        "international": 0.2875,
+        "news_impact": 0.2867,
+        "portfolio": 0.1998,
+        "risk": 0.2278,
+        "tax": 0.3429
       },
-      "n_tasks": 1
+      "n_tasks": 83
     }
   },
-  "composite_lift_vs_rag_pct": 1900.0,
-  "n_tasks": 1,
+  "composite_lift_vs_rag_pct": 168.2006,
+  "n_tasks": 83,
   "k": 1
 }
