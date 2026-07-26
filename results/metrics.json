@@ -1,12 +1,12 @@
 {
-  "as_of_sha": "30e2ed9",
-  "generated_at": "2026-07-26T06:11:26.363499+00:00",
+  "as_of_sha": "61753c9",
+  "generated_at": "2026-07-26T06:26:08.825525+00:00",
   "systems": {
     "finroot": {
       "system": "finroot",
-      "pass_at_1": 1.0,
-      "pass_at_k": 1.0,
-      "pass_hat_k": 1.0,
+      "pass_at_1": 0.988,
+      "pass_at_k": 0.988,
+      "pass_hat_k": 0.988,
       "mean_score": 0.9114,
       "per_domain": {
         "behavioral": 0.8949,
