@@ -129,7 +129,9 @@ def render(*, user_id: str = "demo", mock: bool = True) -> None:
         "How much health insurance cover does a family of 4 need in a metro?",
     ]
     for i, chip in enumerate(_CHIPS):
-        if chip_cols[i % 3].button(chip[:42] + ("…" if len(chip) > 42 else ""), key=f"chip_{i}"):
+        if chip_cols[i % 3].button(
+            chip[:42] + ("…" if len(chip) > 42 else ""), key=f"chip_{i}", help=chip
+        ):
             st.session_state["pending_query"] = chip
 
     # Render previous messages

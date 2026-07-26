@@ -234,7 +234,21 @@
   fix would replace literal-substring overrides with semantic domain classification (e.g. an
   embedding-similarity check against domain exemplars), which is a real architectural
   follow-up worth a dedicated wave, not a one-line patch. Until then: **paraphrase-stress-test
-  is the only way to find these**, and this session found 7 confirmed breaks (Patterns 1, 8,
-  9, 11) across the 5 golden paths + several FRB domains this way — the remaining FRB domains
-  not yet stress-tested (credit, insurance were checked and found robust; a few others may
-  still be untested) should be assumed to carry similar risk until checked.
+  is the only way to find these**, and this session found 8 confirmed breaks (Patterns 1, 8,
+  9, 11) across the 5 golden paths + all 11 FRB domains (all 11 now stress-tested at least
+  once — 9 brittle, 2 robust: credit, insurance).
+
+## Pattern 12: Truncated UI button labels with no accessible fallback
+- Date 2026-07-26 · `src/interface/ui/components/chat.py:132` (golden-path suggestion chips)
+  · Severity Low
+- Root cause: the six golden-path suggestion chips truncate to 42 characters with a literal
+  `…` appended, and the full text is discarded before reaching `st.button()` — not CSS
+  ellipsis, the DOM never contains the full string. No `help=` tooltip was set as a fallback.
+- Impact: neither sighted users nor screen-reader users can discover a chip's full question
+  without clicking it (which immediately fires the query) — found via a live accessibility
+  audit (keyboard nav, contrast, mobile viewport, heading structure were all otherwise clean).
+- Fix: added `help=chip` to the `st.button()` call so the full text is available as a hover
+  tooltip without needing to click.
+- Prevention: any UI element that truncates displayed text for layout reasons should carry
+  the full content in an accessible fallback (`title`/`help`/`aria-label`), not just visually
+  hide it.
