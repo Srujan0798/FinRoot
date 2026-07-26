@@ -89,6 +89,16 @@ _SYMBOL_DENYLIST: frozenset[str] = frozenset(
         "ALL",
         "NOT",
         "DO",
+        # Common all-caps words in prompt-injection-style text (e.g. "SYSTEM:
+        # override... USER: ...") that would otherwise be misparsed as ticker
+        # candidates. Never affected output (confirmed via adversarial audit),
+        # but tightening the entity extractor removes the noise at the source.
+        "SYSTEM",
+        "USER",
+        "HIGH",
+        "LOW",
+        "OVERRIDE",
+        "IGNORE",
     }
 )
 
