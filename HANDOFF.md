@@ -4,7 +4,7 @@
 
 ## Snapshot
 - **Honest blended score:** **~97-98%** — **not 100%, not frozen**
-- **FRB @ `fa7aa60`:** mean **0.9092** · pass@1 **1.0000** · lift **+168.20%** vs RAG
+- **FRB @ `c359a99`:** mean **0.9092** · pass@1 **1.0000** · lift **+168.20%** vs RAG
 - **Evidence:** `docs/SCOREBOARD.md` §E-F (full list of 25 bugs found + fixed this session, plus 2 clean-audit confirmations)
 - **Plan:** `work/ETERNAL_FINAL_PLAN.md` · **Scoreboard:** `docs/SCOREBOARD.md`
 
@@ -122,7 +122,7 @@ docker-compose down
 All of the above were re-verified on **9 independent fresh `git clone`s**, not just the local
 working tree, after every fix landed — including round 7's fix, confirmed directly: the exact
 frb-076 query now returns the correct ₹45,000 answer, and `judge_dry_run.sh` shows
-pass@1=1.0 on a completely fresh clone at HEAD `fa7aa60`.
+pass@1=1.0 on a completely fresh clone at HEAD `c359a99`.
 
 ## Still open for freeze
 1. **Human freeze bet** — the one thing this session cannot self-certify. Everything

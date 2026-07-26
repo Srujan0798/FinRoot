@@ -2,7 +2,7 @@
 
 > Living truth table. Cells move RED → YELLOW → GREEN **only with evidence path**.  
 > As of: 2026-07-26T13:44Z · hostile stranger-verification loop, round 7 · Evidence: `HALL_OF_SHAME.md` Patterns 1-15 + 2 clean-audit confirmations + 1 latent non-live finding (this session)  
-> **Blended honest score: ~97-98%** (not 100%). FRB pass@1 **1.0000** mean **0.9092** lift **+168.20%** @fa7aa60
+> **Blended honest score: ~97-98%** (not 100%). FRB pass@1 **1.0000** mean **0.9092** lift **+168.20%** @c359a99
 
 Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced this freeze window
 
@@ -33,7 +33,7 @@ Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced thi
 | Full fast pytest | **GREEN** | locked suite + principles; timeout flakes on 2 subprocess tests fixed |
 | Docker | **GREEN** | `docker-compose up --build` → `(healthy)`, verified twice; healthcheck curl-missing bug found and fixed |
 | Streamlit 4 tabs | **GREEN** | Playwright PNGs + live browser verification this session (found + fixed a citations-rendering crash) |
-| FRB metrics | **GREEN** | fa7aa60 pass@1=**1.0000** mean=**0.9092** lift=+168.20% |
+| FRB metrics | **GREEN** | c359a99 pass@1=**1.0000** mean=**0.9092** lift=+168.20% |
 | API smoke | **GREEN** | verified on true cold clone (found + fixed missing fastapi/uvicorn deps) |
 | Judge dry-run | **GREEN** | `scripts/judge_dry_run.sh` — verified 3x on independent fresh clones, incl. after every fix |
 | Audit chain | **GREEN** | smoke + security review confirmed genuine hash-chaining (not cosmetic) |
