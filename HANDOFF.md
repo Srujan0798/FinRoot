@@ -113,10 +113,10 @@ PYTHONPATH=src python3 scripts/run_evals.py --mock --k 1
 docker-compose up -d && sleep 30 && docker-compose ps   # expect (healthy)
 docker-compose down
 ```
-All of the above were re-verified on **8 independent fresh `git clone`s** (rounds 1-6), not
-just the local working tree, after every fix landed. Round 7's fix (this one) has been
-verified locally (golden+intent+principles suite green, FRB re-run) but not yet on a fresh
-clone — that verification is the next immediate step, not skipped.
+All of the above were re-verified on **9 independent fresh `git clone`s**, not just the local
+working tree, after every fix landed — including round 7's fix, confirmed directly: the exact
+frb-076 query now returns the correct ₹45,000 answer, and `judge_dry_run.sh` shows
+pass@1=1.0 on a completely fresh clone at HEAD `fa7aa60`.
 
 ## Still open for freeze
 1. **Human freeze bet** — the one thing this session cannot self-certify. Everything
