@@ -1,8 +1,8 @@
 # FinRoot SCOREBOARD
 
 > Living truth table. Cells move RED → YELLOW → GREEN **only with evidence path**.  
-> As of: 2026-07-26T06:26Z · hostile stranger-verification loop, round 6 · Evidence: `HALL_OF_SHAME.md` Patterns 1-14 + 2 clean-audit confirmations + 1 latent non-live finding (this session)  
-> **Blended honest score: ~97-98%** (not 100%). FRB pass@1 **1.0000** mean **0.9114** lift **+168.85%** @61753c9
+> As of: 2026-07-26T13:44Z · hostile stranger-verification loop, round 7 · Evidence: `HALL_OF_SHAME.md` Patterns 1-15 + 2 clean-audit confirmations + 1 latent non-live finding (this session)  
+> **Blended honest score: ~97-98%** (not 100%). FRB pass@1 **1.0000** mean **0.9092** lift **+168.20%** @fa7aa60
 
 Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced this freeze window
 
@@ -33,7 +33,7 @@ Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced thi
 | Full fast pytest | **GREEN** | locked suite + principles; timeout flakes on 2 subprocess tests fixed |
 | Docker | **GREEN** | `docker-compose up --build` → `(healthy)`, verified twice; healthcheck curl-missing bug found and fixed |
 | Streamlit 4 tabs | **GREEN** | Playwright PNGs + live browser verification this session (found + fixed a citations-rendering crash) |
-| FRB metrics | **GREEN** | 61753c9 pass@1=**1.0000** mean=**0.9114** lift=+168.85% |
+| FRB metrics | **GREEN** | fa7aa60 pass@1=**1.0000** mean=**0.9092** lift=+168.20% |
 | API smoke | **GREEN** | verified on true cold clone (found + fixed missing fastapi/uvicorn deps) |
 | Judge dry-run | **GREEN** | `scripts/judge_dry_run.sh` — verified 3x on independent fresh clones, incl. after every fix |
 | Audit chain | **GREEN** | smoke + security review confirmed genuine hash-chaining (not cosmetic) |
@@ -153,5 +153,6 @@ ceilings are relaxed — do not do it as a last-minute change. Full detail:
 22. `WorkingMemory` confirmed dead code in the live agent path (implemented, unit-tested, never wired into `orchestrator.py`/`workflows/`/`interface/`; no session-ID concept in the API) — `docs/SUBMISSION.md` overclaimed "retains context across turns," corrected; tracked as a real architectural item in BACKLOG.md rather than rushed
 23. **Most significant finding this session**: the FRB grader's numeric verification (`evals/graders/code_based.py`) was gameable — a wrong stated answer with the correct number planted elsewhere as a "decoy" scored a perfect 1.0. Fixed by scoping extraction to the agent's actual summary first; real production FRB eval re-run **completely unchanged** (mean 0.9114, tax 1.0000, pass@1 1.0000) proving FinRoot's real answers never relied on the loophole (HALL_OF_SHAME Pattern 14)
 24. Documented (not fixed — no live bug, high-risk to refactor under time pressure) a latent API/SQLite concurrency fragility: safety today is accidental (single-threaded via `async def` with no real offload), not by design; a defensive comment + BACKLOG.md item added so it's caught before anyone adds worker/thread concurrency
+25. **Single most important finding of the session**: fixing #23 (grader decoy exploit) immediately exposed a real, severe production bug — the exact scripted gold question `frb-076` (Section 80D deduction on health insurance premiums) misrouted to the `insurance` domain and returned generic insurance-shopping boilerplate that never states the deduction amount, even though `TaxPlannerAgent` had already computed the exactly correct ₹45,000 internally. The correct number only survived in internal debug text, which is exactly what the OLD grader picked up as "evidence" — this had been silently masked as a perfect score. Fixed with an explicit tax-code short-circuit in domain routing; pass@1 restored to 1.0000 (HALL_OF_SHAME Pattern 15)
 
 **Real score: ~97-98%. Never invent 100% — the human freeze bet is the one thing this can't self-certify.**

@@ -1,12 +1,28 @@
 # HANDOFF — Current State
 
-> Replaced 2026-07-26T06:26Z — hostile stranger-verification loop, round 6 (this session).
+> Replaced 2026-07-26T13:44Z — hostile stranger-verification loop, round 7 (this session).
 
 ## Snapshot
 - **Honest blended score:** **~97-98%** — **not 100%, not frozen**
-- **FRB @ `61753c9`:** mean **0.9114** · pass@1 **1.0000** · lift **+168.85%** vs RAG
-- **Evidence:** `docs/SCOREBOARD.md` §E-F (full list of 23 bugs found + fixed this session, plus 2 clean-audit confirmations)
+- **FRB @ `fa7aa60`:** mean **0.9092** · pass@1 **1.0000** · lift **+168.20%** vs RAG
+- **Evidence:** `docs/SCOREBOARD.md` §E-F (full list of 25 bugs found + fixed this session, plus 2 clean-audit confirmations)
 - **Plan:** `work/ETERNAL_FINAL_PLAN.md` · **Scoreboard:** `docs/SCOREBOARD.md`
+
+## Round 7 — the single most important finding of the entire session
+Fixing the grader decoy-number exploit (round 6) immediately paid off: a re-run showed
+pass@1 drop from 1.0000 to 0.9880, tracing to **the exact scripted gold question frb-076**
+("...health insurance premium... What deduction can I claim under Section 80D?") — not a
+paraphrase. Root cause: `detect_domain()` checked "insurance" keywords before "80d"/"section
+80", so a question that mentions health insurance premiums *as input data* to a tax
+deduction calculation got misrouted to the insurance domain. `TaxPlannerAgent` had already
+computed the exactly correct ₹45,000 answer internally — but the user-facing summary was
+silently overwritten with generic insurance-shopping boilerplate that never states the
+deduction amount at all. The correct number only survived buried in internal debug/trace
+text, which is precisely what the OLD, looser full-text-scanning grader had been picking up
+as "evidence" — **this bug had been silently masked as a perfect score for as long as it
+existed.** Fixed with a short-circuit for explicit tax-code identifiers. Verified: pass@1
+restored to 1.0000, full golden+intent+principles suite green, mean essentially unchanged
+(0.9114→0.9092, a small honest tradeoff from one `international` question's routing shift).
 
 ## Round 6 — the most important finding of the session
 **The FRB grader's numeric verification was gameable.** A wrong stated answer with the
@@ -93,13 +109,14 @@ Round 1 (9 fixes) + round 2 (GP-1/GP-2 paraphrase + dependency CVE disclosure) �
 make smoke
 bash scripts/judge_dry_run.sh
 PYTHONPATH=src python3 scripts/run_evals.py --mock --k 1
-# expect pass@1=1.0000 mean≈0.9114
+# expect pass@1=1.0000 mean≈0.9092
 docker-compose up -d && sleep 30 && docker-compose ps   # expect (healthy)
 docker-compose down
 ```
-All of the above were re-verified on **7 independent fresh `git clone`s**, not just the local
-working tree, after every fix landed — most recently confirmed at HEAD `6ee6909` before the
-final housekeeping regen to `61753c9`.
+All of the above were re-verified on **8 independent fresh `git clone`s** (rounds 1-6), not
+just the local working tree, after every fix landed. Round 7's fix (this one) has been
+verified locally (golden+intent+principles suite green, FRB re-run) but not yet on a fresh
+clone — that verification is the next immediate step, not skipped.
 
 ## Still open for freeze
 1. **Human freeze bet** — the one thing this session cannot self-certify. Everything
