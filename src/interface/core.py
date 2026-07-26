@@ -163,6 +163,15 @@ def answer(
     # FINROOT_LLM_PROVIDER from the env (market_data, news, macro, currency, …).
     # Without this only the LLM would be mocked while tools hit live APIs.
     # Save/restore so we don't leak the mock flag to other tests / callers.
+    #
+    # NOTE (HALL_OF_SHAME latent finding): this mutates process-global
+    # os.environ. Safe today only because the FastAPI /query endpoint is
+    # `async def` with no `await` inside it, serializing all requests on one
+    # event-loop thread — genuine concurrency (uvicorn --workers>1, or ever
+    # threading this call) would let one request's mock/live provider choice
+    # leak into another's mid-flight. Do not add worker/thread concurrency
+    # here without first threading the provider choice through as a real
+    # parameter instead of an env var. See BACKLOG.md.
     _saved_provider_env: str | None = None
     if mock:
         _saved_provider_env = os.environ.get("FINROOT_LLM_PROVIDER")

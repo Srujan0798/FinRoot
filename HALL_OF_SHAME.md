@@ -294,3 +294,45 @@
   data" — applies to any append-only log verification; the fix pattern (compare against an
   independently-tracked expected length/seq, not just internal consistency of what was read)
   generalizes to any similar structure.
+
+## Pattern 14: FRB grader's numeric check was gameable by a "decoy number"
+- Date 2026-07-26 · `evals/graders/code_based.py::grade_code` (numeric verification) ·
+  Severity Critical (undermines the "pass@1=1.0" headline claim's trustworthiness)
+- Root cause: for tasks with `expected.numeric_answer`, the grader extracted every number
+  from the FULL answer text (summary + analysis + risks + actions) and picked whichever
+  candidate was numerically closest to the expected value — with no check on where in the
+  text that number appeared, or whether it was the agent's actual stated conclusion.
+- Impact: hand-crafted adversarial test — a response stating "tax is Rs 50,000" (genuinely
+  wrong; expected 10,400) but with "quote reference 10400 when filing" planted elsewhere as
+  an unrelated decoy — scored a perfect `passed=True, score=1.0`, indistinguishable from a
+  genuinely correct answer. A response with the same wrong "50,000" claim and no decoy
+  correctly failed, confirming this required deliberately planting the expected number, not
+  generic keyword stuffing (which the grader already resists correctly).
+- Fix: numeric candidates are now extracted from `state.final.summary` alone (the agent's
+  actual headline claim) first; only fall back to the full text if the summary has no
+  numeric candidates at all (preserving existing behavior for the normal case). Verified: the
+  adversarial decoy case now correctly fails (extracted=50000, diff=39600); the genuinely
+  correct answer still passes; the real production FRB eval re-run shows **zero change**
+  (mean 0.9114, tax domain still 1.0000, pass@1 still 1.0000) — proof that FinRoot's actual
+  answers genuinely state their numbers in the summary and never relied on the loophole.
+- Prevention: any deterministic grader that extracts a value "from anywhere in the text" is
+  vulnerable to decoy-planting; always scope numeric/factual extraction to the field that
+  represents the agent's actual final claim, with a narrower fallback only when that field is
+  genuinely silent on the value.
+
+## Latent (not live) finding — API concurrency safety is accidental, not by design
+- Date 2026-07-26 · `src/interface/core.py` (`os.environ["FINROOT_LLM_PROVIDER"]` mutation),
+  `src/interface/api/app.py` (`async def query` with no `await`)
+- 10 concurrent `/query` requests (same and different `user_id`) all succeeded with no
+  crashes, no corruption, no SQLite lock errors — confirmed live. But this safety is an
+  accident of the endpoint being declared `async def` with fully synchronous work inside it
+  (never actually offloaded to a thread pool), which serializes all requests on the single
+  event-loop thread. Two things would break immediately if that changed: (1) `answer()`
+  temporarily mutates the **process-global** `os.environ["FINROOT_LLM_PROVIDER"]` and restores
+  it in a `finally` — under real concurrency this could leak one request's mock/live provider
+  choice into another's; (2) bare `sqlite3.connect()` per call with no WAL/busy-timeout tuning
+  would eventually hit `database is locked` under multi-process concurrency.
+- Not fixed this session (no live bug to fix, and refactoring `core.py`'s env-var handling —
+  a widely-used, central path — under time pressure is a worse risk than documenting a latent
+  issue that only manifests if someone later adds `--workers` or thread-pool dispatch).
+  Tracked in BACKLOG.md so it's caught before anyone changes concurrency settings.

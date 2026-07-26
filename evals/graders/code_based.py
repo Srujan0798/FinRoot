@@ -230,7 +230,16 @@ def grade_code(task: dict, state: AgentState) -> GradeResult:
     numeric_extracted: float | None = None
     numeric_diff: float | None = None
     if expected_numeric is not None:
-        candidates = _extract_numeric_candidates(text)
+        # Prefer candidates from the summary alone (the agent's actual stated
+        # headline answer) before falling back to the full text. Scanning the
+        # whole blob (summary+analysis+risks+actions) let a wrong final
+        # answer score a perfect 1.0 if the correct number merely appeared
+        # anywhere else as an unrelated "decoy" (e.g. a citation reference) —
+        # demonstrated adversarially (HALL_OF_SHAME Pattern 14). This does not
+        # change scoring for any answer that states its number in the summary,
+        # which is the normal case; it only closes the decoy loophole.
+        summary_candidates = _extract_numeric_candidates(state.final.summary or "")
+        candidates = summary_candidates or _extract_numeric_candidates(text)
         if not candidates:
             numeric_passed = False
         else:

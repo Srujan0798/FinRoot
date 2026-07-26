@@ -41,6 +41,15 @@
       response, with zero memory of the prior turn. Needs: a session-ID concept in the API
       layer + threading a persistent `MemoryManager` (or at minimum the working-context
       buffer) across calls for the same session · M · earliest wave-16
+- [ ] **Remove the process-global `os.environ["FINROOT_LLM_PROVIDER"]` mutation in
+      `core.py`'s `answer()`** · currently safe only because the `/query` endpoint is
+      `async def` with no `await`, serializing all requests on one event-loop thread — real
+      concurrency (uvicorn `--workers>1`, or threading `answer()`) would let one request's
+      mock/live provider choice leak into another's. Also: bare `sqlite3.connect()` per call
+      in `digital_twin.py` with no WAL/busy-timeout would eventually hit `database is locked`
+      under multi-process concurrency. Neither is a live bug today (verified: 10 concurrent
+      requests, same and different `user_id`, all succeeded with no corruption) — fix before
+      ever adding worker/thread concurrency, not after · S/M · earliest wave-16
 
 ## Research
 - [x] **FinBERT vs LLM-judge agreement study** · grader calibration · M · earliest wave-9
