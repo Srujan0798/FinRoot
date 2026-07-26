@@ -1,13 +1,13 @@
 {
-  "as_of_sha": "61753c9",
-  "generated_at": "2026-07-26T06:26:08.825525+00:00",
+  "as_of_sha": "fa7aa60",
+  "generated_at": "2026-07-26T13:43:52.035584+00:00",
   "systems": {
     "finroot": {
       "system": "finroot",
-      "pass_at_1": 0.988,
-      "pass_at_k": 0.988,
-      "pass_hat_k": 0.988,
-      "mean_score": 0.9114,
+      "pass_at_1": 1.0,
+      "pass_at_k": 1.0,
+      "pass_hat_k": 1.0,
+      "mean_score": 0.9092,
       "per_domain": {
         "behavioral": 0.8949,
         "cashflow": 0.88,
@@ -15,7 +15,7 @@
         "estate_planning": 0.916,
         "general": 0.8481,
         "insurance": 0.9857,
-        "international": 0.925,
+        "international": 0.88,
         "news_impact": 0.8443,
         "portfolio": 0.8992,
         "risk": 0.8604,
@@ -66,7 +66,7 @@
       "n_tasks": 83
     }
   },
-  "composite_lift_vs_rag_pct": 168.8496,
+  "composite_lift_vs_rag_pct": 168.2006,
   "n_tasks": 83,
   "k": 1
 }
