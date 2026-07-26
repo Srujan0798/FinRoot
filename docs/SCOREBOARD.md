@@ -1,8 +1,8 @@
 # FinRoot SCOREBOARD
 
 > Living truth table. Cells move RED → YELLOW → GREEN **only with evidence path**.  
-> As of: 2026-07-25T19:28Z · hostile stranger-verification loop · Evidence: `work/reports/wave-hostile-verify/` (this session)  
-> **Blended honest score: ~97-98%** (not 100%). FRB pass@1 **1.0000** mean **0.9117** lift **+168.94%** @e861de4
+> As of: 2026-07-26T05:13Z · hostile stranger-verification loop, round 3 · Evidence: `HALL_OF_SHAME.md` Patterns 1-11 (this session)  
+> **Blended honest score: ~97-98%** (not 100%). FRB pass@1 **1.0000** mean **0.9114** lift **+166.34%** @98f56d1
 
 Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced this freeze window
 
@@ -13,10 +13,10 @@ Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced thi
 | Criterion | W | Status | % | Evidence / gap |
 |---|---:|---|---:|---|
 | Solution Idea | 15% | YELLOW | 90 | Novelty + judge path + dry-run script; LangChain-vs-LangGraph framing corrected to match code |
-| Agent Architecture | 30% | GREEN | 95 | Soft specialist domain routing; real LangGraph StateGraph verified in code, not just claimed |
-| Reasoning Quality | 35% | GREEN | **99** | GP-1..5 verified live incl. paraphrase stress-test; FRB pass@1 **1.0000** mean **0.9117** |
-| Code Implementation | 20% | GREEN | 96 | Full suite green; CI shallow-clone bug fixed; docker healthcheck fixed; security review clean; UI crash + silent-data-clobber bugs fixed |
-| **BLENDED** | 100% | YELLOW | **~97-98** | Clean commit + true cold-clone + docker DONE this session; only human freeze bet remains |
+| Agent Architecture | 30% | GREEN | 95 | Domain-routing dead-code bug fixed (Pattern 10); soft specialist routing paraphrase-hardened across 9/11 FRB domains; real LangGraph StateGraph verified in code, not just claimed. Known remaining fragility: keyword-override architecture is structurally paraphrase-sensitive by design (Pattern 11) — a durable fix needs semantic classification, flagged as a follow-up, not hidden |
+| Reasoning Quality | 35% | GREEN | **99** | All 5 golden paths + 9 of 11 FRB domains paraphrase-stress-tested live (not just scripted phrasing); FRB pass@1 **1.0000** mean **0.9114** |
+| Code Implementation | 20% | GREEN | 96 | Full suite green (4 independent fresh-clone verifications); CI shallow-clone bug fixed; docker healthcheck fixed; security review clean + 14 dependency CVEs honestly disclosed; UI crash + silent-data-clobber + undocumented API warm-up bugs fixed |
+| **BLENDED** | 100% | YELLOW | **~97-98** | Clean commit + true cold-clone ×4 + docker DONE this session; only human freeze bet remains |
 
 ---
 
@@ -33,7 +33,7 @@ Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced thi
 | Full fast pytest | **GREEN** | locked suite + principles; timeout flakes on 2 subprocess tests fixed |
 | Docker | **GREEN** | `docker-compose up --build` → `(healthy)`, verified twice; healthcheck curl-missing bug found and fixed |
 | Streamlit 4 tabs | **GREEN** | Playwright PNGs + live browser verification this session (found + fixed a citations-rendering crash) |
-| FRB metrics | **GREEN** | e861de4 pass@1=**1.0000** mean=**0.9117** lift=+168.94% |
+| FRB metrics | **GREEN** | 98f56d1 pass@1=**1.0000** mean=**0.9114** lift=+166.34% |
 | API smoke | **GREEN** | verified on true cold clone (found + fixed missing fastapi/uvicorn deps) |
 | Judge dry-run | **GREEN** | `scripts/judge_dry_run.sh` — verified 3x on independent fresh clones, incl. after every fix |
 | Audit chain | **GREEN** | smoke + security review confirmed genuine hash-chaining (not cosmetic) |
@@ -144,5 +144,8 @@ ceilings are relaxed — do not do it as a last-minute change. Full detail:
 13. GP-1 (portfolio) misrouted to `news_impact` intent on a paraphrase lacking "portfolio"/"rebalance"/"allocation" — bare "stock" alone outscored an empty portfolio match. Broadened PORTFOLIO keyword triggers (HALL_OF_SHAME Pattern 8)
 14. GP-2 (tax) fell through to a non-answer on "a lakh" (word-form amount), "two years" (word-form holding period), and "equities" (plural not matching substring "equity") — three compounding gaps, all fixed with word-form parsing + plural support (HALL_OF_SHAME Pattern 9)
 15. Dependency audit found 14 real PYSEC-backed CVEs (incl. RCE-class in langgraph-checkpoint) blocked by this repo's own version ceilings — disclosed honestly in §F above rather than silently ignored or fixed with an untested, risky major-version bump under time pressure; real exploitability checked directly (no checkpointer compiled, chromadb runs embedded-only) and found low but non-zero
+16. `detect_domain()`'s GENERAL-intent fallback returned before the broader `_DOMAIN_KEYWORDS` sweep ever ran — that entire keyword dict was **permanently dead code**, affecting even the baseline scripted cashflow gold question, not just a paraphrase. Reordered (HALL_OF_SHAME Pattern 10)
+17. Stress-tested the 7 remaining FRB domains: credit + insurance robust; behavioral, estate_planning (worst break — complete generic-greeting non-answer), international, and general/portfolio all misrouted on paraphrase. Fixed all 4 with evidence-based keyword additions (HALL_OF_SHAME Pattern 11); flagged the underlying keyword-override architecture as structurally paraphrase-fragile — a real follow-up for semantic classification, not silently left as a one-line patch
+18. API's first request after boot measured ~3x slower than steady-state (0.96s vs 0.32s) and was undocumented anywhere a judge would see it before testing — added a one-line note to JUDGE_QUICKSTART.md
 
 **Real score: ~97-98%. Never invent 100% — the human freeze bet is the one thing this can't self-certify.**
