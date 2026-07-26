@@ -336,3 +336,36 @@
   a widely-used, central path — under time pressure is a worse risk than documenting a latent
   issue that only manifests if someone later adds `--workers` or thread-pool dispatch).
   Tracked in BACKLOG.md so it's caught before anyone changes concurrency settings.
+
+## Pattern 15: A real, severe production bug the grader had been masking (found via self-monitoring)
+- Date 2026-07-26 · `src/finroot/workflows/synthesize.py::detect_domain::_soft_specialist` ·
+  Severity Critical (this is the most important finding of the session)
+- Discovery path: after fixing Pattern 14 (grader decoy-number exploit), a re-run of the FRB
+  eval showed pass@1 drop from 1.0000 to 0.9880 — traced to `frb-076`
+  ("...health insurance premium... What deduction can I claim under Section 80D?"), the
+  **exact scripted gold question, not a paraphrase**.
+- Root cause: `_soft_specialist()` checks domains in the order behavioral → insurance →
+  estate_planning → international → tax → ... . The query mentions "health insurance
+  premium" (matching the insurance override list) before reaching "80d"/"section 80" (the
+  tax override list), so it returned `insurance` and won over the correctly-classified TAX
+  intent. Result: `TaxPlannerAgent` internally computed the exactly correct answer
+  (self ₹25,000 capped + parent ₹20,000 senior-citizen capped = ₹45,000, full breakdown,
+  correct rule citation) — but the user-facing summary was overwritten with **generic
+  insurance-shopping boilerplate** ("ensure sum insured covers Human Life Value...") that
+  never mentions the actual deduction amount at all. The correct ₹45,000 only survived
+  buried in the internal reasoning-trace debug text, which is exactly what the OLD
+  full-text-scanning grader (pre-Pattern-14-fix) picked up as "evidence" — masking a
+  completely broken user-facing answer as a perfect score for as long as this bug existed.
+- Fix: added a short-circuit in `_soft_specialist()` for explicit, unambiguous tax-code
+  identifiers ("section 80", "80d", "80c", "80ccd", "ltcg", "stcg", "capital gain") that
+  returns `tax` immediately, before the insurance/estate_planning/international keyword
+  sweep runs. Verified: frb-076 now correctly returns the ₹45,000 computed summary; full
+  golden + intent + principles suite green; FRB re-run shows pass@1 restored to **1.0000**,
+  mean essentially unchanged (0.9114→0.9092, a ~0.002 shift from one `international`-domain
+  question's routing, still passing — not a regression, a genuine tradeoff worth taking).
+- Prevention: **this bug would have shipped invisibly forever if Pattern 14 hadn't been
+  fixed first** — a robustness fix in the verification layer directly surfaced a real
+  production defect the old, looser grading had been hiding. This is the strongest argument
+  in the whole session for "verify in layers, don't trust one check" — the grader itself
+  needed hostile-testing, and fixing it paid off immediately by exposing a real bug, not
+  just a theoretical one.

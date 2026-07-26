@@ -1006,6 +1006,26 @@ def detect_domain(query: str, intent: Intent | None) -> str:
     # Soft domain upgrades that can override a coarse intent when the query
     # is clearly about a specialized FRB domain (behavioral / insurance / etc.).
     def _soft_specialist() -> str | None:
+        # Explicit tax-section identifiers ("Section 80D", "80C", "LTCG"...)
+        # are unambiguous — they must win over a generic domain word appearing
+        # elsewhere in the same query (e.g. "health insurance premium" as the
+        # INPUT to an 80D deduction question is not an insurance-shopping
+        # question). Found via hostile audit: frb-076 ("...health insurance
+        # premium... What deduction can I claim under Section 80D?") routed
+        # to `insurance` because that keyword list is checked first below,
+        # discarding the TaxPlannerAgent's correct ₹45,000 computation for a
+        # generic insurance-buying summary (HALL_OF_SHAME Pattern 15).
+        _STRONG_TAX_CODES = (
+            "section 80",
+            "80d",
+            "80c",
+            "80ccd",
+            "ltcg",
+            "stcg",
+            "capital gain",
+        )
+        if any(kw in q_lower for kw in _STRONG_TAX_CODES):
+            return "tax"
         # Order: more specific FRB domains first
         for domain in (
             "behavioral",
