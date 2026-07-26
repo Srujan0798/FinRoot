@@ -78,13 +78,12 @@ def test_reordered_events_detected(tmp_path: Path) -> None:
 
 
 def test_truncated_chain_detected(tmp_path: Path) -> None:
-    """NOTE: As of wave-15, verify_chain() does NOT detect truncation
-    (the iterator simply returns fewer events; the chain among the
-    remaining events is internally consistent). The seq check would
-    catch an INSERTION (an event with seq=2 when expected_seq=1) but
-    not a DELETION (the loop just ends). This is a known gap.
-    Fix: AuditTrail.verify_chain_detailed should compare the
-    highest seen seq against the expected total (or sum).
+    """Fixed (HALL_OF_SHAME Pattern 13): verify_chain_detailed() now compares
+    the highest seq seen on disk against ``self._last_seq`` (the highest seq
+    this in-process instance has appended/loaded). Deleting the tail event(s)
+    is otherwise invisible — the remaining events stay internally consistent
+    and the read loop just ends early — so this check is the only thing that
+    catches it.
     """
     audit = AuditTrail(tmp_path / "audit.jsonl")
     for i in range(5):
@@ -93,10 +92,7 @@ def test_truncated_chain_detected(tmp_path: Path) -> None:
     log_path = tmp_path / "audit.jsonl"
     lines = log_path.read_text().splitlines()
     log_path.write_text("\n".join(lines[:-1]) + "\n")
-    # Today this returns True; the test passes (the gap is documented).
-    # Once the gap is fixed, change this to assert is False.
-    assert audit.verify_chain() is True, (
-        "Truncation is not yet detected — see NOTE above. This test "
-        "documents the gap; flip the assertion once verify_chain detects "
-        "truncation."
-    )
+    result = audit.verify_chain_detailed()
+    assert result.ok is False, "Tail truncation must now be detected"
+    assert result.broken_seq == 4
+    assert "truncation" in result.reason.lower()

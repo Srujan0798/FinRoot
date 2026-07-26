@@ -32,6 +32,15 @@
       preventive architecture · an embedding-similarity check against domain exemplars (or a
       small classifier) would be durable where literal keyword lists cannot be · M/L ·
       earliest wave-16
+- [ ] **Wire `WorkingMemory` into the live multi-turn conversation path** · the class exists,
+      is unit-tested, and is a real sliding-window buffer, but `add_turn()` is never called
+      from `orchestrator.py`/`workflows/`/`interface/` in production — `answer()` builds a
+      fresh, empty `MemoryManager` on every call with no session/conversation-ID concept
+      anywhere in the API. Confirmed live: a coherent follow-up question ("what if it were
+      short-term instead?") after a correct LTCG answer got a completely unrelated generic
+      response, with zero memory of the prior turn. Needs: a session-ID concept in the API
+      layer + threading a persistent `MemoryManager` (or at minimum the working-context
+      buffer) across calls for the same session · M · earliest wave-16
 
 ## Research
 - [x] **FinBERT vs LLM-judge agreement study** · grader calibration · M · earliest wave-9

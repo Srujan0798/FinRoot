@@ -363,6 +363,27 @@ class AuditTrail:
             expected_seq += 1  # noqa: SIM113 — used for seq validation, not index
             checked += 1
 
+        # 4) tail-truncation — a deletion of the LAST event(s) is otherwise
+        # invisible to the checks above: the remaining events are internally
+        # consistent, the loop just ends early. This instance remembers the
+        # highest seq it has appended/loaded (`_last_seq`); if disk shows
+        # fewer, the tail was truncated after this instance last knew about
+        # it. (Only meaningful when this instance has actually seen events —
+        # `_last_seq == -1` means nothing has been appended yet.)
+        if self._last_seq >= 0 and (expected_seq - 1) < self._last_seq:
+            result = ChainVerification(
+                ok=False,
+                broken_seq=expected_seq,
+                reason=(
+                    f"tail truncation: chain ends at seq={expected_seq - 1} but this "
+                    f"instance last knew of seq={self._last_seq} — {self._last_seq - (expected_seq - 1)} "
+                    "trailing event(s) missing from disk"
+                ),
+                checked=checked,
+            )
+            self._last_verification = result
+            return result
+
         result = ChainVerification(ok=True, checked=checked)
         self._last_verification = result
         return result

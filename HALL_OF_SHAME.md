@@ -272,3 +272,25 @@
 - Recorded here (not as a numbered failure Pattern) because a clean audit result is exactly
   as important to log as a bug — it tells the next reader these two specific claims have
   been checked, not just asserted, and when.
+
+## Pattern 13: Audit-trail tail-truncation was undetectable (already documented as a known gap; now fixed)
+- Date 2026-07-26 · `src/finroot/audit/trail.py::verify_chain_detailed` · Severity Medium
+- Root cause: the hash-chain read loop only validated events it actually saw. Deleting the
+  LAST event(s) from the on-disk JSONL file left the remaining chain internally consistent
+  — no seq discontinuity, no hash mismatch — so the loop simply ended early and reported
+  success. `tests/unit/test_audit_trail.py::test_truncated_chain_detected` already
+  documented this exact gap with a TODO before this session touched it (not a fresh
+  discovery — an adversarial audit this session re-confirmed it live and flagged it as
+  worth actually fixing rather than leaving as a known gap).
+- Impact: an attacker who can write to the audit log file could delete the most recent
+  entries (e.g. to remove evidence of a bad recommendation) without detection, while any
+  other tampering (mid-chain edits, deletions, or hash patches) was already correctly caught.
+- Fix: `AuditTrail` already tracks `self._last_seq` (the highest seq this in-process instance
+  has appended/loaded, set in `__init__` and `append()`). Added a check after the read loop:
+  if the highest seq seen on disk is less than `self._last_seq`, report tail truncation with
+  the count of missing events. Flipped the pre-existing test's assertion from `is True`
+  (documenting the gap) to `is False` with a real reason-string check.
+- Prevention: this class of gap — "the loop just ends, so nothing catches missing tail
+  data" — applies to any append-only log verification; the fix pattern (compare against an
+  independently-tracked expected length/seq, not just internal consistency of what was read)
+  generalizes to any similar structure.
