@@ -18,8 +18,8 @@ if ! bash orchestrator/scripts/validate_execution.sh; then
   FAILED=1
 fi
 
-if ! bash orchestrator/scripts/validate_docs.sh; then
-  echo "pre-push: validate_docs.sh FAILED" >&2
+if ! bash orchestrator/scripts/validate_doc_links.sh; then
+  echo "pre-push: validate_doc_links.sh FAILED" >&2
   FAILED=1
 fi
 

@@ -25,7 +25,7 @@
   advice is wrong, you can show *why* and *where*. ([`docs/decisions/0007-hash-chained-audit-trail.md`](decisions/0007-hash-chained-audit-trail.md))
 - **Reasoning that you can *measure*.** The FRB benchmark compares Baseline-RAG,
   Single-Agent, and full FinRoot on the same tasks and reports pass@k + composite lift.
-  Single source of truth: `results/metrics.json`. ([`evals/README.md`](../../evals/README.md))
+  Single source of truth: `results/metrics.json`. ([`evals/README.md`](../evals/README.md))
 - **Reasoning that respects your autonomy.** Sovereign-first: runs locally, no telemetry,
   no vendor lock-in. ([`docs/decisions/0006-sovereign-first-mock-default.md`](decisions/0006-sovereign-first-mock-default.md))
 - **Reasoning with a Digital Twin.** Advice is grounded in your goals, risk tolerance,
@@ -37,15 +37,15 @@
 
 | What | Path |
 |---|---|
-| Hero README (judge entry point) | [`README.md`](../../README.md) |
+| Hero README (judge entry point) | [`README.md`](../README.md) |
 | Architecture diagram (Mermaid) | [`docs/architecture/architecture.mmd`](architecture/architecture.mmd) |
 | Demo script (7-minute, click-by-click narration) | [`docs/business/7_minute_demo_script.md`](business/7_minute_demo_script.md) |
 | Demo transcripts (4 showcase queries, offline-capturable) | [`docs/demo/transcript_1_portfolio.md`](demo/transcript_1_portfolio.md) · [`docs/demo/transcript_2_tax_with_number.md`](demo/transcript_2_tax_with_number.md) · [`docs/demo/transcript_3_news_impact.md`](demo/transcript_3_news_impact.md) · [`docs/demo/transcript_4_trap_question.md`](demo/transcript_4_trap_question.md) |
 | Executive summary (1 page) | [`docs/business/executive_summary.md`](business/executive_summary.md) |
 | Presentation outline (6 slides) | [`docs/business/presentation_outline.md`](business/presentation_outline.md) |
 | Architecture decision records (8 ADRs, MADR format) | [`docs/decisions/0001-tier-and-archetype.md`](decisions/0001-tier-and-archetype.md) → [`0008-deterministic-tax-engine.md`](decisions/0008-deterministic-tax-engine.md) |
-| Reasoning-quality proof (FRB harness) | [`evals/README.md`](../../evals/README.md) · `results/metrics.json` |
-| How the dual-tier build works | [`HOW_TO_RUN.md`](../../HOW_TO_RUN.md) · [`HIERARCHY.md`](../../HIERARCHY.md) |
+| Reasoning-quality proof (FRB harness) | [`evals/README.md`](../evals/README.md) · `results/metrics.json` |
+| How the dual-tier build works | [`HOW_TO_RUN.md`](../HOW_TO_RUN.md) · [`HIERARCHY.md`](../HIERARCHY.md) |
 
 ---
 

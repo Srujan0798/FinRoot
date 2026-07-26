@@ -38,7 +38,11 @@ while IFS= read -r md; do
     link="${link%%#*}"
     [ -z "$link" ] && continue
     md_dir=$(dirname "$md")
-    if [ -f "$md_dir/$link" ]; then
+    # Resolve file-relative first, then fall back to repo-root-relative —
+    # this codebase's convention (e.g. src/README.md's wave-task map) commonly
+    # writes repo-root-relative backtick/link paths regardless of the
+    # referencing file's own location.
+    if [ -f "$md_dir/$link" ] || [ -f "$link" ]; then
       CHECKED=$((CHECKED+1))
     else
       echo "BROKEN LINK in $md: $link"
@@ -52,7 +56,7 @@ while IFS= read -r md; do
   while IFS= read -r link; do
     [ -z "$link" ] && continue
     md_dir=$(dirname "$md")
-    if [ -f "$md_dir/$link" ]; then
+    if [ -f "$md_dir/$link" ] || [ -f "$link" ]; then
       CHECKED=$((CHECKED+1))
     else
       echo "BROKEN DOC REF in $md: \`$link\`"
