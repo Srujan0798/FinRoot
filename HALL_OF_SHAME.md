@@ -181,3 +181,60 @@
   miss because the singular/digit form usually appears in test fixtures.** Any `X in text`
   substring check for a domain noun should consider whether the plural form is a completely
   different string, not a superset.
+
+## Pattern 10: `_DOMAIN_KEYWORDS` was permanently dead code for GENERAL-intent queries
+- Date 2026-07-25 · `src/finroot/workflows/synthesize.py::detect_domain` · Severity Critical
+- Root cause: the function's final fallback checked `if intent in _INTENT_TO_DOMAIN: return
+  _INTENT_TO_DOMAIN[intent]` **before** the subsequent `_DOMAIN_KEYWORDS` sweep.
+  `Intent.GENERAL: "general"` is always present in `_INTENT_TO_DOMAIN`, so any query whose
+  intent classifier resolved to GENERAL returned `"general"` immediately — the entire
+  `_DOMAIN_KEYWORDS` dict (a broader keyword sweep covering tax/estate_planning/insurance/
+  behavioral/credit/cashflow) never executed for these queries, silently, for as long as this
+  code has existed.
+- Impact: "I want to build a ₹1Cr corpus in 15 years. How much do I need to invest monthly if
+  I assume 12% CAGR?" — an unambiguous cashflow/SIP-planning question containing the word
+  "corpus" and "monthly" (both listed in `_DOMAIN_KEYWORDS["cashflow"]`) — classified as
+  `general` and got a generic answer instead of cashflow-specific content, for BOTH the
+  original scripted gold question and its paraphrase (not a paraphrase-specific bug — this
+  affected the baseline gold question itself).
+- Fix: moved the `_DOMAIN_KEYWORDS` sweep to run before the `_INTENT_TO_DOMAIN` GENERAL
+  fallback. Verified the cashflow example now correctly routes to `cashflow`; full golden +
+  intent + principles + e2e suite green; FRB re-run mean essentially unchanged (0.9117→0.9114,
+  pass@1 unchanged at 1.0) with `estate_planning`'s bucket score improving materially.
+- Prevention: when a dict is keyed by every possible enum value including a catch-all (GENERAL
+  here), any fallback returning `dict[key]` early makes everything *after* it unreachable for
+  that key — grep for "dead code that only fires for non-GENERAL/non-default cases" whenever
+  a routing function has more than one keyword-sweep stage.
+
+## Pattern 11: Four more domains brittle under paraphrase (behavioral, estate_planning, international, general/portfolio)
+- Date 2026-07-25 · `src/finroot/workflows/synthesize.py` (`_OVERRIDE_KEYWORDS`),
+  `src/finroot/agents/intent.py` (PORTFOLIO keyword group) · Severity Critical
+- Root cause: same overfitting pattern as Patterns 1/8/9 — `_OVERRIDE_KEYWORDS` literal
+  substrings were lifted verbatim from specific gold-question wording rather than general
+  semantic signals. Four confirmed breaks:
+  - **estate_planning (worst break found)**: "provident fund"/"nominee" (paraphrase) vs
+    "epf"/"ppf"/"nomination" (scripted) — misrouted to `general` and returned a **completely
+    generic greeting fallback**, zero engagement with the actual question.
+  - **international**: "Liberalised Remittance Scheme"/"American equities" (paraphrase) vs
+    "LRS"/"US equities" (scripted) — misrouted to `tax`, losing LRS/currency-risk/DTAA/
+    dividend must_mention terms.
+  - **behavioral**: "ride the trend"/"shifting my entire" (paraphrase) vs "chase the
+    momentum"/"move all my" (scripted) — misrouted to `risk`, losing recency-bias/mean-
+    reversion must_mention terms.
+  - **general/portfolio**: "how should I split my investments" (paraphrase) vs "reasonable
+    asset allocation" (scripted) — misrouted to `risk` boilerplate, dropping
+    allocation/horizon must_mention terms.
+- Fix: added the specific paraphrase triggers found (provident fund/nominee;
+  liberalised/liberalized remittance scheme, american equities/stocks, money abroad; ride/
+  chase the trend, shifting my entire; split my investments/how should i split) to the
+  relevant keyword groups. Verified all 4 originals unchanged, all 4 broken paraphrases now
+  correct; full golden + intent + principles + e2e suite green.
+- Prevention: this keyword-override architecture is structurally paraphrase-fragile by
+  design — every fix here is reactive (found via stress-testing), not preventive. A durable
+  fix would replace literal-substring overrides with semantic domain classification (e.g. an
+  embedding-similarity check against domain exemplars), which is a real architectural
+  follow-up worth a dedicated wave, not a one-line patch. Until then: **paraphrase-stress-test
+  is the only way to find these**, and this session found 7 confirmed breaks (Patterns 1, 8,
+  9, 11) across the 5 golden paths + several FRB domains this way — the remaining FRB domains
+  not yet stress-tested (credit, insurance were checked and found robust; a few others may
+  still be untested) should be assumed to carry similar risk until checked.

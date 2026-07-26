@@ -896,6 +896,13 @@ def detect_domain(query: str, intent: Intent | None) -> str:
             "want to sell after",
             "dip",
             "chase the momentum",
+            # Paraphrases found brittle under stress-test (HALL_OF_SHAME
+            # Pattern 11): "ride/chase the trend" instead of "chase the
+            # momentum"; "shifting my entire" instead of "move all my".
+            "ride the trend",
+            "chase the trend",
+            "chasing the trend",
+            "shifting my entire",
             "move all my",
             "miss out",
             "everyone in my",
@@ -932,6 +939,16 @@ def detect_domain(query: str, intent: Intent | None) -> str:
             "through the lrs",
             "lrs route",
             "home bias",
+            # Paraphrases found brittle under stress-test (HALL_OF_SHAME
+            # Pattern 11): spelled-out "Liberalised Remittance Scheme"
+            # instead of "LRS"; "American equities/stocks" instead of "US".
+            "liberalised remittance scheme",
+            "liberalized remittance scheme",
+            "remittance scheme",
+            "american equities",
+            "american stocks",
+            "send money abroad",
+            "money abroad",
         ),
         "insurance": (
             "health cover",
@@ -959,6 +976,11 @@ def detect_domain(query: str, intent: Intent | None) -> str:
             "registered will",
             "without a will",
             "passed away",
+            # Paraphrases found brittle under stress-test (HALL_OF_SHAME
+            # Pattern 11): "provident fund"/"nominee" instead of the literal
+            # "epf"/"ppf"/"nomination".
+            "provident fund",
+            "nominee",
         ),
         "credit": (
             "credit utilization",
@@ -1074,13 +1096,17 @@ def detect_domain(query: str, intent: Intent | None) -> str:
             if kw in q_lower:
                 return domain
 
-    if intent is not None and intent in _INTENT_TO_DOMAIN:
-        return _INTENT_TO_DOMAIN[intent]
-    q = (query or "").lower()
+    # Broader domain keyword sweep — this must run BEFORE the GENERAL
+    # fallback below. _INTENT_TO_DOMAIN[Intent.GENERAL] == "general", so
+    # returning it first made _DOMAIN_KEYWORDS permanently dead code for
+    # any query whose intent resolved to GENERAL (HALL_OF_SHAME Pattern 10).
     for domain, keywords in _DOMAIN_KEYWORDS.items():
         for kw in keywords:
-            if kw in q:
+            if kw in q_lower:
                 return domain
+
+    if intent is not None and intent in _INTENT_TO_DOMAIN:
+        return _INTENT_TO_DOMAIN[intent]
     return "general"
 
 

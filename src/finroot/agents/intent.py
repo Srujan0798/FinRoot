@@ -237,6 +237,11 @@ _KEYWORD_RULES: list[tuple[list[str], Intent, float]] = [
             "rejig",
             "tweak my portfolio",
             "tweak the mix",
+            # Paraphrase of "asset allocation" (HALL_OF_SHAME Pattern 11):
+            # "how should I split my investments" for a horizon/allocation
+            # question.
+            "split my investments",
+            "how should i split",
         ],
         Intent.PORTFOLIO,
         8.0,
