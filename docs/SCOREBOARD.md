@@ -1,8 +1,8 @@
 # FinRoot SCOREBOARD
 
 > Living truth table. Cells move RED → YELLOW → GREEN **only with evidence path**.  
-> As of: 2026-07-26T06:12Z · hostile stranger-verification loop, round 5 · Evidence: `HALL_OF_SHAME.md` Patterns 1-13 + 2 clean-audit confirmations (this session)  
-> **Blended honest score: ~97-98%** (not 100%). FRB pass@1 **1.0000** mean **0.9114** lift **+168.85%** @30e2ed9
+> As of: 2026-07-26T06:26Z · hostile stranger-verification loop, round 6 · Evidence: `HALL_OF_SHAME.md` Patterns 1-14 + 2 clean-audit confirmations + 1 latent non-live finding (this session)  
+> **Blended honest score: ~97-98%** (not 100%). FRB pass@1 **1.0000** mean **0.9114** lift **+168.85%** @61753c9
 
 Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced this freeze window
 
@@ -33,7 +33,7 @@ Legend: **RED** broken/unproven · **YELLOW** partial · **GREEN** evidenced thi
 | Full fast pytest | **GREEN** | locked suite + principles; timeout flakes on 2 subprocess tests fixed |
 | Docker | **GREEN** | `docker-compose up --build` → `(healthy)`, verified twice; healthcheck curl-missing bug found and fixed |
 | Streamlit 4 tabs | **GREEN** | Playwright PNGs + live browser verification this session (found + fixed a citations-rendering crash) |
-| FRB metrics | **GREEN** | 30e2ed9 pass@1=**1.0000** mean=**0.9114** lift=+168.85% |
+| FRB metrics | **GREEN** | 61753c9 pass@1=**1.0000** mean=**0.9114** lift=+168.85% |
 | API smoke | **GREEN** | verified on true cold clone (found + fixed missing fastapi/uvicorn deps) |
 | Judge dry-run | **GREEN** | `scripts/judge_dry_run.sh` — verified 3x on independent fresh clones, incl. after every fix |
 | Audit chain | **GREEN** | smoke + security review confirmed genuine hash-chaining (not cosmetic) |
@@ -151,5 +151,7 @@ ceilings are relaxed — do not do it as a last-minute change. Full detail:
 20. Independently verified (not assumed) that the Self-Critic has real teeth — 2 freshly-constructed bad recommendations correctly scored 0.285/0.47 and failed — and that 4 prompt-injection-style queries produced zero compliance (no leakage, no forced confidence, no dropped disclaimers); fixed one cosmetic-only artifact (all-caps injection words misparsed as ticker candidates) anyway
 21. Audit-trail tail-truncation (deleting the LAST event(s)) was undetectable — an already-documented known gap with a TODO in the test suite, re-confirmed adversarially and actually fixed rather than left open (HALL_OF_SHAME Pattern 13); mid-chain edits/deletions/hash-patches were already correctly caught
 22. `WorkingMemory` confirmed dead code in the live agent path (implemented, unit-tested, never wired into `orchestrator.py`/`workflows/`/`interface/`; no session-ID concept in the API) — `docs/SUBMISSION.md` overclaimed "retains context across turns," corrected; tracked as a real architectural item in BACKLOG.md rather than rushed
+23. **Most significant finding this session**: the FRB grader's numeric verification (`evals/graders/code_based.py`) was gameable — a wrong stated answer with the correct number planted elsewhere as a "decoy" scored a perfect 1.0. Fixed by scoping extraction to the agent's actual summary first; real production FRB eval re-run **completely unchanged** (mean 0.9114, tax 1.0000, pass@1 1.0000) proving FinRoot's real answers never relied on the loophole (HALL_OF_SHAME Pattern 14)
+24. Documented (not fixed — no live bug, high-risk to refactor under time pressure) a latent API/SQLite concurrency fragility: safety today is accidental (single-threaded via `async def` with no real offload), not by design; a defensive comment + BACKLOG.md item added so it's caught before anyone adds worker/thread concurrency
 
 **Real score: ~97-98%. Never invent 100% — the human freeze bet is the one thing this can't self-certify.**

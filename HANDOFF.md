@@ -1,12 +1,24 @@
 # HANDOFF — Current State
 
-> Replaced 2026-07-26T06:12Z — hostile stranger-verification loop, round 5 (this session).
+> Replaced 2026-07-26T06:26Z — hostile stranger-verification loop, round 6 (this session).
 
 ## Snapshot
 - **Honest blended score:** **~97-98%** — **not 100%, not frozen**
-- **FRB @ `30e2ed9`:** mean **0.9114** · pass@1 **1.0000** · lift **+168.85%** vs RAG
-- **Evidence:** `docs/SCOREBOARD.md` §E-F (full list of 21 bugs found + fixed this session, plus 2 clean-audit confirmations)
+- **FRB @ `61753c9`:** mean **0.9114** · pass@1 **1.0000** · lift **+168.85%** vs RAG
+- **Evidence:** `docs/SCOREBOARD.md` §E-F (full list of 23 bugs found + fixed this session, plus 2 clean-audit confirmations)
 - **Plan:** `work/ETERNAL_FINAL_PLAN.md` · **Scoreboard:** `docs/SCOREBOARD.md`
+
+## Round 6 — the most important finding of the session
+**The FRB grader's numeric verification was gameable.** A wrong stated answer with the
+correct number planted elsewhere as an unrelated "decoy" scored a perfect 1.0, indistinguishable
+from a genuinely correct answer — this went straight at the credibility of the headline
+pass@1=1.0000 claim itself. Fixed by scoping numeric extraction to the agent's actual stated
+summary first, falling back to full text only when the summary has no candidates. **Verified
+the real production FRB eval is completely unaffected by this tightening** (mean 0.9114, tax
+1.0000, pass@1 1.0000, byte-for-byte identical to before) — proof FinRoot's actual answers
+never relied on the loophole; it was purely a grader-robustness gap, not a hidden real score
+inflation. Also documented (not fixed) a latent, non-live concurrency fragility in the API/
+SQLite layer — currently safe only by accident of single-threaded execution.
 
 ## Round 5 additions
 1. **Audit-trail tail-truncation now detected** — an already-documented known gap (test had
@@ -85,9 +97,9 @@ PYTHONPATH=src python3 scripts/run_evals.py --mock --k 1
 docker-compose up -d && sleep 30 && docker-compose ps   # expect (healthy)
 docker-compose down
 ```
-All of the above were re-verified on **6 independent fresh `git clone`s**, not just the local
-working tree, after every fix landed — most recently confirmed at HEAD `dc92f07` before the
-final housekeeping regen to `30e2ed9`.
+All of the above were re-verified on **7 independent fresh `git clone`s**, not just the local
+working tree, after every fix landed — most recently confirmed at HEAD `6ee6909` before the
+final housekeeping regen to `61753c9`.
 
 ## Still open for freeze
 1. **Human freeze bet** — the one thing this session cannot self-certify. Everything
