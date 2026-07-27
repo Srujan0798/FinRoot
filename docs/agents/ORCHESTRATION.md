@@ -61,5 +61,5 @@ pending tasks ever share a path, the orchestrator re-partitions before dispatch 
 
 ## Quick start (right now)
 W1 is ready. Open the orchestrator → "Dispatch wave-1" (files exist) → open up to 5 worker windows →
-paste `WORKER_PROMPT.md` + each `work/wave-1/0X-*.md` (02 first). Reports land in
+paste `work/WORKER_PROMPT.md` + each `work/wave-1/0X-*.md` (02 first). Reports land in
 `work/reports/wave-1/`. Then "Review + ship wave-1."

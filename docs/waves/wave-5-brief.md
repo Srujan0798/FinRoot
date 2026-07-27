@@ -14,7 +14,7 @@ explainability/confidence/citation assembly. **Depends on W4. Highest-leverage w
 | 05 | Explainability assembly (rationale+risks+confidence+citations) | reasoning | `src/finroot/reasoning/explain.py` | 01,03 |
 
 ## Contracts to freeze first
-`reasoning.contract.md` — the 5 axes (correctness · risk-awareness · actionability · explainability ·
+`.specify/specs/wave-5/contracts/reasoning.contract.md` — the 5 axes (correctness · risk-awareness · actionability · explainability ·
 evidence), score schema + thresholds, refinement stop conditions, the principles checklist, and the
 "insufficient evidence → do not act yet" downgrade rule.
 

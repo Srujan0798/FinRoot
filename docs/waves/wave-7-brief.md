@@ -14,7 +14,7 @@ zero-friction judging. **UI shell can start after W1; full UI after W4/W5.**
 | 05 | Live harness tab (run FRB in-app) | frontend | `src/interface/ui/components/harness.py` | W6 |
 
 ## Contracts to freeze first
-`ui.contract.md` — the core API the UI/CLI call (one `answer(query, twin) -> Recommendation`
+`.specify/specs/wave-7/contracts/ui.contract.md` — the core API the UI/CLI call (one `answer(query, twin) -> Recommendation`
 entry point), the trace event shape the UI renders, and the Mock-mode default.
 
 ## Acceptance

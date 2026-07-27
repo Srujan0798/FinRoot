@@ -15,7 +15,7 @@ independent, so this wave fans out widely.
 | 06 | Profile + document + watchlist | UserProfileTool, DocumentParserTool, WatchlistAlertTool | `src/finroot/tools/profile.py`, `tools/documents.py`, `tools/watchlist.py` | W1, W2(profile) |
 
 ## Contracts to freeze first
-`tools.contract.md` — every tool: typed input/output Pydantic models, TTL cache, token-bucket rate
+`.specify/specs/wave-3/contracts/tools.contract.md` — every tool: typed input/output Pydantic models, TTL cache, token-bucket rate
 limit, retry+backoff, **loud failure (no synthetic data)**, audit-emit hook.
 
 ## Acceptance

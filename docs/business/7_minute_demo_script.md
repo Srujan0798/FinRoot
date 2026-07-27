@@ -61,7 +61,7 @@
 - Specific violated principles listed (e.g., "Emergency fund preservation", "Concentration risk").
 - The answer explicitly says: *"This advice may not be suitable — verify against your full financial picture."*
 
-**Reliability note:** If the verifier doesn't fire, check that `finroot.reasoning.principles` is importable. If the trap question gets a confident answer instead of a refusal, the verifier may need the `FINROOT_LLM_PROVIDER=mock` env var. Show `docs/demo/transcript_4_trap.md` as fallback.
+**Reliability note:** If the verifier doesn't fire, check that `finroot.reasoning.principles` is importable. If the trap question gets a confident answer instead of a refusal, the verifier may need the `FINROOT_LLM_PROVIDER=mock` env var. Show `docs/demo/transcript_4_trap_question.md` as fallback.
 
 ---
 

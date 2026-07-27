@@ -13,7 +13,7 @@ FinRoot personal and contextual). **Depends on W1. Runs in parallel with W3.**
 | 05 | Sample synthetic Digital Twins + fixtures | data | `data/samples/**`, `data/synthetic/**` | 03 |
 
 ## Contracts to freeze first
-`memory.contract.md` — interfaces for `MemoryManager`, `DigitalTwin` (goals, risk tolerance,
+`.specify/specs/wave-2/contracts/memory.contract.md` — interfaces for `MemoryManager`, `DigitalTwin` (goals, risk tolerance,
 horizon, holdings, tax bracket, constraints), retrieval API. (Orchestrator writes this in /plan.)
 
 ## Acceptance

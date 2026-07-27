@@ -55,6 +55,12 @@ while IFS= read -r md; do
   md_links=$(grep -oE '`[A-Za-z0-9_./-]+\.md`' "$md" 2>/dev/null | sed -E 's/`([^`]+)`/\1/' || true)
   while IFS= read -r link; do
     [ -z "$link" ] && continue
+    # Skip naming *patterns*, not paths. `.specify/specs/wave-N/spec.md` and
+    # `docs/waves/wave-N-gotchas.md` document a convention — the literal N is
+    # never a real file, so flagging them is a permanent unfixable failure.
+    case "$link" in
+      *wave-N*|*'<'*|*'{'*|*'$'*) continue ;;
+    esac
     md_dir=$(dirname "$md")
     if [ -f "$md_dir/$link" ] || [ -f "$link" ]; then
       CHECKED=$((CHECKED+1))

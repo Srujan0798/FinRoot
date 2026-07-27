@@ -56,7 +56,7 @@ Sovereign-first: local model preference, offline fallback, no blind reliance on 
   input fails loud — NEVER substitute synthetic/hallucinated financial data.
 - **FM-08 Scope guard.** `docs/SCOPE_GUARD.md` is law. IN / OUT / LATER.
 - **FM-13 No parallel collisions.** Disjoint write-sets per wave; check before dispatch.
-- **FM-01 No state drift.** `EXECUTION.md`/`HANDOFF.md` are rewritten to current truth, one row
+- **FM-01 No state drift.** `plan/EXECUTION.md`/`HANDOFF.md` are rewritten to current truth, one row
   per item; active wave matches across files.
 - **FM-05/12 One source for metrics.** Numbers live in `results/metrics.json` + eval reports;
   docs regenerate, never hand-type. Stamp "as of <sha>".

@@ -17,7 +17,7 @@ Lightweight (single-user / demo scope). Focus: keep the build green and the demo
 
 ## Common scenarios
 - **Fabricated/uncited number in output (SEV-1)** → the citation validator or grader should have
-  caught it; add the missing guard; tighten `rules/python.md`; add an FRB negative case.
+  caught it; add the missing guard; tighten `orchestrator/rules/python.md`; add an FRB negative case.
 - **Self-Critic rubber-stamping** → add deliberately-bad answers to the eval set it must catch.
 - **Live API down during demo** → switch to Mock mode (default anyway); note in demo script.
 - **Audit chain verify=False** → do NOT auto-repair; investigate the tamper/bug; it's working as designed.

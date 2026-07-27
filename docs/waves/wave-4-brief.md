@@ -14,7 +14,7 @@ and memory (W2). This is where the agent first *reasons end-to-end*. **Depends o
 | 06 | Result synthesizer | reasoning | `src/finroot/workflows/synthesize.py` | 05 |
 
 ## Contracts to freeze first
-`graph.contract.md` — the LangGraph node interface, `AgentState` transitions (from W1 state
+`.specify/specs/wave-4/contracts/graph.contract.md` — the LangGraph node interface, `AgentState` transitions (from W1 state
 contract), sub-agent input/output schema, routing-by-intent map.
 
 ## Acceptance

@@ -143,7 +143,7 @@ Endpoint · Target P95 · Acceptable P95 · Minimum P95. CI fails if P95 exceeds
 SEV-1..4 · On-call rotation · Response: acknowledge→assess→stabilize→communicate→resolve→post-mortem 48h.
 
 ### Skills/Commands Unification (Anthropic May 2026)
-`.claude/commands/deploy.md` (legacy) = `.claude/skills/deploy/SKILL.md` (preferred). Both create `/deploy`.
+.claude/commands/deploy.md (legacy) = .claude/skills/deploy/SKILL.md (preferred) — naming convention, not files in this repo. Both create `/deploy`.
 Frontmatter: `allowed-tools` · `invocation` (claude|user|both) · `subagent: true` (isolated context).
 
 ### evals/tasks/NNN-name.task.yaml (⊕T1)

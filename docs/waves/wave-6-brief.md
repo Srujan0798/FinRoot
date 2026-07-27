@@ -13,7 +13,7 @@ behind the 35% claim. **Depends on W4 + W5.** Without this, reasoning quality is
 | 05 | Report generator → metrics.json + delta | eval eng | `src/finroot/evaluation/report.py`, `evals/reports/.gitkeep` | 04 |
 
 ## Contracts to freeze first
-`evals.contract.md` — task YAML shape (per §4.23), grader interface, metric definitions (pass@k,
+`.specify/specs/wave-6/contracts/evals.contract.md` — task YAML shape (per §4.23), grader interface, metric definitions (pass@k,
 pass^k), the single metrics source (`results/metrics.json`), and the anti-patterns to reject (§6.9).
 
 ## Acceptance

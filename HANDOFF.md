@@ -6,7 +6,7 @@
 - **Honest blended score:** **~97-98%** — **not 100%, not frozen**
 - **FRB @ `c359a99`:** mean **0.9092** · pass@1 **1.0000** · lift **+168.20%** vs RAG
 - **Evidence:** `docs/SCOREBOARD.md` §E-F (full list of 25 bugs found + fixed this session, plus 2 clean-audit confirmations)
-- **Plan:** `work/ETERNAL_FINAL_PLAN.md` · **Scoreboard:** `docs/SCOREBOARD.md`
+- **Plan:** `plan/EXECUTION.md` · **Scoreboard:** `docs/SCOREBOARD.md`
 
 ## Round 7 — the single most important finding of the entire session
 Fixing the grader decoy-number exploit (round 6) immediately paid off: a re-run showed
@@ -104,11 +104,9 @@ follow-up worth a dedicated wave, not something this session is pretending is fu
 Round 1 (9 fixes) + round 2 (GP-1/GP-2 paraphrase + dependency CVE disclosure) — see
 `docs/SCOREBOARD.md` §E-F or prior HANDOFF revisions in git history for full detail.
 
-## → Read `work/EOD_FINAL_HANDOFF.md` next
-That file is the ordered, exact-command action plan for finishing this to submission —
-pre-submission verification steps, optional stretch work (with explicit guardrails against
-risky under-time-pressure changes), and the actual submission steps. This HANDOFF.md is state;
-that file is the plan.
+## Next steps
+The former pointer here was to work/EOD_FINAL_HANDOFF.md, which no longer exists.
+This file is state; `plan/EXECUTION.md` is the plan.
 
 ## Prove green
 ```bash

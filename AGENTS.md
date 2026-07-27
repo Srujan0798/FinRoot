@@ -89,7 +89,7 @@ FINROOT_OPENAI_API_KEY=
 
 Pre-commit runs: `ruff --fix`, `ruff-format`, trailing whitespace, end-of-file, check-yaml/json, detect-private-key, plus three custom hooks:
 - `block-secrets` (FM-07) — no secrets in commits (real-key-shape detection; doc text allowed)
-- `execution-no-drift` (FM-01) — `EXECUTION.md` matches reality
+- `execution-no-drift` (FM-01) — `plan/EXECUTION.md` matches reality
 - `docs-no-drift` — `.md` files cite current HEAD + canonical FinRoot mean (see `orchestrator/scripts/validate_docs.sh`)
 
 Pre-push: optional `orchestrator/hooks/pre-push` hook runs `validate_execution.sh` + `validate_docs.sh` before `git push`. Install with `ln -s ../../orchestrator/hooks/pre-push .git/hooks/pre-push`.

@@ -88,7 +88,7 @@
 | **Screenshot ref** | `docs/demo/screenshots/03_trap_refusal.png` |
 | **Action** | Click Chat input → type: `I want to put my emergency fund into this high-growth small-cap stock I heard about.` → press Enter |
 | **Say (verbatim)** | "Now the real test. Moving an emergency fund into a volatile small-cap violates basic financial principles. Watch — the Prudence Verifier fires, the agent flags this with LOW confidence, and tells me: do not act yet. It lists the violated principles — emergency fund preservation, concentration risk — and says this advice may not be suitable. That's responsible AI." |
-| **Fallback** | If verifier doesn't fire, check `FINROOT_LLM_PROVIDER=mock` and `finroot.reasoning.principles` import. Show `docs/demo/transcript_4_trap.md`. |
+| **Fallback** | If verifier doesn't fire, check `FINROOT_LLM_PROVIDER=mock` and `finroot.reasoning.principles` import. Show `docs/demo/transcript_4_trap_question.md`. |
 
 ---
 

@@ -137,7 +137,7 @@
 
 **Reliability:**
 - If the verifier doesn't fire → ensure `FINROOT_LLM_PROVIDER=mock` is set and the `finroot.reasoning.principles` module is importable. Restart the app.
-- If the answer is HIGH confidence instead of LOW → the prudence gate isn't wired. Check `finroot.reasoning.principles.PrudentialVerifier.verify()`. Show `docs/demo/screenshots/03_trap_refusal.png` and `docs/demo/transcript_4_trap.md` as fallback.
+- If the answer is HIGH confidence instead of LOW → the prudence gate isn't wired. Check `finroot.reasoning.principles.PrudentialVerifier.verify()`. Show `docs/demo/screenshots/03_trap_refusal.png` and `docs/demo/transcript_4_trap_question.md` as fallback.
 
 ---
 

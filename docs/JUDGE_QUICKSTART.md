@@ -79,7 +79,6 @@ PYTHONPATH=src python -m pytest tests/golden/test_golden_paths_ps1.py -q
 | Architecture | `docs/architecture/architecture.png` |
 | Screenshots | `docs/demo/screenshots/` |
 | Audit trail code | `src/finroot/audit/` |
-| Brutal audit | `work/reports/BRUTAL_AUDIT.md` |
 
 ---
 

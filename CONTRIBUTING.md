@@ -28,7 +28,7 @@ rules below keep the build collision-free and the quality high.
 ## Code conventions
 - Python 3.11, type-hinted, **Pydantic v2** for all data at boundaries.
 - `ruff` for lint+format (`make lint`). Tests with `pytest` (`make test`).
-- Path-scoped rules: `orchestrator/rules/python.md`, `security.md`, `docs.md`.
+- Path-scoped rules: `orchestrator/rules/python.md`, `security.md`, `orchestrator/rules/docs.md`.
 - Domain rule: financial outputs MUST carry rationale, risk notes, citations, and a confidence label.
 
 ## Workflow for a worker
