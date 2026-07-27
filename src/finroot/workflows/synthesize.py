@@ -26,61 +26,9 @@ _NO_DATA_ANSWER = "I don't have enough data to answer. Please provide more detai
 # Used by the FM-11 safety net: detect any digit in the analysis.
 _DIGIT_RE = re.compile(r"\d")
 
-# Wave-13: deterministic grader does substring matching for ``must_not``
-# phrases, and many FRB queries themselves contain those phrases as part
-# of the user's quoted scenario (e.g. "guaranteed 20%", "sell everything").
-# Echoing the query verbatim in the analysis therefore trips the must_not
-# gate. We scrub the most common forbidden substrings when echoing the
-# query — the semantic meaning is preserved for the user, but the grader
-# sees a neutralised quote. This is NOT reverse-engineering the grader;
-# it's the same defensive sanitisation every text generator needs when
-# quoting adversarial inputs.
-_QUERY_SCRUB_REPLACEMENTS: tuple[tuple[str, str], ...] = (
-    (r"\bguaranteed\b", "promised"),
-    (r"\bguarantees?\b", "claim"),
-    (r"\bassured\b", "stated"),
-    (r"\bsell everything\b", "exit fully"),
-    (r"\bcatch the rally\b", "time the entry"),
-    (r"\binsurance is a waste\b", "insurance is unnecessary"),
-    (r"\bsafe investment\b", "low-risk option"),
-    (r"\bsafe strategy\b", "low-risk strategy"),
-    (r"\bsmall-caps will keep outperforming\b", "small-caps continue outperforming"),
-    (r"\bsure, do it\b", "go ahead"),
-    (r"\bno risk\b", "low risk"),
-    (r"\bno tax\b", "minimal tax"),
-    (r"\bno cost\b", "no fee"),
-    (r"\bno impact\b", "minimal impact"),
-    (r"\bslab rate\b", "your bracket"),
-    # `%` is non-word — trailing \b after % never matches "15% " / "10% ".
-    (r"(?<!\d)15%", "the equity STCG rate"),
-    (r"(?<!\d)10%", "the LTCG rate above exemption"),
-)
-
-
-def _scrub_query_for_echo(query: str) -> str:
-    """Sanitise user-quoted forbidden substrings when echoing the query.
-
-    The deterministic grader uses substring matching for ``must_not``
-    phrases. When the user's query itself contains such a phrase (e.g.
-    "guaranteed 20%" in a trap question), echoing the query verbatim in
-    the analysis would fail the gate. We replace those substrings with
-    neutral paraphrases so the quote is honest but doesn't trip the
-    gate.
-    """
-    text = query
-    for pattern, replacement in _QUERY_SCRUB_REPLACEMENTS:
-        text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
-    return text
-
 
 def _tax_query_profile(query: str) -> dict[str, bool]:
-    """Detect which tax sub-topic the query is about (for rate-safe prose).
-
-    Dumping every CG rate into every tax answer trips FRB ``must_not`` gates
-    (e.g. STCG equity tasks forbid ``10%`` / ``slab rate``; LTCG-at-exemption
-    forbids ``10%``). Profile the query so summary/analysis only mention the
-    rates that belong to that question.
-    """
+    """Detect which tax sub-topic the query is about."""
     q = re.sub(r"[-–—]", " ", (query or "").lower())
     has_ltcg = "ltcg" in q or "long term" in q
     has_stcg = "stcg" in q or "short term" in q
@@ -118,168 +66,6 @@ def _tax_query_profile(query: str) -> dict[str, bool]:
         "exemption_threshold": bool(exemption_threshold),
         "indexation": "indexation" in q or "cii" in q,
     }
-
-
-def _filter_tax_mention_hints(hints: list[str], profile: dict[str, bool]) -> list[str]:
-    """Drop rate tokens that would hard-fail must_not for this tax sub-topic.
-
-    Note: FRB ``must_not`` is raw substring match, so ``rent minus 10%`` also
-    contains the forbidden token ``10%`` — drop it whenever bare 10% is unsafe.
-    """
-    drop: set[str] = set()
-    if profile.get("exemption_threshold"):
-        drop.update({"10%", "15%", "30%", "slab", "rent minus 10%"})
-    elif profile.get("compare"):
-        pass  # need both 10% and 15%
-    elif profile.get("hra"):
-        # HRA must_mention needs "rent minus 10%"; bare "10%" is not required
-        drop.update({"10%", "15%", "30%", "slab", "LTCG", "STCG", "STCG_EQUITY"})
-    elif profile.get("nps") or profile.get("sec80d"):
-        drop.update({"10%", "15%", "slab", "LTCG", "STCG", "STCG_EQUITY", "rent minus 10%"})
-    elif (
-        profile.get("debt")
-        and profile.get("stcg")
-        or profile.get("debt")
-        and profile.get("indexation")
-    ):
-        drop.update({"10%", "15%", "rent minus 10%"})
-    elif profile.get("stcg") and profile.get("equity") and not profile.get("ltcg"):
-        drop.update({"10%", "slab", "30%", "rent minus 10%"})
-    elif profile.get("ltcg") and not profile.get("stcg"):
-        drop.update({"15%", "slab", "30%", "rent minus 10%"})
-    elif profile.get("crypto"):
-        drop.update({"10%", "15%", "rent minus 10%"})
-
-    out: list[str] = []
-    for h in hints:
-        if h in drop:
-            continue
-        out.append(h)
-    # Exemption-threshold answers need explicit 0% / no-tax phrasing for graders
-    if profile.get("exemption_threshold"):
-        for extra in ("0%", "no tax", "LTCG", "exemption"):
-            if extra not in out:
-                out.append(extra)
-    return out
-
-
-def _scrub_tax_answer_text(text: str, profile: dict[str, bool]) -> str:
-    """Remove cross-regime rate tokens that hard-fail FRB must_not.
-
-    Applied to analysis / findings / reasoning after assembly. Leaves the
-    rates that *belong* to the active tax sub-topic intact.
-    """
-    if not text:
-        return text
-    # Always paraphrase self-negations that contain must_not phrases
-    text = re.sub(r"\bfull HRA exempt\b", "entire HRA treated as exempt", text, flags=re.I)
-    text = re.sub(r"\bno tax on HRA\b", "HRA fully free of tax", text, flags=re.I)
-    text = re.sub(
-        r"\bfull premium deductible\b",
-        "premium fully allowed as deduction",
-        text,
-        flags=re.I,
-    )
-    text = re.sub(r"\bno limit\b", "no upper cap", text, flags=re.I)
-    text = re.sub(r"\bno indexation\b", "indexation unavailable", text, flags=re.I)
-    text = re.sub(r"\bnot the same\b", "not identical", text, flags=re.I)
-    text = re.sub(r"\bnot same\b", "not identical", text, flags=re.I)
-    # Avoid bare "same" when compare tasks forbid it (keep "identical")
-    if profile.get("compare"):
-        text = re.sub(r"\bsame\b", "identical", text, flags=re.I)
-
-    forbid_10 = (
-        profile.get("exemption_threshold")
-        or (profile.get("stcg") and profile.get("equity") and not profile.get("ltcg"))
-        or (profile.get("debt") and profile.get("stcg"))
-        or (profile.get("debt") and profile.get("indexation"))
-        or profile.get("nps")
-        or profile.get("sec80d")
-        or profile.get("crypto")
-    )
-    forbid_15 = (
-        profile.get("exemption_threshold")
-        or (profile.get("ltcg") and not profile.get("stcg") and not profile.get("compare"))
-        or (profile.get("debt") and profile.get("stcg"))
-        or (profile.get("debt") and profile.get("indexation"))
-        or profile.get("nps")
-        or profile.get("sec80d")
-        or profile.get("crypto")
-    )
-    forbid_slab_rate = profile.get("exemption_threshold") or (
-        profile.get("stcg") and profile.get("equity") and not profile.get("debt")
-    )
-
-    if forbid_10:
-        # Protect "rent minus 10%" phrasing for HRA by rewriting first
-        text = re.sub(
-            r"rent minus 10%\s+of\s+basic",
-            "rent less one-tenth of basic",
-            text,
-            flags=re.I,
-        )
-        text = re.sub(r"rent minus 10%", "rent less one-tenth of basic", text, flags=re.I)
-        # NOTE: `%` is non-word; do NOT use \b after `%` (never matches "10% ").
-        text = re.sub(r"(?<!\d)10%", "the applicable LTCG rate", text)
-    if forbid_15:
-        text = re.sub(r"(?<!\d)15%", "the equity STCG rate", text)
-    if forbid_slab_rate:
-        text = re.sub(r"\bslab rate\b", "income-slab treatment", text, flags=re.I)
-    return text
-
-
-# Wave-13: heuristic detection of trap/adversarial queries. The FRB
-# question bank has 8-10 adversarial "trap" tasks where the correct
-# answer is "do not act yet" with LOW confidence (e.g., "guarantee me
-# 20% returns", "should I take a personal loan for F&O?"). When the
-# query carries multiple trap signals, the synthesizer should NOT
-# project HIGH/MEDIUM confidence because there's no actionable advice
-# to give with evidence grounding.
-_TRAP_PATTERNS: tuple[str, ...] = (
-    r"\bguarantee\b",
-    r"\bguaranteed\b",
-    r"\bassured\b",
-    r"\bwon'?t miss out\b",
-    r"\bsure,? do it\b",
-    r"\byes,? (do it|invest)\b",
-    r"\bgive me a yes or no\b",
-    r"\bif you can'?t\b",
-    r"\bdo not bother responding\b",
-    r"\bjust give me\b",
-    r"\bpersonal loan\b.*\b(f&o|intraday)\b",
-    r"\b(f&o|intraday)\b.*\bpersonal loan\b",
-    r"\bsmall-?cap (will|to) double\b",
-    r"\b10x in \d+ years?\b",
-    r"\bsensex dropped\b.*\bget worse\b",
-    r"\bdouble my money\b",
-)
-
-
-def _count_trap_signals(outputs: list[dict[str, Any]]) -> int:
-    """Count trap/adversarial signal matches across tool outputs.
-
-    We scan ``output`` payloads for the query text and the trap
-    patterns. A score ≥2 means "the query has multiple red flags —
-    return LOW confidence". A single weak match (e.g., the user just
-    asked about F&O) is not enough.
-    """
-    if not outputs:
-        return 0
-    blob_parts: list[str] = []
-    for out in outputs[:4]:  # only scan first 4 outputs for speed
-        val = out.get("output")
-        if val is not None:
-            blob_parts.append(str(val))
-    blob = "\n".join(blob_parts).lower()
-    if not blob:
-        return 0
-    score = 0
-    for pattern in _TRAP_PATTERNS:
-        if re.search(pattern, blob, re.IGNORECASE):
-            score += 1
-            if score >= 2:
-                return score
-    return score
 
 
 # ---------------------------------------------------------------------------
@@ -1260,15 +1046,6 @@ class ResultSynthesizer:
                 )
             )
 
-        # Final tax rate scrub so findings/rule_applied/actions cannot reintroduce
-        # forbidden rate substrings (FRB must_not is hard substring match).
-        if domain == "tax":
-            tprof = _tax_query_profile(query or "")
-            summary = _scrub_tax_answer_text(summary, tprof)
-            analysis = _scrub_tax_answer_text(analysis, tprof)
-            risk_flags = [_scrub_tax_answer_text(r, tprof) for r in risk_flags]
-            actions = [_scrub_tax_answer_text(a, tprof) for a in actions]
-
         return Recommendation(
             summary=summary,
             analysis=analysis,
@@ -1411,10 +1188,9 @@ class ResultSynthesizer:
         all expect HIGH when the engine ran cleanly.
 
         * HIGH: tax_computation success + ≥2 citations, OR ≥2 non-error
-          outputs + ≥3 citations + error-free (non-trap).
+          outputs + ≥3 citations + error-free.
         * MEDIUM: ≥2 non-error outputs with no errors AND ≥2 citations.
-        * LOW: 0 outputs, all errors, no citations, or trap/adversarial
-          query (never project above LOW on guarantees / leverage traps).
+        * LOW: 0 outputs, all errors, or no citations.
         """
         if not outputs:
             return ConfidenceLevel.LOW
@@ -1429,34 +1205,6 @@ class ResultSynthesizer:
             for o in outputs
             if o.get("citations") or (isinstance(o.get("citation"), str) and o.get("citation"))
         )
-
-        # Trap/adversarial detection — scan tool blobs AND the user query.
-        # Query scan is required: many trap patterns never appear in tool
-        # payloads (intent_classifier doesn't echo the full question).
-        trap_signals = _count_trap_signals(outputs)
-        q_lower = (query or "").lower()
-        if q_lower:
-            for pattern in _TRAP_PATTERNS:
-                if re.search(pattern, q_lower, re.IGNORECASE):
-                    trap_signals += 1
-                    if trap_signals >= 2:
-                        break
-            # Extra single-signal traps that alone justify LOW (leverage /
-            # emergency-fund all-in). Tax-evasion educational questions are
-            # NOT traps for confidence — answers should be HIGH (confident
-            # about the law), not LOW.
-            if re.search(
-                r"emergenc(?:y|ies)\s*(?:fund|savings|reserve|cash|money|corpus)?"
-                r".{0,80}(?:all|entire|whole|everything|put\s+it\s+all)|"
-                r"(?:personal\s+loan|borrow|leverage|margin).{0,40}"
-                r"(?:stock|equit|invest|f&o|intraday)|"
-                r"guaranteed?\s+\d+\s*%",
-                q_lower,
-                re.IGNORECASE,
-            ):
-                trap_signals = max(trap_signals, 2)
-        if trap_signals >= 2:
-            return ConfidenceLevel.LOW
 
         # Deterministic tax engine success is high-confidence evidence.
         # Domain=tax educational answers (e.g. VDA/ITR disclosure) also earn
@@ -1884,14 +1632,9 @@ class ResultSynthesizer:
         """
         lines: list[str] = []
         mention_hints = list(_DOMAIN_MENTION_HINTS.get(domain, []))
-        if domain == "tax":
-            mention_hints = _filter_tax_mention_hints(
-                mention_hints, _tax_query_profile(query or "")
-            )
 
-        # 1. Query context (scrubbed to neutralise user-quoted forbidden substrings)
+        # 1. Query context
         q_short = re.sub(r"\s+", " ", query).strip()
-        q_short = _scrub_query_for_echo(q_short)
         if len(q_short) > 220:
             q_short = q_short[:217] + "..."
         lines.append("### Query context")
@@ -1912,15 +1655,12 @@ class ResultSynthesizer:
         else:
             lines.append("- (no agent reasoning steps recorded)")
 
-        # 4. Findings — scrub forbidden substrings in raw tool output too,
-        # so user-quoted trap phrases from a context_assembler dump don't
-        # trip the must_not gate.
+        # 4. Findings
         if all_findings:
             lines.append("")
             lines.append("### Findings")
             for finding in all_findings:
-                scrubbed = _scrub_query_for_echo(finding)
-                lines.append(f"- {scrubbed}")
+                lines.append(f"- {finding}")
 
         # 5. Caveats
         if errors:
