@@ -34,3 +34,16 @@ jobs:
         run: ruff check src/ tests/ scripts/
       - name: test (fast)
         run: python -m pytest tests/ -q -m "not slow and not stress" --timeout=120
+
+  validators:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The verifier is fetched from outside the repo under test. A gate that
+      # lives in the repo it judges can be edited by whatever is being judged.
+      - name: Fetch Adaptoid validators
+        run: git clone --depth 1 https://github.com/Srujan0798/Adaptoid-OS.git /tmp/adaptoid-os
+
+      - name: Preflight (25 validators, incl. FM-09b entailment)
+        run: bash /tmp/adaptoid-os/validators/preflight.sh .
